@@ -65,6 +65,10 @@
 
 1. 用搬来的演示关卡 `/CitySamplePCG/Levels/L_CitySamplePCG_Demo`（带 194 个外部 Actor、
    那 7 个手绘样条、以及 18 个 PCGVolume），从上游阶段开始跑；
+
+   **该关卡已实测装配完整**：194 个外部 Actor 中有 24 个提到 `PCGVolume`，
+   它们**恰好各引用 18 张图里的 1 张**（`PCG_1_1_Terrain` … `PCG_5_2_OuterForest`，
+   每张出现 1 次）。所以这是最省事的起点 —— 打开它，18 个阶段都在位。
 2. 或在自己关卡里画等价样条，并**同时**把 Actor 打上与参数同名的 Tag，
    （参数名与 Tag 名必须对得上，见上表）。
 
