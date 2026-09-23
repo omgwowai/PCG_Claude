@@ -38,21 +38,37 @@
 
 ### 2.1 硬约束：这些图**不是自含的**
 
-18 张图之间靠 **Actor 引用**（按名字取上游阶段的输出）传递数据，不是靠资产路径。
-实测有 4 个资产按名字引用了演示关卡里的**手绘样条 Actor**：
+18 张图之间靠**上一阶段的数据**传递，通道有两种，都**不是资产路径引用**：
 
-| 资产 | 引用的样条 Actor |
-|---|---|
-| `Examples/City/CitySample_Generator_Steps_1_Base` | `Artery_1`、`Artery_2` |
-| `Examples/City/CitySample_Generator_Steps_2_Districts` | `CityShape` |
-| `Levels/PCG/PCG_1_1_Terrain` | `Terrain_shaping_1` |
-| `Levels/PCG/PCG_3_1_3_Highways` | `Highway_Width` |
+**(a) 图用户参数（已实测）**
+`PCG_3_1_3_Highways` 里有一个 `PCGGenericUserParameterGetSettings` 节点，
+名为 `GetParam_HighwayWidth`，其 `property_path = "Highway_Width"`；
+它的 tooltip 原文是 *"Width is driven by the Highway_Width graph parameter."*。
+`PCG_1_1_Terrain` 顶层 20 个节点 = 15 个子图 + 3 个数学 + **2 个用户参数读取**
+（它自己不含任何 Actor 筛选节点，"Get Terrain_shaping_1 Spline" 这个名字在**子图内部**）。
 
-→ **单拎一张图出来跑是没数据的。** 两条路：
+**(b) 演示关卡里的 Actor 标签（已实测）**
+`L_CitySamplePCG_Demo` 的 194 个外部 Actor 里，这些名字是**作为 Tag 存在**的：
 
-1. 用搬来的演示关卡 `/CitySamplePCG/Levels/L_CitySamplePCG_Demo`（它带 194 个外部 Actor，
-   含那 7 个手绘样条与 18 个 PCGVolume），从上游阶段开始跑；
-2. 或在自己关卡里画等价样条，并按 Actor 名命名（名字必须对得上）。
+| 名字 | 出现次数 | 用途 |
+|---|---|---|
+| `Terrain_shaping` | 2（**无 `_1` 后缀**） | 地形形变轮廓 |
+| `CityShape` | 2 | 城市边界 |
+| `Artery_1` / `Artery_2` / `Artery_3` | 各 2 | 三条主干道 |
+| `Highway_Width` / `Highway` / `Highway_Lane` … | 1 / 85 / … | 高架及其宽度与车道 |
+| `MainTowerPark` / `LandmarkPark` | 2 / 1 | 地标园区 |
+
+> ⚠️ **命名细节**：图里写的是 `Terrain_shaping_1`，而关卡 Actor 的 Tag 是
+> `Terrain_shaping`（没有 `_1`）。别把这两个当成同一个字符串。
+
+→ **单拎一张图出来挂到空关卡上是没数据的。** 两条路：
+
+1. 用搬来的演示关卡 `/CitySamplePCG/Levels/L_CitySamplePCG_Demo`（带 194 个外部 Actor、
+   那 7 个手绘样条、以及 18 个 PCGVolume），从上游阶段开始跑；
+2. 或在自己关卡里画等价样条，并**同时**把 Actor 打上与参数同名的 Tag，
+   （参数名与 Tag 名必须对得上，见上表）。
+
+反过来，**不依赖上游阶段的图是可以单独跑的** —— 见 §3.1 的实测。
 
 ---
 
@@ -77,6 +93,41 @@
 
 > 注意：27 个样式资产的**闭包约 9.15 GB**（主要是 `/Game/Building` 的 8.9 GB 建筑美术 +
 > 插件内 84 个网格）。只取样式码子集时，`/Game/Building/CH|NY|QB|SF` 要一并带上。
+
+### 3.1 实测：搬来的图**真的能生成真实建筑**（2026-09-23）
+
+这是"可复用"的实证，不是"能加载"的推断。做法见
+`Content/Python/pcg_reuse_test_setup.py`（阶段 A）+ `pcg_reuse_test_read.py`（阶段 B）：
+
+1. 在离交付区 20 km 处 spawn 一个临时 PCGVolume（**避免污染已交付的 3×3 区域**）；
+2. 给它 brush 8000×8000×4000（全尺寸 → 局部 ±4000 / ±2000）；
+3. `set_graph("/CitySamplePCG/Examples/Building/Building_Staggered_HShape")`；
+4. `activate(True)` → `generate_local(True)`（**不 activate 就是静默零点**，见 `traps.md` 18）；
+5. **下一次调用**再读，然后 cleanup + destroy（实测 `test_volumes_remaining=0`）。
+
+结果：
+
+| 指标 | 数值 |
+|---|---|
+| 图规模 | 18 节点 / 24 边 |
+| ISM 组件数 | **151** |
+| 总实例数 | **3129** |
+| 其中用 `/Game` 美术的实例 | **3129（100%）** |
+
+消费到的是**真实 City Sample 建筑构件**，不是代理盒：`Kit_Bldg_CHC_L01_A` … `L15_A` 的
+`Wall_01/02/03/04`、`CornerEx/CornerIn`、`Entrance`、decal 变体，外加屋顶与立面道具
+（`SM_roof_pipe_a_N1`、`SM_roof_window_N1`、`SM_BLDG_Prop_BA_Awning_A01_N1`、
+`SM_BLDG_Prop_Lamp_Wall_A01_N1`、`SM_Scaffolding_metal_N1` …）。单构件最多被复用到 **295 次**。
+
+**两个值得记住的观察**：
+
+1. **`get_generated_graph_output()` 读到 0 个 tagged data，却有 3129 个实例。**
+   说明"该图把数据写进输出 pin"与"该图 spawn 了几何"**不是一回事** ——
+   这张图在中间就 spawn 掉了，输出 pin 是空的。
+   → **验证 spawn 型图必须数 ISM 实例，不能只读输出点数。** 这条同时补充了
+   `SKILL.md`「如何验证」一节。
+2. 该图**不依赖上游阶段**（自含），所以能这样单独跑。它是 `Examples/` 下的示例，
+   与 18 张阶段图不同 —— 拿不准时先试跑一次，别假设。
 
 ---
 
@@ -154,4 +205,22 @@ ToolsetRegistry                      1 文件引用
 | `/Game` 美术可加载 | 对 `/Game` 重扫后注册数 2516 → 147467；`load_asset` 实测返回 `StaticMesh` |
 | 插件描述文件 | JSON 合法；15 个插件名全部能在 897 个 `.uplugin` 里找到 |
 | 27 样式 / 18 图 | 文件在磁盘上：27 个 `SGD_*.uasset`、18 个 `PCG_*.uasset` |
-| 运行时挂载 | **需要重启编辑器**（见 §5）后 `/CitySamplePCG` 才可见 |
+| **运行时挂载** | 重启后 `/CitySamplePCG` 已挂载；`list_assets` 得 1648；`/Game` 总注册 147459 |
+| **18 图可加载** | 全部 18 个 `load_asset` 返回 `PCGGraph`（规模 3…210 节点，见验证脚本输出） |
+| **27 样式可加载** | 全部 27 个返回 `BP_ShapeGrammarDefinition_C` |
+| **8 个新插件挂载** | 日志各 1 条 `Mounting Engine plugin …`；**0 条**加载失败 |
+| **裁剪生效** | `ModelContextProtocol` / `AllToolsets` 的 `Mounting` 条目数 = **0** |
+| **可复用（端到端）** | 用 `Building_Staggered_HShape` 生成 **151 ISM / 3129 实例，100% 用 `/Game` 美术**（§3.1） |
+| **交付物未受影响** | 迁移+重启后回归：3×3 区域仍 12 节点 12 边、41 实例（`pcg_postmigration_regression.py`） |
+
+复现命令（脚本都在 `Content/Python/`，用 `run_unreal_script` 调用）：
+
+```
+pcg_migration_verify.py            # 挂载 + 18 图 + 27 样式 的验收
+pcg_reuse_test_setup.py            # 复用实测 阶段 A（会 spawn 临时 Volume 并生成）
+pcg_reuse_test_read.py             # 复用实测 阶段 B（读数并自清理）
+pcg_postmigration_regression.py    # 已交付 3×3 区域的回归
+```
+
+> 后三个会**改动关卡**（前两个 spawn/销毁临时 Actor）。跑完**不要保存关卡**，
+> 否则测试残留会被提交。`pcg_reuse_test_setup.py` 自身刻意不保存。
