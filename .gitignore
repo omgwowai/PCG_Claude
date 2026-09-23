@@ -1,0 +1,40 @@
+# Unreal Engine generated / build artifacts
+[Bb]inaries/
+[Bb]uild/
+[Dd]erivedDataCache/
+[Ii]ntermediate/
+[Ss]aved/
+[Pp]latforms/
+
+# Visual Studio / Rider / IDE
+.vs/
+.vsconfig
+.idea/
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.slnx
+*.suo
+*.user
+*.xcodeproj
+*.xcworkspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python (MCP server tooling)
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# UE crash / log
+*.log
+*.pdb
+
+# Keep these despite the patterns above
+!Config/

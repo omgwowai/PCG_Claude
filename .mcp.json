@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "unreal": {
+      "command": "E:/PCG_Claude/mcp_server/.venv/Scripts/python.exe",
+      "args": ["-m", "mcp_server"],
+      "cwd": "E:/PCG_Claude/mcp_server",
+      "env": {
+        "UE_MCP_HOST": "127.0.0.1",
+        "UE_MCP_PORT": "8777"
+      }
+    }
+  }
+}
