@@ -18,7 +18,10 @@ import json
 import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CENSUS = os.path.join(REPO, "Saved", "Reports", "stage_census.json")
+# 实测数据的归属位置：放在 Tools/data/ 下（git 跟踪），
+# 而不是 Saved/Reports/（被 .gitignore 排除），否则报告无法从干净克隆重建。
+CENSUS = os.path.join(REPO, "Tools", "data", "stage_census.json")
+LEGACY_CENSUS = os.path.join(REPO, "Saved", "Reports", "stage_census.json")
 SHOTS = os.path.join(REPO, "Saved", "Screenshots", "WindowsEditor")
 
 LABELS = [
@@ -51,7 +54,10 @@ def main():
     ap.add_argument("--title", default="City Sample PCG 18 阶段运行报告")
     args = ap.parse_args()
 
-    with open(args.census, encoding="utf-8") as fh:
+    census_path = args.census
+    if not os.path.exists(census_path) and os.path.exists(LEGACY_CENSUS):
+        census_path = LEGACY_CENSUS   # 兼容旧会话留下的位置
+    with open(census_path, encoding="utf-8") as fh:
         census = json.load(fh)
 
     order = census["order"]
