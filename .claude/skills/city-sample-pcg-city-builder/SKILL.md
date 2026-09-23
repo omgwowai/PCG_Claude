@@ -83,8 +83,8 @@ digraph city {
 
 **路线 A —— 复用 PCGPrimitives 原语库（推荐起点）**
 
-引擎自带 `PCGPrimitives` 插件：`/PCGPrimitives/Primitives` 下实测有 **86 个成品原语**（递归共 225 个资产，含各原语的 `_CoreProcess` 内部子图），其中 **84 个自含**（只引用引擎类与插件内资产，可直接在本项目用）；`Create_Mesh_Extrude` 与 `Create_Mesh_Planar` 两个引用了 `/Game/` 路径，**本项目可能缺资产，用前先确认**
-（只引用引擎类与插件内资产），可直接在本项目使用。按动词分类：
+引擎自带 `PCGPrimitives` 插件：`/PCGPrimitives/Primitives` 下实测有 **86 个成品原语**（递归共 225 个资产，含各原语的 `_CoreProcess` 内部子图），其中 **84 个自含**（只引用引擎类与插件内资产，可直接在本项目用）；`Create_Mesh_Extrude` 与 `Create_Mesh_Planar` 两个引用了 `/Game/` 路径，**本项目可能缺资产，用前先确认**。
+按动词分类：
 `Assign / Compose / Copy / Create / Capture / Debug / Extract / Fill / Filter /
 Get / Override / Place / Shared / Spawn / Subdivide / Trace / Transform / Write`。
 
