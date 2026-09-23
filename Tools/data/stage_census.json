@@ -1,0 +1,14 @@
+{
+  "_source": "pcg_stage_run.py phase=poll, measured after bulk generation with all nodes debug-flagged",
+  "_note": "real = non-debug instanced geometry; debug = PCG debug cubes (/PCG/DebugObjects/PCG_Cube)",
+  "order": ["PCG_1_1_Terrain","PCG_1_2_BG_Buildings","PCG_1_3_BG_Mountains",
+            "PCG_2_1_MainTower_Footprint","PCG_2_2_CentralPark_Footprint",
+            "PCG_3_1_1_Districts","PCG_3_1_2_Roads","PCG_3_1_3_Highways",
+            "PCG_3_1_4_Lots","PCG_3_2_1_Ground","PCG_3_2_2_LeftOverLots",
+            "PCG_3_2_3_Parkings","PCG_3_3_1_Buildings","PCG_3_3_2_Rooftops",
+            "PCG_4_1_MainTower_Visuals","PCG_4_2_CentralPark_Visuals",
+            "PCG_5_1_CityEdge","PCG_5_2_OuterForest"],
+  "real_instances": [0,394,59,0,0,0,286221,81684,11255,220128,40882,13495,478349,27110,26583,965022,20768,34661],
+  "debug_instances":[785181,1389,361,18,8,18218,721190,625049,8343,1571116,1570525,783936,1332360,0,1371887,9702657,1033351,1045270],
+  "camera_per_stage": {"1":"City_WideView_1","2":"City_WideView_1","3":"City_WideView_1","4":"Building_Edit","5":"CentralPark_1","6":"City_WideView_2","7":"Street_1","8":"HighWayEdit","9":"Street_2","10":"Street_3","11":"Street_2","12":"Street_3","13":"Building_Edit","14":"Building_Edit","15":"City_WideView_1","16":"CentralPark_1","17":"City_WideView_2","18":"City_WideView_1"}
+}

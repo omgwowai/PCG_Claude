@@ -208,3 +208,7 @@ for c in comp.get_owner().get_components_by_class(unreal.PrimitiveComponent):
 - `references/node-classes.md` — **PCG 节点类名表**：常用节点的确切类名与 `/Script/...` 加载路径、子图节点唯一正确的 `SetSubgraph()` 接法、从标题猜类名会失败的陷阱表，以及「动态输入 pin 加不了」这一硬限制。**写 `add_node_of_type` 前必读。**
 - `references/tooling.md` — `run_unreal_script` 的调用形态与脚本契约、六大反直觉之处、拒绝时的确切报错串，以及**「CitySample 侧工具 → 本项目怎么写」的对照表**。**写调用前必读。**
 - `references/traps.md` — 静默零点与实测坑（17 条）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
+- `references/stage-run-playbook.md` — **把 18 阶段跑一遍并逐阶段截图的操作手册**：
+  自带的 11 个电影机位对照表、「PCG debug 没有全局开关」与限量理由、
+  「一次调用只发一张截图」的落盘节奏、以及重载关卡会崩编辑器这条硬约束。
+  **要跑这套流水线前必读。**
