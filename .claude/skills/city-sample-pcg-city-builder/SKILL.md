@@ -159,6 +159,32 @@ for it in items:
 - **几何验证优先走数值（包围盒 / 顶点数 / Actor 数），不要目测截图**——
   PCG 的检视态会产生幻影可视化，肉眼不可靠。
 
+### 关键：读出 0 点**不等于**图没生成
+
+**实测（2026-09-23）**：用 `/CitySamplePCG/Examples/Building/Building_Staggered_HShape`
+生成，`get_generated_graph_output()` 返回 **0 个 tagged data**，
+但同一时刻 ISM 组件有 **151 个、实例 3129 个**。
+
+原因：这类图**在中间就把几何 spawn 掉了**，输出 pin 本来就是空的。
+"写了数据到输出 pin" 与 "spawn 了几何" 是**两件事**。
+
+→ **验证 spawn 型图必须数实例**，不能只读输出点数：
+
+```python
+total = 0
+for c in comp.get_owner().get_components_by_class(unreal.PrimitiveComponent):
+    try:
+        n = c.get_instance_count()          # InstancedStaticMeshComponent 上有
+    except Exception:
+        continue
+    if n: total += n
+# 还可读 c.get_editor_property("static_mesh").get_path_name()
+# 判断用的是不是自己期望的那套美术（如 "/Game/Building/..." vs 代理盒）
+```
+
+**两条读数一起用**：输出点数管"图算到哪一步"，实例数管"落地产出了什么"。
+两者不一致时以**实例数**为准——用户要的是几何，不是 pin 上的数据。
+
 ## Red flags — STOP
 
 | 想法 | 现实 |
