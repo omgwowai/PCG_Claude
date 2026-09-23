@@ -128,3 +128,33 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **红盒兜底** | 任何**无匹配行**的语义点一律渲染为**红色代理盒** | **配置缺失肉眼可见，杜绝静默消失** |
 
 第二个机制尤其值得推广——它把 PCG 最危险的"静默零点"变成了**可见的红色**。
+
+---
+
+## 4. 2026-09-23 第二次实测新增（搭 3×3 小区域时踩到）
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **18** | **`generate_local()` 会静默不生成。** `GenerateInternal` 的第一行是 `if (IsGenerating() \|\| !GetSubsystem() \|\| !ShouldGenerate(...)) return InvalidPCGTaskId;`，而 `ShouldGenerate` 要求 **`bActivated && GetGraph() && GetSubsystem()`**。在**同一个脚本里刚 spawn 的 PCGVolume** 上直接 `generate_local` 会命中这个分支：**不报错、不生成**，下次读就是空集合 | **生成前先 `pc.activate(True)`**（并 `get_editor_property("activated")` 复查为 True）。`bActivated` 头文件默认是 `true`，但新建/刚 spawn 的组件实测需要显式 activate |
+| **19** | 上面那条导致**第一次读是 `tagged_count=0`**，极易误判成"图配置错了"。实际图是对的 | 静默零点先怀疑**组件未激活/未就绪**，再怀疑图。分开两次调用：一次 activate+generate，下次读 |
+| **20** | **`unreal.CubeBuilder` 不存在**（`hasattr` 为 False），但 PCGVolume 实例上 `get_editor_property("brush_builder")` **拿得到** `CubeBuilder` 对象 | 不要 `unreal.CubeBuilder()` 造；直接从 volume 取实例再 `set_editor_property("x"/"y"/"z", ...)` |
+| **21** | **`BrushComponent.brush` 是 protected，读不了**（`Property 'Brush' ... is protected and cannot be read`）。所以**没法用"复制别的 Volume 的 brush"来给 PCGVolume 塑形** | 走 `brush_builder`（见上条） |
+| **22** | **`CubeBuilder` 的 x/y/z 是"全尺寸"不是半尺寸。** 实测 `x=3300` → `get_actor_local_bounds_pcg()` 返回 `±1650` | 想要 ±W 就填 `2W` |
+| **23** | **`PCGEdge` 的 `get_output_node()` / `get_input_node()` 命名与直觉相反**（实测：数据流 `Spawner.Out → Output.In` 的边，`get_output_node()` 返回的是 **DefaultOutputNode**） | **不要靠边的 getter 判断上下游**。要定位"某节点的搭档"，用**实测属性值**匹配（如下游 TransformPoints 的 `scale_min`），或用 `pin.is_connected` |
+| **24** | `PCGEdge` 上 `get_output_node` / `get_input_node` / `get_output_pin_label` / `get_input_pin_label` 是**方法**，`input_pin` / `output_pin` 是**属性**。把它们当属性/方法搞反会得到 `AttributeError` 或 `<Object PCGPin>` 字符串 | 需要拓扑时**先 `dir()`**，别猜 |
+
+### 4.1 一条重要的正面结论：同一次调用内**建图 + 设参 + 连线**是安全的
+
+`node-classes.md` §0.6 的"异步"约束**只针对 `get_generated_graph_output()`**。
+在同一脚本里 `add_node_of_type` → 设参 → `add_edge` → 读回 pin 标签 → `save_asset`，
+**全部同步生效**，实测建出 12 节点 12 边且 `get_all_edges()` 立刻可见。
+所以**建图不需要拆成多次调用**，只有"读生成结果"需要。
+
+### 4.2 PCGVolume 必须给真实 brush，否则覆盖不了区域
+
+新建的 PCGVolume 只有一个 **200 单位**的默认立方体 brush（`local_bounds_pcg` = ±100）。
+它决定组件的生成范围。两条路：
+
+- **改 brush_builder 的 x/y/z**（推荐，与 actor scale 解耦）：填全尺寸。
+- 或者放大 actor scale —— 但那样必须把网格节点的 `coordinate_space` 设成 **`WORLD`**，
+  否则 `LOCAL_COMPONENT`（**默认值**）会把 actor 的缩放乘进 GridExtents，城市会放大同样倍数。
