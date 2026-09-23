@@ -9,10 +9,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Engine: **`E:\UnrealEngine`** — a **source build** of UE 5.8.2. `EngineAssociation` in
   `PCG_Claude.uproject` is that build's registry GUID `{4B303DEF-4E44-1DE5-A177-09B23BCA8A5A}`.
 - Game module: `PCG_Claude` (Runtime). Plugins enabled: ModelingToolsEditorMode, StateTree,
-  GameplayStateTree, PythonScriptPlugin, UnrealMcpBridge.
+GameplayStateTree, PythonScriptPlugin, PCG, PCGPrimitives, UnrealMcpBridge.
 - Git remote: `https://github.com/omgwowai/PCG_Claude.git` (branch `main`).
-- **Despite the name, the PCG (Procedural Content Generation) framework is not used** — the PCG
-  plugin is not enabled, and there is no PCG graph or component anywhere in `Source/` or `Content/`.
+- The **PCG (Procedural Content Generation) framework is enabled** (`PCG` + `PCGPrimitives`, added
+  2026-09-23 so the `city-sample-pcg-city-builder` skill can build procedural cities here), but
+  **no PCG graph or component exists yet** in `Source/` or `Content/` — the project still ships
+  stock Epic template code with no PCG content of its own.
 
 Almost all game code is stock Epic template code. The only bespoke addition is the MCP bridge
 toolchain described under "Driving the editor" below; treat the rest as upstream template

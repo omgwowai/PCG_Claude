@@ -36,6 +36,14 @@
 			"Enabled": true
 		},
 		{
+			"Name": "PCG",
+			"Enabled": true
+		},
+		{
+			"Name": "PCGPrimitives",
+			"Enabled": true
+		},
+		{
 			"Name": "UnrealMcpBridge",
 			"Enabled": true
 		}
