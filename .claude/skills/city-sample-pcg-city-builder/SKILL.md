@@ -14,8 +14,12 @@ description: Use when the user asks to build, regenerate, or modify a procedural
 
 城市生成的**方法论**参照业已分析的 Epic City Sample PCG 流水线
 （`docs/city-sample-pcg-pipeline.md`）：分阶段、阶段间按名字取上游 Actor 数据、
-人工只画样条、随机性集中在末端。但**Epic 的 18 张图与 27 个建筑样式资产搬不过来**
-（它们依赖 CitySample 项目的美术资产），所以本项目走**同构自建**路线。
+人工只画样条、随机性集中在末端。
+
+> **2026-09-23 重大变更：Epic 的 18 张图与 27 个建筑样式资产已经搬进本项目了。**
+> 连同约 62 GB 美术资产，挂载在 `/CitySamplePCG/`（插件）与
+> `/Game/{Building,Prop,Road,Megascans,…}`。
+> **动手前先读 `references/migrated-citysample-library.md` —— 能用现成的就不要自建。**
 
 **核心纪律：先探测 → 再规划 → 一个脚本一次往返 → 每步用数据验证。**
 
@@ -35,6 +39,11 @@ PCG 最大的风险不是报错，而是**静默零点**——配置错误不抛
   `netstat -ano | findstr 8777`。
 - **PCG 插件需已启用**。`PCG_Claude.uproject` 已加 `PCG` 与 `PCGPrimitives`
   （2026-09-23）；**若编辑器是在此之前启动的，必须先重启**，否则探测脚本会报告未加载。
+- **`/CitySamplePCG/` 挂载点只在编辑器启动时注册。** 迁移进来的 18 张图与 27 个样式资产
+  全在这个插件里，**改了 `.uproject` 或新拷了插件内容都必须重启编辑器**才可见。
+  探针：`unreal.EditorAssetLibrary.does_directory_exist("/CitySamplePCG")`。
+  反过来，`/Game` 侧的美术**不需要重启**——对 `/Game` 做一次
+  `AssetRegistry.scan_paths_synchronous(["/Game"], True, True)` 就会注册进来。
 - **脚本必须放 `Content/Python/` 下**。路径逃出该根、非 `.py`、文件不存在，桥一律拒绝。
 
 ## Main-line workflow
@@ -102,6 +111,22 @@ Get / Override / Place / Shared / Spawn / Subdivide / Trace / Transform / Write`
 `/PCGPrimitives/Examples/City/City_Generator_Steps_1_Base` → `_7_city_contour`
 七段串联图，把一张大图拆成七个顺序依赖的小图，是最贴近本路线的教材。
 
+**路线 C —— 直接用搬进来的 City Sample 库（现在最优先）**
+
+`/CitySamplePCG/` 下已经有 Epic 的 **18 张城市阶段图**（`Levels/PCG/PCG_1_1_Terrain` …
+`PCG_5_2_OuterForest`）、**27 个建筑样式资产**（`PCG/DataAssets/Buildings/<CODE>/SGD_<CODE>_A`）、
+7 段 `CitySample_Generator_Steps_*` 入门图，以及约 460 个形状语法规则。
+`/Game/{Building,Prop,Road,Megascans,Material,…}` 是它们依赖的美术。
+
+用法与两个硬约束见 `references/migrated-citysample-library.md`。**先记住**：
+
+1. 这 18 张图之间靠 **Actor 引用**传数据（不是资产路径），
+   单拎一张图出来挂到空关卡上**跑不出东西**；
+2. 加载方式就是普通 PCG 图：`unreal.load_asset("/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings")`
+   → `set_graph` → `activate(True)` → `generate_local`。
+
+**只要有一张现成图或一个现成样式资产能满足需求，就不要走路线 A/B 自建。**
+
 **无论走哪条路线，都优先复用而不是从零建节点。**
 
 ## 如何验证（本项目没有 GetNodeDataView）
@@ -148,6 +173,11 @@ for it in items:
 
 ## References
 
+- `references/migrated-citysample-library.md` — **本项目现在能直接用的 City Sample 资产库**：
+  `/CitySamplePCG/` 的 18 张图与 27 个样式资产的确切路径、它们之间的 Actor 依赖、
+  环境前置（哪些插件、为什么删掉 `ModelContextProtocol`/`AllToolsets`）、
+  以及「62 GB 不进 git + `Tools/sync-citysample-assets.ps1` 重拉」的策略。
+  **要用现成资产前必读。**
 - `references/pipeline-map.md` — City Sample 的 18 阶段流水线、关卡装配、手绘样条、各阶段内部结构、形状语法、建筑样式码、World Partition 注意事项，以及**可搬迁 / 不可搬迁**的清单。**规划前必读。**
 - `references/node-classes.md` — **PCG 节点类名表**：常用节点的确切类名与 `/Script/...` 加载路径、子图节点唯一正确的 `SetSubgraph()` 接法、从标题猜类名会失败的陷阱表，以及「动态输入 pin 加不了」这一硬限制。**写 `add_node_of_type` 前必读。**
 - `references/tooling.md` — `run_unreal_script` 的调用形态与脚本契约、六大反直觉之处、拒绝时的确切报错串，以及**「CitySample 侧工具 → 本项目怎么写」的对照表**。**写调用前必读。**
