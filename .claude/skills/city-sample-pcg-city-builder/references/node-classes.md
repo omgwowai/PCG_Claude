@@ -500,3 +500,83 @@ sset.set_editor_property("synchronous_load", True)
   → **无法从 Python 反查「某个标题对应哪个类」**。必须靠本文件的表，或走编辑器节点调色板。
 - `ApplyPreconfiguredSettings()` **不是 `UFUNCTION`**，
   所以想拿「Point Filter」那档预置默认值，得自己按属性手工设。
+
+---
+
+## 7. 2026-09-23 实测补全（Grid / TransformPoints / 枚举 / Spawner）
+
+### 7.1 枚举成员名（**猜名字会直接 AttributeError**）
+
+| 枚举 | 真实成员 | 备注 |
+|---|---|---|
+| `PCGCoordinateSpace` | `LOCAL_COMPONENT` / `ORIGINAL_COMPONENT` / `WORLD` | **没有 `LOCAL`**。默认 `WORLD`（value 0）。Grid 节点默认值实测是 `WORLD` |
+| `PCGPointPosition` | `CELL_CENTER` / `CELL_CORNERS` | 默认 `CELL_CENTER` |
+| `PCGPointProperties` | `BOUNDS_MIN/MAX`、`COLOR`、`DENSITY`、`EXTENTS`、`LOCAL_CENTER`、`LOCAL_SIZE`、`POSITION`、`ROTATION`、`SCALE`、`SCALED_LOCAL_SIZE`、`SEED`、`STEEPNESS`、`TRANSFORM` | 多出 `LOCAL_CENTER` / `LOCAL_SIZE` / `SCALED_LOCAL_SIZE` |
+| `PCGCullPointsMode` | `ORDERED` / `UNORDERED` | |
+| `PCGPointExtentsModifierMode` | `ADD` / `MAXIMUM` / `MINIMUM` / `MULTIPLY` / `SET` | |
+
+### 7.2 `CreatePointsGrid` 真实输入 pin 标签
+
+```
+Execution Dependency, Overrides, GridExtents, CellSize, PointSteepness,
+CoordinateSpace, bSetPointsBounds, bCullPointsOutsideVolume, PointPosition
+输出： Out
+```
+
+### 7.3 `TransformPoints` 真实输入 pin 标签（**注意大小写**）
+
+```
+In, Execution Dependency, Overrides, bApplyToAttribute, AttributeName,
+OffsetMin, OffsetMax, bAbsoluteOffset, RotationMin, RotationMax,
+bAbsoluteRotation, ScaleMin, ScaleMax, bAbsoluteScale, bUniformScale,
+bRecomputeSeed, Seed
+输出： Out
+```
+
+### 7.4 `StaticMeshSpawner` 真实输入 pin 标签
+
+```
+In, Execution Dependency, Overrides, TargetActor,
+bAllowMergeDifferentDataInSameInstancedComponents, Seed
+输出： Out
+```
+
+### 7.5 图输出节点的输入 pin 叫 `"Out"`（不是 `"In"`）
+
+`DefaultOutputNode` 的 `input_pins` 只有一个，**标签就是 `Out`**。
+所以收尾连线是 `graph.add_edge(spawner, "Out", g.get_output_node(), "Out")`。
+
+### 7.6 **`uniform_scale` 默认是 `True`**
+
+这是本项目最隐蔽的一个坑：`PCGTransformPointsSettings.uniform_scale` 默认 `True`，
+**会让 `scale_min`/`scale_max` 的向量被当成各向同性处理**，非等比缩放（路面板、扁平盒）全部失真。
+要按 `(x, y, z)` 分别缩放**必须显式 `set_editor_property("uniform_scale", False)`**。
+（`absolute_scale` / `absolute_rotation` 默认也都是 `False`。）
+
+### 7.7 `PCGTransformPointsSettings` 完整可写属性面（实测全部 OK）
+
+`offset_min` / `offset_max` / `scale_min` / `scale_max` / `rotation_min` / `rotation_max`
+（`Vector` / `Rotator`）；
+`absolute_offset` / `absolute_scale` / `absolute_rotation` / `uniform_scale` / `recompute_seed`
+（bool）；`apply_to_attribute` / `attribute_name`。
+
+### 7.8 `PCGStaticMeshSpawnerSettings` 可写属性面
+
+`mesh_selector_parameters`（选择器对象，网格走它的 `mesh_entries`）、`synchronous_load`、
+`target_actor`、`allow_merge_different_data_in_same_instanced_components`、
+`apply_mesh_bounds_to_points`、`instance_packer_type`、`warn_on_identical_spawn`、
+`use_seed` / `seed`、`out_attribute_name`、`post_process_function_names`。
+
+### 7.9 读回验证的两个可用入口（本项目无 GetNodeDataView）
+
+```python
+# 每个 ISM 组件的实例数（几何是否真的生成）
+for c in vol.get_components_by_class(unreal.PrimitiveComponent):
+    n = c.get_instance_count()      # InstancedStaticMeshComponent 上有
+
+# 体积包围盒（brush 是否真的生效）
+vol.get_actor_local_bounds_pcg()    # 本地
+vol.get_actor_bounds_pcg()          # 世界
+```
+
+**注意 `pc.is_generating()` 不可用**（`AttributeError`）——不要用它判断生成是否在跑。
