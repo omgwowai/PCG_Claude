@@ -89,7 +89,7 @@ PAGE = """<title>__TITLE__</title>
   .wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:34px 72px}
   a{color:var(--accent)}
   :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
-  code{font-family:var(--mono); font-size:.88em}
+  code{font-family:var(--mono); font-size:.88em; overflow-wrap:anywhere}  /* 关卡路径是连续长串，必须允许断行，否则会把页面撑宽造成横向滚动 */
 
   header.run{display:flex; flex-direction:column; gap:14px; margin-bottom:30px}
   .eyebrow{
@@ -100,7 +100,7 @@ PAGE = """<title>__TITLE__</title>
     font-family:var(--display); font-weight:700; font-size:clamp(26px,3.6vw,38px);
     line-height:1.12; letter-spacing:-.015em; margin:0; text-wrap:balance;
   }
-  .lede{margin:0; color:var(--muted); max-width:66ch}
+  .lede{margin:0; color:var(--muted); max-width:66ch; overflow-wrap:anywhere}
   .stats{
     display:flex; flex-wrap:wrap; gap:10px 26px; margin:2px 0 0;
     padding-block:14px; border-block:1px solid var(--line);
@@ -133,7 +133,7 @@ PAGE = """<title>__TITLE__</title>
     font-family:var(--display); font-weight:600; font-size:18px;
     letter-spacing:-.01em; margin:0; text-wrap:balance;
   }
-  .graph{font-family:var(--mono); font-size:12.5px; color:var(--muted); word-break:break-all}
+  .graph{font-family:var(--mono); font-size:12.5px; color:var(--muted); word-break:break-all; overflow-wrap:anywhere}
   .chip{
     margin-left:auto; flex:0 0 auto; font-size:12px; font-weight:600;
     padding:3px 10px; border-radius:999px; white-space:nowrap;
