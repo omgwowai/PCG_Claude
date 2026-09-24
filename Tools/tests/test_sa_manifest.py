@@ -38,7 +38,11 @@ def test_build_stages_always_emits_both_kinds_in_order(tmp_path):
     stages = M.build_stages(str(cpath), str(shots),
                             order=["PCG_A", "PCG_B"], min_bytes=50000)
     assert [s["n"] for s in stages] == [1, 2]
-    assert [s["shots"][0]["kind"], s["shots"][1]["kind"]] == ["debug", "geometry"]
+    # `s` was undefined here in the brief's version of this test: it was only bound
+    # inside the list comprehension above, and comprehension variables do not leak in
+    # Python 3. Asserting per stage states the intent (both kinds, in order there).
+    for st in stages:
+        assert [sh["kind"] for sh in st["shots"]] == ["debug", "geometry"]
     # stage 1 has no files -> both entries carry img_missing, not a crash
     assert "img_missing" in stages[0]["shots"][0]
     assert "img_missing" in stages[0]["shots"][1]
