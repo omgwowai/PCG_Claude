@@ -1,6 +1,6 @@
 # 小区域 18 阶段 City Sample PCG 实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** 在 `/Game/PCGArea/L_SmallArea18` 里建成一个约 600 m 的小区域，用 Epic 的 18 张 City Sample 阶段图按序生成，每阶段交付 PCG debug 与累计几何两张截图。
 
@@ -61,7 +61,7 @@
 - Consumes: 无
 - Produces: `scale_for_target(city_bbox, target_cm) -> float`；`map_point(p, scale, src_center, dst_center) -> [float,float,float]`；`map_tangent(v, scale) -> [x,y,z]`；`bbox_of_points(points) -> (min_xyz, max_xyz)`；`city_bbox_from_splines(splines) -> (min,max)`；`orbit_camera(center, radius, az_deg, elev_deg, dist_mult, min_height) -> ([loc],[rot])`
 
-- [ ] **Step 1: 写失败的测试**
+- [x] **Step 1: 写失败的测试**
 
 ```python
 # Tools/tests/test_sa_geom.py
@@ -156,12 +156,12 @@ def test_orbit_camera_respects_the_minimum_height_for_a_flat_view():
     assert loc[2] == 500.0
 ```
 
-- [ ] **Step 2: 跑测试确认它失败**
+- [x] **Step 2: 跑测试确认它失败**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_geom.py -q`
 Expected: FAIL / ERROR with `ModuleNotFoundError: No module named 'pcg_sa_geom'`
 
-- [ ] **Step 3: 写实现**
+- [x] **Step 3: 写实现**
 
 ```python
 # Content/Python/pcg_sa_geom.py
@@ -244,12 +244,12 @@ def orbit_camera(center, radius_cm, az_deg, elev_deg, dist_mult, min_height):
     return [x, y, z], [pitch, yaw, 0.0]
 ```
 
-- [ ] **Step 4: 跑测试确认通过**
+- [x] **Step 4: 跑测试确认通过**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_geom.py -q`
 Expected: `9 passed`
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Content/Python/pcg_sa_geom.py Tools/tests/test_sa_geom.py
