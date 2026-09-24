@@ -270,7 +270,7 @@ git commit -m "Add pure similarity-transform geometry for the small-area PCG run
   `{"spline_actors": [{"label","class","tags","loc","scale","splines":[{"num_points","closed","points"}]}], "volumes": [{"label","loc","graph"}], "cameras": [{"label","loc","rot"}], "terrain": [{"label","class"}]}`
   —— **Task 3 直接消费这个形状**。
 
-- [ ] **Step 1: 写脚本（无单测；判定靠 `mcp_result` 的断言字段）**
+- [x] **Step 1: 写脚本（无单测；判定靠 `mcp_result` 的断言字段）**
 
 ```python
 # Content/Python/pcg_sa_level.py
@@ -454,14 +454,14 @@ del RESULT, _args
 gc.collect()
 ```
 
-- [ ] **Step 2: 运行它**
+- [x] **Step 2: 运行它**
 
 `run_unreal_script(script_path="pcg_sa_level.py", args={})`
 Expected: `ok: true`，`data.gate.pass: true`，`data.gate.terrain_actors: 1`，`volumes: 18`，`cameras: 11`，`missing_graphs: []`。
 
 若 `data.abort` 出现（目标已存在），说明是重跑：加 `args={"force": True}`。若 `data.failed` 出现，**停下来请用户手工另存**，不要试第三种脚本路径。
 
-- [ ] **Step 3: 把 inventory 存盘，供 Task 3 离线使用**
+- [x] **Step 3: 把 inventory 存盘，供 Task 3 离线使用**
 
 把 `data.inventory` 写入 `Saved/Reports/sa_inventory.json`（编辑器侧写盘用
 `unreal.PythonScriptLibrary` 不可靠，改为**在 Step 2 的输出里取 JSON 后由 shell 写盘**）：
@@ -477,7 +477,7 @@ C:\Python314\python.exe Tools/sa_extract_inventory.py \
 `Tools/sa_extract_inventory.py` 是本任务新增的小工具，读 tool-results JSON、取
 `data.inventory`、写盘，并在 stdout 打印《样条 Actor 数 / 样条组件数 / 包围盒》。
 
-- [ ] **Step 4: 验证关卡资产真的在磁盘上**
+- [x] **Step 4: 验证关卡资产真的在磁盘上**
 
 Run:
 ```bash
@@ -486,7 +486,7 @@ find Content/__ExternalActors__/PCGArea -type f 2>/dev/null | wc -l
 ```
 Expected: `.umap` 存在且 mtime 是刚刚；外部 Actor 目录**可能还不存在**（取决于 WP 复制行为，见 Review Focus 5），若为空记下实际情况，Task 7 保存后再核对。
 
-- [ ] **Step 5: 确认 demo 关卡没被动**
+- [x] **Step 5: 确认 demo 关卡没被动**
 
 Run:
 ```bash
@@ -495,7 +495,7 @@ find Plugins/CitySamplePCG/Content -newermt "-10 minutes" -type f | head
 ```
 Expected: demo `.umap` 的 mtime 仍是出厂日期（`Sep 1 11:58`）；第二条命令**无输出**。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Content/Python/pcg_sa_level.py Tools/sa_extract_inventory.py
