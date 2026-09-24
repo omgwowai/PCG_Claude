@@ -90,39 +90,61 @@ def visible_set(run, eas, show_upto, hide_debug=True, only_vol=None,
     return {"shown": shown, "hidden": hidden}
 
 
-def _used_names():
-    """Names this session has already asked the automation to write.
+# Names this session has ALREADY asked the automation to write. Persisted to disk
+# because the used-set cannot be inferred: the automation refuses a name it has
+# written even after the file is deleted, and nothing readable tells us what it
+# remembers. Measured 2026-09-24:
+#
+#     13:37  sa_stage_01_..._debug.png (fresh)       -> landed
+#     later  same name re-fired                       -> valid: True, nothing written
+#     later  same name, target file deleted first     -> valid: True, nothing written
+#     13:53  sa_probe_capture_test.png (never used)   -> landed
+#     later  same name claimed free by an EMPTY set    -> would refuse again
+#
+# The last line is the trap: a fresh in-memory set plus a deleted file both say
+# "free" while the automation still remembers. So the set is persisted, and the
+# names already spent before it existed are seeded here.
+SHOT_NAMES_LEDGER = "Reports/sa_shot_names.json"
+SEED_SPENT = ("sa_stage_01_PCG_1_1_Terrain_debug.png",)
 
-    Module-level state here survives across bridge calls because the bridge execs every
-    script in the same persistent __main__ namespace (measured by pcg_sa_hostprobe.py,
-    which saw globals from every script so far in one dict).
-    """
+
+def _ledger_path():
+    import unreal
+    return os.path.join(unreal.Paths.project_saved_dir(), SHOT_NAMES_LEDGER)
+
+
+def _used_names():
+    """The persisted set of names already handed to the automation."""
     s = globals().get("_SA_USED_SHOT_NAMES")
-    if not isinstance(s, set):
-        s = set()
-        globals()["_SA_USED_SHOT_NAMES"] = s
+    if isinstance(s, set | frozenset):
+        return s
+    s = set(SEED_SPENT)
+    try:
+        with open(_ledger_path(), encoding="utf-8") as fh:
+            s.update(json.load(fh).get("claimed", []))
+    except Exception:
+        pass
+    globals()["_SA_USED_SHOT_NAMES"] = s
     return s
 
 
+def _persist_used_names():
+    try:
+        names = sorted(_used_names())
+        path = _ledger_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump({"claimed": names}, fh, indent=1, ensure_ascii=False)
+    except Exception:
+        pass
+
+
 def claim_name(name):
-    """A name the automation has never written.
-
-    MEASURED RULE (2026-09-24): the high-res screenshot will not write to a filename it
-    has already used in this session, EVEN IF THAT FILE NO LONGER EXISTS. Evidence:
-
-        13:37  sa_stage_01_..._debug.png  (fresh)        -> landed, log line present
-        later  same name again                            -> valid: True, nothing written
-        later  same name, file deleted first              -> valid: True, nothing written
-        13:53  sa_probe_capture_test.png  (never used)    -> landed, log line present
-
-    So an earlier fix here that deleted the target before firing could never have worked;
-    the guard is per-name, not per-file. Each capture claims a fresh name, and an _rN
-    variant is renamed back to its canonical name by promote_variants() on a later call.
-    """
-    import unreal
+    """A name the automation has never been asked to write in this session."""
     used = _used_names()
     if name not in used and not os.path.exists(shot_path(name)):
         used.add(name)
+        _persist_used_names()
         return name
     base, ext = os.path.splitext(name)
     k = 2
@@ -130,6 +152,7 @@ def claim_name(name):
         cand = "%s_r%d%s" % (base, k, ext)
         if cand not in used and not os.path.exists(shot_path(cand)):
             used.add(cand)
+            _persist_used_names()
             return cand
         k += 1
 
