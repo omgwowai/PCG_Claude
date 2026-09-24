@@ -248,7 +248,7 @@ def update_census(stage, graph, real_n, dbg_n):
     return p
 
 
-def run(phase, stage, max_debug_shown, target_cm):
+def run(phase, stage, max_debug_shown, target_cm, skip_camera=False):
     import unreal
     run_mod = ensure_import_path()
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
@@ -322,10 +322,16 @@ def run(phase, stage, max_debug_shown, target_cm):
     if vol is None:
         return {"abort": "no volume labelled %s" % label}
 
-    # the camera is re-applied on every capture: visibility changes do not move the
-    # view, but a previous stage's camera may still be set, and a wrong camera is
-    # the single easiest way to produce an unreadable frame.
-    cam = run_mod.phase_apply_camera(eas, les, s, "computed", float(target_cm))
+    # The camera is normally re-applied here so a stage's frame is never shot through a
+    # stale pose. It can be skipped, because the only captures that have ever LANDED in
+    # this session were fired from a call that did NOT also move the viewport camera
+    # (measured 2026-09-24: the 13:37 and 13:53 successes vs four failures that all moved
+    # it in the same call). skip_camera=true lets the caller set the pose in its own call
+    # first, which is the shape the successes had.
+    if skip_camera:
+        cam = {"stage": s, "mode": "skipped", "reason": "set by the caller"}
+    else:
+        cam = run_mod.phase_apply_camera(eas, les, s, "computed", float(target_cm))
     # a capture fired by an earlier call has landed by now; give it its canonical name
     promoted = promote_variants()
 

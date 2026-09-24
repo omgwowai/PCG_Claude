@@ -21,10 +21,13 @@ import gc
 import json
 import os
 
-NAME = "sa_probe_capture_test.png"
+# Default is timestamped so the control never collides with a spent name: the
+# automation refuses a filename it has already written, even after deletion.
+import time as _time
+NAME = "sa_ctl_%d.png" % int(_time.time())
 
 
-def main():
+def main(name=NAME):
     import unreal
 
     out = {}
@@ -71,15 +74,15 @@ def main():
     out["shotdir_exists"] = os.path.isdir(shotdir)
     out["shotdir_writable"] = os.access(shotdir, os.W_OK) if os.path.isdir(shotdir) else None
     out["shotdir_count"] = len(os.listdir(shotdir)) if os.path.isdir(shotdir) else None
-    target = os.path.join(shotdir, NAME)
+    target = os.path.join(shotdir, name)
     out["target"] = target
     out["target_exists_before"] = os.path.exists(target)
 
     # --- fire ONE capture to a never-used name ---
     try:
         t = AL.take_high_res_screenshot(
-            1600, 900, NAME, None, False, False, force_game_view=False)
-        out["fired"] = NAME
+            1600, 900, name, None, False, False, force_game_view=False)
+        out["fired"] = name
         out["task_valid"] = str(t.is_valid_task()) if t else None
         out["task_repr"] = str(t)[:200]
     except Exception as ex:
@@ -91,7 +94,8 @@ def main():
 
 
 try:
-    RESULT = {"ok": True, "data": main()}
+    _a = mcp_args if isinstance(mcp_args, dict) else {}
+    RESULT = {"ok": True, "data": main(str(_a.get("name", NAME)))}
 except Exception as exc:
     RESULT = {"ok": False, "error": "%s: %s" % (type(exc).__name__, str(exc)[:300])}
 
@@ -100,6 +104,7 @@ try:
 except Exception as se:
     mcp_result = {"ok": False, "serialization_failed": str(se)[:200]}
 
-print(json.dumps(mcp_result, ensure_ascii=False, default=str))
+if __name__ == "__main__":
+    print(json.dumps(mcp_result, ensure_ascii=False, default=str))
 del RESULT
 gc.collect()
