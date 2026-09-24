@@ -37,15 +37,18 @@ def main(name=NAME):
     out["current_level"] = str(les.get_current_level())
 
     # --- viewport / game view state ---
-    for name, fn in (("editor_get_game_view", lambda: les.editor_get_game_view()),
+    # NB: the loop variable is `key`, not `name`. It was `name` in the first version and
+    # shadowed the `name` parameter, so after the loop the capture fired a filename of
+    # "is_in_play_in_editor" - no .png, nothing to write. That run is invalid, not evidence.
+    for key, fn in (("editor_get_game_view", lambda: les.editor_get_game_view()),
                      ("get_allows_cinematic_control", lambda: les.get_allows_cinematic_control()),
                      ("get_viewport_config_keys", lambda: les.get_viewport_config_keys()),
                      ("get_active_viewport_config_key", lambda: les.get_active_viewport_config_key()),
                      ("is_in_play_in_editor", lambda: les.is_in_play_in_editor())):
         try:
-            out[name] = str(fn())
+            out[key] = str(fn())
         except Exception as ex:
-            out[name] = "ERR %s: %s" % (type(ex).__name__, str(ex)[:100])
+            out[key] = "ERR %s: %s" % (type(ex).__name__, str(ex)[:100])
 
     # A viewport that stopped redrawing would explain a capture that reports valid and
     # writes nothing: the automation screenshot needs a rendered frame to photograph.
