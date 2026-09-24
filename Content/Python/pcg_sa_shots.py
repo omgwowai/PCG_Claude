@@ -90,41 +90,98 @@ def visible_set(run, eas, show_upto, hide_debug=True, only_vol=None,
     return {"shown": shown, "hidden": hidden}
 
 
-def fire(name, les=None):
-    """Queue one capture, after clearing the way for it.
+def _used_names():
+    """Names this session has already asked the automation to write.
 
-    Two things measured on 2026-09-24, both needed for a RE-capture to land:
-      * `take_high_res_screenshot` does not overwrite an existing file: the stage 1
-        re-capture fired with `valid: True` and wrote nothing, leaving the 13:37 sky
-        shot in place with an unchanged mtime and no new log line. The 09-23 run never
-        hit this because every capture had a unique per-stage filename.
-      * the viewport has to be invalidated so a fresh frame is actually rendered for
-        the capture to photograph, rather than a throttled or stale one.
-    Both are harmless on a first capture.
+    Module-level state here survives across bridge calls because the bridge execs every
+    script in the same persistent __main__ namespace (measured by pcg_sa_hostprobe.py,
+    which saw globals from every script so far in one dict).
+    """
+    s = globals().get("_SA_USED_SHOT_NAMES")
+    if not isinstance(s, set):
+        s = set()
+        globals()["_SA_USED_SHOT_NAMES"] = s
+    return s
+
+
+def claim_name(name):
+    """A name the automation has never written.
+
+    MEASURED RULE (2026-09-24): the high-res screenshot will not write to a filename it
+    has already used in this session, EVEN IF THAT FILE NO LONGER EXISTS. Evidence:
+
+        13:37  sa_stage_01_..._debug.png  (fresh)        -> landed, log line present
+        later  same name again                            -> valid: True, nothing written
+        later  same name, file deleted first              -> valid: True, nothing written
+        13:53  sa_probe_capture_test.png  (never used)    -> landed, log line present
+
+    So an earlier fix here that deleted the target before firing could never have worked;
+    the guard is per-name, not per-file. Each capture claims a fresh name, and an _rN
+    variant is renamed back to its canonical name by promote_variants() on a later call.
     """
     import unreal
+    used = _used_names()
+    if name not in used and not os.path.exists(shot_path(name)):
+        used.add(name)
+        return name
+    base, ext = os.path.splitext(name)
+    k = 2
+    while True:
+        cand = "%s_r%d%s" % (base, k, ext)
+        if cand not in used and not os.path.exists(shot_path(cand)):
+            used.add(cand)
+            return cand
+        k += 1
+
+
+def promote_variants():
+    """Rename any landed *_rN.png onto its canonical name.
+
+    Called at the START of a capture call, so the variant fired by the previous call has
+    had a full round trip to land. This keeps the canonical filenames the report and the
+    manifest expect while letting a re-shoot use a fresh name.
+    """
+    import unreal
+    d = os.path.join(unreal.Paths.project_saved_dir(), SHOT_DIR)
+    moved = []
+    if not os.path.isdir(d):
+        return moved
+    for f in sorted(os.listdir(d)):
+        if not f.endswith(".png") or "_r" not in f:
+            continue
+        stem, _, tail = os.path.splitext(f)[0].rpartition("_r")
+        if not stem or not tail.isdigit():
+            continue
+        canonical = stem + ".png"
+        try:
+            os.replace(os.path.join(d, f), os.path.join(d, canonical))
+            moved.append([f, canonical])
+        except Exception:
+            continue
+    return moved
+
+
+def fire(name, les=None):
+    """Queue one capture under a never-used name; report what was claimed."""
+    import unreal
     info = {}
-    p = shot_path(name)
-    info["pre_existing"] = os.path.exists(p)
-    try:
-        if info["pre_existing"]:
-            os.remove(p)
-        info["removed"] = not os.path.exists(p)
-    except Exception as ex:
-        info["remove_err"] = "%s: %s" % (type(ex).__name__, str(ex)[:120])
     if les is not None:
         try:
             les.editor_invalidate_viewports()
             info["invalidated"] = True
         except Exception as ex:
             info["invalidate_err"] = str(ex)[:100]
+    claimed = claim_name(name)
+    info["requested"] = name
+    info["claimed"] = claimed
+    info["varied"] = bool(claimed != name)
     try:
         t = unreal.AutomationLibrary.take_high_res_screenshot(
-            1600, 900, name, None, False, False, force_game_view=False)
-        info["fired"] = name
+            1600, 900, claimed, None, False, False, force_game_view=False)
+        info["fired"] = claimed
         info["valid"] = str(t.is_valid_task()) if t else None
     except Exception as ex:
-        info["fired"] = name
+        info["fired"] = claimed
         info["shot_err"] = "%s: %s" % (type(ex).__name__, str(ex)[:180])
     return info
 
@@ -246,6 +303,8 @@ def run(phase, stage, max_debug_shown, target_cm):
     # view, but a previous stage's camera may still be set, and a wrong camera is
     # the single easiest way to produce an unreadable frame.
     cam = run_mod.phase_apply_camera(eas, les, s, "computed", float(target_cm))
+    # a capture fired by an earlier call has landed by now; give it its canonical name
+    promoted = promote_variants()
 
     if phase == "shot_debug":
         vis = visible_set(run_mod, eas, 0, hide_debug=False, only_vol=vol,
@@ -253,7 +312,7 @@ def run(phase, stage, max_debug_shown, target_cm):
         name = "sa_stage_%02d_%s_debug.png" % (s, label)
         r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "debug", "vis": vis,
-                  "cam": cam})
+                  "cam": cam, "promoted": promoted})
         p = shot_path(name)
         r["exists"] = os.path.exists(p)
         r["bytes"] = os.path.getsize(p) if r["exists"] else 0
@@ -265,7 +324,8 @@ def run(phase, stage, max_debug_shown, target_cm):
         name = "sa_stage_%02d_%s_geometry.png" % (s, label)
         r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "geometry", "vis": vis,
-                  "cam": cam, "real_instances": real_n, "debug_instances": dbg_n,
+                  "cam": cam, "promoted": promoted,
+                  "real_instances": real_n, "debug_instances": dbg_n,
                   "real_components": real_c, "debug_components": dbg_c,
                   "suspect_zero": bool(real_n == 0 and s not in DATA_ONLY)})
         p = shot_path(name)
