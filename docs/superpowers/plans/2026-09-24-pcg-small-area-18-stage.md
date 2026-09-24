@@ -1430,7 +1430,7 @@ git commit -m "Add the capture and teardown script for the small-area run"
 - Consumes: `pcg_sa_run.py` 的 `gen` / `probe` / `apply_camera`；`pcg_sa_shots.py` 的 `shot_debug` / `shot_geom`；由我（执行者）逐次经 `run_unreal_script` 调用
 - Produces: `Saved/Reports/sa_run_log.json` —— 每个阶段的 `gen` / `shot_debug` / `shot_geom` 返回原文，**Task 7/8 消费它**
 
-- [ ] **Step 1: 写驱动脚本**
+- [x] **Step 1: 写驱动脚本**
 
 ```powershell
 # Tools/run_sa_stages.ps1
@@ -1461,12 +1461,12 @@ $lines | Set-Content -Encoding utf8 Saved/Reports/sa_call_sequence.txt
 Write-Output "wrote Saved/Reports/sa_call_sequence.txt ($($lines.Count) calls)"
 ```
 
-- [ ] **Step 2: 打印调用序列**
+- [x] **Step 2: 打印调用序列**
 
 Run: `powershell -File Tools/run_sa_stages.ps1 -PrintOnly`
 Expected: 56 行（18×3 + 2 条收尾），每条一眼看清用哪个脚本、哪个 phase、哪个 stage。
 
-- [ ] **Step 3: 逐阶段执行，把返回原文追加到 `Saved/Reports/sa_run_log.json`**
+- [x] **Step 3: 逐阶段执行，把返回原文追加到 `Saved/Reports/sa_run_log.json`**
 
 执行者循环 18 次，每次三步，并把三次返回的 JSON 追加进 log：
 `{"stage": n, "gen": {...}, "shot_debug": {...}, "shot_geom": {...}}`
@@ -1477,7 +1477,7 @@ Expected: 56 行（18×3 + 2 条收尾），每条一眼看清用哪个脚本、
 - `shot_geom.exists == true` 且 `bytes > 50000`
 - `shot_geom.suspect_zero == false`，除非该阶段是 1/4/5/6
 
-- [ ] **Step 4: 抽看三个关键阶段的图**
+- [x] **Step 4: 抽看三个关键阶段的图**
 
 用 Read 工具打开这三张，确认画面合理：
 - `sa_stage_07_PCG_3_1_2_Roads_geometry.png`（路网是否成网）
@@ -1486,7 +1486,7 @@ Expected: 56 行（18×3 + 2 条收尾），每条一眼看清用哪个脚本、
 
 若这三张里有任何一张是空天或只有地形，回到 `pcg_sa_run.ORBIT` 调机位重截该阶段，并把调整写进 log。
 
-- [ ] **Step 5: 收尾并核对**
+- [x] **Step 5: 收尾并核对**
 
 `run_unreal_script(script_path="pcg_sa_shots.py", args={"phase": "census"})`
 Expected: 18 个阶段的数字齐；`suspect_zero` 只可能出现在因美术而空的数据阶段之外——若有，记下阶段号。
@@ -1494,7 +1494,7 @@ Expected: 18 个阶段的数字齐；`suspect_zero` 只可能出现在因美术�
 `run_unreal_script(script_path="pcg_sa_shots.py", args={"phase": "finish"})`
 Expected: `saved: true`，`epic_touched: []`（**空的**，表示没有任何 `/CitySamplePCG/` 的包被标脏）。
 
-- [ ] **Step 6: 验证保存真的落地了**
+- [x] **Step 6: 验证保存真的落地了**
 
 Run:
 ```bash
@@ -1505,7 +1505,7 @@ ls -la Plugins/CitySamplePCG/Content/Levels/L_CitySamplePCG_Demo.umap
 ```
 Expected: 新关卡 mtime 是刚刚；外部 Actor 目录**有文件**（若为 0，说明 `save_current_level()` 没带外部 Actor 包，按 Review Focus 5 回退：用 `get_dirty_map_packages()` 收集后 `save_packages` 逐个保存，并把结论写进 Task 10 的技能修正）；demo 关卡 mtime 不变。
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```bash
 git add Tools/run_sa_stages.ps1 Content/PCGArea/L_SmallArea18.umap
@@ -1527,7 +1527,7 @@ git commit -m "Run all 18 City Sample PCG stages on the 600 m area and capture e
   `{"title","subtitle","level","stages":[{"n","graph","label","shots":[{"kind","path","img_missing"?}],"metrics":{"instances","debug_instances","status"},"notes"}],"footer"}`，
   且 **`stages[i].shots` 永远是两个元素**（`kind` 为 `"debug"` 与 `"geometry"`），缺图时该元素只有 `img_missing`。Task 8 直接消费它。
 
-- [ ] **Step 1: 写失败的测试**
+- [x] **Step 1: 写失败的测试**
 
 ```python
 # Tools/tests/test_sa_manifest.py
@@ -1595,12 +1595,12 @@ def test_a_too_small_file_counts_as_missing(tmp_path):
     assert "img_missing" in stages[0]["shots"][0]
 ```
 
-- [ ] **Step 2: 跑测试确认失败**
+- [x] **Step 2: 跑测试确认失败**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_manifest.py -q`
 Expected: FAIL / ERROR with `No module named 'sa_manifest'`
 
-- [ ] **Step 3: 写实现**
+- [x] **Step 3: 写实现**
 
 ```python
 #!/usr/bin/env python
@@ -1732,17 +1732,17 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 4: 跑测试确认通过**
+- [x] **Step 4: 跑测试确认通过**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_manifest.py -q`
 Expected: `4 passed`
 
-- [ ] **Step 5: 用真数据生成清单**
+- [x] **Step 5: 用真数据生成清单**
 
 Run: `C:\Python314\python.exe Tools/sa_manifest.py`
 Expected: `36 shots`、`18/18 complete`；若列出缺失阶段，先补截图再继续。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Tools/sa_manifest.py Tools/tests/test_sa_manifest.py Saved/Reports/sa_manifest.json
