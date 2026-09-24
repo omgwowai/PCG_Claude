@@ -126,6 +126,13 @@ def main():
         "stages": stages,
         "footer": ("地形来自复制过来的 MeshPartition Actor，阶段 1 按新的 CityShape "
                    "重新塑形；18 张图资产未做任何修改。实例合计 %d；debug 立方体合计 %d。"
+                   "本表数字取自 Tools/data/stage_census_smallarea.json，即 18 个阶段跑完后的"
+                   "实测值：保存下来的关卡里 debug 立方体已全部清掉（第二个有序 pass 用 "
+                   "debug_nodes=0 重跑了一遍），所以直接去看关卡会读到 0，那是清理结果，"
+                   "不是本表算错。"
+                   "另需说明：该关卡有一个外部 Actor 文件 288 MB，超过 GitHub 单文件 100 MB 的"
+                   "上限，因此被 .gitignore 按 GUID 路径排除，**未入库**；仓库里的关卡打开后"
+                   "会缺这一个 Actor 的内容，与编辑器内的实时状态不完全一致。"
                    % (sum(s["metrics"]["instances"] for s in stages),
                       sum(s["metrics"]["debug_instances"] for s in stages))),
     }

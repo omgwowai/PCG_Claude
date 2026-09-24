@@ -89,7 +89,17 @@ __pycache__/
 !/Content/__ExternalActors__/Variant_Platforming/
 !/Content/__ExternalActors__/Variant_SideScrolling/
 !/Content/__ExternalActors__/PCGArea/
-/Content/__ExternalObjects__/
+# Same reasoning as __ExternalActors__ above: volume-scoped, our own levels' objects are
+# tracked, the imported CitySample ones (under Map/) are not. Note the `/*` form — the
+# previous `/Content/__ExternalObjects__/` excluded the whole directory, and git does not
+# descend into an excluded directory, so an inner `!` exception would never match. The
+# level's own objects are 60 files totalling 248 KB.
+/Content/__ExternalObjects__/*
+!/Content/__ExternalObjects__/ThirdPerson/
+!/Content/__ExternalObjects__/Variant_Combat/
+!/Content/__ExternalObjects__/Variant_Platforming/
+!/Content/__ExternalObjects__/Variant_SideScrolling/
+!/Content/__ExternalObjects__/PCGArea/
 /Plugins/CitySamplePCG/Content/
 
 # Stray CitySample root-level file pulled in with the art copy. It belongs to
