@@ -38,7 +38,8 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAX_EDGE = 1200
 JPEG_QUALITY = 80
 
-STATUS_ZH = {"ok": "有画面", "empty": "数据阶段", "missing": "缺截图"}
+STATUS_ZH = {"ok": "有画面", "empty": "数据阶段", "missing": "缺截图",
+             "empty_expected_geometry": "空 · 未产出几何"}
 
 PAGE = """<title>__TITLE__</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,6 +143,10 @@ PAGE = """<title>__TITLE__</title>
   .chip.ok{color:var(--ok); background:var(--ok-soft)}
   .chip.empty{color:var(--warn); background:var(--warn-soft)}
   .chip.missing{color:var(--bad); background:var(--bad-soft)}
+  /* A non-data stage that produced no geometry is the run's most interesting result, not a
+     failure to report. It shares the warning colour with the data stages so it reads as
+     "expected but worth noticing" rather than as an error. */
+  .chip.empty_expected_geometry{color:var(--warn); background:var(--warn-soft)}
 
   dl.metrics{
     display:flex; flex-wrap:wrap; gap:0; margin:0;
@@ -263,7 +268,13 @@ def render_shots(st, max_edge, quality, repo):
                            .replace("__KIND__", html.escape(str(kind or "")))
                            .replace("__KIND_ZH__", html.escape(KIND_ZH.get(kind, ""))))
                 continue
-            missing.append(str(st.get("graph")))
+        # A shot that cannot be rendered counts as missing whether the manifest gave a
+        # `path` that is absent (legacy shape) or only an `img_missing` (two-shot shape,
+        # which has NO path key). The first version of this appended only in the former
+        # case, so `missing` stayed empty for the two-shot manifest and the caller's
+        # `captured = stages - len(missing)` reported full success even with every PNG
+        # gone. Recorded per SHOT, too, so a stage missing both is counted twice.
+        missing.append((str(st.get("graph")), str(kind or "single")))
         out.append('<div class="noimg">无截图：' +
                    html.escape(str(e.get("img_missing") or "未捕获")) + "</div>")
     return "".join(out), missing, kb
@@ -336,10 +347,17 @@ def build_html_with_stats(man, max_edge=MAX_EDGE, quality=JPEG_QUALITY, repo=Non
         cards.append(card(st, shot_html))
 
     n_total = len(stages)
-    n_shot = n_total - len(missing)
+    # Shot-based, not stage-based: a stage asks for one or two shots and `missing` now
+    # carries one entry per absent shot, so this cannot over-report when PNGs are absent.
+    n_asked = sum(len(s.get("shots") or ([{"path": s["shot"]}] if s.get("shot") else []))
+                  for s in stages)
+    n_shot = n_asked - len(missing)
     n_ok = sum(1 for s in stages if (s.get("metrics") or {}).get("status") == "ok")
     n_data = sum(1 for s in stages
                  if (s.get("metrics") or {}).get("status") == "empty")
+    n_emptygeo = sum(1 for s in stages
+                     if (s.get("metrics") or {}).get("status")
+                     == "empty_expected_geometry")
     tot_inst = sum((s.get("metrics") or {}).get("instances") or 0 for s in stages)
     tot_dbg = sum((s.get("metrics") or {}).get("debug_instances") or 0 for s in stages)
 
@@ -348,7 +366,8 @@ def build_html_with_stats(man, max_edge=MAX_EDGE, quality=JPEG_QUALITY, repo=Non
         '<div><b>%d</b><span>张截图</span></div>' % n_shot,
         '<div><b>%s</b><span>真实实例</span></div>' % format(tot_inst, ","),
         '<div><b>%s</b><span>debug 立方体</span></div>' % format(tot_dbg, ","),
-        '<div><b>%d / %d</b><span>有画面 / 数据阶段</span></div>' % (n_ok, n_data),
+        '<div><b>%d</b><span>有画面阶段</span></div>' % n_ok,
+        '<div><b>%d / %d</b><span>数据阶段 / 空阶段</span></div>' % (n_data, n_emptygeo),
     ])
 
     doc = (PAGE
@@ -384,8 +403,13 @@ def main():
     doc, total_kb, missing = build_html_with_stats(man, args.max_edge,
                                                   args.quality)
 
-    n_total = len(man.get("stages", []))
-    n_shot = n_total - len(missing)
+    _stages = man.get("stages", [])
+    # Shot-based, matching build_html_with_stats: one entry per shot ASKED for, so the
+    # printed count reflects absent PNGs rather than silently equalling the stage count.
+    n_asked = sum(len(s.get("shots") or ([{"path": s["shot"]}] if s.get("shot") else []))
+                  for s in _stages)
+    n_total = len(_stages)
+    n_shot = n_asked - len(missing)
 
     out = args.out if os.path.isabs(args.out) else os.path.join(REPO, args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -393,10 +417,11 @@ def main():
         fh.write(doc)
 
     print("wrote %s" % out)
-    print("stages=%d captured=%d embedded=%.1f KB html=%.1f KB"
-          % (n_total, n_shot, total_kb, os.path.getsize(out) / 1024.0))
+    print("stages=%d captured=%d/%d embedded=%.1f KB html=%.1f KB"
+          % (n_total, n_shot, n_asked, total_kb, os.path.getsize(out) / 1024.0))
     if missing:
-        print("WARNING stages without an image: %s" % ", ".join(map(str, missing)))
+        print("WARNING stages without an image: %s"
+              % ", ".join("%s/%s" % (g, k) for g, k in missing))
 
 
 if __name__ == "__main__":

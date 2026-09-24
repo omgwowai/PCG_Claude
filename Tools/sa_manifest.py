@@ -85,6 +85,27 @@ def build_stages(census_path, shots_dir, order=None, min_bytes=MIN_BYTES):
                 shots.append({"kind": kind, "img_missing": p})
         present = all("path" in s for s in shots)
         inst = int(real.get(str(n), 0) or 0)
+        # Named `dbg_n`, not `dbg`: `dbg` is the census dict from the top of this function,
+        # and the first version of this edit rebound it to an int, so the second loop
+        # iteration crashed on `int.get`.
+        dbg_n = int(dbg.get(str(n), 0) or 0)
+        status = status_for(n, inst, present)
+        if n in DATA_ONLY:
+            note = ("数据阶段：图产出的是数据而不是实例化几何，"
+                    "本阶段的 geometry 张与前一张相同。")
+        elif not (inst and inst > 0):
+            # Keyed on the DATA, not on `status`. Keying on status meant the note vanished
+            # whenever a stage's shots were also absent (status becomes "missing" first),
+            # so the report would lose its explanation for the run's only empty stage
+            # exactly when it mattered most. The graph completing with data but no geometry
+            # is a property of the stage, not of whether its PNGs were written.
+            note = ("空阶段（实测结论，不是脚本失败）：%s 生成完成（debug 立方体 %s 个，"
+                    "说明中间数据是有的），但**没有产出任何实例化几何**。"
+                    "该阶段在 600 m 岛屿上按密度散布植被，可能因可用地面不足而未达阈值；"
+                    "已按「重新生成 + 再读一次」两步复核，两次都为 0。"
+                    % (graph, format(dbg_n, ",")))
+        else:
+            note = ""
         stages.append({
             "n": n,
             "graph": graph,
@@ -92,13 +113,68 @@ def build_stages(census_path, shots_dir, order=None, min_bytes=MIN_BYTES):
             "shots": shots,
             "metrics": {
                 "instances": inst,
-                "debug_instances": int(dbg.get(str(n), 0) or 0),
-                "status": status_for(n, inst, present),
+                "debug_instances": dbg_n,
+                "status": status,
             },
-            "notes": ("数据阶段：图产出的是数据而不是实例化几何，"
-                      "本阶段的 geometry 张与前一张相同。" if n in DATA_ONLY else ""),
+            "notes": note,
         })
     return stages
+
+
+def footer_text(stages):
+    """The report's closing prose.
+
+    This is where the measurements that live in the census and the ledger reach the page a
+    reader actually opens. The plan's Review Focus requires three things the first version
+    of this footer omitted entirely:
+
+    * the density trade-off between this 600 m area and the full-scale city, stated with
+      its numbers rather than as a caveat, because a reader comparing the two would
+      otherwise conclude the pipeline behaves differently at this scale;
+    * the next-step parameter position, so "make it less dense" has an address
+      (`PCG_3_1_1_Districts`' block grid length/width graph parameters) instead of
+      requiring another investigation;
+    * the two visual cases that were never verified: the highway silhouette's provenance
+      (deliberately long at the source, not a scaling artifact) and the
+      `missing_visual` case where a distant landmark may simply fall outside the frame.
+
+    It also states the magnitude of the git exclusion. The excluded actor belongs to
+    `PCG_4_2_CentralPark_Visuals`, which is the run's densest stage at 1,806,980 instances,
+    so the committed level is missing ~62% of the geometry the report's own totals
+    advertise — not "one actor's content" in any incidental sense.
+    """
+    tot_inst = sum((s.get("metrics") or {}).get("instances") or 0 for s in stages)
+    tot_dbg = sum((s.get("metrics") or {}).get("debug_instances") or 0 for s in stages)
+    biggest = max(((s.get("metrics") or {}).get("instances") or 0) for s in stages) \
+        if stages else 0
+    pct = int(round(100.0 * biggest / tot_inst)) if tot_inst else 0
+
+    return (
+        "地形来自复制过来的 MeshPartition Actor，阶段 1 按新的 CityShape 重新塑形；"
+        "18 张图资产未做任何修改。实例合计 %s；debug 立方体合计 %s。"
+        "本表数字取自 Tools/data/stage_census_smallarea.json，即 18 个阶段跑完后的实测值："
+        "保存下来的关卡里 debug 立方体已全部清掉（第二个有序 pass 用 debug_nodes=0 重跑了一遍），"
+        "所以直接去看关卡会读到 0，那是清理结果，不是本表算错。"
+        "【密度取舍】本次把 2,130×1,818 m 的城市按相似变换缩到 600×512 m，"
+        "**但美术保持原尺寸**，所以单位面积上的实例数比原城高一个数量级："
+        "建筑阶段 382,245 个实例（全尺寸 2 km 城为 478,349），"
+        "中央公园阶段 1,806,980 个（全尺寸为 965,022）—— 面积缩到约 9%%，实例数却接近或超过原城。"
+        "这是「只改样条、不动图」的必然结果，不是缩放错误。若要接近原城观感，"
+        "下一步是改图内参数：`PCG_3_1_1_Districts` 的 **Block grid length / width** "
+        "（按 Large / Medium / Small 街区分档各一组），属结构性改图，需另行确认。"
+        "【未验证项一】高架（HighWay_2 / HighWay_3）在缩后仍从城市两侧各伸出约 2 km，"
+        "这是原关卡的设计（高架本就跨城而过），**不是缩放留下的错误**；"
+        "若远景那两条长剪影不可接受，应改样条而不是改缩放。"
+        "【未验证项二】背景山体（阶段 3，来自 /Game/Environment/Background_City/VistaCliffs_PCG）"
+        "是绝对位置资产，城市缩小后它是否仍落在机位视野内**未做校验**；"
+        "若某阶段画面里看不到预期地物，本报告以 `missing_visual`（未截图证明）如实标注，"
+        "不以截图充数。"
+        "【入库范围】该关卡有一个外部 Actor 文件 **288 MB**，超过 GitHub 单文件 100 MB 的上限，"
+        "因此被 .gitignore 按 GUID 路径排除、**未入库**。该 Actor 属于 "
+        "**PCG_4_2_CentralPark_Visuals**（本表最大的一个阶段，%s 个实例，占全部实例的约 %d%%）："
+        "仓库里的关卡打开后会缺这一个阶段的内容，与编辑器内的实时状态明显不一致。"
+        "这是仓库体积上限导致的结果，已在 .gitignore 旁注明。"
+        % (format(tot_inst, ","), format(tot_dbg, ","), format(biggest, ","), pct))
 
 
 def main():
@@ -124,17 +200,11 @@ def main():
         "level": "/Game/PCGArea/L_SmallArea18",
         "census": census_path,
         "stages": stages,
-        "footer": ("地形来自复制过来的 MeshPartition Actor，阶段 1 按新的 CityShape "
-                   "重新塑形；18 张图资产未做任何修改。实例合计 %d；debug 立方体合计 %d。"
-                   "本表数字取自 Tools/data/stage_census_smallarea.json，即 18 个阶段跑完后的"
-                   "实测值：保存下来的关卡里 debug 立方体已全部清掉（第二个有序 pass 用 "
-                   "debug_nodes=0 重跑了一遍），所以直接去看关卡会读到 0，那是清理结果，"
-                   "不是本表算错。"
-                   "另需说明：该关卡有一个外部 Actor 文件 288 MB，超过 GitHub 单文件 100 MB 的"
-                   "上限，因此被 .gitignore 按 GUID 路径排除，**未入库**；仓库里的关卡打开后"
-                   "会缺这一个 Actor 的内容，与编辑器内的实时状态不完全一致。"
-                   % (sum(s["metrics"]["instances"] for s in stages),
-                      sum(s["metrics"]["debug_instances"] for s in stages))),
+        # Wired to the function, not an inline string: the first version of this fix added
+        # footer_text() and left the old inline footer here, so the function's tests passed
+        # while the generated page carried none of its content. Keeping any of this prose
+        # inline is the bug; the function is the single definition.
+        "footer": footer_text(stages),
     }
     out = args.out if os.path.isabs(args.out) else os.path.join(REPO, args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
