@@ -2005,7 +2005,7 @@ git commit -m "Track the new small-area level and its external actors"
 - Consumes: Task 3 的 `report`、Task 6 的 log 与观测、Task 9 的入库结论
 - Produces: 无代码产物；技能文档与交接文档
 
-- [ ] **Step 1: 改 playbook §3.2**
+- [x] **Step 1: 改 playbook §3.2**
 
 把「重载这个关卡会让编辑器崩溃」这一节整段替换为**真实原因**：
 不是重载，而是**上一次脚本把 UObject 留在 Python 全局里**。内容要点：
@@ -2018,7 +2018,7 @@ git commit -m "Track the new small-area level and its external actors"
   `del` 掉 `unreal.Object` 类型的全局并 `gc.collect()`；
 - 2026-09-24 的复现：`pcg_area_demo_recon.py` 的第一版就是这么崩的，改函数作用域后同一关卡可正常加载。
 
-- [ ] **Step 2: 给 traps.md 加第 25 条**
+- [x] **Step 2: 给 traps.md 加第 25 条**
 
 在 `## 4. 2026-09-23 第二次实测新增` 表后新增 `## 5. 2026-09-24 第三次实测新增`，含：
 
@@ -2030,17 +2030,17 @@ git commit -m "Track the new small-area level and its external actors"
 | **28** | **demo 关卡的样条不止「7 个手绘样条」。** 实测 24 个 Actor 带 `SplineComponent`，其中 `PCG_3_1_1_Districts` 一个 Volume 就带 **67 个**细分样条；另有 `HighRise_Zone_*`、`HighWay_2/3`、以及一批 `PCG Generated Actor` 产生的 `ForestExclusion_*` / `Lake_*` / `ParkPath_*` | 缩放城市必须**遍历所有 SplineComponent**，只改「7 个」会漏掉整张街区细分图 |
 | **29** | **`PCGComponent` 上没有 `is_generating()`**（实测 `hasattr` 为 False），只有 `generated` 布尔 | 判断「生成好了没」用 `generated` 加实例数两次读数是否相同；不要找不存在的 API |
 
-- [ ] **Step 3: 给 migrated-citysample-library.md §2.1 追加**
+- [x] **Step 3: 给 migrated-citysample-library.md §2.1 追加**
 
 在「硬约束：这些图不是自含的」一节末尾加两条：
 - **地形是第 3 个依赖，也是最容易漏的**：demo 关卡的 MeshPartition Actor 是阶段 1 读写、后续阶段投影的目标。**空白关卡跑不出任何东西**。
 - **因此新区域要走模板复制**：`LevelEditorSubsystem.new_level_from_template(新路径, "/CitySamplePCG/Levels/L_CitySamplePCG_Demo")`，一条调用就带上地形、18 个 Volume（含图参数）、11 个机位、灯与水面。实测见 2026-09-24 的 `pcg_sa_level.py`。
 
-- [ ] **Step 4: 更新交接文档**
+- [x] **Step 4: 更新交接文档**
 
 把 `docs/handoff-next-session-small-area.md` 里已过时的两段（「本项目只有 `/Engine/BasicShapes`」「没有建筑美术资产」）改掉——迁移的 62 GB 美术已经到位，`/Game/Building`、`/Game/Road`、`/CitySamplePCG/` 都能用；并把本次的路径、脚本名、census 与报告位置写进去。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add .claude/skills/city-sample-pcg-city-builder/references docs/handoff-next-session-small-area.md

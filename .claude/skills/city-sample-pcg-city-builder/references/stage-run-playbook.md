@@ -120,13 +120,41 @@ LogWindows: Error: Fatal error:
 → **每阶段只 flag 4 个节点**（实测够看清），**画面里最多同时显示 3 个
 debug 组件**，其余 `set_visibility(False)`。
 
-### 3.2 一个必须知道的坑：**重载这个关卡会让编辑器崩溃**
+### 3.2 一个必须知道的坑：**Python 全局里的 UObject 会让下一次切关卡崩掉编辑器**
 
-`CheckForWorldGCLeaks()` 在**关世界未被 GC 回收**时 abort，
-实测重载 `L_CitySamplePCG_Demo` 就会命中（旧 world 仍被引用）。
+> **2026-09-24 更正。** 本文原先写的是「重载这个关卡就会崩」，那是**误诊**。
+> 重载并不是原因，甚至不算危险；真正的原因见下。
 
-→ **一次会话只加载一次**。脚本里保留 `status` 阶段先判断当前关卡，
-已经是目标关卡就**不要**再 `load_level`。
+`CheckForWorldGCLeaks()` 的 abort 条件是**关世界未被 GC 回收**。而本项目的桥
+用 `exec(compile(...), globals())` 在**常驻的 `__main__` 命名空间**里执行脚本，
+所以**顶层变量跨调用存活**：任何留在全局的 world / package / level / actor /
+component 包装都会一直引用旧 world，下一次 `load_level` 就命中：
+
+```
+World Memory Leaks: 1 leaks objects and packages
+  (root) GCObjectReferencer -> FPyReferenceCollector::AddReferencedObjects(Package /Temp/Untitled_1)
+Script Stack: /Script/LevelEditor.LevelEditorSubsystem.LoadLevel
+```
+
+引用链直接指名：是 Python 侧的引用收集器在钉住旧包。
+
+**实测证据（2026-09-24）**：`pcg_area_demo_recon.py` 的第一版把
+`pkg = w.get_outermost()` 留在全局，下一次切关卡就崩了；改成全部局部作用域后，
+**同一个关卡照常加载，没有重启编辑器**。另外 `pcg_sa_hostprobe.py` 打印的
+`globals_count: 74` 里能看到**多个脚本的常量混在同一个字典**，这就是同一个机制。
+
+**正确规则**：
+
+1. **UObject 只放函数局部** —— world / package / level / actor / component 一律不要赋值给顶层变量。
+2. **全局只放 JSON 可序列化的东西** —— 常量、字符串、数字、纯 dict/list。
+3. **切关卡前主动清场**：删掉全局里 `unreal.Object` 类型的名字再 `gc.collect()`
+   （`pcg_sa_level.py` 的 `purge_uobject_globals()` 就是这个，实测三次调用都报 dropped 为空，
+   是廉价的保险）。
+4. **全局 dict/list 也要检查里面有没有对象**：递归判断，不要只看容器类型 ——
+   一个 `{"pkg": package}` 一样会钉住 world。
+
+**副作用之一**：既然全局跨调用存活，`import X` 会被 `sys.modules` 缓存，
+**改了 X 的内容再 import 拿到的是旧代码**。需要热更新就 `sys.modules.pop("X", None)` 再 import。
 
 ---
 
