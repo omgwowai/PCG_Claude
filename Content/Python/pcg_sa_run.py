@@ -277,9 +277,15 @@ def phase_apply_camera(eas, les, stage, camera_mode, target_cm):
     radius = 0.5 * max(mx[0] - mn[0], mx[1] - mn[1])
     az, elev, mult = ORBIT.get(stage, (0, 30, 2.4))
     loc, rot = G.orbit_camera(center, radius, az, elev, mult, min_height=radius * 0.6)
+    # KEYWORDS, NOT POSITIONAL. Measured by pcg_sa_rotprobe.py:
+    #   unreal.Rotator(-32, 180, 0) -> {pitch: 180, yaw: 0, roll: -32}   <- positional order
+    #                                                                     is (roll, pitch, yaw)
+    #   unreal.Rotator(pitch=-32, yaw=180, roll=0) -> the pose we want
+    # This is what produced the sky-only stage 1 capture: passing (pitch, yaw, roll)
+    # positionally built pitch=180, yaw=0 = pointing straight up.
     les.set_level_viewport_camera_info(
         unreal.Vector(loc[0], loc[1], loc[2]),
-        unreal.Rotator(rot[0], rot[1], rot[2]),
+        unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
         les.get_active_viewport_config_key())
     return {"stage": stage, "mode": "computed", "center": [round(v, 1) for v in center],
             "radius": round(radius, 1), "loc": [round(v, 1) for v in loc],
@@ -326,25 +332,36 @@ def run(phase, stage, debug_nodes, camera_mode, target_cm):
     return {"abort": "unknown phase %s" % phase}
 
 
-try:
-    _args = mcp_args if isinstance(mcp_args, dict) else {}
-except NameError:
-    _args = {}
+# The main block MUST be guarded. pcg_sa_shots.py does `import pcg_sa_run` to reuse this
+# module's helpers, and an unguarded block runs at import time — measured 2026-09-24: that
+# printed a stray `{"ok": true, "data": {"abort": "phase probe needs a stage"}}` into the
+# caller's stdout and called run() with default arguments. Harmless only because the default
+# phase is read-only.
+#
+# `__name__ == "__main__"` is the right guard for this environment, measured by
+# pcg_sa_hostprobe.py: the bridge execs scripts with __name__ set to "__main__", so a direct
+# invocation runs the block and an `import` makes it "pcg_sa_run" and skips it. mcp_args is
+# also always present, but that test would be a less precise proxy.
+if __name__ == "__main__":
+    try:
+        _args = mcp_args if isinstance(mcp_args, dict) else {}
+    except NameError:
+        _args = {}
 
-try:
-    RESULT = {"ok": True, "data": run(str(_args.get("phase", "probe")),
-                                     _args.get("stage", None),
-                                     int(_args.get("debug_nodes", 4)),
-                                     str(_args.get("camera_mode", "computed")),
-                                     float(_args.get("target_cm", 60000.0)))}
-except Exception as _exc:
-    RESULT = {"ok": False, "error": "%s: %s" % (type(_exc).__name__, str(_exc)[:400])}
+    try:
+        RESULT = {"ok": True, "data": run(str(_args.get("phase", "probe")),
+                                         _args.get("stage", None),
+                                         int(_args.get("debug_nodes", 4)),
+                                         str(_args.get("camera_mode", "computed")),
+                                         float(_args.get("target_cm", 60000.0)))}
+    except Exception as _exc:
+        RESULT = {"ok": False, "error": "%s: %s" % (type(_exc).__name__, str(_exc)[:400])}
 
-try:
-    mcp_result = json.loads(json.dumps(RESULT, default=str))
-except Exception as _se:
-    mcp_result = {"ok": False, "serialization_failed": str(_se)[:200]}
+    try:
+        mcp_result = json.loads(json.dumps(RESULT, default=str))
+    except Exception as _se:
+        mcp_result = {"ok": False, "serialization_failed": str(_se)[:200]}
 
-print(json.dumps(mcp_result, ensure_ascii=False, default=str)[:200000])
-del RESULT, _args
-gc.collect()
+    print(json.dumps(mcp_result, ensure_ascii=False, default=str)[:200000])
+    del RESULT, _args
+    gc.collect()
