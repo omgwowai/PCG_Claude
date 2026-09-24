@@ -1950,7 +1950,7 @@ git commit -m "Render two captures per stage in the PCG report and keep the sing
 - Consumes: Task 6 产出的 `Content/__ExternalActors__/PCGArea/`
 - Produces: 入库的新关卡与外部 Actor
 
-- [ ] **Step 1: 加放行规则**
+- [x] **Step 1: 加放行规则**
 
 在 `.gitignore` 的 `/Content/__ExternalActors__/*` 之后、`/Content/__ExternalObjects__/` 之前插入一行：
 
@@ -1962,7 +1962,7 @@ git commit -m "Render two captures per stage in the PCG report and keep the sing
 并加 `!/Content/__ExternalObjects__/PCGArea/`，因为外部**对象**（不是 Actor）
 也要跟着关卡入库；若该目录不存在则跳过这一条。
 
-- [ ] **Step 2: 核对入库内容与体积**
+- [x] **Step 2: 核对入库内容与体积**
 
 Run:
 ```bash
@@ -1974,7 +1974,7 @@ Expected: 只有 `Content/PCGArea/`、`Content/__ExternalActors__/PCGArea/`、�
 **最后一条命令必须无输出**——任何超过 90 MB 的单个文件都会让 GitHub 拒收，若出现就把它加回
 `.gitignore` 并在报告里注明该资产未入库。
 
-- [ ] **Step 3: 确认 demo 关卡与图资产没被改动**
+- [x] **Step 3: 确认 demo 关卡与图资产没被改动**
 
 Run:
 ```bash
@@ -1983,7 +1983,7 @@ ls -la Plugins/CitySamplePCG/Content/Levels/L_CitySamplePCG_Demo.umap
 ```
 Expected: 第一条无输出；第二条 mtime 仍是 `Sep 1 11:58`。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add .gitignore Content/Python/pcg_area_demo_recon.py
