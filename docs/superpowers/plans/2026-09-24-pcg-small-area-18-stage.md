@@ -1133,7 +1133,7 @@ git commit -m "Add the small-area stage runner: cleanup, generate, camera, probe
 - Consumes: `pcg_sa_run.py` 的 `ORDER` / `DEBUG_CUBE` / `comps()` / `counted()` / `vol_by_label()` / `phase_apply_camera()`（用 `import pcg_sa_run` 复用，不复制代码）
 - Produces: `Saved/Screenshots/WindowsEditor/sa_stage_NN_<graph>_debug.png` 与 `_geometry.png`；`Saved/Reports/sa_census.json` 累积文件；`finish` → `{"saved", "debug_flags_cleared", "packages_after", "epic_touched"}`
 
-- [ ] **Step 1: 写脚本**
+- [x] **Step 1: 写脚本**
 
 ```python
 # Content/Python/pcg_sa_shots.py
@@ -1392,12 +1392,12 @@ del RESULT, _args
 gc.collect()
 ```
 
-- [ ] **Step 2: 阶段 1 的 debug 张**
+- [x] **Step 2: 阶段 1 的 debug 张**
 
 `run_unreal_script(script_path="pcg_sa_shots.py", args={"phase": "shot_debug", "stage": 1})`
 Expected: `data.fired` 是文件名，`data.cam.mode: computed`，`data.vis.hidden` > 0（别的阶段被隐藏），`data.exists` 可能仍是 `false`（下一帧才写盘）。
 
-- [ ] **Step 3: 确认图落地并看图**
+- [x] **Step 3: 确认图落地并看图**
 
 Run:
 ```bash
@@ -1405,12 +1405,12 @@ ls -la Saved/Screenshots/WindowsEditor/sa_stage_01_PCG_1_1_Terrain_debug.png
 ```
 Expected: 文件存在且 > 50 KB。**用 Read 工具打开这张 PNG 亲眼看一眼**：600 m 的城市应该占据画面中部，不是空天、不是贴脸。若不对，调 `pcg_sa_run.ORBIT[stage]` 的仰角/距离后重截（只改常量，不改逻辑）。
 
-- [ ] **Step 4: 阶段 1 的 geometry 张**
+- [x] **Step 4: 阶段 1 的 geometry 张**
 
 `run_unreal_script(script_path="pcg_sa_shots.py", args={"phase": "shot_geom", "stage": 1})`
 Expected: `data.exists: true`（这一步之前有一个完整往返，上一张已落盘），`data.real_instances` 为 0（数据阶段），`data.suspect_zero: false`（阶段 1 在豁免名单里），`data.census` 指向 `Saved/Reports/sa_census.json`。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Content/Python/pcg_sa_shots.py
