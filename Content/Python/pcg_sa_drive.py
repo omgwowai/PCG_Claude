@@ -89,9 +89,10 @@ def main(stage, phase, verify_from):
         entry["on_disk"] = _verify(run, shots, eas, verify_from)
 
     if phase == "finish":
-        entry["gen_all"] = "skipped"
-        entry["flags"] = shots.run(
-            "finish", stage, 3, 60000.0) if False else None
+        # shots.run's stage argument is unused for finish; it clears every graph's debug
+        # flag, restores visibility, and saves ONLY the derived level. It reports
+        # epic_touched so a dirty CitySample package would be visible.
+        entry["finish"] = shots.run("finish", 1, 3, 60000.0)
         _log_line(entry)
         return entry
 
@@ -143,6 +144,11 @@ def summarise(e):
                     % (c["real"], c["dbg"], e.get("suspect_zero")))
     if fired:
         bits.append("queued=%s" % fired)
+    f = e.get("finish")
+    if f:
+        bits.append("saved=%s flags_cleared=%s epic_touched=%s"
+                    % (f.get("saved"), f.get("debug_flags_cleared"),
+                       f.get("epic_touched")))
     if e.get("promoted"):
         bits.append("promoted=%s" % len(e["promoted"]))
     on_disk = e.get("on_disk")

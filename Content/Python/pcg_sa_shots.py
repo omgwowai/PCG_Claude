@@ -246,6 +246,13 @@ def run_order():
             "PCG_5_1_CityEdge", "PCG_5_2_OuterForest"]
 
 
+def shot_name(n, graph, kind):
+    """The canonical filename for a stage's capture. One definition, used by the
+    capture phases here, by pcg_sa_drive.py for verification, and matched by the
+    report manifest's builder."""
+    return "sa_stage_%02d_%s_%s.png" % (n, graph, kind)
+
+
 def update_census(stage, graph, real_n, dbg_n):
     import unreal
     p = os.path.join(unreal.Paths.project_saved_dir(), CENSUS)
@@ -360,7 +367,7 @@ def run(phase, stage, max_debug_shown, target_cm, skip_camera=False):
     if phase == "shot_debug":
         vis = visible_set(run_mod, eas, 0, hide_debug=False, only_vol=vol,
                           max_debug_shown=int(max_debug_shown))
-        name = "sa_stage_%02d_%s_debug.png" % (s, label)
+        name = shot_name(s, label, "debug")
         r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "debug", "vis": vis,
                   "cam": cam, "promoted": promoted})
@@ -372,7 +379,7 @@ def run(phase, stage, max_debug_shown, target_cm, skip_camera=False):
     if phase == "shot_geom":
         vis = visible_set(run_mod, eas, s, hide_debug=True, only_vol=None)
         real_n, dbg_n, real_c, dbg_c = run_mod.counted(vol)
-        name = "sa_stage_%02d_%s_geometry.png" % (s, label)
+        name = shot_name(s, label, "geometry")
         r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "geometry", "vis": vis,
                   "cam": cam, "promoted": promoted,
