@@ -1761,7 +1761,7 @@ git commit -m "Add the two-shot manifest builder for the small-area report"
 - Consumes: Task 7 的清单（`stages[i].shots` 为列表）
 - Produces: `docs/pcg-small-area-18-stage-report.html`；**同时保持旧的单图清单可用**（`stages[i].shot` 单值路径仍在），因为 09-23 的报告要靠它重建
 
-- [ ] **Step 1: 写失败的测试**
+- [x] **Step 1: 写失败的测试**
 
 ```python
 # Tools/tests/test_sa_report.py
@@ -1825,12 +1825,12 @@ def _tiny_png(tmp_path):
     return str(p)
 ```
 
-- [ ] **Step 2: 跑测试确认失败**
+- [x] **Step 2: 跑测试确认失败**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_report.py -q`
 Expected: FAIL with `AttributeError: module 'build_pcg_stage_report' has no attribute 'build_html'`
 
-- [ ] **Step 3: 改实现**
+- [x] **Step 3: 改实现**
 
 在 `Tools/build_pcg_stage_report.py` 里：
 
@@ -1904,12 +1904,12 @@ def build_html(man, max_edge=MAX_EDGE, quality=JPEG_QUALITY):
 
 5. 在 `PAGE` 的 `<style>` 里加 `.shotcap` 的样式（小字、居中、来自 `--muted`），保证两张图下标看得懂。
 
-- [ ] **Step 4: 跑测试确认通过**
+- [x] **Step 4: 跑测试确认通过**
 
 Run: `C:\Python314\python.exe -m pytest Tools/tests/test_sa_report.py -q`
 Expected: `3 passed`
 
-- [ ] **Step 5: 用真清单生成报告**
+- [x] **Step 5: 用真清单生成报告**
 
 Run:
 ```bash
@@ -1919,7 +1919,7 @@ C:\Python314\python.exe Tools/build_pcg_stage_report.py ^
 ```
 Expected: `wrote docs/...html`，`stages=18 captured=18`，`embedded≈` 数 MB。
 
-- [ ] **Step 6: 回归检查旧报告仍能重建**
+- [x] **Step 6: 回归检查旧报告仍能重建**
 
 Run:
 ```bash
@@ -1931,7 +1931,7 @@ ls -la Saved/Reports/regression-18-stage.html
 ```
 Expected: 生成成功、字节数与 `docs/pcg-18-stage-report.html` 同量级（约 2.9 MB）。这证明单图路径没被改坏。**注意不要覆盖 `docs/pcg-18-stage-report.html`。**
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```bash
 git add Tools/build_pcg_stage_report.py Tools/tests/test_sa_report.py docs/pcg-small-area-18-stage-report.html

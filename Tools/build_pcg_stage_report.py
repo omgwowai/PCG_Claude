@@ -158,6 +158,15 @@ PAGE = """<title>__TITLE__</title>
     margin:0; padding:11px 18px 14px; font-size:13.5px; color:var(--muted);
     border-top:1px solid var(--line); background:var(--surface-2);
   }
+  /* 两张图的下标：debug / 累计几何。小字居中，压在暗色图上，保证看得懂哪张是哪张 */
+  .shotcap{
+    margin:0; padding:6px 18px 10px; font-size:11.5px; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--muted); background:#0a0d11;
+    border-top:1px solid #ffffff14;
+  }
+  @media (max-width:520px){
+    .shotcap{padding-inline:14px}
+  }
 
   footer.run{
     margin-top:32px; padding-top:16px; border-top:1px solid var(--line);
@@ -213,6 +222,53 @@ CARD = """    <li class="stage">
     </li>"""
 
 
+SHOT_FIGURE = ('<figure class="shot" data-kind="__KIND__">'
+               '<img loading="lazy" src="__SRC__" '
+               'width="__W__" height="__H__" alt="__ALT__"></figure>'
+               '<p class="shotcap">__KIND_ZH__</p>')
+KIND_ZH = {"debug": "PCG debug", "geometry": "累计几何"}
+
+
+def render_shots(st, max_edge, quality, repo):
+    """One figure per entry in shots[]; legacy 'shot' single path still works.
+
+    Returns (html, missing_list, total_kb).
+
+    The two-shot path exists because the small-area run captures each stage twice: an
+    isolated PCG-debug frame and a cumulative-geometry frame. The legacy single `shot`
+    key is kept because the 09-23 report is rebuilt from a manifest that uses it, and
+    that report must keep regenerating.
+
+    `data-kind` on each figure is not decoration: it is what lets a reader (or a test)
+    tell the two frames apart in the markup, since the visible captions are Chinese.
+    """
+    out, missing, kb = [], [], 0.0
+    entries = st.get("shots")
+    if not entries:
+        single = st.get("shot")
+        entries = [{"kind": None, "path": single}] if single else []
+    for e in entries:
+        kind = e.get("kind")
+        p = e.get("path")
+        if p:
+            ap = p if os.path.isabs(p) else os.path.join(repo, p)
+            if os.path.exists(ap):
+                uri, w, h, k = encode(ap, max_edge, quality)
+                kb += k
+                out.append(SHOT_FIGURE
+                           .replace("__SRC__", uri)
+                           .replace("__W__", str(w))
+                           .replace("__H__", str(h))
+                           .replace("__ALT__", html.escape(str(st.get("label") or "")))
+                           .replace("__KIND__", html.escape(str(kind or "")))
+                           .replace("__KIND_ZH__", html.escape(KIND_ZH.get(kind, ""))))
+                continue
+            missing.append(str(st.get("graph")))
+        out.append('<div class="noimg">无截图：' +
+                   html.escape(str(e.get("img_missing") or "未捕获")) + "</div>")
+    return "".join(out), missing, kb
+
+
 def encode(path, max_edge, quality):
     """降采样到 max_edge，返回 (data_uri, w, h, kb)。"""
     with Image.open(path) as im:
@@ -243,18 +299,11 @@ def cam_from_note(note):
     return "—"
 
 
-def card(st):
+def card(st, shot):
+    """One stage card. `shot` is the already-rendered figure HTML from render_shots."""
     e = html.escape
     m = st.get("metrics") or {}
     status = str(m.get("status") or "missing").lower()
-    if st.get("img"):
-        shot = ('<figure class="shot"><img loading="lazy" src="' + st["img"] +
-                '" width="' + str(st["img_w"]) + '" height="' + str(st["img_h"]) +
-                '" alt="' + e(str(st.get("label") or st.get("graph"))) +
-                ' 阶段的 PCG 截图"></figure>')
-    else:
-        shot = ('<div class="noimg">无截图：' +
-                e(str(st.get("img_missing") or "未捕获")) + "</div>")
     return (CARD
             .replace("__N__", str(st.get("n", "?")))
             .replace("__LABEL__", e(str(st.get("label") or st.get("graph"))))
@@ -268,41 +317,29 @@ def card(st):
             .replace("__NOTE__", e(str(st.get("notes") or ""))))
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--manifest", required=True)
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--max-edge", type=int, default=MAX_EDGE,
-                    help="内嵌图像长边像素（默认 %d）" % MAX_EDGE)
-    ap.add_argument("--quality", type=int, default=JPEG_QUALITY,
-                    help="内嵌 JPEG 质量（默认 %d）" % JPEG_QUALITY)
-    args = ap.parse_args()
+def build_html_with_stats(man, max_edge=MAX_EDGE, quality=JPEG_QUALITY, repo=None):
+    """Render the manifest to the report document, plus the stats main() prints.
 
-    with open(args.manifest, encoding="utf-8") as fh:
-        man = json.load(fh)
-
+    This is the single rendering pass. build_html() delegates here and keeps only the
+    document, so the two entry points cannot render the stage list twice or disagree
+    about it, and main() still gets total_kb and missing without a second pass.
+    """
+    repo = repo or REPO
     stages = man.get("stages", [])
+    cards, missing = [], []
     total_kb = 0.0
-    cards = []
-    missing = []
     for st in stages:
         st = dict(st)
-        shot = st.get("shot")
-        if shot:
-            p = shot if os.path.isabs(shot) else os.path.join(REPO, shot)
-            if os.path.exists(p):
-                uri, w, h, kb = encode(p, args.max_edge, args.quality)
-                st["img"], st["img_w"], st["img_h"] = uri, w, h
-                total_kb += kb
-            else:
-                st["img_missing"] = p
-                missing.append(st.get("graph"))
-        cards.append(card(st))
+        shot_html, miss, kb = render_shots(st, max_edge, quality, repo)
+        total_kb += kb
+        missing.extend(miss)
+        cards.append(card(st, shot_html))
 
     n_total = len(stages)
     n_shot = n_total - len(missing)
     n_ok = sum(1 for s in stages if (s.get("metrics") or {}).get("status") == "ok")
-    n_data = sum(1 for s in stages if (s.get("metrics") or {}).get("status") == "empty")
+    n_data = sum(1 for s in stages
+                 if (s.get("metrics") or {}).get("status") == "empty")
     tot_inst = sum((s.get("metrics") or {}).get("instances") or 0 for s in stages)
     tot_dbg = sum((s.get("metrics") or {}).get("debug_instances") or 0 for s in stages)
 
@@ -322,6 +359,33 @@ def main():
            .replace("__STATS__", stats)
            .replace("__CARDS__", "\n".join(cards))
            .replace("__FOOTER__", html.escape(str(man.get("footer", "")))))
+    return doc, total_kb, missing
+
+
+def build_html(man, max_edge=MAX_EDGE, quality=JPEG_QUALITY, repo=None):
+    """The report document only. Thin wrapper so callers and tests need one value."""
+    doc, _kb, _missing = build_html_with_stats(man, max_edge, quality, repo)
+    return doc
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--manifest", required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--max-edge", type=int, default=MAX_EDGE,
+                    help="内嵌图像长边像素（默认 %d）" % MAX_EDGE)
+    ap.add_argument("--quality", type=int, default=JPEG_QUALITY,
+                    help="内嵌 JPEG 质量（默认 %d）" % JPEG_QUALITY)
+    args = ap.parse_args()
+
+    with open(args.manifest, encoding="utf-8") as fh:
+        man = json.load(fh)
+
+    doc, total_kb, missing = build_html_with_stats(man, args.max_edge,
+                                                  args.quality)
+
+    n_total = len(man.get("stages", []))
+    n_shot = n_total - len(missing)
 
     out = args.out if os.path.isabs(args.out) else os.path.join(REPO, args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
