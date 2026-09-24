@@ -516,7 +516,7 @@ git commit -m "Add level derivation script that copies the demo level as a templ
   `{"scale", "src_center", "dst_center", "city_bbox_before", "city_bbox_after", "splines":[{"label","components","points_before","points_after","closed"}], "cameras":[...], "volumes":[{"label","loc_before","loc_after"}]}`
   —— **报告（Task 8）与技能修正（Task 10）消费它**。
 
-- [ ] **Step 1: 写脚本**
+- [x] **Step 1: 写脚本**
 
 ```python
 # Content/Python/pcg_sa_shape.py
@@ -711,7 +711,7 @@ del RESULT, _args
 gc.collect()
 ```
 
-- [ ] **Step 2: 先 dry run，核对计划**
+- [x] **Step 2: 先 dry run，核对计划**
 
 `run_unreal_script(script_path="pcg_sa_shape.py", args={"dry_run": true})`
 Expected:
@@ -724,17 +724,17 @@ Expected:
 
 若 `spline_actors` 不是 24（例如 18 或 19），说明 WP 关卡里有 Actor 没加载：报出实际值并停下，先解决加载问题，不要带病继续。
 
-- [ ] **Step 3: 真施加**
+- [x] **Step 3: 真施加**
 
 `run_unreal_script(script_path="pcg_sa_shape.py", args={})`
 Expected: 同 Step 2 的字段，且 `dry_run: false`、`splines[*].points_after == points_before`（点数不变）、`closed` 数组与之前一致。
 
-- [ ] **Step 4: 读回验证（独立于上一步）**
+- [x] **Step 4: 读回验证（独立于上一步）**
 
 `run_unreal_script(script_path="pcg_sa_shape.py", args={"dry_run": true})`
 Expected: **同一次 dry_run 现在读到的是变换后的值**——`src_center` 应≈新的城市中心、`scale` 应≈1.0（因为已经缩过了），`city_size_after_m` ≈ `[600, 512]`。这是「变换确实生效」的独立证据：如果 scale 还是 0.28，说明 Step 3 什么都没改。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Content/Python/pcg_sa_shape.py
