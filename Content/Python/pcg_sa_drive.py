@@ -100,6 +100,20 @@ def main(stage, phase, verify_from):
     entry["graph"] = label
 
     if phase == "debug":
+        # GUARD, mirroring the geom phase's: `gen` adds this stage's instanced components,
+        # and new components are VISIBLE as soon as they exist, so generating stage N while
+        # stage N-1's geometry frame is still pending would add stage N's geometry to that
+        # picture. A capture photographs the visibility current when it RENDERS, which is
+        # ~1-2 minutes after queueing (measured 2026-09-24), so this refuses to touch
+        # anything until the previous stage's geometry frame is on disk. The caller retries.
+        if stage > 1:
+            prev_label = shots.run_order()[stage - 2]
+            pname = shots.shot_name(stage - 1, prev_label, "geometry")
+            if not any(os.path.exists(shots.shot_path(n))
+                       for n in (pname, pname.replace(".png", "_r2.png"))):
+                entry["wait"] = "previous geometry frame not on disk: %s" % pname
+                _log_line(entry)
+                return entry
         entry["gen"] = run.run("gen", stage, 4, "computed", 60000.0)
         vis = shots.visible_set(run, eas, 0, hide_debug=False,
                                only_vol=run.vol_by_label(eas, label), max_debug_shown=3)
@@ -109,6 +123,18 @@ def main(stage, phase, verify_from):
         entry["cam_mode"] = cam.get("mode")
         entry["fire"] = shots.fire(name, les)
     elif phase == "geom":
+        # GUARD: a capture photographs the visibility that is current WHEN IT RENDERS, so
+        # changing to cumulative visibility before the debug frame has rendered would make
+        # both shots identical. Rather than pace this from the host with a poll per stage,
+        # refuse to change anything until the debug frame is on disk; the caller retries.
+        dbg_name = shots.shot_name(stage, label, "debug")
+        dbg_ok = [n for n in (dbg_name, dbg_name.replace(".png", "_r2.png"))
+                  if os.path.exists(shots.shot_path(n))]
+        if not dbg_ok:
+            entry["wait"] = "debug frame not on disk yet: %s" % dbg_name
+            _log_line(entry)
+            return entry
+        entry["debug_frame"] = dbg_ok[0]
         vis = shots.visible_set(run, eas, stage, hide_debug=True, only_vol=None)
         cam = run.phase_apply_camera(eas, les, stage, "computed", 60000.0)
         real_n, dbg_n, real_c, dbg_c = run.counted(run.vol_by_label(eas, label))
@@ -144,6 +170,8 @@ def summarise(e):
                     % (c["real"], c["dbg"], e.get("suspect_zero")))
     if fired:
         bits.append("queued=%s" % fired)
+    if e.get("wait"):
+        bits.append("WAIT(%s)" % e["wait"])
     f = e.get("finish")
     if f:
         bits.append("saved=%s flags_cleared=%s epic_touched=%s"
