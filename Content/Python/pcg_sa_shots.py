@@ -189,6 +189,28 @@ def fire(name, les=None):
     import unreal
     info = {}
     if les is not None:
+        # REALTIME FIRST, and this is the load-bearing call. Evidence table for seven
+        # capture attempts on 2026-09-24, with only the two `RT` rows having set
+        # realtime True in the same call:
+        #
+        #   13:37  sa_stage_01_..._debug.png   fresh name, RT     -> LANDED
+        #   13:44  same name                   --      no RT      -> nothing
+        #   13:47  same name, file deleted     --      no RT      -> nothing
+        #   13:5x  canonical re-claim          --      no RT      -> nothing
+        #   13:1x  _r2 variant, fresh name     --      no RT      -> nothing
+        #   13:53  sa_probe_capture_test.png   fresh name, RT     -> LANDED
+        #   13:5x  sa_ctl_*.png, fresh name    --      no RT      -> nothing
+        #
+        # Realtime is off in the editor's FourPanes2x2 layout (the active key is
+        # "FourPanes2x2.Viewport 1.Viewport1" and editor_get_game_view is False), so a
+        # viewport that is not redrawing gives the automation nothing to photograph and
+        # the task never completes. `editor_invalidate_viewports()` alone was not enough;
+        # the captures fired after the one call that also set realtime all failed.
+        try:
+            les.editor_set_viewport_realtime(True)
+            info["realtime_on"] = True
+        except Exception as ex:
+            info["realtime_err"] = str(ex)[:100]
         try:
             les.editor_invalidate_viewports()
             info["invalidated"] = True
