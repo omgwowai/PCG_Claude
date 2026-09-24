@@ -90,14 +90,43 @@ def visible_set(run, eas, show_upto, hide_debug=True, only_vol=None,
     return {"shown": shown, "hidden": hidden}
 
 
-def fire(name):
+def fire(name, les=None):
+    """Queue one capture, after clearing the way for it.
+
+    Two things measured on 2026-09-24, both needed for a RE-capture to land:
+      * `take_high_res_screenshot` does not overwrite an existing file: the stage 1
+        re-capture fired with `valid: True` and wrote nothing, leaving the 13:37 sky
+        shot in place with an unchanged mtime and no new log line. The 09-23 run never
+        hit this because every capture had a unique per-stage filename.
+      * the viewport has to be invalidated so a fresh frame is actually rendered for
+        the capture to photograph, rather than a throttled or stale one.
+    Both are harmless on a first capture.
+    """
     import unreal
+    info = {}
+    p = shot_path(name)
+    info["pre_existing"] = os.path.exists(p)
+    try:
+        if info["pre_existing"]:
+            os.remove(p)
+        info["removed"] = not os.path.exists(p)
+    except Exception as ex:
+        info["remove_err"] = "%s: %s" % (type(ex).__name__, str(ex)[:120])
+    if les is not None:
+        try:
+            les.editor_invalidate_viewports()
+            info["invalidated"] = True
+        except Exception as ex:
+            info["invalidate_err"] = str(ex)[:100]
     try:
         t = unreal.AutomationLibrary.take_high_res_screenshot(
             1600, 900, name, None, False, False, force_game_view=False)
-        return {"fired": name, "valid": str(t.is_valid_task()) if t else None}
+        info["fired"] = name
+        info["valid"] = str(t.is_valid_task()) if t else None
     except Exception as ex:
-        return {"fired": name, "shot_err": "%s: %s" % (type(ex).__name__, str(ex)[:180])}
+        info["fired"] = name
+        info["shot_err"] = "%s: %s" % (type(ex).__name__, str(ex)[:180])
+    return info
 
 
 def shot_path(name):
@@ -222,7 +251,7 @@ def run(phase, stage, max_debug_shown, target_cm):
         vis = visible_set(run_mod, eas, 0, hide_debug=False, only_vol=vol,
                           max_debug_shown=int(max_debug_shown))
         name = "sa_stage_%02d_%s_debug.png" % (s, label)
-        r = fire(name)
+        r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "debug", "vis": vis,
                   "cam": cam})
         p = shot_path(name)
@@ -234,7 +263,7 @@ def run(phase, stage, max_debug_shown, target_cm):
         vis = visible_set(run_mod, eas, s, hide_debug=True, only_vol=None)
         real_n, dbg_n, real_c, dbg_c = run_mod.counted(vol)
         name = "sa_stage_%02d_%s_geometry.png" % (s, label)
-        r = fire(name)
+        r = fire(name, les)
         r.update({"stage": s, "graph": label, "kind": "geometry", "vis": vis,
                   "cam": cam, "real_instances": real_n, "debug_instances": dbg_n,
                   "real_components": real_c, "debug_components": dbg_c,
