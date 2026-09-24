@@ -158,3 +158,21 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 - **改 brush_builder 的 x/y/z**（推荐，与 actor scale 解耦）：填全尺寸。
 - 或者放大 actor scale —— 但那样必须把网格节点的 `coordinate_space` 设成 **`WORLD`**，
   否则 `LOCAL_COMPONENT`（**默认值**）会把 actor 的缩放乘进 GridExtents，城市会放大同样倍数。
+
+---
+
+## 5. 2026-09-24 第三次实测新增（把 18 阶段跑在小区域上时踩到）
+
+> 这一节按**代价**排序，不是按发现顺序。前五条是计划里原本就列的；**30–33 是本次实际花掉最多时间的四条**。
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **25** | **Python 全局里的 UObject 会钉住旧 world，让下一次切关卡 abort 在 `CheckForWorldGCLeaks()`。** 实测引用链 `FPyReferenceCollector::AddReferencedObjects(Package /Temp/Untitled_1)`，脚本栈指向 `LevelEditorSubsystem.LoadLevel`。09-23 记的「重载 demo 关卡会崩」是误诊 | 顶层只放 JSON；UObject 全放函数内；切关卡前清理并 `gc.collect()`。详见 `stage-run-playbook.md` §3.2 |
+| **26** | **`Actor.add_component_by_class` 不存在**（`AttributeError`），所以**不能从 Python 给 Actor 新挂 SplineComponent** | 要新样条就走「复制带样条的 Actor」或请用户手画。样条只有改写已有的：`set_location_at_spline_point` / `set_tangent_at_spline_point` / `set_closed_loop` / `update_spline`（都是 `UFUNCTION`，实测可用） |
+| **27** | **`set_spline_points()` 会把所有点重设为 `CurveAuto` 并丢弃自定义切线**，原本是 `CURVE_CUSTOM_TANGENT` 的样条形状会变 | 逐点 `set_location_at_spline_point(i, p, WORLD, False)` + `set_tangent_at_spline_point(i, 变换后的切线, WORLD, False)`，最后 `update_spline()` 一次 |
+| **28** | **demo 关卡的样条不止「7 个手绘样条」。** 实测 **19 个 Actor** 带 `SplineComponent`（85 个组件、453 个点），其中 `PCG_3_1_1_Districts` **一个 Volume 就带 67 个**细分样条；另有 `HighRise_Zone_*`、`HighWay_2/3`、以及 `PCG Generated Actor` 产生的 `ForestExclusion_*` / `Lake_*` / `ParkPath_*` | 缩放城市必须**遍历所有 SplineComponent**。只改「7 个」会漏掉整张街区细分图。复现数字在 `Saved/Reports/sa_inventory.json` 与 `pcg_sa_verify.py` |
+| **29** | **`PCGComponent` 上没有 `is_generating()`**（实测 `hasattr` 为 False），只有 `generated` 布尔 | 判断「生成好了没」用 `generated` + 实例数两次读数是否相同；不要找不存在的 API |
+| **30** | **（本次最难的一条）样条的 world ↔ local 存储规则**，四次尝试、两次关卡重置才搞对：`world = local + actor_location`（组件 rotation 1 / scale 1）；**`local` 在 actor 移动时不变**；`set_location_at_spline_point(p, WORLD)` 存的是 `local = p - actor_location`，写 WORLD 读回来**精确**（`write_error` 为 0）；但**写完再移动 actor，该点会跟着位移** | **读点在动 actor 之前，写点在动 actor 之后。** 正确顺序是三段式：PASS 0 快照所有点的 world → PASS 1 每个 actor **只移动一次**（按 `get_path_name()` 去重，带样条的 PCGVolume 会同时出现在两个集合里，移动两次就错）→ PASS 2 写映射后的 world 点。所有错误版本的症状都一样：误差恰为 `s * (L1 - L0)`（实测 CityShape 偏 `(-1921.2, 1401.6)` cm，与 `0.2816816 * (-6820.516, 4975.783)` 吻合到 0.1 cm）。复现探针：`Content/Python/pcg_sa_convprobe.py` |
+| **31** | **截图是异步的，落盘延迟约 1–2 分钟**，不是「下一帧」。同一次调用里查 `os.path.exists()` 会读到 `False`，90 秒的轮询也会超时 —— 于是**六张已经成功的截图被判为失败**，并因此产生了四个被证伪的假设（文件名复用、同调用内移机位、realtime 开关、窗口最小化） | **不要用同一次调用的结果判断截图成败**；核验放到**下一次调用**（或主机侧等 1–2 分钟再查盘）。`pcg_sa_drive.py` 的两个 phase 都内建了这个等待，并把 `WAIT(<name>)` 作为「上一张还没落盘」的信号返回 |
+| **32** | **截图文件名是一次性的：automation 会拒绝写过一次的名字，即使文件已被删除。** 而它记住了什么**从 Python 侧读不到** | 用「带时间戳或 `_rN` 后缀的新名字」；把已用过的名字**落盘记账**（`Saved/Reports/sa_shot_names.json`），并在下一次调用把 `_rN` 改名回规范名。**不要靠 `os.path.exists` 推断名字是否可用** —— 删掉文件后它照样拒绝 |
+| **33** | **一次调用里批量重新生成全部 18 个阶段会破坏阶段间依赖。** 图之间靠 `Get_ActorDataByRef` 读上游 Actor 数据；并发重跑让下游阶段读到「正在重建」的上游数据。实测：阶段 17 的 6,400 个实例**全部丢失**、阶段 13 少了 8,177 个建筑 | **严格按阶段号顺序重跑**，一阶段一次调用，中间留出生成时间。判断修复成功的方法不是「没报错」，而是**逐阶段把 `real_instances` 与一份已定稿的 census 比对**（`pcg_sa_census_cmp.py` 就是干这个的） |

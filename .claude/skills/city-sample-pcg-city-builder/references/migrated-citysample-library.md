@@ -61,10 +61,48 @@
 > ⚠️ **命名细节**：图里写的是 `Terrain_shaping_1`，而关卡 Actor 的 Tag 是
 > `Terrain_shaping`（没有 `_1`）。别把这两个当成同一个字符串。
 
+> ⚠️ **2026-09-24 两处更正**（都是实测，本文先前写错）：
+>
+> 1. **样条不是「7 个手绘样条」**：实测 **19 个 Actor 带 `SplineComponent`**，共 85 个组件、
+>    453 个点。其中 `PCG_3_1_1_Districts` **一个 Volume 就带 67 个**细分样条，
+>    另有 `HighRise_Zone_1/2`、`HighWay_2/3`（各 11–12 点）、`PCG Generated Actor` 产生的
+>    `ForestExclusion_*` / `Lake_*` / `ParkPath_*`。**缩放或改造城市时必须遍历所有
+>    SplineComponent**，只改「7 个」会漏掉整张街区细分图。
+> 2. **`Highway_Width` 不是 Actor Tag**，而是**图参数**：实测 194 个 Actor 里**没有任何一个**
+>    带 `Highway_Width` 这个 Tag（源关卡与副本都没有）。它由 `PCG_3_1_3_Highways` 里的
+>    `PCGGenericUserParameterGetSettings`（`property_path = "Highway_Width"`）读取，
+>    属于上表 (a) 类。确认方式是探针扫 `property_path`，不是查 Tag。
+
+### 2.2 第三个依赖：**地形（MeshPartition），也是最容易漏的一个**
+
+上表 (a)(b) 之外还有一样东西，单看「图与图之间怎么传数据」是看不见的：
+
+**demo 关卡的地形是一个 `/Script/MeshPartition.MeshPartition` Actor。**
+阶段 1（`PCG_1_1_Terrain`）从它读地形、再把塑形结果写回；**后续所有阶段都往它上面投影**。
+
+→ **空白关卡跑不出任何东西**：没有 MeshPartition，阶段 1 无处可写，后面每一阶段的地面
+  贴地都会落空 —— 而且**不报错**，只是产出变少或变空。这是本流水线最贵的静默零点。
+
+### 2.3 因此：**新区域走「模板复制」，不要从空白关卡搭**
+
+```python
+les.new_level_from_template("/Game/PCGArea/L_SmallArea18",
+                            "/CitySamplePCG/Levels/L_CitySamplePCG_Demo")
+```
+
+一条调用就把**地形 Actor、18 个 PCGVolume（含各自的图参数覆盖）、11 个电影机位、灯与水面**
+全部带过来。实测（2026-09-24，`Content/Python/pcg_sa_level.py`）：副本 194 个 Actor、
+地形 1 个、Volume 18 个、机位 11 个、样条 Actor 19 个，与源关卡逐项一致，且源关卡
+mtime 保持出厂日期不变（复制不会写源关卡）。
+
+**注意**：`new_level_from_template` 在**目标已存在**时返回 `False`，此时回退路径
+`EditorLoadingAndSavingUtils.new_map_from_template` + `save_map` 才是实际生效的那条 ——
+脚本里两条都要留。
+
 → **单拎一张图出来挂到空关卡上是没数据的。** 两条路：
 
 1. 用搬来的演示关卡 `/CitySamplePCG/Levels/L_CitySamplePCG_Demo`（带 194 个外部 Actor、
-   那 7 个手绘样条、以及 18 个 PCGVolume），从上游阶段开始跑；
+   19 个带样条的 Actor、以及 18 个 PCGVolume），从上游阶段开始跑；
 
    **该关卡已实测装配完整**：194 个外部 Actor 中有 24 个提到 `PCGVolume`，
    它们**恰好各引用 18 张图里的 1 张**（`PCG_1_1_Terrain` … `PCG_5_2_OuterForest`，
