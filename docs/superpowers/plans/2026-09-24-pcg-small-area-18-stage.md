@@ -757,7 +757,7 @@ git commit -m "Add the similarity-transform step that shrinks the copied city to
   - `apply_camera` → `{"stage", "camera", "loc", "rot", "mode"}`（`mode` 是 `computed` 或 `cine`）
   - `probe` → `{"stage", "volumes", "real_components", "debug_components", "real_instances", "debug_instances", "generated"}`
 
-- [ ] **Step 1: 写脚本的骨架与四个 phase**
+- [x] **Step 1: 写脚本的骨架与四个 phase**
 
 ```python
 # Content/Python/pcg_sa_run.py
@@ -1094,27 +1094,27 @@ del RESULT, _args
 gc.collect()
 ```
 
-- [ ] **Step 2: 清场**
+- [x] **Step 2: 清场**
 
 `run_unreal_script(script_path="pcg_sa_run.py", args={"phase": "cleanup_all"})`
 Expected: `data.cleaned: 18`
 
-- [ ] **Step 3: 生成阶段 1 并核对**
+- [x] **Step 3: 生成阶段 1 并核对**
 
 `run_unreal_script(script_path="pcg_sa_run.py", args={"phase": "gen", "stage": 1})`
 Expected: `data.fired: true`，`data.activated: true`，`data.flagged: 4`，`data.flagged_nodes` 有 4 个类名，`data.err` 不出现。
 
-- [ ] **Step 4: 下一次调用读阶段 1**
+- [x] **Step 4: 下一次调用读阶段 1**
 
 `run_unreal_script(script_path="pcg_sa_run.py", args={"phase": "probe", "stage": 1})`
 Expected: `data.generated: true`；阶段 1 是数据阶段，`real_instances` 可能是 0（地形写进 MeshTerrain，不是实例），`debug_instances` **必须 > 0**（否则 debug flag 没生效）。
 
-- [ ] **Step 5: 机位验证**
+- [x] **Step 5: 机位验证**
 
 `run_unreal_script(script_path="pcg_sa_run.py", args={"phase": "apply_camera", "stage": 1})`
 Expected: `mode: computed`，`center` ≈ 新城市中心（≈ `[-9485, 6937, 0]`），`radius` ≈ **30000 cm**（600 m 城市的一半），`loc` 在 `center` 之外 2.6×半径 的方向上、z 大于 0。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Content/Python/pcg_sa_run.py
