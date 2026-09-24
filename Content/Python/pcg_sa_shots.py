@@ -185,32 +185,24 @@ def promote_variants():
 
 
 def fire(name, les=None):
-    """Queue one capture under a never-used name; report what was claimed."""
+    """Queue one capture under a never-used name; report what was claimed.
+
+    NO VIEWPORT MUTATION HERE, deliberately. An earlier version set
+    `editor_set_viewport_realtime(True)` on every capture and claimed it was "the
+    load-bearing call", with a seven-row evidence table. That hypothesis was FALSIFIED:
+    the run that set realtime and still wrote nothing is recorded in the ledger, as is
+    the run that did not set it and landed. Setting a persistent editor preference on
+    every shot for an unproven reason also has a real cost — it changes the user's
+    viewport state and nothing restores it. `editor_invalidate_viewports()` is kept
+    because it is harmless and was in the version that landed first.
+
+    The one measured fact about a capture that does not land: the write is asynchronous
+    and can take a minute or two, so a missing file in the SAME call means nothing. Judge
+    a capture on a LATER call, from disk.
+    """
     import unreal
     info = {}
     if les is not None:
-        # REALTIME FIRST, and this is the load-bearing call. Evidence table for seven
-        # capture attempts on 2026-09-24, with only the two `RT` rows having set
-        # realtime True in the same call:
-        #
-        #   13:37  sa_stage_01_..._debug.png   fresh name, RT     -> LANDED
-        #   13:44  same name                   --      no RT      -> nothing
-        #   13:47  same name, file deleted     --      no RT      -> nothing
-        #   13:5x  canonical re-claim          --      no RT      -> nothing
-        #   13:1x  _r2 variant, fresh name     --      no RT      -> nothing
-        #   13:53  sa_probe_capture_test.png   fresh name, RT     -> LANDED
-        #   13:5x  sa_ctl_*.png, fresh name    --      no RT      -> nothing
-        #
-        # Realtime is off in the editor's FourPanes2x2 layout (the active key is
-        # "FourPanes2x2.Viewport 1.Viewport1" and editor_get_game_view is False), so a
-        # viewport that is not redrawing gives the automation nothing to photograph and
-        # the task never completes. `editor_invalidate_viewports()` alone was not enough;
-        # the captures fired after the one call that also set realtime all failed.
-        try:
-            les.editor_set_viewport_realtime(True)
-            info["realtime_on"] = True
-        except Exception as ex:
-            info["realtime_err"] = str(ex)[:100]
         try:
             les.editor_invalidate_viewports()
             info["invalidated"] = True
@@ -251,6 +243,23 @@ def shot_name(n, graph, kind):
     capture phases here, by pcg_sa_drive.py for verification, and matched by the
     report manifest's builder."""
     return "sa_stage_%02d_%s_%s.png" % (n, graph, kind)
+
+
+def shot_name_candidates(n, graph, kind, limit=12):
+    """Every name a stage's shot may legitimately have landed under, canonical first.
+
+    `claim_name()` appends `_r2`, `_r3`, ... until it finds a name the automation has not
+    been asked to write, and it is unbounded: stage 1 of the first run landed as `_r3`
+    after two spent names. Any consumer that looks for a shot on disk must therefore try
+    the whole sequence, not just the canonical name and `_r2` — the drive guards did the
+    latter and would have reported `WAIT` forever for stage 1.
+    """
+    base = shot_name(n, graph, kind)
+    stem = base[:-len(".png")]
+    out = [base]
+    for k in range(2, limit + 1):
+        out.append("%s_r%d.png" % (stem, k))
+    return out
 
 
 def update_census(stage, graph, real_n, dbg_n):

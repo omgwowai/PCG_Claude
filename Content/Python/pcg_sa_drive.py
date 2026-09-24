@@ -110,7 +110,8 @@ def main(stage, phase, verify_from):
             prev_label = shots.run_order()[stage - 2]
             pname = shots.shot_name(stage - 1, prev_label, "geometry")
             if not any(os.path.exists(shots.shot_path(n))
-                       for n in (pname, pname.replace(".png", "_r2.png"))):
+                       for n in shots.shot_name_candidates(
+                           stage - 1, prev_label, "geometry")):
                 entry["wait"] = "previous geometry frame not on disk: %s" % pname
                 _log_line(entry)
                 return entry
@@ -128,7 +129,7 @@ def main(stage, phase, verify_from):
         # both shots identical. Rather than pace this from the host with a poll per stage,
         # refuse to change anything until the debug frame is on disk; the caller retries.
         dbg_name = shots.shot_name(stage, label, "debug")
-        dbg_ok = [n for n in (dbg_name, dbg_name.replace(".png", "_r2.png"))
+        dbg_ok = [n for n in shots.shot_name_candidates(stage, label, "debug")
                   if os.path.exists(shots.shot_path(n))]
         if not dbg_ok:
             entry["wait"] = "debug frame not on disk yet: %s" % dbg_name
