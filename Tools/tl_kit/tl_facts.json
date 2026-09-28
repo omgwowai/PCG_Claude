@@ -1,0 +1,124 @@
+{
+  "_generated_by": "Content/Python/tl_probe_facts.py",
+  "_task": "task-1-brief.md Step 1-5 reconnaissance for the TL building-style plan",
+  "mesh_pivot": [
+    {
+      "role": "L1_wall",
+      "path": "/Game/Building/CH/A/Kit_Bldg_CHA_L1_A/Mesh/SM_BLDG_CHA_L01_A_Wall_01_N1",
+      "deviated_from_brief": false,
+      "loaded": true,
+      "origin_cm": [-59.896, -162.5, 250.008],
+      "extent_cm": [87.74, 162.5, 249.99],
+      "sphere_radius_cm": 310.806,
+      "bounds_min": [-147.635, -325.0, 0.017],
+      "bounds_max": [27.844, 0.0, 500.0],
+      "num_lods": 2,
+      "lod0_verts": 702,
+      "lod0_tris": 512
+    },
+    {
+      "role": "L1_column",
+      "path": "/Game/Building/CH/A/Kit_Bldg_CHA_L1_A/Mesh/SM_BLDG_CHA_L01_A_Column_01_N1",
+      "deviated_from_brief": false,
+      "loaded": true,
+      "origin_cm": [-59.875, -62.501, 250.007],
+      "extent_cm": [87.72, 62.5, 249.99],
+      "sphere_radius_cm": 272.208,
+      "bounds_min": [-147.594, -125.002, 0.014],
+      "bounds_max": [27.844, 0.001, 500.0],
+      "num_lods": 2,
+      "lod0_verts": 511,
+      "lod0_tris": 290
+    },
+    {
+      "role": "L2_wall",
+      "path": "/Game/Building/CH/A/Kit_Bldg_CHA_L2_A/Mesh/SM_BLDG_CHA_L02_A_Wall_01_N1",
+      "deviated_from_brief": true,
+      "brief_path": "/Game/Building/CH/A/Kit_Bldg_CHA_L01_A/Mesh/SM_BLDG_CHA_L02_A_Wall_01_N1",
+      "deviation_note": "The brief's path names an 'L01' folder holding an 'L02'-named mesh; that folder does not exist on disk (confirmed by direct load_asset failure and directory listing). The real, on-disk folder for the L02 wall module is 'Kit_Bldg_CHA_L2_A' (matching the L1 kit's own naming pattern 'Kit_Bldg_CHA_L1_A'). Substituted per the coordinator's explicit ruling to pick a genuine wall module from a standard level (L2 or later) that actually exists.",
+      "loaded": true,
+      "origin_cm": [-34.947, -162.5, 149.997],
+      "extent_cm": [35.53, 162.5, 150.0],
+      "sphere_radius_cm": 223.986,
+      "bounds_min": [-70.478, -325.0, -0.006],
+      "bounds_max": [0.584, 0.0, 300.0],
+      "num_lods": 2,
+      "lod0_verts": 3638,
+      "lod0_tris": 2512
+    }
+  ],
+  "rule_grammars": {
+    "assets": {
+      "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L00": "[FC][FS2]+[LC]",
+      "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L01": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
+      "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L02": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
+      "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L05": "[FC][WS1][W1]+[LC]",
+      "/CitySamplePCG/PCG/DataAssets/Buildings/SFB/RULE_SFB_L01": "[FC][W5][WS3][W3]+[W5][LC]"
+    },
+    "read_mechanism": {
+      "correction_to_task4_plan": "Task 4's plan text assumes a RULE asset (BP_ShapeGrammarRule_C instance) exposes a property literally named 'grammar', writable via set_editor_property(\"grammar\", ...). THIS IS WRONG. The asset's only top-level property is \"rule\" (case-insensitively also \"Rule\"), which returns an STC_Rule struct. That struct does NOT expose its fields via get_editor_property() on any dir()-listed name (dir() lists only generic struct methods), and its to_dict() returns an empty {}. The working read (and, by the same struct-serialization mechanism, the expected write) path is export_text()/import_text() using UE's canonical '(FieldName_GUID=value,...)' text format. The grammar field's real mangled name is 'grammar_10_4003928D40C6099DCA57829F48235D57' (identical GUID suffix across all 5 assets tested, since it's a class-level struct layout, not per-instance). Task 4 MUST be corrected to read/write via rule.export_text()/rule.import_text() (or an equivalent set_editor_properties() call keyed by the mangled name), not via get_editor_property(\"grammar\")/set_editor_property(\"grammar\", ...)."
+    },
+    "step4_verdict": {
+      "headline": "BDF<->RULE token mapping HOLDS: all 4 pairs match exactly. No contradiction found.",
+      "all_match": true,
+      "pairs": [
+        {"bdf_label": "LV0", "rule_asset": "RULE_CHA_L00", "bdf_grammar": "[FC][FS2]+[LC]", "rule_grammar": "[FC][FS2]+[LC]", "match": true},
+        {"bdf_label": "LV1-F0", "rule_asset": "RULE_CHA_L05", "bdf_grammar": "[FC][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[LC]", "match": true},
+        {"bdf_label": "LV1-F1", "rule_asset": "RULE_CHA_L01", "bdf_grammar": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]", "match": true},
+        {"bdf_label": "LV2-F1", "rule_asset": "RULE_CHA_L02", "bdf_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "match": true}
+      ]
+    }
+  },
+  "whitelist_nodes": {
+    "headline": "The style-code whitelist (CHA, CHB, ..., and where TL would be added) is a graph-level user parameter named 'BuildingsStyles' (String, default \"\") on /CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings's user_parameters InstancedPropertyBag. It is NOT overridden anywhere in the two whitelist graphs named in the brief, nor at the top-level PCG_3_3_1_Buildings level graph -- every consumer relies on the empty-string default, which per its pin tooltip means 'randomly use all available building styles'.",
+    "PCG_3_3_1_Buildings": {
+      "path": "/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings",
+      "hits": [],
+      "note": "No node/settings property on this graph carries the literal whitelist string as a value (confirmed by both a targeted scan and a full member-dump scan). This graph's own user_parameters bag has NO BuildingsStyles entry at all (it only carries Debug/MinHeight*/MaxHeight*/Partitioned/ComplexBuildingShapes/CollisionGeometry) -- so BuildingsStyles is never surfaced for a level author to set here. It contains 3 PCGSubgraphSettings nodes (Subgraph_3, Subgraph_40, Subgraph_41) whose subgraph_instance.graph resolves to Assign_CitySampleBuildings; all 3 have subgraph_override == None, i.e. none of them override BuildingsStyles."
+    },
+    "Assign_BldgStyles_per_MinWallWidth": {
+      "path": "/CitySamplePCG/PCG/Assign_BldgStyles_per_MinWallWidth",
+      "hits": [],
+      "note": "No node/settings property on this graph carries the literal whitelist string as a value either (same two scan methods). This graph's own user_parameters bag is empty (no properties at all). It contains 10 PCGSubgraphSettings nodes (Subgraph_2, Assign_20/15/14/12/11/10/9/8/6) whose subgraph_instance.graph resolves to Assign_CitySampleBuildings; all 10 have subgraph_override == None."
+    },
+    "Assign_CitySampleBuildings": {
+      "path": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings",
+      "hits": [
+        {
+          "node": "<graph user_parameters>",
+          "settings_class": "InstancedPropertyBag",
+          "param": "BuildingsStyles",
+          "type": "String",
+          "value": "",
+          "sibling_params": ["InputsProcessingGraph", "InputsFallbackGraph", "CoreProcessGraph", "PrepareOutputsGraph", "MinHeight", "MaxHeight", "BuildingsStyles", "Staggered", "Foundation", "SpawnMeshes", "SpawnIntoBuildingsActors", "Seed"],
+          "read_mechanism": "graph.get_editor_property(\"user_parameters\") -> InstancedPropertyBag; to_dict() returns {} (unhelpful, same pattern as STC_Rule); export_text() returns the real values, e.g. '(Value=/Engine/Transient.PropertyBag_...(...,BuildingsStyles=\"\",...))'.",
+          "note": "This is the TRUE, unique edit target for adding style code TL to the whitelist: append TL (and update the tooltip's enumerated list/glossary, which lives as separate FProperty metadata -- see tooltip_metadata_not_reachable_via_api below) here, or set a subgraph_override on a specific instantiating node for a scoped change."
+        }
+      ]
+    },
+    "Assign_CitySampleBuildings_CoreProcess_consumers": {
+      "path": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/Assign_CitySampleBuildings_CoreProcess",
+      "note": "This subgraph is the CoreProcessGraph referenced by Assign_CitySampleBuildings's user_parameters (see sibling_params above). It contains 56 nodes; 2 of them READ (not write) a live PCG point-data attribute named 'BuildingsStyles' (materialized from the graph user-parameter of the same name): FilterDataByAttribute_4 filters on attribute '@Data.BuildingsStyles', and DataAttributesToTags_1 maps attribute 'BuildingsStyles' to a tag. The node that WRITES/materializes the attribute from the user-parameter was not conclusively located within Task 1's time-box; these two are consumers, not the definition site. The user-parameter default itself (recorded above) remains the authoritative whitelist edit target regardless.",
+      "hits": [
+        {"node": "FilterDataByAttribute_4", "settings_class": "PCGFilterByAttributeSettings", "param": "attribute", "value": "@Data.BuildingsStyles"},
+        {"node": "DataAttributesToTags_1", "settings_class": "PCGDataAttributesToTagsSettings", "param": "attributes_tags_mapping", "value": "{\"BuildingsStyles\": {}}"}
+      ]
+    },
+    "tooltip_metadata_not_reachable_via_api": {
+      "summary": "The full enumerated style-code list (CHA, CHB, CHC, ..., SFJ) and its per-code glossary (e.g. 'CHA=Chicago early 1900s office building...') exist as FProperty/pin TOOLTIP metadata on the BuildingsStyles parameter, confirmed present in Assign_BldgStyles_per_MinWallWidth.uasset's raw bytes via a byte-level scan from outside the editor (Python file read + regex, ~45 'CHA' occurrences found; no 'strings' utility was available in this environment).",
+      "why_it_matters": "This tooltip text is documentation metadata, NOT a live property value, and is therefore NOT reachable through get_editor_property()-based Python scans -- confirmed by an exhaustive BFS across the full 48-graph closure of both whitelist graphs named in the brief (zero string hits despite the scan mechanism being independently verified correct), plus a direct input_pins/output_pins + pin-label scan (also zero hits). Any later task that needs to update the human-readable glossary (e.g. adding 'TL=<description>' text) will need a different mechanism than get_editor_property()/set_editor_property() -- this was not resolved within Task 1's scope and should be flagged to whichever task handles documentation/tooltip text.",
+      "verbatim_tooltip_fragments": [
+        "The BuildingsStyles string parameter expects a comma-separated list where entries can be one of the following: CHA, CHB, CHC, CHD, CHE, CHF, CHG, CHH, CHI, CHJ, NYAA, NYAB, NYAC, NYAD, NYAE, NYAF, NYG, NYGA, NYH, QBA, QBAA, SFA, SFB, SFC, SFD, SFE, SFJ. If the string is not set, the primitive will randomly use all available buildings styles.",
+        "BuildingsStyles=Definitions..CHA=Chicago early 1900s office building built with medium-sized white concrete blocks and hosting stores on the ground floor...CHB=Chicago 1920s office skyscraper..."
+      ]
+    }
+  },
+  "fbx_import_ok": {
+    "value": "unknown",
+    "checks": {
+      "Interchange.FeatureFlags.Import.FBX_int": 1,
+      "has_legacy_fbx_factory": true
+    },
+    "note": "Determined read-only; no FBX import was attempted, per the coordinator's explicit ruling that Task 1 must not import anything (importing FBX with Interchange enabled from Python is known to crash the editor) and that the missing Interchange.FeatureFlags.Import.FBX cvar in Config/DefaultEngine.ini is out of scope here (it is Task 3's dependency). The console-variable read above returned 1 (enabled) at query time and a legacy FbxFactory class is present, but neither read-only signal constitutes proof that an actual import would succeed, so the value is honestly recorded as \"unknown\" rather than inferred as true."
+  }
+}
