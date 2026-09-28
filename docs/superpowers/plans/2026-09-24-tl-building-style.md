@@ -658,22 +658,35 @@ print(json.dumps({
 mcp_result = R
 ```
 
-- [ ] **Step 2: Confirm Interchange is disabled before importing**
+- [ ] **Step 2: Add the Interchange-off cvar and restart the editor, BEFORE importing**
 
-Check `Config/DefaultEngine.ini` contains the FBX cvar under `[ConsoleVariables]`:
+Task 1 measured that `Config/DefaultEngine.ini` currently has **no `[ConsoleVariables]` section and
+no `Interchange.FeatureFlags.Import.FBX` entry at all** — so this step adds it rather than verifying
+it. This is not optional bookkeeping: importing FBX with Interchange enabled crashes the editor
+process from Python (a TaskGraph RecursionGuard assert — no exception, the process dies), so the
+first import in Step 3 would take the editor down with it.
+
+Check first:
 
 ```bash
-grep -n "Interchange.FeatureFlags.Import.FBX" Config/DefaultEngine.ini
+grep -n "Interchange.FeatureFlags.Import.FBX\|^\[ConsoleVariables\]" Config/DefaultEngine.ini
 ```
 
-Expected: a line `Interchange.FeatureFlags.Import.FBX=False`.
-
-**If absent, add it** under `[ConsoleVariables]` and restart the editor — importing FBX with Interchange enabled crashes the process (spec §2.10, U4). This is the 5.8 re-confirmation of a workaround that was verified on 5.7.
+If the entry is absent, add the section (or the line, if the section exists but is empty):
 
 ```ini
 [ConsoleVariables]
 Interchange.FeatureFlags.Import.FBX=False
 ```
+
+Then **restart the editor** — an ini cvar is read at startup, so adding it while the editor runs
+has no effect. Ask the controller to restart if you cannot, and wait for the bridge on
+127.0.0.1:8777 to come back before continuing.
+
+**This is the 5.8 re-confirmation of a workaround verified on 5.7** (spec §2.10, U4). If Step 3's
+import still crashes with the cvar set, the flag name has changed on 5.8 — read the crash from
+`Saved/Logs/PCG_Claude.log` for the assert text and report back rather than guessing at a second
+flag name.
 
 - [ ] **Step 3: Run the import and read the scale verification**
 
