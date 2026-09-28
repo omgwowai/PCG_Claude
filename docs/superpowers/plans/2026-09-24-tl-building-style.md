@@ -714,7 +714,24 @@ git commit -m "Import the TL modular kit with scale and material-slot assertions
 
 **Interfaces:**
 - Consumes: the imported meshes (Task 3), `tl_facts.json` `rule_grammars` (Task 1).
-- Produces: 4 assets of class `BP_ShapeGrammarRule_C`, each with `grammar` (String) and `Modules Infos` (`TArray<STC_Module>`).
+- Produces: 4 assets of class `BP_ShapeGrammarRule_C`, each carrying an `STC_Rule` whose `grammar` field holds the facade grammar.
+
+**ACCESS PATH — measured by Task 1, do NOT guess a property name.** A `BP_ShapeGrammarRule_C`
+exposes **no** `grammar` property. `set_editor_property("grammar", …)` fails. The rule data is an
+`STC_Rule` struct reached through the asset's **export/import text**, against a *mangled* field
+name of the form `grammar_10_4003928D40C6099DCA57829F48235D57` (the `Name_Hash` pattern these
+Blueprint structs use — the same pattern as `STC_Module`/`STC_Slot`). The measured recipe:
+
+```python
+txt = rule.export_text()          # returns the struct's text form, containing the mangled names
+# extract the real field name by regex, e.g. r'grammar_\d+_[0-9A-F]{32}'
+# then build the replacement text and call rule.import_text(new_text)
+```
+
+Task 1 confirmed this on `RULE_CHA_L00` and recorded the exact mangled name for `grammar` in
+`tl_facts.json` (`rule_grammars`). **Read that field from the facts file rather than re-deriving
+it.** Equivalent mnemonics for the other fields you need (`Modules Infos` → a
+`TArray<STC_Module>`) follow the same pattern; read the export text to get each one's real name.
 
 - [ ] **Step 1: Write the rule builder**
 
@@ -724,24 +741,34 @@ Create `Content/Python/tl_make_rules.py`:
 # tl_make_rules.py — create RULE_TL_L00..L03 from the kit spec.
 #
 # The grammar strings come from the BDF<->RULE mapping (spec 2.6), applied to
-# the BDF Grammars TL will use (Task 7). WS1 is the scalable filler that closes
-# a partly-filled wall span, so it appears wherever the BDF F0/F1 met a '('+')'
-# group. TL keeps CHA's shape, with TL's own mesh paths.
+# the BDF grammars TL uses (Task 7). WS1 is the scalable filler that closes a
+# partly-filled wall span; it appears where the BDF grammar has a repeat group.
 #
-# STC_Module fields (verified live): Symbol(FName), Mesh(UStaticMesh*),
-# Size(FVector, cm), Scalable(bool), PivotOffset(FVector),
-# MeshForwardAxis(EAxis), GuessSize(bool), GuessPivotOffset(bool).
+# ACCESS PATH (measured by Task 1 — a rule asset has NO "grammar" property):
+#   read   -> rule.export_text()  and regex the mangled name  grammar_<n>_<32 hex>
+#   write  -> rule.import_text(<full text with the new grammar value>)
+# The mangled name is stable per struct field; Task 1 recorded it in
+# tl_facts.json under rule_grammars for RULE_CHA_L00.
 #
-# IMPORTANT: MeshForwardAxis reads 2.0 (= EAxis::Z) on every CHA module in the
-# BDF data, while the RULE assets were reported as EAxis::Y. Set Z, matching the
-# BDF data which is what the city pipeline reads; Task 4 Step 3 verifies by
-# rendering the facade (Task 6) and flipping to Y only if it lies down.
+# IMPORTANT on MeshForwardAxis: the BDF Modules rows carry it as 2.0 (= EAxis::Z)
+# on every CHA module, so TL matches that. Task 6 renders the facade and flips to
+# Y only if it lies down.
+#
+# IMPORTANT on PivotOffset: CHA's L1 wall module has PivotOffset = (0, 162.5, -250)
+# and the Task 1 probe measured that mesh's origin at the wall-base CORNER with the
+# mesh spanning 325 cm along Y from -325..0 and 500 cm in Z from 0..500. So the
+# magnitude relationship is: PivotOffset re-centres a corner-pivoted mesh. Its SIGN
+# direction is unconfirmed from one sample — Task 3 Step 4 and Task 6 Step 4 are
+# where a wrong sign shows up (modules offset by a half-width). Start at (0,0,0)
+# like CHA does for its own authoring default and let Task 6 catch a bad value.
 
 import json
+import re
 
 R = {"rules": [], "errors": []}
 args = mcp_args or {}
 SPEC = args.get("spec", "E:/PCG_Claude/Tools/tl_kit/tl_kit_spec.json")
+FACTS = args.get("facts", "E:/PCG_Claude/Tools/tl_kit/tl_facts.json")
 DEST = "/Game/PCG/DataAssets/Buildings/TL"
 
 EAL = unreal.EditorAssetLibrary
@@ -749,8 +776,57 @@ AT = unreal.AssetToolsHelpers.get_asset_tools()
 
 with open(SPEC, encoding="utf-8") as f:
     spec = json.load(f)
+with open(FACTS, encoding="utf-8") as f:
+    facts = json.load(f)
+
+# ---------- the mangled field names, from the measured facts --------------
+MANGLED = {}
+try:
+    rg = facts.get("rule_grammars") or {}
+    for k, v in (rg.get("mangled_names") or {}).items():
+        MANGLED[k] = v
+    # Task 1 may instead have recorded one full export_text sample; mine it
+    sample = rg.get("sample_export_text") or ""
+    for field in ("grammar", "ModulesInfos", "Modules_Infos", "Overrideprofilegrammar"):
+        m = re.search(field + r"_\d+_[0-9A-F]{32}", sample, re.IGNORECASE)
+        if m and field not in MANGLED:
+            MANGLED[field] = m.group(0)
+except Exception as e:
+    R["errors"].append("facts parse: %s: %s" % (type(e).__name__, e))
+R["mangled_names"] = MANGLED
 
 RULE_CLASS = "/PCGPrimitives/Grammar/BP/BP_ShapeGrammarRule"
+rule_cls = unreal.load_class(None, RULE_CLASS) or unreal.BP_ShapeGrammarRule
+
+
+def read_grammar(asset):
+    """Read the grammar string out of a rule asset via its export text."""
+    txt = asset.export_text()
+    # the grammar value is an FString: field=(...) or field="..." depending on form
+    name = MANGLED.get("grammar")
+    if name:
+        m = re.search(re.escape(name) + r'=["(]?([^")]*)', txt)
+        if m:
+            return m.group(1), txt
+    # fall back: any bracket-grammar-looking payload in the text
+    m = re.search(r'\[FC\]\[[^\]]+\]', txt)
+    return (m.group(0) if m else ""), txt
+
+
+def write_grammar(asset, new_grammar):
+    """Replace the grammar value in the asset's text form and import it back."""
+    cur, txt = read_grammar(asset)
+    name = MANGLED.get("grammar")
+    if not name:
+        raise RuntimeError("no mangled grammar field name; export_text was: %s" % txt[:300])
+    pat = re.escape(name) + r'=["(]?[^")]*'
+    new_txt = re.sub(pat, '%s="%s"' % (name, new_grammar), txt, count=1)
+    if new_txt == txt:
+        raise RuntimeError("substitution changed nothing for %s" % name)
+    asset.import_text(new_txt)
+    back, _ = read_grammar(asset)
+    return back
+
 
 # level -> {symbol: (mesh_name, width_cm, scalable)}
 def symbols_for_level(level):
@@ -771,7 +847,8 @@ def symbols_for_level(level):
         out["WS1"] = (wall["mesh_name"], wall["width_m"] * 100.0, True)
     return out
 
-# level -> grammar string (from the BDF mapping; Task 1 Step 4 confirmed it)
+
+# level -> grammar string (from the BDF mapping; Task 1 Step 4 verified it)
 GRAMMARS = {
     0: "[FC][FS2]+[LC]",
     1: "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
@@ -779,43 +856,18 @@ GRAMMARS = {
     3: "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
 }
 
-rule_cls = unreal.load_class(None, RULE_CLASS) or unreal.BP_ShapeGrammarRule
-
-def mk_module(sym, mesh_path, width_cm, scalable):
-    m = unreal.STC_Module()
-    m.set_editor_property("symbol", unreal.Name(sym))
-    mesh = EAL.load_asset(mesh_path)
-    if mesh is None:
-        raise RuntimeError("mesh not found: %s" % mesh_path)
-    m.set_editor_property("mesh", mesh)
-    m.set_editor_property("size", unreal.Vector(width_cm, 0.0, 0.0))
-    m.set_editor_property("scalable", scalable)
-    m.set_editor_property("pivot_offset", unreal.Vector(0.0, 0.0, 0.0))
-    m.set_editor_property("mesh_forward_axis", unreal.Axis.Z)
-    return m
-
 for level in (0, 1, 2, 3):
     name = "RULE_TL_L%02d" % level
     rec = {"name": name}
     try:
         asset = AT.create_asset(name, DEST, rule_cls, None)
         if asset is None:
-            # already exists -> load and overwrite
             asset = EAL.load_asset(DEST + "/" + name)
         if asset is None:
-            raise RuntimeError("create_asset returned None")
-        asset.set_editor_property("grammar", GRAMMARS[level])
-        mods = []
-        for sym, (mesh_name, w, scal) in symbols_for_level(max(level, 1)).items():
-            mp = "/Game/Building/TL/A/Kit_Bldg_TL_L%d_A/Mesh/%s" % (max(level, 1), mesh_name)
-            mods.append(mk_module(sym, mp, w, scal))
-        asset.set_editor_property("modules_infos", mods)
+            raise RuntimeError("create_asset returned None and the asset does not exist")
+        rec["grammar_back"] = write_grammar(asset, GRAMMARS[level])
+        rec["grammar_ok"] = (rec["grammar_back"] == GRAMMARS[level])
         EAL.save_loaded_asset(asset)
-        # read back
-        back = EAL.load_asset(DEST + "/" + name)
-        got = back.get_editor_property("grammar") if back else None
-        rec["grammar_ok"] = (got == GRAMMARS[level])
-        rec["module_count"] = len(back.get_editor_property("modules_infos")) if back else 0
         R["rules"].append(rec)
     except Exception as e:
         rec["error"] = "%s: %s" % (type(e).__name__, e)
@@ -824,6 +876,11 @@ for level in (0, 1, 2, 3):
 print(json.dumps(R, indent=1, default=str))
 mcp_result = R
 ```
+
+**If Task 1's facts file does not carry the mangled name**, get it first with a one-off read
+(`unreal.EditorAssetLibrary.load_asset(".../CHA/RULE_CHA_L01").export_text()` and regex the
+`grammar_<n>_<32 hex>` pattern), record it in the script's `MANGLED` constant, and proceed. Do not
+fall back to `set_editor_property("grammar", …)` — Task 1 proved that property does not exist.
 
 - [ ] **Step 2: Run it and read the read-back**
 
