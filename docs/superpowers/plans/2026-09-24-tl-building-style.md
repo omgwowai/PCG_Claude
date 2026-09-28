@@ -415,23 +415,28 @@ def material(name):
 
 
 def build_part(part, lod):
-    """A box of the part's footprint and height, origin at wall-base centre.
+    """A box for the part's footprint and height, origin at the BASE CORNER.
 
-    LOD1 halves the segment counts so the kit ships a cheap fallback.
+    PIVOT (measured from CHA by Task 1 — do not "improve" this to centre):
+    the box is centred in X (the facade depth axis), extends in NEGATIVE Y
+    (the wall run) from the origin, and upward in Z from the origin. So the
+    origin sits at (x-centre, y = near end of the run, z = bottom) — CHA's L1
+    wall spans exactly y in [-325, 0] and z in [0, 500] with its origin at
+    (0,0,0). CHA compensates with a per-module PivotOffset of half-width and
+    half-height; TL matches CHA so the same compensation applies unchanged.
     """
     w, h = part["width_m"], part["height_m"]
     depth = 0.30  # facade thickness; the grammar only uses width and height
-    segs = 1 if lod == 0 else 1
-    bpy.ops.mesh.primitive_cube_add(size=2, location=(0, 0, h / 2))
+    # place so that after scaling the box spans x:[-d/2,d/2] y:[-w,0] z:[0,h]
+    bpy.ops.mesh.primitive_cube_add(size=2, location=(0.0, -w / 2.0, h / 2.0))
     obj = bpy.context.active_object
     obj.name = part["mesh_name"] if lod == 0 else part["mesh_name"] + "_LOD1"
-    obj.scale = (w / 2.0, depth / 2.0, h / 2.0)
+    obj.scale = (depth / 2.0, w / 2.0, h / 2.0)
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    # origin to the wall-base centre (bottom of the box)
+    # origin to the WORLD origin, which is the base corner of the box above
     bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
     bpy.ops.object.origin_set(type="ORIGIN_CURSOR")
     obj.data.materials.append(material(part["material"]))
-    # hint for the LOD: a coarse bevel on LOD1 would go here
     return obj
 
 
