@@ -317,9 +317,10 @@ Create `Tools/tl_kit/tl_kit_spec.json`. Twenty-nine parts: 9 for L1, 10 each for
   "variant": "A",
   "unit": "meter",
   "pivot_convention": {
-    "origin": "wall-base-center",
-    "note": "origin at the bottom centre of the wall span; +X along the wall, +Z up",
-    "forward_axis": "Y"
+    "origin": "corner-base",
+    "note": "MEASURED FROM CHA (Task 1), not chosen. The mesh's local origin sits at the BOTTOM of the piece (z = 0, not the z midpoint) and at ONE END of the wall run, not its middle. CHA's L1 wall spans y in [-325, 0] and z in [0, 500] with its origin at (0,0,0), i.e. the y = 0 end and the z = 0 bottom. The wall run is along Y; X is the facade thickness/depth; Z is up.",
+    "compensation": "CHA re-centres each module with a PivotOffset of magnitude (0, width/2, height/2) -- exactly half the wall width and half the height, converting the corner pivot into a centre pivot for the grammar's placement maths. MEASURED: the BDF Modules row for CHA's L1 wall reports PivotOffset = (0, 162.5, -250), and 162.5 = 325/2 with 250 = 500/2. Its SIGN direction is unconfirmed (one sample). TL matches CHA exactly, because CHA's convention is known to lay out correctly.",
+    "forward_axis": "Y is the wall run; MeshForwardAxis in the data reads 2.0 (EAxis::Z)"
   },
   "lods": [0, 1],
   "parts": [
