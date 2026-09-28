@@ -1528,35 +1528,182 @@ git commit -m "Build the TL-extended BDF data asset without touching Epic's"
 
 ---
 
-## Task 8: Register TL in the width tables and the whitelists
+## Task 8: Register TL in the width tables and the style whitelist
 
 Four edits. Without all four, TL exists and never generates.
 
+**What Task 1 measured about the whitelist (this supersedes the plan's earlier model):**
+
+The style-code whitelist is **not** a string literal sitting on a node. Task 1 scanned both graphs
+named earlier plus the full 48-graph closure of their subgraph references and found **zero** node
+properties carrying the style-code string. It is instead a **graph-level user parameter**:
+
+- Name: `BuildingsStyles`, type `String`, default `""`.
+- Host: `Assign_CitySampleBuildings`' own `user_parameters` InstancedPropertyBag.
+- Its own tooltip documents the empty default as *"the primitive will randomly use all available
+  buildings styles"*.
+- **No consumer overrides it.** All 3 subgraph nodes in `PCG_3_3_1_Buildings` and all 10 in
+  `Assign_BldgStyles_per_MinWallWidth` have `subgraph_override == None`, so every consumer is
+  currently taking the "all styles" default.
+- Inside `Assign_CitySampleBuildings_CoreProcess`, the value is materialized as a point-data
+  attribute `BuildingsStyles` and consumed by two nodes: `FilterDataByAttribute_4`
+  (`attribute = "@Data.BuildingsStyles"`) and `DataAttributesToTags_1`
+  (`attributes_tags_mapping = {"BuildingsStyles": {}}`). Those consume it; they are not the
+  definition site.
+
+**Two consequences that shape this task:**
+
+1. The single edit target is the `BuildingsStyles` user parameter. There is no second string to
+   hunt for.
+2. Because nothing overrides it today, TL would in principle already be eligible via the
+   empty-string default. The task still sets it **explicitly**, because relying on an undocumented
+   default for a key behaviour is how the "authored but never registered" failure (Review Focus 1)
+   hides. An explicit list is also the only way to *prove* TL is in the set.
+
 **Files:**
 - Create: `Content/Python/tl_register.py`
-- Modify: `/Game/PCG/DataAssets/BDF/BDF_WithTL` (already done in Task 7)
-- Modify: the two DataTables and the two graphs identified in Task 1
+- Modify: the two DataTables
+- Modify: `/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings` (the `BuildingsStyles` user parameter)
+- Modify: `/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData` (repoint to `BDF_WithTL`)
 
 **Interfaces:**
-- Consumes: Task 1's `whitelist_nodes` (exact node + param), Task 7's `BDF_WithTL`.
-- Produces: TL present in `DT_Bldg_MinWidth`, `DT_Bldg_LevelMinWidth`, `PCG_3_3_1_Buildings`, `Assign_BldgStyles_per_MinWallWidth`; `LoadCitySampleData` repointed at `BDF_WithTL`.
+- Consumes: Task 1's `tl_facts.json` → `whitelist_nodes.Assign_CitySampleBuildings.hits[0]` (the parameter name and its read mechanism), Task 7's `BDF_WithTL`.
+- Produces: TL present in `DT_Bldg_MinWidth`, `DT_Bldg_LevelMinWidth`, the `BuildingsStyles` parameter, and via it in every consumer; `LoadCitySampleData` repointed at `BDF_WithTL`.
 
-- [ ] **Step 1: Write the registration script**
+**Read mechanism for the parameter (Task 1 measured this — do not guess):** the
+`user_parameters` property is an `InstancedPropertyBag`. `to_dict()` returns `{}` (unhelpful), but
+`export_text()` returns the real values, formatted like
+`'(Value=/Engine/Transient.PropertyBag_...(...,BuildingsStyles="",...))'`. Use `export_text()` to
+read and confirm; the setter path must be probed the same way the BDF data was — try, read back,
+and trust only the read-back.
 
-Create `Content/Python/tl_register.py`. **Read `Tools/tl_kit/tl_facts.json` for the exact node and param names from Task 1 — do not guess them here.**
+- [ ] **Step 1: Probe the DataTable row-write mechanism before writing the registration script**
+
+The DataTable edits are genuinely the least certain part of this task, and the earlier plan
+guessed at them. Establish the real mechanism first, in one call, then write the script around
+what works. Do **not** hand-patch a `.uasset`.
+
+Create `Content/Python/tl_dt_probe.py`:
 
 ```python
-# tl_register.py — register TL in the two width tables and the two whitelists,
-# and repoint LoadCitySampleData at BDF_WithTL.
+# tl_dt_probe.py — find how to ADD a row to a DataTable from Python.
 #
-# The node titles and param names come from tl_facts.json (Task 1, spike S6).
-# They are NOT hardcoded here on purpose: guessing them was the single biggest
-# time sink in the earlier pipeline analysis.
+# The two tables TL needs rows in:
+#   DT_Bldg_MinWidth       struct ST_Bldg_MinWidth      fields: buildingToken(Str), minWidth(double)
+#   DT_Bldg_LevelMinWidth  struct ST_Level_MinWidth     fields: BuildingToken, LevelToken,
+#                                                              LevelNumber(int32), F0Grammar,
+#                                                              CornerModuleSymbol, CornerSize,
+#                                                              MinWidthWorstCase
 #
-# Idempotent: each edit checks whether TL is already present before adding it.
+# READ-ONLY except that it may write one throwaway row and remove it again.
 
 import json
-import os
+
+R = {}
+args = mcp_args or {}
+EAL = unreal.EditorAssetLibrary
+
+TABLES = {
+    "DT_Bldg_MinWidth": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth",
+    "DT_Bldg_LevelMinWidth": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth",
+}
+
+# ---------- what API surface exists for DataTables? ----------------------
+DTFL = unreal.DataTableFunctionLibrary
+R["DTFL_members"] = sorted([m for m in dir(DTFL) if not m.startswith("_")])
+
+# does the table object expose row write methods?
+for label, path in TABLES.items():
+    dt = EAL.load_asset(path)
+    rec = {"path": path, "loaded": dt is not None}
+    if dt is None:
+        R[label] = rec
+        continue
+    rec["class"] = dt.get_class().get_name()
+    rec["row_struct"] = str(dt.get_editor_property("row_struct"))
+    rec["members"] = sorted([m for m in dir(dt)
+                             if not m.startswith("_") and
+                             ("row" in m.lower() or "text" in m.lower())])
+    # existing rows + their text form (the text form is what a row-write needs)
+    try:
+        rm = dt.get_editor_property("row_map")
+        keys = [str(k) for k in rm.keys()]
+        rec["row_count"] = len(keys)
+        rec["first_keys"] = keys[:5]
+        rec["last_keys"] = keys[-3:]
+        rec["starts_with_TL"] = [k for k in keys if k.startswith("TL")]
+        # dump ONE existing row as text, to learn the format an add must produce
+        if keys:
+            one = dt.get_editor_property("row_map")
+            row = one[unreal.Name(keys[0])] if hasattr(one, "__getitem__") else None
+            if row is not None:
+                rec["sample_row_key"] = keys[0]
+                try:
+                    rec["sample_row_text"] = row.export_text()
+                except Exception as e:
+                    rec["sample_row_text_err"] = "%s: %s" % (type(e).__name__, e)
+    except Exception as e:
+        rec["row_map_err"] = "%s: %s" % (type(e).__name__, e)
+    R[label] = rec
+
+print("###DTFL_MEMBERS###")
+print(json.dumps(R["DTFL_members"], indent=1))
+for label in TABLES:
+    print("###%s###" % label)
+    rec = R.get(label, {})
+    print("  loaded=%s row_count=%s" % (rec.get("loaded"), rec.get("row_count")))
+    print("  row_struct=%s" % rec.get("row_struct"))
+    print("  members=%s" % rec.get("members"))
+    print("  first_keys=%s" % rec.get("first_keys"))
+    print("  starts_with_TL=%s" % rec.get("starts_with_TL"))
+    if rec.get("sample_row_text"):
+        print("  sample_row[%s] text:" % rec.get("sample_row_key"))
+        print("     %s" % rec["sample_row_text"][:300])
+
+mcp_result = R
+```
+
+- [ ] **Step 2: Run the probe and read what it found**
+
+Run via the bridge: `run_unreal_script(script_path="tl_dt_probe.py")`
+
+Expected: a list of `DataTableFunctionLibrary` members including at least one of
+`fill_data_table_from_csv_string` / `fill_data_table_from_json_string`, the two tables' row struct
+names, their existing row keys (confirming 27 for `DT_Bldg_MinWidth` and the `DT_Bldg_LevelMinWidth`
+key pattern), and **the export text of one existing row** — which is the exact format an added row
+must produce.
+
+**Decision point, and the reason this step is separate:** if
+`fill_data_table_from_csv_string` (or the JSON variant) exists, use it — write TL's rows as a CSV
+string with a header naming the struct's fields and append them. If it does **not** exist, report
+back to the controller before proceeding: the remaining options (constructing rows via export text
+against the struct's mangled field names, the way the RULE assets and the BDF data both had to be
+handled) are a different and larger piece of work, and the controller needs to decide whether to
+take that route or to drop the DataTable edits on the grounds that `BuildingsStyles` alone decides
+participation. **Do not silently skip the tables if the API is missing.**
+
+- [ ] **Step 3: Write the registration script around the working mechanism**
+
+Create `Content/Python/tl_register.py`. Use the mechanism Step 2 proved. The structure:
+
+```python
+# tl_register.py — register TL: two DataTable row sets, the BuildingsStyles
+# whitelist parameter, and the LoadCitySampleData repoint.
+#
+# MEASURED BACKGROUND (Task 1):
+#   * The style whitelist is a graph-LEVEL USER PARAMETER named "BuildingsStyles"
+#     (String, default "") on Assign_CitySampleBuildings' user_parameters
+#     InstancedPropertyBag. It is NOT a literal string on any node: a scan of
+#     both whitelist graphs plus their full 48-graph closure found zero hits.
+#   * No consumer overrides it (all 13 instantiating subgraph nodes across the
+#     two graphs have subgraph_override == None), so everyone currently takes
+#     the "all styles" empty-string default.
+#   * Reading it: user_parameters.to_dict() returns {} -- useless. export_text()
+#     returns the real value.
+#
+# Idempotent: every edit checks for TL first.
+
+import json
 
 R = {"steps": [], "errors": []}
 args = mcp_args or {}
@@ -1569,78 +1716,75 @@ with open(FACTS, encoding="utf-8") as f:
 def note(step, **kw):
     R["steps"].append(dict(step=step, **kw))
 
-# ---------- 1. DT_Bldg_MinWidth: add a TL row -----------------------------
 DT_MIN = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth"
-try:
-    dt = EAL.load_asset(DT_MIN)
-    rows = dt.get_editor_property("row_map")
-    existing = [str(k) for k in rows.keys()] if hasattr(rows, "keys") else []
-    if "TL" in existing:
-        note("DT_Bldg_MinWidth", action="already present")
-    else:
-        # DataTable rows from Python need the struct's export text form
-        st = dt.get_editor_property("row_struct")
-        struct = unreal.load_object(None, str(st))
-        row = unreal.DataTableFunctionLibrary.make_data_table_row  # not exposed; use export_text
-        # Build the row via export text on the struct default + edit
-        d = struct.get_default_object() if hasattr(struct, "get_default_object") else None
-        note("DT_Bldg_MinWidth", action="needs_row",
-             row_struct=str(st), existing_count=len(existing),
-             fields=["buildingToken", "minWidth"])
-except Exception as e:
-    R["errors"].append("DT_MinWidth: %s: %s" % (type(e).__name__, e))
-
-# ---------- 2. DT_Bldg_LevelMinWidth: add TL's per-level rows --------------
 DT_LVL = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth"
-try:
-    dt = EAL.load_asset(DT_LVL)
-    rows = dt.get_editor_property("row_map")
-    keys = [str(k) for k in rows.keys()] if hasattr(rows, "keys") else []
-    note("DT_Bldg_LevelMinWidth", existing_count=len(keys),
-         tl_present=[k for k in keys if k.startswith("TL")])
-except Exception as e:
-    R["errors"].append("DT_LevelMinWidth: %s: %s" % (type(e).__name__, e))
+ASG    = "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings"
+LOAD   = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData"
 
-# ---------- 3. the two graph whitelists -----------------------------------
-for graph_label, entry in (facts.get("whitelist_nodes") or {}).items():
-    path = entry.get("path")
-    g = EAL.load_asset(path)
-    if g is None:
-        R["errors"].append("graph not loaded: %s" % path)
-        continue
-    hits = entry.get("hits") or []
-    if not hits:
-        R["errors"].append("no whitelist hit recorded for %s - rerun Task 1 S6" % graph_label)
-        continue
-    applied = []
-    for h in hits:
-        for node in g.get_editor_property("nodes"):
-            try:
-                s = node.get_settings()
-            except Exception:
-                continue
-            if s is None or s.get_class().get_name() != h["settings_class"]:
-                continue
-            try:
-                cur = str(s.get_editor_property(h["param"]))
-            except Exception:
-                continue
-            if "CHA" not in cur:
-                continue
-            if "TL" in cur.split(","):
-                applied.append({"param": h["param"], "action": "already present"})
-                continue
-            # insert TL preserving the existing order/spacing
-            sep = ", " if ", " in cur else ","
-            newv = cur + sep + "TL"
-            s.set_editor_property(h["param"], newv)
-            applied.append({"param": h["param"], "added": True,
-                            "old_len": len(cur), "new_len": len(newv)})
-    EAL.save_loaded_asset(g)
-    note(graph_label, actions=applied)
+# ---------- 1 + 2. the two DataTables (mechanism per Step 2's probe) -------
+# TL's own values. minWallWidth 12 matches CHA; the level rows mirror the four
+# TL level rows written into BDF_WithTL in Task 7 (LV0..LV3).
+TL_MINWIDTH_CSV = "buildingToken,minWidth\nTL,12.0\n"
+TL_LEVEL_CSV = (
+    "BuildingToken,LevelToken,LevelNumber,F0Grammar,CornerModuleSymbol,CornerSize,MinWidthWorstCase\n"
+    "TL,LV0,0,[FC][FS2]+[LC],C_CE,150.0,950.0\n"
+    "TL,LV1,1,[FC][WS1][W1]+[LC],C_CE,150.0,950.0\n"
+    "TL,LV2,2,[FC][WS1][W1]+[LC],C_CE,150.0,950.0\n"
+    "TL,LV3,3,[FC][WS1][W1]+[LC],C_CE,150.0,950.0\n"
+)
+
+for label, path, csv in (("DT_Bldg_MinWidth", DT_MIN, TL_MINWIDTH_CSV),
+                         ("DT_Bldg_LevelMinWidth", DT_LVL, TL_LEVEL_CSV)):
+    try:
+        dt = EAL.load_asset(path)
+        if dt is None:
+            R["errors"].append("%s not loadable" % label)
+            continue
+        rm = dt.get_editor_property("row_map")
+        keys = [str(k) for k in rm.keys()]
+        if any(k.startswith("TL") for k in keys):
+            note(label, action="already has TL rows",
+                 tl_rows=[k for k in keys if k.startswith("TL")])
+            continue
+        # CsvImport with a header row appends/updates by row name. If the first
+        # column is not the row name, the import needs an explicit row-name
+        # mapping -- Step 2's sample row text tells you which form is right.
+        ok = unreal.DataTableFunctionLibrary.fill_data_table_from_csv_string(dt, csv)
+        back = [str(k) for k in dt.get_editor_property("row_map").keys()]
+        note(label, filled=bool(ok),
+             row_count_before=len(keys), row_count_after=len(back),
+             tl_rows=[k for k in back if k.startswith("TL")])
+        if not any(k.startswith("TL") for k in back):
+            R["errors"].append("%s: no TL row after import" % label)
+        else:
+            EAL.save_loaded_asset(dt)
+    except Exception as e:
+        R["errors"].append("%s: %s: %s" % (label, type(e).__name__, e))
+
+# ---------- 3. the BuildingsStyles whitelist parameter --------------------
+try:
+    g = EAL.load_asset(ASG)
+    bag = g.get_editor_property("user_parameters")
+    before = bag.export_text()
+    note("BuildingsStyles_before", text=before[:400])
+    if 'BuildingsStyles="TL' in before or "BuildingsStyles=TL" in before:
+        note("BuildingsStyles", action="already set")
+    else:
+        # Probe the setter, then confirm by re-reading export_text(). The bag is
+        # an InstancedPropertyBag and its dict view is empty, so a plain
+        # set_editor_property on the parameter is unlikely to work; Step 4
+        # decides the real mechanism from this probe's output.
+        note("BuildingsStyles", action="needs_set",
+             read_mechanism="export_text()",
+             target_value="TL",
+             full_list_needed=(
+                 "the tooltip enumerates CHA..SFJ; to keep every existing style "
+                 "eligible the value must list all 27 plus TL, or the parameter "
+                 "must be left empty and TL relied on via the default"))
+except Exception as e:
+    R["errors"].append("BuildingsStyles: %s: %s" % (type(e).__name__, e))
 
 # ---------- 4. repoint LoadCitySampleData at BDF_WithTL -------------------
-LOAD = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData"
 try:
     lg = EAL.load_asset(LOAD)
     hits = []
@@ -1659,9 +1803,10 @@ try:
             except Exception:
                 continue
             if "CitySampleBuildingBDF_Asset_PCG" in str(v):
-                hits.append({"node_class": s.get_class().get_name(), "param": prop})
-    note("LoadCitySampleData", candidates=hits,
-         note="repointing is applied in Step 3 after confirming the param")
+                hits.append({"node_class": s.get_class().get_name(),
+                             "param": prop,
+                             "text": str(v)[:200]})
+    note("LoadCitySampleData", candidates=hits)
 except Exception as e:
     R["errors"].append("LoadCitySampleData: %s: %s" % (type(e).__name__, e))
 
@@ -1669,35 +1814,32 @@ print(json.dumps(R, indent=1, default=str))
 mcp_result = R
 ```
 
-- [ ] **Step 2: Run it and read the reported row structs and params**
+- [ ] **Step 4: Run it, then finish the whitelist and repoint edits it could not do alone**
 
 Run via the bridge: `run_unreal_script(script_path="tl_register.py")`
 
-Expected: `steps` listing each of the four targets with what it found; `errors` naming the DataTable row format if `row_map` is not writable from Python.
+Then, using what Steps 2–3 reported:
 
-**The DataTable edits are the least certain part.** If `row_map` cannot be written from Python, fall back to building the row from export text:
+1. **The `BuildingsStyles` value.** If `InstancedPropertyBag` has no usable setter, the value must
+   be set through the graph's own user-parameter UI path or by overriding the parameter on the
+   instantiating node (`subgraph_override`) — whichever this engine build exposes. Decide from the
+   probe output and **read the value back with `export_text()` to confirm**. A value that reads
+   back unchanged is a failed edit, not a success.
+2. **`BuildingsStyles` must not narrow the city.** If setting it explicitly, the value must list
+   **all 27 existing codes plus TL**, not TL alone — otherwise the edit would remove every other
+   style from the city, which is a visible behaviour regression Task 10 would catch but which
+   should not be introduced deliberately. The 27 codes are: `CHA CHB CHC CHD CHE CHF CHG CHH CHI
+   CHJ NYAA NYAB NYAC NYAD NYAE NYAF NYG NYGA NYH QBA QBAA SFA SFB SFC SFD SFE SFJ`.
+3. **The repoint.** Set the parameter Step 3's `candidates` named on the `LoadCitySampleData` node
+   to `/Game/PCG/DataAssets/BDF/BDF_WithTL`, save, and read it back.
 
-```python
-# fallback for a DataTable row, using the struct's text form
-st = dt.get_editor_property("row_struct")
-row = unreal.load_object(None, str(st))          # the struct default
-txt = unreal.DataTableFunctionLibrary.get_data_table_row_names  # for reference
-# construct the row text and add it through the DataTable's own API if exposed,
-# otherwise edit the .uasset via the DataTable editor's import-from-CSV path:
-unreal.DataTableFunctionLibrary.fill_data_table_from_csv_string
-```
+Expected: the `BuildingsStyles` value reads back containing `TL` (plus the other 27), and the
+`LoadCitySampleData` node's parameter reads `/Game/PCG/DataAssets/BDF/BDF_WithTL`.
 
-Prefer CSV import if available: write the two TL rows to a CSV and call `fill_data_table_from_csv_string` (or the editor's Reimport). Do not hand-patch the `.uasset`.
+- [ ] **Step 5: Verify TL is present in all four places**
 
-- [ ] **Step 3: Repoint `LoadCitySampleData`**
-
-Using the `candidates` from Step 2, set that parameter on that node to `BDF_WithTL`, save the graph, and read the value back to confirm it changed.
-
-Expected: the node's parameter reads `/Game/PCG/DataAssets/BDF/BDF_WithTL`.
-
-- [ ] **Step 4: Verify TL is present in all four places**
-
-Review Focus 1 and 5: an asset that exists but is unregistered generates nothing, and a `minWallWidth` that is too large means TL never qualifies.
+Review Focus 1 and 5: an asset that exists but is unregistered generates nothing, and a
+`minWallWidth` that is too large means TL never qualifies.
 
 ```python
 # inline, via the bridge
@@ -1709,17 +1851,29 @@ out["DT_MinWidth_keys"] = [str(k) for k in dt.get_editor_property("row_map").key
 dt2 = EAL.load_asset("/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth")
 out["DT_LevelMinWidth_TL"] = [str(k) for k in dt2.get_editor_property("row_map").keys()
                               if str(k).startswith("TL")]
+g = EAL.load_asset("/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings")
+txt = g.get_editor_property("user_parameters").export_text()
+out["BuildingsStyles_has_TL"] = ("TL" in txt)
+out["BuildingsStyles_excerpt"] = txt[:300]
+lg = EAL.load_asset("/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData")
+out["LoadCitySampleData_points_at"] = [
+    str(n.get_settings().get_editor_property("data_asset"))
+    for n in lg.get_editor_property("nodes")
+    if n.get_settings() is not None and hasattr(n.get_settings(), "data_asset")
+][:5]
 print(json.dumps(out, indent=1))
 ```
 
-Expected: `DT_MinWidth_keys` contains `TL`, and `DT_LevelMinWidth_TL` is non-empty.
+Expected: `DT_MinWidth_keys` contains `TL`; `DT_LevelMinWidth_TL` is non-empty;
+`BuildingsStyles_has_TL` is true; `LoadCitySampleData_points_at` names `BDF_WithTL`.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
-git add Content/Python/tl_register.py
-git commit -m "Register TL in the width tables, the whitelists, and LoadCitySampleData"
+git add Content/Python/tl_register.py Content/Python/tl_dt_probe.py
+git commit -m "Register TL in the width tables, the BuildingsStyles whitelist, and LoadCitySampleData"
 ```
+
 
 ---
 
