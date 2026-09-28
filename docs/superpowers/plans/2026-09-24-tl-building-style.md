@@ -2088,7 +2088,127 @@ git commit -m "Verify TL generates in the city pipeline"
 
 ---
 
-## Task 10: Update the durable docs and run the regression
+## Task 10: New level, PCG-generated TL building — the acceptance test
+
+This is the deliverable the work exists for: **a new level in which PCG generates a building out of
+TL's own modules, with the assembly verified numerically.** Tasks 2–9 built the parts and proved each
+link; this task proves the whole thing produces a *building* — multiple levels stacked, made of more
+than one distinct TL part.
+
+**Files:**
+- Create: `Content/Python/tl_new_level.py` (create the level and its volume)
+- Create: `Content/Python/tl_new_level_read.py` (the read/verify half)
+- Output: a new level containing a `PCGVolume` whose graph produces a TL building
+
+**Interfaces:**
+- Consumes: the imported meshes (Task 3), `SGD_TL_A` (Task 5), `BDF_WithTL` (Task 7), the registration (Task 8).
+- Produces: a new level plus a printed verification report: instance count, distinct TL mesh paths used, total bounds, and observed level count.
+
+### Three hard constraints, each already measured in this project
+
+**1. Copy the demo level as a template; do NOT start from a blank level.** The demo level's terrain is a
+`/Script/MeshPartition.MeshPartition` Actor that stage 1 writes to and every later stage projects
+onto. **A blank level has no MeshPartition, so buildings get no ground — and nothing errors**, the
+output is simply empty or short. This is documented as the pipeline's most expensive silent zero.
+
+```python
+les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+# returns False when the target already exists -> the documented fallback is the real path then
+ok = les.new_level_from_template(NEW_LEVEL, "/CitySamplePCG/Levels/L_CitySamplePCG_Demo")
+if not ok:
+    unreal.EditorLoadingAndSavingUtils.new_map_from_template(NEW_LEVEL, DEMO)
+    unreal.EditorLoadingAndSavingUtils.save_map(unreal.EditorLevelLibrary.get_editor_world(), NEW_LEVEL)
+```
+
+**2. Never park a UObject in a Python global.** Measured: a UObject held at module scope pins the old
+world, and the next level switch then aborts inside `CheckForWorldGCLeaks()` — the reference chain ran
+through `FPyReferenceCollector::AddReferencedObjects(Package /Temp/Untitled_1)` with the script stack
+at `LevelEditorSubsystem.LoadLevel`. (The earlier note that "reloading the demo level crashes" was a
+**misdiagnosis**; reloading is not the problem, pinning UObjects is.) So: **only JSON at module top
+level**, every UObject constructed inside a function, and clear + `gc.collect()` before any level load.
+
+**3. `Actor.add_component_by_class` does not exist** (`AttributeError`, measured) — you **cannot** attach
+a `SplineComponent` to an Actor from Python. To get a spline, either duplicate an existing Actor that
+already carries one, or mutate points on a spline that already exists. The real, working spline API is
+`set_location_at_spline_point` / `set_tangent_at_spline_point` / `set_closed_loop` / `update_spline`.
+Do **not** use `set_spline_points()`, which resets every point to `CurveAuto` and discards custom
+tangents. If a footprint spline genuinely cannot be produced in script, ask the user to draw one —
+that is a legitimate answer, and far better than burning calls on a nonexistent API.
+
+### The graph to run
+
+Use the **BDF path**, because it is the one that proves the modules stack into multiple floors:
+`Assign_CitySampleBuildings` fed by `LoadCitySampleData` (which Task 8 repointed at `BDF_WithTL`), with
+its `BuildingsStyles` parameter set to `TL`, consuming a **closed building-footprint spline** as input.
+The BDF `VerticalGrammar` for TL is `[LV0][LV1][LV2][LV3]`, so one footprint should yield a
+multi-level building.
+
+If the BDF path will not run standalone in a fresh level, fall back to `SGD_TL_A` via
+`Assign_ShapeGrammarDefinition` (whose `Main Grammar` is also a vertical stack, `L00, L01, L02, L03`).
+Say which route you used and, if the fallback was needed, what the BDF path did instead — that is a
+finding about the registration, not just a workaround.
+
+- [ ] **Step 1: Write the level-creation script**
+
+Create `Content/Python/tl_new_level.py`. Follow the three constraints above. Report what the template
+copy brought over (actor count, PCGVolume count, spline-bearing actor count) so the next step knows
+what it is working with rather than assuming.
+
+- [ ] **Step 2: Create the volume and its graph, then generate**
+
+Spawn a `PCGVolume` in the new level, give it the graph, feed it a closed footprint spline, set
+`BuildingsStyles` to `TL`, then `activate(True)` → `generate_local(True)`. **`activate(True)` is
+required** — skipping it is a silent zero.
+
+**Do not read the result in this call.** Generation is asynchronous: reading
+`get_generated_graph_output()` in the same call returns an empty collection with no error.
+
+- [ ] **Step 3: Read and verify the assembly — numerically, in a separate call**
+
+Create `Content/Python/tl_new_level_read.py`. A screenshot is a **secondary** confirmation, taken in a
+**separate** call (screenshots land on disk with roughly a 1–2 minute latency; judging them in the
+generating call has already produced false failures in this project). The primary evidence is numeric:
+
+1. **ISM instance count** — a building is many instances, not one. Zero means nothing assembled.
+2. **The set of distinct TL mesh paths used.** This is the load-bearing check for
+   "our modules assemble into a building": **the count of distinct parts must be greater than one.** A
+   single mesh path repeated hundreds of times means the grammar collapsed to one symbol and did *not*
+   assemble — that is a **failure**, not a pass, and it is exactly the mode a screenshot might not make
+   obvious.
+3. **Total bounds** — a building, not a flat plane. Z extent should be metres of stacked levels
+   (roughly 500 + 300 + 300 cm for L1–L3, so ~11 m before any roof), not centimetres.
+4. **Observed level count** — derived from the distinct `L01`/`L02`/`L03` kit folders present in the
+   mesh paths. Three levels present means the vertical grammar stacked.
+
+Report every number. Do **not** cleanup at the end of this task the way Task 6 does — the point is a
+persisted level with a visible building.
+
+- [ ] **Step 4: Save the level**
+
+Save the new level so it persists. **Note the version-control consequence:** `Content/Map/` is
+gitignored, so the level itself will not be committed — consistent with the kit's own handling. **The
+durable deliverable is therefore the two scripts**, which must be able to rebuild the level from
+scratch. Say plainly in your report that the level is reproducible from `tl_new_level.py` +
+`tl_new_level_read.py` rather than tracked.
+
+- [ ] **Step 5: Confirm the delivered 3×3 area is still untouched**
+
+You have now created a level and generated in it, which is a larger operation than any earlier task.
+Confirm the earlier delivery did not regress before finishing: run
+`run_unreal_script(script_path="pcg_postmigration_regression.py")` and report its numbers. The
+recorded baseline is **12 nodes / 12 edges / 41 instances**. A changed count means something in this
+task disturbed existing content — report it rather than explaining it away.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add Content/Python/tl_new_level.py Content/Python/tl_new_level_read.py
+git commit -m "Generate a TL building in a new level and verify the modules assemble"
+```
+
+---
+
+## Task 11: Update the durable docs and run the regression
 
 The pipeline analysis documents two facts that this work disproves. Leaving them wrong misleads every future session.
 
@@ -2135,7 +2255,9 @@ git commit -m "Record the BDF schema and correct the building-style pipeline doc
 
 ## Self-Review
 
-**Spec coverage.** §1 goals → Tasks 2–9. §2.1–2.11 facts → encoded in the Global Constraints and Task 7's schema table. §3 route A → Tasks 2–6; route B → Tasks 7–9. §4 blocks A–D → Tasks 2–3 (`tl_kit_spec.json` + Blender + import), 4–6 (SGD), 7–9 (BDF + verify). §5 deliverables → each task commits its script; the spec/city-sample reference updates are Task 10. §6 verification → the two-phase read pattern is written into every verify task, and the four iron rules are Global Constraints. §7 U1–U8 → U1 answered by the probes and encoded in Task 7; U2 → Task 1 Step 4; U3 → Tasks 1 & 3 Step 4; U4 → Task 3 Step 2; U5/U6 → folded into Task 7's level table; U7 → Task 7's never-touch-Epic constraint; U8 → the editor is running. §8 phases P0–P4 → Tasks 1, 2–3, 4–6, 7–9, 10.
+**Spec coverage.** §1 goals → Tasks 2–9. §2.1–2.11 facts → encoded in the Global Constraints and Task 7's schema table. §3 route A → Tasks 2–6; route B → Tasks 7–9. §4 blocks A–D → Tasks 2–3 (`tl_kit_spec.json` + Blender + import), 4–6 (SGD), 7–9 (BDF + verify). §5 deliverables → each task commits its script; the spec/city-sample reference updates are Task 11. §6 verification → the two-phase read pattern is written into every verify task, and the four iron rules are Global Constraints. §7 U1–U8 → U1 answered by the probes and encoded in Task 7; U2 → Task 1 Step 4; U3 → Tasks 1 & 3 Step 4; U4 → Task 3 Step 2; U5/U6 → folded into Task 7's level table; U7 → Task 7's never-touch-Epic constraint; U8 → the editor is running. §8 phases P0–P4 → Tasks 1, 2–3, 4–6, 7–9, 10–11.
+
+**Acceptance.** The user's stated end goal — "新建一个level，用pcg创建我们新建的building，验证功能正常，我们的模块能拼成一个建筑" — is Task 10, not Task 9. Task 9 proves TL participates in the existing city pipeline; **Task 10 proves TL's modules assemble into an actual building in a new level**, which is the stronger claim and the one the deliverable is judged on.
 
 **Placeholder scan.** No "TBD"/"implement later". The one deliberate deferral is Task 8's DataTable row-write mechanism, which is genuinely unknown from Python and is handled with two concrete fallbacks rather than a placeholder. Task 1 resolves it before Task 8 needs it.
 
