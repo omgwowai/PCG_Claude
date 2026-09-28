@@ -22,6 +22,7 @@
 - **Spawn-type graphs must be verified by ISM instance count**, not by output pin point count (a graph can report 0 tagged data while having spawned thousands of instances).
 - **`activate(True)` before `generate_local`** — skipping it is a silent zero.
 - **Never modify Epic's `CitySampleBuildingBDF_Asset_PCG` in place.** Write a new asset and repoint `LoadCitySampleData`. It is gitignored, so there is no VCS fallback.
+- **The only write route for a BDF data asset is duplicate-then-mutate.** `UPCGDataAsset.data`, `UPCGDataCollectionExporter.data`, and `FPCGDataPtrWrapper.data` are all `VisibleAnywhere` (⇒ `CPF_EditConst`) and reject Python's setter, and `PCGDataFunctionLibrary.make_tagged_data` is **not bound in this build**. Measured working route: `duplicate_asset` → mutate the duplicate's own point data (`create_*_attribute`, `set_points`) → `save_loaded_asset`. See Task 7.
 - **Scripts must live under `Content/Python/`** (the MCP bridge rejects paths outside it).
 - **`mcp_result` must be JSON-serializable.** `unreal.Vector` / `Name` / Actor objects are not.
 - **Do not save levels after spawning test volumes.** Test residue must not be committed.
@@ -1213,15 +1214,36 @@ Create `Content/Python/tl_make_bdf.py`:
 # appends TL rows. Epic's asset is READ ONLY here: it is gitignored, so there is
 # no VCS fallback if it is damaged.
 #
-# Write path (verified against engine source):
-#   UPCGDataAsset.data is a plain BlueprintReadWrite FPCGDataCollection
-#   PCGAssetExporterUtils.create_asset is BlueprintCallable
-#   new_object REQUIRES a non-null outer
-#   DuplicateAndReOuterData only re-outers data whose outer IS the transient
-#   package, so we outer our new point data to /Engine/Transient deliberately.
+# ============================ WRITE PATH =================================
+# MEASURED, NOT ASSUMED (2026-09-24). Three "obvious" routes were tried and ALL
+# THREE FAIL, because the relevant properties are declared VisibleAnywhere,
+# which sets CPF_EditConst and blocks Python's setter even though the header
+# also says BlueprintReadWrite:
 #
-# ShouldSave compares CRCs: exporting identical content onto an existing asset
-# returns None. We vary AssetDescription per run and delete the target first.
+#   * UPCGDataAsset.data                    -> "Property 'Data' ... is read-only"
+#   * UPCGDataCollectionExporter.data       -> same
+#   * FPCGDataPtrWrapper.data               -> same
+#
+# Also: PCGDataFunctionLibrary.make_tagged_data is declared in the header but is
+# NOT bound in this build ("has no attribute 'make_tagged_data'").
+#
+# THE ROUTE THAT WORKS (measured end to end, value verified on disk):
+#   1. EditorAssetLibrary.duplicate_asset(SRC, DEST)
+#      -> copies the asset with all four tag groups intact (27/240/2916/1966)
+#   2. PCGDataFunctionLibrary.add_to_collection(coll, pd, Name("In"), tags)
+#      -> builds tagged data with pin and tags preserved
+#   3. mutate the point data that now belongs to the DUPLICATE:
+#      md.create_string_attribute(...) and pd.set_points(pts) both work
+#      (the read-only wall is on the container, not on the data inside it)
+#   4. EditorAssetLibrary.save_loaded_asset(asset)
+#
+# Measured proof: the Levels group went 240 -> 241 points; the .uasset on disk
+# grew to 2,958,589 bytes with a fresh mtime; Epic's source stayed byte-identical
+# (2958616 bytes, mtime 1788235103 unchanged).
+#
+# IMPORTANT: mutation must happen on the duplicated asset's OWN data objects.
+# Creating fresh PCGPointData and trying to put it into the collection does not
+# work, because that needs a writable `data`.
 
 import json
 
@@ -1229,85 +1251,22 @@ R = {"groups": [], "errors": []}
 args = mcp_args or {}
 SPEC = args.get("spec", "E:/PCG_Claude/Tools/tl_kit/tl_kit_spec.json")
 SRC = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/CitySampleBuildingBDF_Asset_PCG"
-DEST_DIR = "/Game/PCG/DataAssets/BDF"
-DEST_NAME = "BDF_WithTL"
+DEST = args.get("dest", "/Game/PCG/DataAssets/BDF/BDF_WithTL")
 
 EAL = unreal.EditorAssetLibrary
 MA = unreal.PCGMetadataAccessorHelpers
-TRANSIENT = unreal.find_package("/Engine/Transient")
 
 with open(SPEC, encoding="utf-8") as f:
     spec = json.load(f)
 
-# ---------- helpers -------------------------------------------------------
-def read_pt(pt, md, name, kind):
-    fn = {
-        "str": "get_string_attribute", "name": "get_name_attribute",
-        "int": "get_integer32_attribute", "dbl": "get_double_attribute",
-        "bool": "get_bool_attribute", "vec": "get_vector_attribute",
-        "v4": "get_vector4_attribute", "sop": "get_soft_object_path_attribute",
-    }[kind]
-    return getattr(MA, fn)(pt, md, name)
-
-def new_point_data():
-    pd = unreal.new_object(unreal.PCGPointData, TRANSIENT, "")
-    return pd, pd.mutable_metadata()
-
-def mk_pt(md, values, types):
-    """values/types: parallel dicts. Returns an FPCGPoint carrying the attrs."""
-    p = unreal.PCGPoint()
-    for nm, kind in types.items():
-        v = values.get(nm)
-        if v is None:
-            continue
-        if kind == "str":
-            p = MA.set_string_attribute(p, md, nm, str(v))
-        elif kind == "name":
-            p = MA.set_string_attribute(p, md, nm, str(v))   # stored as FName by the attr
-        elif kind == "int":
-            p = MA.set_integer32_attribute(p, md, nm, int(v))
-        elif kind == "dbl":
-            p = MA.set_double_attribute(p, md, nm, float(v))
-        elif kind == "bool":
-            p = MA.set_bool_attribute(p, md, nm, bool(v))
-        elif kind == "vec":
-            p = MA.set_vector_attribute(p, md, nm, v)
-        elif kind == "v4":
-            p = MA.set_vector4_attribute(p, md, nm, v)
-        elif kind == "sop":
-            p = MA.set_soft_object_path_attribute(p, md, nm, v)
-    return p
-
-def declare(md, types, defaults):
-    for nm, kind in types.items():
-        if kind == "str":
-            md.create_string_attribute(nm, defaults.get(nm, ""), False, True)
-        elif kind == "name":
-            # create as string then rename is not exposed; create_string_attribute
-            # is what the live data uses for every other token, so TL creates a
-            # STRING attribute here and Step 3 verifies how the Levels set stores it.
-            md.create_string_attribute(nm, defaults.get(nm, ""), False, True)
-        elif kind == "int":
-            md.create_integer32_attribute(nm, int(defaults.get(nm, 0)), False, True)
-        elif kind == "dbl":
-            md.create_double_attribute(nm, float(defaults.get(nm, 0.0)), False, True)
-        elif kind == "bool":
-            md.create_bool_attribute(nm, bool(defaults.get(nm, False)), False, True)
-        elif kind == "vec":
-            md.create_vector_attribute(nm, defaults.get(nm, unreal.Vector()), False, True)
-        elif kind == "v4":
-            md.create_vector4_attribute(nm, defaults.get(nm, unreal.Vector4()), False, True)
-        elif kind == "sop":
-            md.create_soft_object_path_attribute(nm, "", False, True)
-
 # ---------- TL values -----------------------------------------------------
 # From the BDF source (Content/Building/HDA/Bldg/BDF) + spec 2.8.
-# Horizontal grammar per level: levels are re-mapped so TL's LV0..LV3 mirror CHA's.
+# Horizontal grammar per level: levels are remapped so TL's LV0..LV3 mirror CHA's.
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
     "VerticalGrammarStaggered": "[LV0][LV1][LV2][LV3]",
-    "MinWallWidth": 12.0,       # matches CHA; spec Review Focus 5 watches this
+    "MinWallWidth": 12.0,       # matches CHA; Review Focus 5 watches this value
     "MinBldgHeight": 5.0,
     "MaxBldgHeight": 60.0,
     "RoofData": unreal.Vector4(0.2, 0.1, 0.2, 0.1),   # CHA's Roof_Inset/Offset pair
@@ -1336,12 +1295,14 @@ TL_LEVELS = [
      "FLengths": unreal.Vector(950.0, 3925.0, 5800.0), "IsTopper": False},
 ]
 
-# symbol -> (kit part, width cm, scalable) per level; mirror CHA's symbol set
+# symbol -> (kit part, scalable); mirrors CHA's symbol set
 SYM = {"Wall_01": ("W1", False), "Column_01": ("P1", False),
        "Column_02": ("P2", False), "Entrance_01": ("E1", False),
        "CornerEx_01": ("C_CE", False), "CornerExL_01": ("C_SL", False),
        "CornerExR_01": ("C_SR", False), "CornerIn_01": ("C_I", False),
        "CornerInL_01": ("C_IL", False), "CornerInR_01": ("C_IR", False)}
+
+TL_MESH_ROOT = "/Game/Building/TL/A"
 
 def tl_modules():
     rows = []
@@ -1349,18 +1310,20 @@ def tl_modules():
     # L0 filler, matching CHA's FS2
     rows.append({"BuildingToken": "TL", "Level": 0, "Symbol": "FS2", "Size": 200.0,
                  "Mod_Name": "L0_Filler", "bScalable": True,
-                 "Mesh": "/Game/Building/TL/A/Kit_Bldg_TL_L1_A/Mesh/SM_BLDG_TL_L01_A_Wall_01_N1",
+                 "Mesh": "%s/Kit_Bldg_TL_L1_A/Mesh/SM_BLDG_TL_L01_A_Wall_01_N1"
+                         % TL_MESH_ROOT,
                  "PivotOffset": unreal.Vector(), "MeshForwardAxis": 2.0,
                  "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
                  "PtID": ptid})
     ptid += 1
     for p in spec["parts"]:
         sym, scal = SYM[p["part"]]
+        mesh_path = "%s/Kit_Bldg_TL_L%d_A/Mesh/%s" % (
+            TL_MESH_ROOT, p["level"], p["mesh_name"])
         rows.append({
             "BuildingToken": "TL", "Level": p["level"], "Symbol": sym,
             "Size": p["width_m"] * 100.0, "Mod_Name": p["mesh_name"],
-            "bScalable": scal,
-            "Mesh": "/Game/Building/TL/A/Kit_Bldg_TL_L%d_A/Mesh/%s" % (p["level"], p["mesh_name"]),
+            "bScalable": scal, "Mesh": mesh_path,
             "PivotOffset": unreal.Vector(), "MeshForwardAxis": 2.0,
             "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
             "PtID": ptid})
@@ -1371,114 +1334,145 @@ def tl_modules():
             ptid += 1
     return rows
 
-# ---------- assemble -----------------------------------------------------
-src = EAL.load_asset(SRC)
-src_items = src.get_editor_property("data").get_editor_property("tagged_data")
+# ---------- attribute type discovery -------------------------------------
+# The duplicate already carries every attribute with its correct type, so we
+# never create attributes here - we only append points and fill them. But we
+# must know each attribute's type to pick the matching SETTER. Discover it by
+# probing an existing row with each getter in turn.
+def discover_types(pt, md, names):
+    types = {}
+    for nm in names:
+        for kind, fn in (("name", "get_name_attribute"),
+                         ("str", "get_string_attribute"),
+                         ("bool", "get_bool_attribute"),
+                         ("dbl", "get_double_attribute"),
+                         ("int", "get_integer32_attribute"),
+                         ("vec", "get_vector_attribute"),
+                         ("v4", "get_vector4_attribute"),
+                         ("sop", "get_soft_object_path_attribute")):
+            try:
+                getattr(MA, fn)(pt, md, nm)
+                types[nm] = kind
+                break
+            except Exception:
+                continue
+    return types
 
-BDF_T = {"BuildingToken": "str", "VerticalGrammar": "str",
-         "VerticalGrammarStaggered": "str", "MinWallWidth": "dbl",
-         "MinBldgHeight": "dbl", "MaxBldgHeight": "dbl", "RoofData": "v4"}
-LVL_T = {"BuildingToken": "name", "LevelNumber": "int", "LevelToken": "str",
-         "LevelHeight": "dbl", "Size": "dbl", "F": "str", "F0": "str",
-         "F1": "str", "F2": "str", "FLengths": "vec", "IsTopper": "bool"}
-MOD_T = {"BuildingToken": "str", "Level": "int", "Symbol": "str", "Size": "dbl",
-         "Mod_Name": "name", "Mesh": "sop", "HasProps": "bool", "HasWindow": "bool",
-         "bScalable": "bool", "PivotOffset": "vec", "MeshForwardAxis": "dbl",
-         "PropOffset": "vec", "PtID": "int"}
+SETTERS = {"str": "set_string_attribute", "name": "set_name_attribute",
+           "int": "set_integer32_attribute", "dbl": "set_double_attribute",
+           "bool": "set_bool_attribute", "vec": "set_vector_attribute",
+           "v4": "set_vector4_attribute", "sop": "set_soft_object_path_attribute"}
 
-made = []
-for item in src_items:
-    tags = [str(t) for t in item.get_editor_property("tags")]
-    pin = item.get_editor_property("pin")
-    src_data = item.get_editor_property("data").get_editor_property("data")
-    src_md = src_data.mutable_metadata()
+# explicit inverse of SETTERS: never derive a getter by editing the setter name
+GETTERS = {"str": "get_string_attribute", "name": "get_name_attribute",
+           "int": "get_integer32_attribute", "dbl": "get_double_attribute",
+           "bool": "get_bool_attribute", "vec": "get_vector_attribute",
+           "v4": "get_vector4_attribute", "sop": "get_soft_object_path_attribute"}
 
-    # copy the existing rows by re-wrapping the SAME data objects
-    entries = [unreal.PCGDataFunctionLibrary.make_tagged_data(src_data, set(tags), pin)]
+def mk_pt(md, values, types):
+    """Build one FPCGPoint, setting only attributes whose type we discovered.
 
-    # and add the TL rows for this group
-    tl_target = None
-    if "BDF" in tags and "BDFData" in tags:
-        tl_target = (BDF_T, [TL_BDF])
-    elif "Levels" in tags:
-        tl_target = (LVL_T, [dict(r, BuildingToken="TL") for r in TL_LEVELS])
-    elif "Modules" in tags:
-        tl_target = (MOD_T, tl_modules())
-    elif "Props" in tags:
-        tl_target = None   # phase 1 adds no TL props
+    set_*_attribute takes UPARAM(ref) FPCGPoint&, which Python returns rather
+    than mutating in place, so the result MUST be captured each time.
+    """
+    p = unreal.PCGPoint()
+    for nm, v in values.items():
+        kind = types.get(nm)
+        if kind is None or v is None:
+            continue
+        try:
+            p = getattr(MA, SETTERS[kind])(p, md, nm, v)
+        except Exception as e:
+            R["errors"].append("set %s (%s): %s: %s" % (
+                nm, kind, type(e).__name__, e))
+    return p
 
-    if tl_target:
-        types, rows = tl_target
-        pd, md = new_point_data()
-        declare(md, types, {})
-        pts = []
-        for row in rows:
+# ---------- duplicate, then append ---------------------------------------
+if EAL.does_asset_exist(DEST):
+    EAL.delete_asset(DEST)
+
+try:
+    dup = EAL.duplicate_asset(SRC, DEST)
+    R["duplicated"] = dup is not None
+except Exception as e:
+    R["errors"].append("duplicate_asset: %s: %s" % (type(e).__name__, e))
+    dup = None
+
+if dup:
+    items = dup.get_editor_property("data").get_editor_property("tagged_data")
+    for it in items:
+        tags = [str(t) for t in it.get_editor_property("tags")]
+        d = it.get_editor_property("data").get_editor_property("data")
+        if d is None:
+            continue
+        md = d.mutable_metadata()
+        existing = list(d.get_points())
+        keys = tuple(sorted(tags))
+
+        # what rows does this group need?
+        if "BDF" in tags and "BDFData" in tags:
+            new_rows = [TL_BDF]
+        elif "Levels" in tags:
+            new_rows = [dict(r, BuildingToken="TL") for r in TL_LEVELS]
+        elif "Modules" in tags:
+            new_rows = tl_modules()
+        else:
+            new_rows = []          # Props: phase 1 adds none
+
+        if not new_rows:
+            R["groups"].append({"tags": keys, "existing": len(existing),
+                                "added": 0})
+            continue
+
+        # discover the real types from a row that is already there
+        types = discover_types(existing[0], md, list(new_rows[0].keys()))
+        if "F" in new_rows[0] and "F" not in types:
+            # the Levels set carries F as well as F0/F1/F2; fill it from F0
+            pass
+        added = []
+        for row in new_rows:
             full = dict(row)
             if "F" not in full and "F0" in full:
                 full["F"] = full["F0"]
-            full.setdefault("BuildingToken", "TL")
-            pts.append(mk_pt(md, full, types))
-        pd.set_points(pts)
-        entries.append(unreal.PCGDataFunctionLibrary.make_tagged_data(pd, set(tags), pin))
-        R["groups"].append({"tags": tags, "tl_rows": len(pts),
-                            "total": len(src_data.get_points()) + len(pts)})
-    else:
-        R["groups"].append({"tags": tags, "tl_rows": 0,
-                            "total": len(src_data.get_points())})
+            added.append(mk_pt(md, full, types))
 
-    coll = unreal.PCGDataCollection()
-    coll.set_editor_property("tagged_data", entries)
-    made.append(coll)
+        # append in ONE set_points call: the whole list replaces the array
+        d.set_points(existing + added)
+        R["groups"].append({"tags": keys, "existing": len(existing),
+                            "added": len(added),
+                            "total": len(d.get_points()),
+                            "types": types})
 
-# merge into one collection carrying all four groups
-all_tagged = []
-for c in made:
-    all_tagged.extend(c.get_editor_property("tagged_data"))
-final = unreal.PCGDataCollection()
-final.set_editor_property("tagged_data", all_tagged)
+    try:
+        R["saved"] = EAL.save_loaded_asset(dup)
+    except Exception as e:
+        R["errors"].append("save: %s: %s" % (type(e).__name__, e))
 
-# ---------- write ---------------------------------------------------------
-target = DEST_DIR + "/" + DEST_NAME
-if EAL.does_asset_exist(target):
-    EAL.delete_asset(target)      # ShouldSave compares CRCs; a stale asset returns None
+R["exists"] = EAL.does_asset_exist(DEST)
 
-exporter = unreal.new_object(unreal.PCGDataCollectionExporter, TRANSIENT, "")
-exporter.set_editor_property("data", final)
-exporter.set_editor_property("asset_description", "BDF with TL")
-params = unreal.PCGAssetExporterParameters()
-params.set_editor_property("open_save_dialog", False)
-params.set_editor_property("asset_name", DEST_NAME)
-params.set_editor_property("asset_path", DEST_DIR)
-params.set_editor_property("save_on_export_ended", True)
-try:
-    unreal.PCGAssetExporterUtils.create_asset(exporter, params)
-except Exception as e:
-    R["errors"].append("create_asset: %s: %s" % (type(e).__name__, e))
-
-R["exists"] = EAL.does_asset_exist(target)
-
-# ---------- verify the round trip ----------------------------------------
+# ---------- verify from a fresh load -------------------------------------
 ver = {}
 try:
-    a2 = EAL.load_asset(target)
+    a2 = EAL.load_asset(DEST)
     items2 = a2.get_editor_property("data").get_editor_property("tagged_data")
     ver["tagged_count"] = len(items2)
     for it in items2:
         tg = [str(t) for t in it.get_editor_property("tags")]
         d = it.get_editor_property("data").get_editor_property("data")
         md = d.mutable_metadata()
+        types = discover_types(d.get_points()[0], md, ["BuildingToken"])
+        kind = types.get("BuildingToken")
         tl = 0
-        for pt in d.get_points():
-            try:
-                if str(read_pt(pt, md, "BuildingToken", "name")) == "TL":
-                    tl += 1
-            except Exception:
+        if kind:
+            getter = getattr(MA, GETTERS[kind])
+            for pt in d.get_points():
                 try:
-                    if str(read_pt(pt, md, "BuildingToken", "str")) == "TL":
+                    if str(getter(pt, md, "BuildingToken")) == "TL":
                         tl += 1
                 except Exception:
                     pass
-        ver["+".join(tg)] = {"points": len(d.get_points()), "tl_points": tl}
+        ver["+".join(tg)] = {"points": len(d.get_points()), "tl_points": tl,
+                             "token_type": kind}
 except Exception as e:
     ver["fatal"] = "%s: %s" % (type(e).__name__, e)
 R["verify"] = ver
@@ -1491,13 +1485,19 @@ mcp_result = R
 
 Run via the bridge: `run_unreal_script(script_path="tl_make_bdf.py")`
 
-Expected: `exists: true`, and `verify` showing TL points in the `BDF+BDFData`, `Levels+BDFData`, and `Modules+BDFData` groups (`tl_points` = 1, 4, and ~45 respectively).
+Expected: `duplicated: true`, `saved: true`, `exists: true`, and `verify` showing TL points in the `BDF+BDFData` (1), `Levels+BDFData` (4), and `Modules+BDFData` (~48) groups, with every existing group's original count preserved.
+
+**If `duplicate_asset` returns `None`**, `DEST`'s folder does not exist. Create it first:
+
+```python
+unreal.EditorAssetLibrary.make_directory("/Game/PCG/DataAssets/BDF")
+```
 
 - [ ] **Step 3: Verify the `Levels.BuildingToken` type**
 
-This is Review Focus 2 — the trap that makes TL silently unmatched.
+This is Review Focus 2 — the trap that makes TL silently unmatched. Step 2's `verify` already reports `token_type` per group; confirm the Levels group reports `name` (matching how Epic's copy stores it).
 
-Read one TL level row back and confirm the attribute reads non-empty via the **`name`** getter (not `str`):
+Read a TL level row back and confirm it reads through the **`name`** getter (not `str`):
 
 ```python
 # inline, via the bridge
@@ -1507,14 +1507,14 @@ for it in a.get_editor_property("data").get_editor_property("tagged_data"):
     if "Levels" in [str(t) for t in it.get_editor_property("tags")]:
         d = it.get_editor_property("data").get_editor_property("data")
         md = d.mutable_metadata()
-        pt = d.get_points()[27]     # first TL row, after CHA's 21 + 6
+        pt = d.get_points()[-1]        # a TL row, appended last
         print("as name:", MA.get_name_attribute(pt, md, "BuildingToken"))
         print("as str :", MA.get_string_attribute(pt, md, "BuildingToken"))
 ```
 
-Expected: `as name: TL` and `as str:` empty (or vice versa) — whichever getter returns `TL` tells you which attribute type the copy actually created.
+Expected: `as name: TL` and `as str:` empty. Whichever getter returns `TL` is the type the copy actually uses.
 
-**If neither returns `TL`**, the attribute was created with the wrong type. Delete `BDF_WithTL`, change `declare()` to create the `Levels.BuildingToken` attribute with the matching type, and re-run Step 2.
+**If neither returns `TL`**, the point was appended without its metadata entry reaching the copied attribute — re-check `discover_types` on that group and confirm the setter chosen matches.
 
 - [ ] **Step 4: Commit**
 
