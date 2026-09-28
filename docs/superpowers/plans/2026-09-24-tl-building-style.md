@@ -940,87 +940,61 @@ git commit -m "Author the four TL shape-grammar rules"
 - Consumes: the 4 RULEs (Task 4).
 - Produces: 1 asset of class `BP_ShapeGrammarDefinition_C` with `Main Grammar` = `"L00, L01, L02, L03"`, `Use Grammar` true, and `Slots` (`TArray<STC_Slot>`) each referencing one rule.
 
-- [ ] **Step 1: Write the SGD builder**
+**ACCESS PATHS — measured by Task 1 on the real `SGD_CHA_A`, do NOT guess property names.**
+This asset class has the *same* mangled-struct-field problem Task 4 hit, and **two** of the names the
+brief's draft uses do not exist:
 
-Create `Content/Python/tl_make_sgd.py`:
+- The rule binding inside a slot is **not** reachable as `shape_grammar_rules` (nor
+  `ShapeGrammarRules`); both fail. The real name is
+  **`ShapeGrammarRules_42_0CB868434643776AF184F78028144928`**, holding a one-element array of object
+  references. Read it with `export_text()` on the slot struct.
+- **The SGD class itself exposes no `main_grammar`-style property at all** — `dir()` on a loaded
+  `SGD_CHA_A` lists only generic `UDataAsset`/editor-property plumbing (`get_editor_property`,
+  `set_editor_property`, `get_class`, `rename`, `modify`, …), nothing grammar-shaped. So
+  `set_editor_property("main_grammar", …)` fails. Read the real field name from `export_text()` on the
+  asset (or on its grammar struct) first, exactly as Task 4 did for the rule's `grammar`.
 
-```python
-# tl_make_sgd.py — create SGD_TL_A from the four TL rules.
-#
-# STC_Slot fields (verified live on SGD_CHA_A): Symbol(FName), size(double),
-# scalable(bool), offset(FVector), is_corner(bool), Mirror(bool),
-# ShapeGrammarRules(TArray<BP_ShapeGrammarRule_C*>) -> python "slots" on the SGD.
-# BP_ShapeGrammarDefinition_C variables (python names): slots, main_grammar,
-# use_grammar, minimum_size, spawn_on, reverse_spline, description.
+**Measured facts about CHA's own SGD that TL must mirror:**
+- `SGD_CHA_A` carries **12 slots**: `L00`–`L10` plus `L20` (not a continuous `L00`–`L20` run).
+- Each slot binds **exactly one** rule, and the binding is **1:1 by level number** — slot `L02` →
+  `RULE_CHA_L02`, with no exceptions and no slot referencing more than one rule.
+- There is **no facade-variant dimension** in the slots: they are indexed purely by level number, not
+  by `F0`/`F1`/`F2`.
+- TL is 4 levels, so TL gets **4 slots** (`L00`–`L03`), one rule each — a smaller but structurally
+  identical shape to CHA's 12.
 
-R = {"slots": [], "errors": []}
-args = mcp_args or {}
-DEST = "/Game/PCG/DataAssets/Buildings/TL"
-NAME = "SGD_TL_A"
+**So the rule-binding check in Step 3 is genuinely available**: after building `SGD_TL_A`, confirm each
+slot's mangled binding field points at the matching `RULE_TL_L0n`. That is a string-independent,
+object-level confirmation, and it is the same technique Task 1 used to validate the CHA↔RULE
+correspondence.
 
-EAL = unreal.EditorAssetLibrary
-AT = unreal.AssetToolsHelpers.get_asset_tools()
+- [ ] **Step 1: Probe the SGD's real field names before writing the builder**
 
-# slot symbol -> rule asset, mirroring how CHA's SGD holds one slot per level
-SLOTS = [
-    ("L00", "RULE_TL_L00"),
-    ("L01", "RULE_TL_L01"),
-    ("L02", "RULE_TL_L02"),
-    ("L03", "RULE_TL_L03"),
-]
-MAIN_GRAMMAR = "L00, L01, L02, L03"
+Do this first, in one call, and do not skip it. Load `SGD_CHA_A`, dump its `export_text()` and every
+slot's `export_text()`, and report:
+- the real mangled name for the asset's main-grammar field and its value (`SGD_CHA_A`'s `main_grammar`
+  is a comma-space-separated `L##` list — record the exact separator and spacing),
+- the real mangled names for `use_grammar`, `description`, and the slot's own fields,
+- one slot's full text, so the format an added slot must produce is known.
 
-sgd_cls = unreal.load_class(None, "/PCGPrimitives/Grammar/BP/BP_ShapeGrammarDefinition") \
-    or unreal.BP_ShapeGrammarDefinition
+Copy the text shape from what you find rather than inventing it. If a field you need is genuinely
+unreachable even by text, **stop and report rather than guessing** — a slot array written in the wrong
+text format is the kind of failure that surfaces much later and confusingly.
 
-asset = AT.create_asset(NAME, DEST, sgd_cls, None)
-if asset is None:
-    asset = EAL.load_asset(DEST + "/" + NAME)
-if asset is None:
-    R["errors"].append("create_asset returned None and the asset does not exist")
-else:
-    asset.set_editor_property("main_grammar", MAIN_GRAMMAR)
-    asset.set_editor_property("use_grammar", True)
-    asset.set_editor_property("description", unreal.Text("TL building - self-built 3-level modular kit."))
+- [ ] **Step 2: Write and run the SGD builder**
 
-    slots = []
-    for sym, rule_name in SLOTS:
-        rule = EAL.load_asset(DEST + "/" + rule_name)
-        if rule is None:
-            R["errors"].append("rule missing: %s" % rule_name)
-            continue
-        s = unreal.STC_Slot()
-        s.set_editor_property("symbol", unreal.Name(sym))
-        s.set_editor_property("size", 0.0)
-        s.set_editor_property("scalable", False)
-        s.set_editor_property("offset", unreal.Vector(0.0, 0.0, 0.0))
-        s.set_editor_property("is_corner", False)
-        s.set_editor_property("mirror", False)
-        s.set_editor_property("shape_grammar_rules", [rule])
-        slots.append(s)
-    asset.set_editor_property("slots", slots)
-    EAL.save_loaded_asset(asset)
+Create `Content/Python/tl_make_sgd.py`, building `SGD_TL_A` with 4 slots bound to the 4 TL rules. Use
+the field names Step 1 measured. Save, then **reload from disk and re-read** before asserting — the
+in-memory object is not evidence that the save landed (Task 4's review established that distinction).
 
-    back = EAL.load_asset(DEST + "/" + NAME)
-    R["slots"] = [str(x.get_editor_property("symbol")) for x in back.get_editor_property("slots")]
-    R["main_grammar"] = str(back.get_editor_property("main_grammar"))
-    R["use_grammar"] = bool(back.get_editor_property("use_grammar"))
+Expected: 4 slots whose symbols are `L00`…`L03`, each binding its matching `RULE_TL_L0n`; the main
+grammar reads back as a comma-space-separated `L00, L01, L02, L03`.
 
-print(json.dumps(R, indent=1, default=str))
-mcp_result = R
-```
+- [ ] **Step 3: Verify against the known-good asset**
 
-- [ ] **Step 2: Run it**
-
-Run via the bridge: `run_unreal_script(script_path="tl_make_sgd.py")`
-
-Expected: `slots: ["L00","L01","L02","L03"]`, `main_grammar: "L00, L01, L02, L03"`, `use_grammar: true`, `errors: []`.
-
-- [ ] **Step 3: Verify against a known-good asset**
-
-Load `SGD_CHA_A` with the same script (change `NAME`) and compare its `main_grammar` shape — it should be a comma-separated `L##` list. A mismatch in separator or spacing means the grammar tokenizer will not split TL's string.
-
-Expected: CHA's `main_grammar` is also a comma-space-separated `L##` list, confirming TL's format matches.
+Compare `SGD_TL_A`'s read-back against `SGD_CHA_A`'s on the same script: same field names, same
+separator and spacing in the main grammar, one rule per slot. A different separator or spacing means
+the grammar tokenizer will not split TL's string and the facade will not assemble.
 
 - [ ] **Step 4: Commit**
 
