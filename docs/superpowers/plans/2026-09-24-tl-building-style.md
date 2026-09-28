@@ -1078,19 +1078,36 @@ except Exception as e:
     R["set_err"] = "%s: %s" % (type(e).__name__, e)
 
 # ---------- create the spline + volume -----------------------------------
-spline_actor = eas.spawn_actor_from_class(unreal.Actor, SPAWN, unreal.Rotator())
-spline_actor.set_actor_label("TL_SGD_Probe_Spline")
-spline = spline_actor.add_component_by_class(unreal.SplineComponent, True)
-pts = [unreal.Vector(0, 0, 0), unreal.Vector(2000, 0, 0)]
-spline.set_editor_property("spline_curve", unreal.SplineCurve())
-spline.clear_spline_points()
-for p in pts:
-    spline.add_spline_point(p, unreal.SplinePointType.LINEAR, False)
-R["spline_points"] = spline.get_number_of_spline_points()
+# DO NOT use Actor.add_component_by_class — it does NOT exist (measured,
+# AttributeError), so you cannot attach a SplineComponent or a PCGComponent to a
+# bare spawned Actor from Python.
+#
+# The working approach is to spawn the REAL class that already carries the
+# component you need. A PCGVolume carries its own PCGComponent, so:
+#     vol = eas.spawn_actor_from_class(unreal.PCGVolume, SPAWN, unreal.Rotator())
+#     comp = vol.get_component_by_class(unreal.PCGComponent)
+# Probe the actual class name first (`hasattr(unreal, "PCGVolume")`) rather than
+# trusting this comment; if it is not bound, find the class the demo level's
+# volumes actually use and spawn that.
+#
+# For the FOOTPRINT SPLINE there are only two honest routes, because you cannot
+# add a SplineComponent:
+#   (a) duplicate an existing Actor that already carries one (the demo level has
+#       19 such Actors), then repoint its points with the real spline API:
+#       set_location_at_spline_point / set_tangent_at_spline_point /
+#       set_closed_loop / update_spline.  Do NOT use set_spline_points(), which
+#       resets every point to CurveAuto and discards custom tangents.
+#   (b) ask the user to draw one.
+# Record which route you took.
 
-vol_actor = eas.spawn_actor_from_class(unreal.Actor, SPAWN, unreal.Rotator())
-vol_actor.set_actor_label("TL_SGD_Probe_Volume")
-comp = vol_actor.add_component_by_class(unreal.PCGComponent, True)
+vol = eas.spawn_actor_from_class(SPAWN_CLASS, SPAWN, unreal.Rotator())
+vol.set_actor_label("TL_SGD_Probe_Volume")
+comp = vol.get_component_by_class(unreal.PCGComponent)
+if comp is None:
+    R["fatal"] = "spawned actor has no PCGComponent - report which class you used"
+    print(json.dumps(R, indent=1, default=str))
+    mcp_result = R
+    raise SystemExit
 comp.set_graph(graph)
 comp.activate(True)          # REQUIRED: without this it is a silent zero
 comp.generate_local(True)
