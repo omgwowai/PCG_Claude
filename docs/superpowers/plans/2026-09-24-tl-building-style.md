@@ -71,10 +71,13 @@ args = mcp_args or {}
 EAL = unreal.EditorAssetLibrary
 
 # ---------- S4: mesh pivot + bounds --------------------------------------
+# Path case matters and CHA's is inconsistent on disk (some kits are spelled
+# `Kit_Bldg_CHa_L20_A`, lowercase a). If one of these 404s, try the other case
+# and record which spelling loaded.
 MESHES = [
     "/Game/Building/CH/A/Kit_Bldg_CHA_L1_A/Mesh/SM_BLDG_CHA_L01_A_Wall_01_N1",
     "/Game/Building/CH/A/Kit_Bldg_CHA_L1_A/Mesh/SM_BLDG_CHA_L01_A_Column_01_N1",
-    "/Game/Building/CH/A/Kit_Bldg_CHA_L01_A/Mesh/SM_BLDG_CHA_L02_A_Wall_01_N1",
+    "/Game/Building/CH/A/Kit_Bldg_CHA_L2_A/Mesh/SM_BLDG_CHA_L02_A_Wall_01_N1",
 ]
 mesh_facts = []
 for p in MESHES:
