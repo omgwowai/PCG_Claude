@@ -60,7 +60,24 @@ byte-identical to RULE_CHA_L00's own grammar. So for L00 this script only
 writes the grammar field (a same-value round-trip, kept for provenance) and
 leaves ModulesInfos exactly as duplicated from RULE_CHA_L00 -- i.e. it still
 references CHA's borrowed NY foundation mesh, honestly, rather than
-inventing TL-specific foundation content that does not exist.
+inventing TL-specific foundation content that does not exist. (Ruled
+acceptable in review: Task 3 only built levels 1-3, and GRAMMARS[0] is a pure
+filler row, so a borrowed foundation mesh at L00 is an acceptable placeholder
+for a level the kit deliberately does not author.)
+
+VERIFICATION: after each rule is saved, this script forces a genuine reload
+from disk (unreal.EditorLoadingAndSavingUtils.reload_packages on the asset's
+package, ASSUME_POSITIVE so it never blocks on a dialog under the headless
+MCP bridge) and re-reads the grammar/module count from that freshly-reloaded
+object -- not from the in-memory object that was just mutated. A prior run of
+this script only re-fetched the mutated in-memory object, which proves
+import_text()/set_editor_property() round-tripped but cannot catch a
+save_loaded_asset() failure or a load-time deserialization difference; that
+gap is why the disk-reload step exists. Any mismatch after reload raises.
+
+An unmapped `part` name in the kit spec (no PART_TO_SYMBOL entry) also raises
+rather than being silently skipped, so a kit that gains a new part type fails
+loudly instead of quietly losing a module.
 """
 
 import json
@@ -214,10 +231,14 @@ def build_modules_array_text(level):
     parts = [p for p in spec["parts"] if p["level"] == level]
     entries = []
     missing = []
+    unmapped = []
     wall_part = None
     for p in parts:
         sym = PART_TO_SYMBOL.get(p["part"])
         if sym is None:
+            # Fail loudly rather than silently dropping a module: a kit that
+            # gains a new part type must not quietly lose a module here.
+            unmapped.append(p["part"])
             continue
         path = mesh_asset_path(level, p["mesh_name"])
         if not EAL.does_asset_exist(path):
@@ -225,6 +246,8 @@ def build_modules_array_text(level):
         entries.append(build_module_entry(sym, path, p["width_m"] * 100.0, False))
         if p["part"] == "Wall_01":
             wall_part = p
+    if unmapped:
+        raise RuntimeError("unmapped part name(s) with no PART_TO_SYMBOL entry: %s" % sorted(set(unmapped)))
     if wall_part is not None:
         path = mesh_asset_path(level, wall_part["mesh_name"])
         entries.append(build_module_entry("WS1", path, wall_part["width_m"] * 100.0, True))
@@ -272,22 +295,68 @@ for level in (0, 1, 2, 3):
         rule.import_text(new_txt)
         asset.set_editor_property("rule", rule)
 
-        # independent-ish read-back: fetch a NEW struct proxy from the asset,
-        # not the one we just mutated, and export it again.
+        # in-memory sanity check: fetch a NEW struct proxy from the asset,
+        # not the one we just mutated, and export it again. This proves
+        # import_text() -> set_editor_property() round-tripped in memory, but
+        # it CANNOT catch a save_loaded_asset() failure or a load-time
+        # deserialization difference, because it never leaves the process's
+        # live object -- see the genuine disk-reload check below for that.
         rule2 = asset.get_editor_property("rule")
         txt2 = rule2.export_text()
         rec["grammar_written"] = target_grammar
-        rec["grammar_read_back"] = extract_field_value(txt2, GRAMMAR_FIELD)
-        rec["grammar_ok"] = (rec["grammar_read_back"] == target_grammar)
+        rec["grammar_in_memory"] = extract_field_value(txt2, GRAMMAR_FIELD)
 
         mspan = find_field_span(txt2, MODULES_FIELD)
         if mspan is not None:
             inner = txt2[mspan[0] + 1:mspan[1] - 1]
-            rec["module_count_read_back"] = count_top_level_entries(inner)
+            rec["module_count_in_memory"] = count_top_level_entries(inner)
+        else:
+            rec["module_count_in_memory"] = 0
+
+        saved_ok = EAL.save_loaded_asset(asset)
+        rec["saved_ok"] = bool(saved_ok)
+        if not saved_ok:
+            raise RuntimeError("EAL.save_loaded_asset returned falsy for %s" % dest_path)
+
+        # ---- genuine disk round-trip: force the package to reload from the
+        # .uasset that was just written, then re-read the rule struct from
+        # that freshly-reloaded object. ASSUME_POSITIVE avoids any editor
+        # dialog (this runs headless via the MCP bridge) while still doing a
+        # real reload rather than a no-op.
+        pkg = asset.get_outermost()
+        reloaded, reload_err = unreal.EditorLoadingAndSavingUtils.reload_packages(
+            [pkg], unreal.ReloadPackagesInteractionMode.ASSUME_POSITIVE
+        )
+        rec["disk_reload_attempted"] = bool(reloaded)
+        rec["disk_reload_error"] = str(reload_err) if reload_err else ""
+
+        asset_fresh = EAL.load_asset(dest_path)
+        if asset_fresh is None:
+            raise RuntimeError("post-reload load_asset returned None for %s" % dest_path)
+        rule_fresh = asset_fresh.get_editor_property("rule")
+        txt_fresh = rule_fresh.export_text()
+
+        rec["grammar_read_back"] = extract_field_value(txt_fresh, GRAMMAR_FIELD)
+        rec["grammar_ok"] = (rec["grammar_read_back"] == target_grammar)
+        if not rec["grammar_ok"]:
+            raise RuntimeError(
+                "grammar did not survive disk reload for %s: wrote %r, read back %r"
+                % (dest_path, target_grammar, rec["grammar_read_back"])
+            )
+
+        mspan_fresh = find_field_span(txt_fresh, MODULES_FIELD)
+        if mspan_fresh is not None:
+            inner_fresh = txt_fresh[mspan_fresh[0] + 1:mspan_fresh[1] - 1]
+            rec["module_count_read_back"] = count_top_level_entries(inner_fresh)
         else:
             rec["module_count_read_back"] = 0
 
-        EAL.save_loaded_asset(asset)
+        if rec.get("modules_written") and rec["module_count_read_back"] != rec["module_count_written"]:
+            raise RuntimeError(
+                "module count did not survive disk reload for %s: wrote %d, read back %d"
+                % (dest_path, rec["module_count_written"], rec["module_count_read_back"])
+            )
+
         R["rules"].append(rec)
     except Exception as e:
         rec["error"] = "%s: %s" % (type(e).__name__, e)
