@@ -12,6 +12,7 @@
       "sphere_radius_cm": 310.806,
       "bounds_min": [-147.635, -325.0, 0.017],
       "bounds_max": [27.844, 0.0, 500.0],
+      "pivot_convention": "Local origin (0,0,0) sits at bounds_min.z (0.017, ~=0, i.e. the BOTTOM of the Z range [0,500], not the Z-centre 250) and at bounds_max.y (0.0, i.e. an EDGE of the Y range [-325,0], not the Y-centre -162.5). Corner/base pivot, not a centre pivot.",
       "num_lods": 2,
       "lod0_verts": 702,
       "lod0_tris": 512
@@ -26,6 +27,7 @@
       "sphere_radius_cm": 272.208,
       "bounds_min": [-147.594, -125.002, 0.014],
       "bounds_max": [27.844, 0.001, 500.0],
+      "pivot_convention": "Same pattern as L1_wall: local origin (0,0,0) sits at bounds_min.z (0.014, ~=0, bottom of the [0,500] range, not Z-centre 250) and at bounds_max.y (0.001, ~=0, the SAME Y edge the wall uses, not this mesh's own Y-centre -62.5). Corner/base pivot, not a centre pivot -- identical convention to L1_wall, just a narrower module (half the wall's Y width).",
       "num_lods": 2,
       "lod0_verts": 511,
       "lod0_tris": 290
@@ -42,11 +44,21 @@
       "sphere_radius_cm": 223.986,
       "bounds_min": [-70.478, -325.0, -0.006],
       "bounds_max": [0.584, 0.0, 300.0],
+      "pivot_convention": "Same pattern again: local origin (0,0,0) sits at bounds_min.z (-0.006, ~=0, bottom of the [~0,300] range, not Z-centre 150) and at bounds_max.y (0.0, an edge of the [-325,0] Y range, not the Y-centre -162.5). Corner/base pivot, not a centre pivot -- consistent across all 3 kit meshes despite L2's shorter Z extent (300 vs L1's 500).",
       "num_lods": 2,
       "lod0_verts": 3638,
       "lod0_tris": 2512
     }
   ],
+  "mesh_pivot_summary": {
+    "conclusion": "All 3 measured CHA kit meshes (L1 wall, L1 column, L2 wall) are CORNER/BASE-pivoted, not centre-pivoted: the local origin (0,0,0) sits at the bottom of each mesh's Z bounding range (bounds_min.z ~= 0 in every case, never the Z-midpoint) and at one edge of its Y bounding range (bounds_max.y ~= 0 in every case -- the Y range runs from a negative bounds_min.y up to 0 -- never the Y-midpoint). This is the pivot convention Task 2 should assume for any new TL mesh authored to fit this kit: origin at the base-corner (Z=0, Y=0 at the wall/column's shared edge), not centred.",
+    "pivot_offset_cross_check": {
+      "source": "BDF Modules group row for CHA, Level 1 (module symbol matching the L1 wall), PivotOffset attribute, reported by the coordinator (not independently re-read by this probe round, since the fix instructions specified recording the coordinator-supplied magnitudes without asserting sign).",
+      "value_as_reported": "(-0, 162.5, -250)",
+      "magnitude_match": "Y magnitude 162.5 = half the L1 wall's Y width (325 / 2); Z magnitude 250 = half the L1 wall's Z height (500 / 2). Both match the corner-pivot reading exactly: PivotOffset is what re-centres a base/corner-pivoted mesh (origin at a Y-edge and Z-bottom) to its geometric centre for grammar placement.",
+      "sign_convention": "NOT ASSERTED. Only one sample (CHA L1 wall) was available and its sign was supplied by the coordinator, not independently derived here from multiple modules. Whether PivotOffset's sign is a fixed convention (e.g. always negative-Y/negative-Z to move from corner to centre) or varies by module/mirroring is UNCONFIRMED and is flagged as an open question for Task 3/4, which will need to apply PivotOffset correctly for a new TL mesh."
+    }
+  },
   "rule_grammars": {
     "assets": {
       "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L00": "[FC][FS2]+[LC]",
@@ -58,19 +70,33 @@
     "read_mechanism": {
       "correction_to_task4_plan": "Task 4's plan text assumes a RULE asset (BP_ShapeGrammarRule_C instance) exposes a property literally named 'grammar', writable via set_editor_property(\"grammar\", ...). THIS IS WRONG. The asset's only top-level property is \"rule\" (case-insensitively also \"Rule\"), which returns an STC_Rule struct. That struct does NOT expose its fields via get_editor_property() on any dir()-listed name (dir() lists only generic struct methods), and its to_dict() returns an empty {}. The working read (and, by the same struct-serialization mechanism, the expected write) path is export_text()/import_text() using UE's canonical '(FieldName_GUID=value,...)' text format. The grammar field's real mangled name is 'grammar_10_4003928D40C6099DCA57829F48235D57' (identical GUID suffix across all 5 assets tested, since it's a class-level struct layout, not per-instance). Task 4 MUST be corrected to read/write via rule.export_text()/rule.import_text() (or an equivalent set_editor_properties() call keyed by the mangled name), not via get_editor_property(\"grammar\")/set_editor_property(\"grammar\", ...)."
     },
+    "sgd_slot_binding": {
+      "summary": "A follow-up read (fix for Finding 2) found that STC_Slot DOES carry a real, object-level rule binding -- it is just not reachable by the property name 'shape_grammar_rules' (nor its exact-cased form 'ShapeGrammarRules'); get_editor_property() fails on both. The correct read path, discovered the same way as the RULE asset's own 'grammar' field, is export_text() on the slot struct, which reveals the true mangled field name 'ShapeGrammarRules_42_0CB868434643776AF184F78028144928' holding a one-element array of object references.",
+      "sgd_used": "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/SGD_CHA_A",
+      "slot_to_rule_bindings": {
+        "L00": "RULE_CHA_L00", "L01": "RULE_CHA_L01", "L02": "RULE_CHA_L02",
+        "L03": "RULE_CHA_L03", "L04": "RULE_CHA_L04", "L05": "RULE_CHA_L05",
+        "L06": "RULE_CHA_L06", "L07": "RULE_CHA_L07", "L08": "RULE_CHA_L08",
+        "L09": "RULE_CHA_L09", "L10": "RULE_CHA_L10", "L20": "RULE_CHA_L20"
+      },
+      "finding": "Every one of SGD_CHA_A's 12 slots (only 12 exist -- L00-L10 plus L20, not a continuous L00-L20 run) binds, object-level and 1:1, to the single RULE asset whose name suffix matches its own symbol (slot 'L02' -> RULE_CHA_L02, etc.), with no exceptions and no slot referencing more than one rule. This gives an independent, non-string-based confirmation of the existing LV1-F1 and LV2-F1 pairs below (slot L01/L02 -> RULE_CHA_L01/L02, matching those rows' rule_asset field).",
+      "why_it_does_not_resolve_lv2_f0": "The slot symbols are indexed purely by LEVEL NUMBER (L00...L20), not by BDF FACADE-VARIANT label (F0/F1/F2), and each slot carries exactly one bound rule. There is no 'L02-F0'-style slot to inspect. Slot 'L02' -- the only level-2 slot that exists -- is already accounted for as the LV2-F1 pairing (it binds to RULE_CHA_L02, whose grammar matches LV2's F1 string, not F0). So this mechanism, even now that it is understood, has nothing further to say about which RULE asset (if any) is specifically 'LV2-F0': there is no distinct slot object for it to point at, and the 17-asset grammar-string collision (see step4_verdict below) remains unresolved by this route."
+    },
     "step4_verdict": {
-      "headline": "BDF<->RULE token mapping HOLDS: all 4 pairs match exactly. No contradiction found.",
+      "headline": "BDF<->RULE token mapping HOLDS on 4 of 5 pairs considered; the 5th (LV2-F0) is honestly indistinguishable, not confirmed.",
       "all_match": true,
       "pairs": [
         {"bdf_label": "LV0", "rule_asset": "RULE_CHA_L00", "bdf_grammar": "[FC][FS2]+[LC]", "rule_grammar": "[FC][FS2]+[LC]", "match": true},
         {"bdf_label": "LV1-F0", "rule_asset": "RULE_CHA_L05", "bdf_grammar": "[FC][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[LC]", "match": true},
         {"bdf_label": "LV1-F1", "rule_asset": "RULE_CHA_L01", "bdf_grammar": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]", "match": true},
-        {"bdf_label": "LV2-F1", "rule_asset": "RULE_CHA_L02", "bdf_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "match": true}
+        {"bdf_label": "LV2-F1", "rule_asset": "RULE_CHA_L02", "bdf_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "rule_grammar": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]", "match": true},
+        {"bdf_label": "LV2-F0", "rule_asset": null, "bdf_grammar": "[FC][WS1][W1]+[LC]", "rule_grammar": null, "match": "indistinguishable",
+         "note": "BDF's live LV2.F0 value (confirmed directly from the BDF Levels group this round, see tl_facts.json's absence of a separate cha_levels dump -- read via tl_probe_lv2f0b.py, not persisted here since it is a live-data re-confirmation, not a new fact category) is '[FC][WS1][W1]+[LC]'. This exact string is also LV1's F0, and is also the ENTIRE grammar of RULE_CHA_L04 through RULE_CHA_L20 (17 separate RULE assets, all byte-identical). No RULE asset's own level number can be independently matched to 'LV2' specifically for the F0 variant: the SGD_CHA_A slot-binding mechanism (see sgd_slot_binding above), which does give an object-level, string-independent confirmation for the LV1-F1/LV2-F1 pairs, has no slot at all for an 'F0' variant of any level -- slots are indexed by level number only, one rule each, and slot 'L02' is already spoken for as the LV2-F1 binding. Per the coordinator's explicit guidance, this is recorded honestly as indistinguishable -- string matches, level not independently confirmed -- rather than asserting a fabricated fifth confirmed pair."}
       ]
     }
   },
   "whitelist_nodes": {
-    "headline": "The style-code whitelist (CHA, CHB, ..., and where TL would be added) is a graph-level user parameter named 'BuildingsStyles' (String, default \"\") on /CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings's user_parameters InstancedPropertyBag. It is NOT overridden anywhere in the two whitelist graphs named in the brief, nor at the top-level PCG_3_3_1_Buildings level graph -- every consumer relies on the empty-string default, which per its pin tooltip means 'randomly use all available building styles'.",
+    "headline": "Two things must both be true for TL to generate, and they are different mechanisms in different places. (1) SELECTION: 'BuildingsStyles' is a graph-level user parameter (String, default \"\") on /CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings's user_parameters InstancedPropertyBag; it is a FILTER over which already-available style codes get used, not a definition of which codes exist. It is NOT overridden anywhere in the two whitelist graphs named in the brief, nor at the top-level PCG_3_3_1_Buildings level graph -- every consumer relies on the empty-string default, which per its pin tooltip means 'randomly use all available building styles'. (2) AVAILABILITY: a style code only EXISTS to be selected (by name or by the empty-string 'all' default) if it has rows in CitySampleBuildingBDF_Asset_PCG's 'BDF' point-data group (currently exactly 27 points/codes, one per style, with matching rows in that code's 'Levels'/'Modules' groups) -- this is what Task 7 writes, not this parameter. Naming 'TL' in BuildingsStyles without also giving it BDF/Levels/Modules rows would select a code with nothing to generate; giving it BDF rows without ever naming/excluding it in BuildingsStyles is sufficient for it to be included in the default 'use all available' behavior. Both facts are required to reason about how TL becomes generatable; neither alone is 'the' edit target.",
     "PCG_3_3_1_Buildings": {
       "path": "/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings",
       "hits": [],
@@ -92,13 +118,17 @@
           "value": "",
           "sibling_params": ["InputsProcessingGraph", "InputsFallbackGraph", "CoreProcessGraph", "PrepareOutputsGraph", "MinHeight", "MaxHeight", "BuildingsStyles", "Staggered", "Foundation", "SpawnMeshes", "SpawnIntoBuildingsActors", "Seed"],
           "read_mechanism": "graph.get_editor_property(\"user_parameters\") -> InstancedPropertyBag; to_dict() returns {} (unhelpful, same pattern as STC_Rule); export_text() returns the real values, e.g. '(Value=/Engine/Transient.PropertyBag_...(...,BuildingsStyles=\"\",...))'.",
-          "note": "This is the TRUE, unique edit target for adding style code TL to the whitelist: append TL (and update the tooltip's enumerated list/glossary, which lives as separate FProperty metadata -- see tooltip_metadata_not_reachable_via_api below) here, or set a subgraph_override on a specific instantiating node for a scoped change."
+          "note": "This is where style SELECTION is constrained (the parameter this graph reads to decide which codes to use), NOT where a code becomes eligible to exist in the first place. Appending 'TL' here (plus updating the tooltip's enumerated list/glossary, which lives as separate FProperty metadata -- see tooltip_metadata_not_reachable_via_api below) narrows selection to include TL explicitly, but is neither necessary (the empty-string default already selects from all available codes) nor sufficient (TL must also have rows in the BDF asset's 'BDF'/'Levels'/'Modules' groups -- Task 7's job -- or there is nothing for this parameter to select). Do not treat this parameter as 'the' unique edit target for adding a new style code."
         }
       ]
     },
+    "write_site_not_located": {
+      "summary": "The node inside Assign_CitySampleBuildings_CoreProcess that WRITES/materializes the live PCG point-data attribute 'BuildingsStyles' from the graph user-parameter of the same name was not located during this probe (only the two READ/consumer nodes below were found). This is recorded as an explicit gap, not a silent omission.",
+      "why_it_is_not_needed": "Given the two-part mechanism above (selection parameter + BDF-asset availability), the write/materialization site is not load-bearing for the TL plan: the parameter's role is fully characterized by its measured name, type, and default, and by confirming no consumer overrides it, regardless of which specific node inside CoreProcess turns the user-parameter into a per-point attribute. No later task needs the materialization node identified to add TL -- Task 7 supplies BDF-asset rows, and the whitelist default (or an explicit append of 'TL') is a parameter-level edit that does not require knowing the internal materialization node."
+    },
     "Assign_CitySampleBuildings_CoreProcess_consumers": {
       "path": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/Assign_CitySampleBuildings_CoreProcess",
-      "note": "This subgraph is the CoreProcessGraph referenced by Assign_CitySampleBuildings's user_parameters (see sibling_params above). It contains 56 nodes; 2 of them READ (not write) a live PCG point-data attribute named 'BuildingsStyles' (materialized from the graph user-parameter of the same name): FilterDataByAttribute_4 filters on attribute '@Data.BuildingsStyles', and DataAttributesToTags_1 maps attribute 'BuildingsStyles' to a tag. The node that WRITES/materializes the attribute from the user-parameter was not conclusively located within Task 1's time-box; these two are consumers, not the definition site. The user-parameter default itself (recorded above) remains the authoritative whitelist edit target regardless.",
+      "note": "This subgraph is the CoreProcessGraph referenced by Assign_CitySampleBuildings's user_parameters (see sibling_params above). It contains 56 nodes; 2 of them READ (not write) a live PCG point-data attribute named 'BuildingsStyles' (materialized from the graph user-parameter of the same name): FilterDataByAttribute_4 filters on attribute '@Data.BuildingsStyles', and DataAttributesToTags_1 maps attribute 'BuildingsStyles' to a tag. The node that WRITES/materializes the attribute from the user-parameter was not located -- see write_site_not_located above for why that gap is not load-bearing for the TL plan. These two are consumers, not the definition site.",
       "hits": [
         {"node": "FilterDataByAttribute_4", "settings_class": "PCGFilterByAttributeSettings", "param": "attribute", "value": "@Data.BuildingsStyles"},
         {"node": "DataAttributesToTags_1", "settings_class": "PCGDataAttributesToTagsSettings", "param": "attributes_tags_mapping", "value": "{\"BuildingsStyles\": {}}"}

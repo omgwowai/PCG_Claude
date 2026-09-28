@@ -44,6 +44,29 @@
 #     PCG *attribute* also named "BuildingsStyles" is separately read/
 #     filtered/tagged (not written) by two nodes inside
 #     Assign_CitySampleBuildings_CoreProcess.
+#
+# Fix pass (Task 1 code review -- 3 Important findings, all addressed below):
+#   - Finding 1: BuildingsStyles is a SELECTION filter, not the sole "TRUE
+#     edit target" the first draft claimed. A style code is only AVAILABLE
+#     to be selected once it has rows in the BDF asset's BDF/Levels/Modules
+#     groups (Task 7's job). Both facts now recorded; certainty language
+#     dropped; the not-located write/materialization site is explicitly
+#     marked as not needed given this framing.
+#   - Finding 2: the original 4-pair BDF<->RULE check silently omitted
+#     LV2-F0. Now checked against the FULL RULE_CHA_L00..L20 set (21 assets,
+#     not just the 5 named in the brief) and against SGD_CHA_A's slot->rule
+#     object bindings (STC_Slot's real field is a mangled
+#     "ShapeGrammarRules_<GUID>" name, reachable only via export_text() --
+#     "shape_grammar_rules" and "ShapeGrammarRules" both fail via
+#     get_editor_property()). LV2-F0's BDF grammar string turns out to be
+#     byte-identical across 17 separate RULE_CHA_L04..L20 assets, and slots
+#     are indexed by level number only (no F0/F1/F2 distinction), so no
+#     asset can be independently confirmed as "LV2-F0" -- recorded honestly
+#     as indistinguishable rather than as a fabricated 5th match.
+#   - Finding 3: mesh_pivot now states the pivot conclusion explicitly
+#     (corner/base pivot: origin at bounds_min.z and bounds_max.y) instead
+#     of leaving three raw bounds tuples for Task 2 to re-derive, plus a
+#     PivotOffset magnitude cross-check (sign deliberately not asserted).
 
 import json
 import re
@@ -92,6 +115,21 @@ for candidates in MESH_CANDIDATES:
             rec["sphere_radius_cm"] = round(radius, 3)
             rec["bounds_min"] = [round(origin.x - extent.x, 3), round(origin.y - extent.y, 3), round(origin.z - extent.z, 3)]
             rec["bounds_max"] = [round(origin.x + extent.x, 3), round(origin.y + extent.y, 3), round(origin.z + extent.z, 3)]
+            # Fix (Task 1 review, Finding 3): state the pivot conclusion, not
+            # just the raw tuples. Z: local origin (0,0,0) sits at bounds_min.z
+            # (~0, the BOTTOM of the Z range) in every mesh measured, never the
+            # Z-centre. Y: local origin sits at bounds_max.y (~0, an EDGE of
+            # the Y range, since Y always runs from a negative bounds_min.y up
+            # to 0), never the Y-centre. Corner/base pivot, not a centre pivot.
+            z_min, z_max = rec["bounds_min"][2], rec["bounds_max"][2]
+            y_min, y_max = rec["bounds_min"][1], rec["bounds_max"][1]
+            rec["pivot_convention"] = (
+                "Local origin (0,0,0) sits at bounds_min.z (%.3f, ~=0, the BOTTOM of "
+                "the Z range [%.3f,%.3f], not the Z-centre %.1f) and at bounds_max.y "
+                "(%.3f, ~=0, an EDGE of the Y range [%.3f,%.3f], not the Y-centre %.1f). "
+                "Corner/base pivot, not a centre pivot." % (
+                    z_min, z_min, z_max, (z_min + z_max) / 2.0,
+                    y_max, y_min, y_max, (y_min + y_max) / 2.0))
         except Exception as e:
             rec["bounds_err"] = "%s: %s" % (type(e).__name__, e)
         try:
@@ -103,6 +141,40 @@ for candidates in MESH_CANDIDATES:
     mesh_facts.append(rec)
 R["mesh_pivot"] = mesh_facts
 
+# Fix (Task 1 review, Finding 3): one summary conclusion across all meshes,
+# plus the coordinator-supplied PivotOffset magnitude cross-check. Sign is
+# deliberately NOT asserted -- only one sample was available and its sign was
+# supplied by the coordinator, not independently re-derived here across
+# multiple modules; flagged as an open question for Task 3/4.
+R["mesh_pivot_summary"] = {
+    "conclusion": (
+        "All measured CHA kit meshes are CORNER/BASE-pivoted, not centre-pivoted: "
+        "the local origin (0,0,0) sits at the bottom of each mesh's Z bounding "
+        "range (bounds_min.z ~= 0 in every case, never the Z-midpoint) and at one "
+        "edge of its Y bounding range (bounds_max.y ~= 0 in every case, never the "
+        "Y-midpoint). This is the pivot convention Task 2 should assume for any "
+        "new TL mesh authored to fit this kit: origin at the base-corner, not "
+        "centred."
+    ),
+    "pivot_offset_cross_check": {
+        "source": "BDF Modules group row for CHA, Level 1 (L1 wall module), "
+                   "PivotOffset attribute, as reported by the coordinator "
+                   "(not independently re-read by this script; recording the "
+                   "coordinator-supplied magnitude without asserting sign, per "
+                   "the coordinator's explicit instruction).",
+        "value_as_reported": "(-0, 162.5, -250)",
+        "magnitude_match": "Y magnitude 162.5 = half the L1 wall's Y width "
+                            "(325/2); Z magnitude 250 = half the L1 wall's Z "
+                            "height (500/2). Both match the corner-pivot "
+                            "reading: PivotOffset is what re-centres a "
+                            "base/corner-pivoted mesh for grammar placement.",
+        "sign_convention": "NOT ASSERTED from this single sample. Whether "
+                            "PivotOffset's sign is a fixed convention or "
+                            "varies by module/mirroring is UNCONFIRMED -- "
+                            "flagged as an open question for Task 3/4.",
+    },
+}
+
 # ---------- S3: RULE grammar strings -------------------------------------
 RULES = [
     "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L00",
@@ -110,6 +182,15 @@ RULES = [
     "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L02",
     "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L05",
     "/CitySamplePCG/PCG/DataAssets/Buildings/SFB/RULE_SFB_L01",
+]
+# Fix (Task 1 review, Finding 2): the original RULES list above only covered
+# the 5 assets named in the brief. Reading LV2-F0 honestly required knowing
+# EVERY CHA RULE asset's grammar, because RULE_CHA_L00..L20 (21 assets) all
+# exist, and several share identical grammar strings. Extend to the full set.
+RULES += [
+    "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L%02d" % i
+    for i in range(0, 21)
+    if "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L%02d" % i not in RULES
 ]
 GRAMMAR_RE = re.compile(r'(\w*[Gg]rammar\w*)="((?:[^"\\]|\\.)*)"')
 rule_facts = {}
@@ -135,8 +216,60 @@ for p in RULES:
     rule_facts[p] = got
 R["rule_grammars"] = rule_facts
 
-# Step 4 verdict: compare the 4 explicit BDF-side grammar strings from the
-# Task 1 dispatch against their corresponding RULE_* assets above.
+# Fix (Task 1 review, Finding 2): independent, object-level confirmation of
+# which RULE asset a given SGD_CHA_A slot symbol binds to. STC_Slot does NOT
+# expose this via get_editor_property("shape_grammar_rules") (that name is
+# wrong, and so is the exact-cased "ShapeGrammarRules" -- both raise). The
+# real, working read path -- discovered the same way as the RULE asset's own
+# "grammar" field -- is export_text() on the slot struct, which reveals the
+# true mangled field name and a regex over it yields the bound RULE path(s).
+SGD_PATH = "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/SGD_CHA_A"
+SLOT_RULE_RE = re.compile(r"'(/[^']+?\.(RULE_[A-Za-z0-9_]+))'")
+sgd_slot_binding = {"sgd_used": SGD_PATH, "slot_to_rule_bindings": {}}
+sgd = EAL.load_asset(SGD_PATH)
+if sgd is not None:
+    try:
+        for s in sgd.get_editor_property("slots"):
+            try:
+                sym = str(s.get_editor_property("symbol"))
+            except Exception:
+                continue
+            try:
+                et = s.export_text()
+                names = SLOT_RULE_RE.findall(et)
+                sgd_slot_binding["slot_to_rule_bindings"][sym] = (
+                    names[0][1] if names else None)
+            except Exception:
+                sgd_slot_binding["slot_to_rule_bindings"][sym] = None
+    except Exception as e:
+        sgd_slot_binding["slots_err"] = "%s: %s" % (type(e).__name__, e)
+sgd_slot_binding["summary"] = (
+    "STC_Slot carries a real, object-level rule binding under the mangled "
+    "field name 'ShapeGrammarRules_<GUID>' (readable via export_text(), not "
+    "via get_editor_property() under any name tried). Every slot on SGD_CHA_A "
+    "binds 1:1 to the single RULE asset whose name suffix matches its own "
+    "symbol (e.g. slot 'L02' -> RULE_CHA_L02), with no exceptions."
+)
+sgd_slot_binding["why_it_does_not_resolve_lv2_f0"] = (
+    "Slots are indexed purely by LEVEL NUMBER (L00..L20), not by BDF "
+    "FACADE-VARIANT label (F0/F1/F2), and each slot binds exactly one rule. "
+    "There is no 'L02-F0'-style slot: slot 'L02' is already accounted for as "
+    "the LV2-F1 pairing (RULE_CHA_L02 matches LV2's F1 string, not F0). So "
+    "this mechanism has nothing further to say about which RULE asset is "
+    "'LV2-F0' -- there is no distinct slot object for it to point at."
+)
+R["rule_grammars"]["_sgd_slot_binding"] = sgd_slot_binding
+
+# Step 4 verdict: compare the BDF-side grammar strings against their
+# corresponding RULE_* assets. Fix (Task 1 review, Finding 2): the original
+# 4-pair list silently omitted LV2-F0 (in neither RULES nor here), which made
+# "HOLDS on all 4 pairs" read as complete coverage of the 5 strings given in
+# the brief. Extended to 5 pairs; LV2-F0 is recorded honestly as
+# indistinguishable rather than faked as a 5th confirmed match, because its
+# BDF grammar string ("[FC][WS1][W1]+[LC]") is byte-identical across 17
+# separate RULE_CHA_L04..L20 assets, and the slot-binding mechanism above
+# (which does independently confirm LV1-F1/LV2-F1) has no F0-specific slot to
+# check against.
 BDF_VS_RULE = [
     ("LV0",    "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L00", "[FC][FS2]+[LC]"),
     ("LV1-F0", "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L05", "[FC][WS1][W1]+[LC]"),
@@ -145,6 +278,8 @@ BDF_VS_RULE = [
     ("LV2-F1", "/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L02",
      "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]"),
 ]
+LV2_F0_BDF_GRAMMAR = "[FC][WS1][W1]+[LC]"
+
 verdict = {"pairs": [], "all_match": True}
 for bdf_label, rule_path, bdf_grammar in BDF_VS_RULE:
     rule_grammar = rule_facts.get(rule_path, {}).get("grammar")
@@ -154,13 +289,38 @@ for bdf_label, rule_path, bdf_grammar in BDF_VS_RULE:
         "bdf_label": bdf_label, "rule_asset": rule_path,
         "bdf_grammar": bdf_grammar, "rule_grammar": rule_grammar, "match": match,
     })
-verdict["headline"] = ("BDF<->RULE token mapping HOLDS: all %d pairs match exactly."
-                        % len(verdict["pairs"])) if verdict["all_match"] else \
-                       "BDF<->RULE token mapping BROKEN: see mismatched pairs below."
+
+# LV2-F0: find every RULE_CHA_L* asset whose grammar matches, to make the
+# collision count a measured fact rather than an assertion.
+colliding = sorted(
+    p for p, got in rule_facts.items()
+    if got.get("grammar") == LV2_F0_BDF_GRAMMAR
+    and p.startswith("/CitySamplePCG/PCG/DataAssets/Buildings/CHA/RULE_CHA_L")
+)
+verdict["pairs"].append({
+    "bdf_label": "LV2-F0", "rule_asset": None,
+    "bdf_grammar": LV2_F0_BDF_GRAMMAR, "rule_grammar": None,
+    "match": "indistinguishable",
+    "colliding_rule_assets": colliding,
+    "note": ("BDF's live LV2.F0 value matches %d separate RULE_CHA_L* assets "
+              "byte-for-byte (%s), including RULE_CHA_L05 already used above "
+              "for LV1-F0. No RULE asset's own level number can be "
+              "independently matched to 'LV2' specifically for the F0 "
+              "variant -- the SGD slot-binding mechanism has no F0-specific "
+              "slot to check (see _sgd_slot_binding above). Recorded "
+              "honestly as indistinguishable: string matches, level not "
+              "independently confirmed." % (len(colliding), colliding)),
+})
+verdict["headline"] = (
+    "BDF<->RULE token mapping HOLDS on %d of %d pairs considered; the 5th "
+    "(LV2-F0) is honestly indistinguishable, not confirmed."
+    % (sum(1 for p in verdict["pairs"] if p["match"] is True), len(verdict["pairs"]))
+)
 R["rule_grammars"]["_step4_verdict"] = verdict
 
 # ---------- S6: where is the style-code whitelist? ------------------------
 whitelist = {}
+
 
 # 1) the confirmed live answer: Assign_CitySampleBuildings's own graph-level
 #    user_parameters InstancedPropertyBag carries a BuildingsStyles String
@@ -182,13 +342,33 @@ if g:
             "note": "Graph-level user parameter on Assign_CitySampleBuildings itself "
                     "(not a per-node setting). Default value is the empty string, which "
                     "per the pin tooltip means \"randomly use all available building "
-                    "styles\". This is the TRUE edit target for adding style code TL: "
-                    "either change this default, or (more likely, per-instance) set a "
-                    "subgraph_override on whichever node instantiates this subgraph.",
+                    "styles\". Fix (Task 1 review, Finding 1): this parameter is where "
+                    "style SELECTION is constrained, NOT where a code becomes eligible "
+                    "to exist. A code is only AVAILABLE to be selected (by name, or by "
+                    "the empty-string 'all' default) once it has rows in the BDF asset's "
+                    "'BDF'/'Levels'/'Modules' groups (Task 7's job). Do not treat this "
+                    "parameter alone as 'the' edit target for adding style code TL -- "
+                    "both facts (selection constraint here, availability via BDF rows) "
+                    "are required.",
         })
     except Exception as e:
         target_entry["export_text_err"] = "%s: %s" % (type(e).__name__, e)
 whitelist["Assign_CitySampleBuildings"] = target_entry
+whitelist["write_site_not_located"] = {
+    "summary": "The node inside Assign_CitySampleBuildings_CoreProcess that "
+               "WRITES/materializes the live PCG point-data attribute "
+               "'BuildingsStyles' from the graph user-parameter of the same "
+               "name was not located (only the two READ/consumer nodes below "
+               "were found).",
+    "why_it_is_not_needed": "Given the two-part mechanism above (selection "
+               "parameter + BDF-asset availability), the write/materialization "
+               "site is not load-bearing for the TL plan: the parameter's role "
+               "is fully characterized by its measured name, type, and "
+               "default, and by confirming no consumer overrides it. Task 7 "
+               "supplies BDF-asset rows; the whitelist default (or an "
+               "explicit append of 'TL') is a parameter-level edit that does "
+               "not require knowing the internal materialization node.",
+}
 
 # 2) confirm no override exists anywhere in the two graphs named in the brief:
 #    walk every PCGSubgraphSettings node whose subgraph_instance.graph resolves
@@ -270,7 +450,9 @@ if gc:
                                             "param": "attributes_tags_mapping", "value": str(v)})
 consumer_entry["note"] = ("These nodes READ/tag the live PCG point-data attribute " +
     "\"BuildingsStyles\" (materialized elsewhere in this subgraph from the graph " +
-    "user-parameter of the same name); they do not define/write the whitelist.")
+    "user-parameter of the same name); they do not define/write the whitelist. " +
+    "See whitelist['write_site_not_located'] for why the materialization node's " +
+    "location is not load-bearing for the TL plan.")
 whitelist["Assign_CitySampleBuildings_CoreProcess_consumers"] = consumer_entry
 
 # 4) root-cause note on the tooltip prose (found via raw .uasset byte
@@ -321,12 +503,16 @@ for r in R["mesh_pivot"]:
         r["path"].split("/")[-1], r.get("loaded"), r.get("deviated_from_brief"),
         r.get("origin_cm"), r.get("extent_cm"), r.get("num_lods"),
         r.get("lod0_verts"), r.get("lod0_tris")))
+    if r.get("pivot_convention"):
+        print("    pivot: %s" % r["pivot_convention"])
+print("  SUMMARY: %s" % R["mesh_pivot_summary"]["conclusion"])
 
 print("###RULE_GRAMMARS###")
 for p, got in R["rule_grammars"].items():
-    if p == "_step4_verdict":
+    if p in ("_step4_verdict", "_sgd_slot_binding"):
         continue
     print("  %s loaded=%s grammar=%s" % (p.split("/")[-1], got.get("loaded"), got.get("grammar")))
+print("  SGD_SLOT_BINDING: %s" % R["rule_grammars"]["_sgd_slot_binding"]["slot_to_rule_bindings"])
 print("  STEP4_VERDICT: %s" % R["rule_grammars"]["_step4_verdict"]["headline"])
 for pair in R["rule_grammars"]["_step4_verdict"]["pairs"]:
     print("     %s match=%s" % (pair["bdf_label"], pair["match"]))
