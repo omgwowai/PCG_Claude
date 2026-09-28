@@ -24,7 +24,9 @@
 - **Never modify Epic's `CitySampleBuildingBDF_Asset_PCG` in place.** Write a new asset and repoint `LoadCitySampleData`. It is gitignored, so there is no VCS fallback.
 - **The only write route for a BDF data asset is duplicate-then-mutate.** `UPCGDataAsset.data`, `UPCGDataCollectionExporter.data`, and `FPCGDataPtrWrapper.data` are all `VisibleAnywhere` (⇒ `CPF_EditConst`) and reject Python's setter, and `PCGDataFunctionLibrary.make_tagged_data` is **not bound in this build**. Measured working route: `duplicate_asset` → mutate the duplicate's own point data (`create_*_attribute`, `set_points`) → `save_loaded_asset`. See Task 7.
 - **Scripts must live under `Content/Python/`** (the MCP bridge rejects paths outside it).
+- **Blueprint struct fields are stored under mangled names.** A Blueprint struct field is a `<Field>_<GUID>` name that no clean `get_editor_property()` name reaches — two confirmed instances: a RULE asset's `grammar` and `STC_Slot`'s `ShapeGrammarRules`. The reliable read path is `export_text()` (and for rules, `import_text()` to write). Do not guess a clean property name and do not assume its absence means the data is unreachable.
 - **`mcp_result` must be JSON-serializable.** `unreal.Vector` / `Name` / Actor objects are not.
+- **Kit meshes are CORNER/base-pivoted, not centre-pivoted.** Measured on CHA (Task 1): the local origin sits at the **bottom** (z ≈ 0, not the Z midpoint) and at **one end of the wall span in Y** (CHA's L1 wall spans y ∈ [−325, 0], so the origin is the y = 0 end, not the middle). CHA compensates with a per-module `PivotOffset` of magnitude (0, half-width, half-height) — whose sign direction is unconfirmed. TL matches CHA's convention exactly, because CHA's is known to lay out correctly.
 - **Do not save levels after spawning test volumes.** Test residue must not be committed.
 
 ## Review Focus
