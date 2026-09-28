@@ -330,6 +330,19 @@ for level in (0, 1, 2, 3):
         rec["disk_reload_attempted"] = bool(reloaded)
         rec["disk_reload_error"] = str(reload_err) if reload_err else ""
 
+        # Gate on the reload's own success signal. If reload_packages() ever
+        # returns False (a silent no-op -- e.g. the package lands in the
+        # InMemoryPackages or DirtyPackages bucket instead of the plain
+        # ReloadPackages() path), EAL.load_asset() below will hand back the
+        # still-resident in-memory object rather than a freshly-deserialized
+        # one, and every check after this point would silently pass against
+        # data that was never actually read from disk. Refuse to proceed.
+        if not reloaded:
+            raise RuntimeError(
+                "reload_packages reported no reload for %s; refusing to "
+                "trust a read that may be the in-memory object" % dest_path
+            )
+
         asset_fresh = EAL.load_asset(dest_path)
         if asset_fresh is None:
             raise RuntimeError("post-reload load_asset returned None for %s" % dest_path)
