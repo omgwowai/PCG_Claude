@@ -35,6 +35,14 @@ import json
 import os
 import sys
 
+# kit_common has no bpy dependency (it's shared with test_kit_spec.py, which
+# runs outside Blender), but running this file via `blender -b -P script.py`
+# doesn't reliably put the script's own directory on sys.path the way a
+# normal `python script.py` invocation does, so add it explicitly before
+# importing.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kit_common
+
 import bpy
 
 
@@ -127,6 +135,34 @@ def main():
     args = parse_args()
     with open(args.spec, encoding="utf-8") as f:
         spec = json.load(f)
+
+    # Fail loudly on a truncated or malformed spec instead of silently
+    # exporting a partial kit and printing "###EXPORTED### N" as if N were
+    # the intended count. This is the same silent-partial-kit failure mode
+    # the "lods" mismatch below guards against, just at the parts level.
+    part_count = len(spec["parts"])
+    if part_count != kit_common.EXPECTED_PART_COUNT:
+        raise SystemExit(
+            f"tl_kit_spec.json has {part_count} parts, expected "
+            f"{kit_common.EXPECTED_PART_COUNT}. Refusing to build a "
+            f"partial/oversized kit -- fix the spec (or kit_common."
+            f"EXPECTED_PART_COUNT if the kit's shape has genuinely changed)."
+        )
+
+    # Guard the "lods" field against drifting from what this script actually
+    # builds. build_tl_kit.py only ever produces kit_common.LODS_PRODUCED;
+    # if the spec advertises more (or different) LODs than that, a
+    # downstream consumer (e.g. the Task 3 importer) could go looking for
+    # FBX files that were never exported.
+    declared_lods = spec.get("lods")
+    if declared_lods != kit_common.LODS_PRODUCED:
+        raise SystemExit(
+            f"tl_kit_spec.json declares lods={declared_lods!r}, but this "
+            f"script only builds/exports lods={kit_common.LODS_PRODUCED!r}. "
+            f"Update tl_kit_spec.json's \"lods\" field (or this script, if "
+            f"more LODs are now genuinely authored) so the two agree."
+        )
+
     fb_dir = os.path.join(args.out, "FBX_Export")
     os.makedirs(fb_dir, exist_ok=True)
 

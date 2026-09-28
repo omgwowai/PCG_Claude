@@ -1,5 +1,8 @@
 import json, os, sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kit_common
+
 SPEC = os.path.join(os.path.dirname(__file__), "tl_kit_spec.json")
 
 # CHA dimensions TL aligns to (spec 2.8). Widths in meters, heights in meters.
@@ -60,3 +63,28 @@ def test_names_follow_the_convention():
     for p in spec["parts"]:
         assert p["mesh_name"].startswith("SM_BLDG_TL_L"), p
         assert p["mesh_name"].endswith(p["part"] + "_N1"), p
+
+
+def test_part_count_matches_expected():
+    # Guards the "fail loudly on a short/truncated spec" property: if the
+    # spec ever gains or loses a part without kit_common.EXPECTED_PART_COUNT
+    # being updated deliberately, this test (and build_tl_kit.py's own
+    # runtime check) catches it instead of silently building a partial or
+    # oversized kit.
+    spec = load()
+    assert len(spec["parts"]) == kit_common.EXPECTED_PART_COUNT, len(spec["parts"])
+
+
+def test_declared_lods_match_what_the_build_script_produces():
+    # Reviewer finding on Task 2: tl_kit_spec.json declared "lods": [0, 1]
+    # while build_tl_kit.py only ever builds/exports LOD0 (the "lod"
+    # parameter was dropped from build_part() because both its branches
+    # produced identical geometry). That drift was invisible because nothing
+    # in this suite checked the "lods" field against reality -- a Task 3
+    # importer trusting "lods": [0, 1] would go looking for 29 "_LOD1" FBX
+    # files that were never produced. This test pins the spec's declared
+    # LOD set to kit_common.LODS_PRODUCED, the single source of truth for
+    # what build_tl_kit.py actually builds, so the two cannot drift apart
+    # silently again.
+    spec = load()
+    assert spec["lods"] == kit_common.LODS_PRODUCED, spec["lods"]
