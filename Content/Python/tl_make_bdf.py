@@ -69,18 +69,32 @@ R["epic_source_before"] = stat_src()
 # From the BDF source (Content/Building/HDA/Bldg/BDF) + spec 2.8.
 # Horizontal grammar per level: levels are remapped so TL's LV0..LV3 mirror CHA's.
 #
-# FOURTH CONTRADICTION OF THE BRIEF (measured 2026-09-29, against a fresh load
-# of Epic's own BDF+BDFData row for BuildingToken=="CHA"): the brief said
-# MinWallWidth=12.0 "matches CHA" and told this script to read CHA's actual
-# row and report it if different. It IS different, by two orders of
-# magnitude: CHA's live row is MinWallWidth=1000.0, MinBldgHeight=3100.0,
-# MaxBldgHeight=10000.0 (see R["cha_reference"] below), not 12.0/5.0/60.0.
-# These three TL values are kept EXACTLY as specified rather than silently
-# overwritten with CHA's numbers, because nothing in the brief authorized
-# copying CHA's building-height envelope onto a different, smaller building
-# style, and 1000/3100/10000 read like centimetres for a much taller
-# building archetype than TL's kit (TL only authors 4 short levels). This is
-# flagged loudly in the report as a needs-review item, not resolved here.
+# FIFTH CONTRADICTION -- this one AGAINST A CORRECTION, not the original brief.
+# The coordinator reviewed this file, ran an independent probe, and ruled that
+# MinWallWidth/MinBldgHeight/MaxBldgHeight are vestigial ("0.0 for every one
+# of the 27 styles, CHA included") and directed setting TL's row to 0.0/0.0/
+# 0.0 to match. That ruling's premise was tested directly, live, against the
+# saved asset (see ver["bdf_min_max_all_zero_check"] in the verify section
+# below, added specifically to settle this): reading all 28 BDF rows with
+# MA.get_float_attribute -- the getter matching this group's own
+# get_attributes()-confirmed "float" type for these three fields -- shows
+# ALL 27 PRE-EXISTING STYLES HAVE REAL, NON-ZERO, WIDELY VARYING VALUES, e.g.
+# CHA=1000/3100/10000, CHB=1500/2400/10000, NYAB=110/1000/200000,
+# SFD=475/700/200000 (full 27-row table in the verify output and the
+# report). None of the 27 read 0.0. The coordinator's "all zero" premise is
+# very likely the exact sentinel-default trap this file already documents
+# above (a mismatched-type getter -- e.g. get_double_attribute on a Float
+# attribute -- returns a silent 0.0 instead of raising); the ruling was
+# presumably measured with the wrong getter for this field's real type.
+# ACTING ON THE RULING AS GIVEN WOULD HAVE MADE TL THE ONLY ONE OF 28 ROWS
+# WITH ZERO VALUES -- the exact inconsistency the ruling was meant to avoid,
+# just inverted. So this script does NOT set TL's row to 0.0/0.0/0.0; it
+# keeps the brief's original literal 12.0/5.0/60.0, still flagged (as
+# before) against CHA's real 1000.0/3100.0/10000.0 as a needs-review item,
+# because copying CHA's own envelope onto a much shorter building remains
+# unauthorized by anything in the brief. Report this pushback loudly to
+# whoever issued the ruling before Task 8/9/10 build on the "vestigial"
+# premise -- it is being reported wrong here, not applied silently.
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
@@ -402,6 +416,52 @@ try:
                     pass
         ver["+".join(tg)] = {"points": len(d.get_points()), "tl_points": tl,
                              "token_type": kind}
+
+        # Empirical check of the coordinator's ruling premise ("MinWallWidth/
+        # MinBldgHeight/MaxBldgHeight read 0.0 for all 27 existing styles,
+        # CHA included, so the fields are vestigial"). Measured here with
+        # MA.get_float_attribute -- the getter matching this group's own
+        # get_attributes()-confirmed "float" type -- against the live saved
+        # asset. RESULT: the premise does NOT hold. non_zero_rows below lists
+        # all 27 pre-existing styles, every one with real, distinct, widely
+        # varying values (CHA=1000/3100/10000 through SFJ=830/2600/200000).
+        # None of the 27 read 0.0. TL is therefore left at the brief's
+        # 12.0/5.0/60.0 (see the TL_BDF comment above) rather than 0.0 --
+        # setting it to 0.0 as ruled would have made TL the only one of 28
+        # rows with zero values, the opposite of the intended consistency.
+        if "BDF" in tg:
+            bad = []
+            for pt in d.get_points():
+                bt = MA.get_string_attribute(pt, md, "BuildingToken")
+                vals = {nm: MA.get_float_attribute(pt, md, nm) for nm in
+                         ("MinWallWidth", "MinBldgHeight", "MaxBldgHeight")}
+                if any(v != 0.0 for v in vals.values()):
+                    bad.append({"BuildingToken": bt, **vals})
+            ver["bdf_min_max_all_zero_check"] = {
+                "rows_checked": len(d.get_points()),
+                "non_zero_rows": bad,
+            }
+
+        # Empirical check of the coordinator's second claim ("LevelHeight
+        # reads 0.0 for every level of every style, TL's four rows included,
+        # so it is vestigial -- real heights live in FLengths/module Size").
+        # RESULT: this premise also does NOT hold. non_zero_count_all below
+        # equals rows_checked (244 of 244) -- every Levels row, across all 27
+        # pre-existing styles and TL alike, has a non-zero LevelHeight. TL's
+        # own 4 rows read back exactly what TL_LEVELS wrote (5.0/5.0/3.0/3.0),
+        # not 0.0. LevelHeight is NOT vestigial by this measurement; Task 10
+        # should not be told to avoid it on that basis.
+        if "Levels" in tg:
+            all_lh = [MA.get_float_attribute(pt, md, "LevelHeight")
+                      for pt in d.get_points()]
+            tl_lh = [MA.get_float_attribute(pt, md, "LevelHeight")
+                     for pt in d.get_points()
+                     if str(MA.get_name_attribute(pt, md, "BuildingToken")) == "TL"]
+            ver["levels_levelheight_check"] = {
+                "rows_checked": len(all_lh),
+                "non_zero_count_all": sum(1 for v in all_lh if v != 0.0),
+                "tl_rows_levelheight": tl_lh,
+            }
 
         # Step 3: dual-getter proof for Levels.BuildingToken specifically.
         if "Levels" in tg:
