@@ -76,6 +76,23 @@
 # correctness, not about re-deriving footprint dimensions from scratch, and the
 # grammar's "+" sections repeat to fill whatever height is given regardless of
 # style.
+#
+# --- Fixes from the Task 6 review (2026-09-29), both Critical:
+#
+# Critical 1: `sgd_set_correctly` used to be computed and then IGNORED --
+# activate()/generate_local() ran unconditionally even if import_text() had
+# silently failed to apply (malformed text, a future bag-field-order change).
+# That is the single worst outcome this test could produce: reporting "TL
+# verified" while CHA silently regenerated. Fixed: generation is now gated on
+# `R["sgd_set_correctly"]` via `fatal()` below -- no swap confirmed, no
+# generate call, full stop.
+#
+# Important 3: the three fatal branches after a successful duplicate_actor()
+# ("no PCGComponent", "could not load SGD_TL_A", "field not found") used to
+# `raise SystemExit` without destroying `dup`, leaving an orphaned probe actor
+# in the open level until the NEXT run's pre-clean loop happened to remove it.
+# Fixed: all fatal exits now funnel through `fatal()`, which destroys the
+# in-flight `dup` (if one exists yet) before raising.
 
 import gc
 import json
@@ -90,6 +107,32 @@ R = {}
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 EAL = unreal.EditorAssetLibrary
 les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+
+
+def fatal(msg, dup_actor=None):
+    """Report a fatal condition and, if a probe actor was already duplicated,
+    destroy it before exiting -- so a failed run never leaves committed-looking
+    residue in the open level for the NEXT run to have to clean up (Important 3
+    from the 2026-09-29 review)."""
+    global mcp_result
+    R["fatal"] = msg
+    if dup_actor is not None:
+        try:
+            c2 = dup_actor.get_component_by_class(unreal.PCGComponent)
+            if c2:
+                try:
+                    c2.cleanup_local(True)
+                except Exception:
+                    pass
+            eas.destroy_actor(dup_actor)
+            R["fatal_cleanup"] = "orphan probe actor destroyed"
+        except Exception as e:
+            R["fatal_cleanup"] = "FAILED to destroy orphan probe actor: %s: %s" % (
+                type(e).__name__, e)
+    print(json.dumps(R, indent=1, default=str))
+    mcp_result = json.loads(json.dumps(R, default=str))
+    raise SystemExit
+
 
 R["current_level"] = str(les.get_current_level())
 
@@ -115,20 +158,14 @@ for a in eas.get_all_level_actors():
         break
 
 if source is None:
-    R["fatal"] = "source volume not found: %s -- is Bldg_SGD_level loaded?" % SOURCE_LABEL
-    print(json.dumps(R, indent=1, default=str))
-    mcp_result = R
-    raise SystemExit
+    fatal("source volume not found: %s -- is Bldg_SGD_level loaded?" % SOURCE_LABEL)
 
 src_loc = source.get_actor_location()
 offset = unreal.Vector(SPAWN.x - src_loc.x, SPAWN.y - src_loc.y, SPAWN.z - src_loc.z)
 
 dup = eas.duplicate_actor(source, offset=offset)
 if dup is None:
-    R["fatal"] = "duplicate_actor returned None"
-    print(json.dumps(R, indent=1, default=str))
-    mcp_result = R
-    raise SystemExit
+    fatal("duplicate_actor returned None")  # nothing to clean up yet
 
 dup.set_actor_label(PROBE_LABEL)
 loc = dup.get_actor_location()
@@ -137,10 +174,7 @@ R["dup_location"] = [round(float(loc.x), 1), round(float(loc.y), 1), round(float
 
 comp = dup.get_component_by_class(unreal.PCGComponent)
 if comp is None:
-    R["fatal"] = "duplicate has no PCGComponent"
-    print(json.dumps(R, indent=1, default=str))
-    mcp_result = R
-    raise SystemExit
+    fatal("duplicate has no PCGComponent", dup_actor=dup)
 
 # wipe whatever CHA generated content came along with the duplicate, so every
 # instance counted in the read-phase is attributable purely to this run
@@ -160,19 +194,14 @@ R["bag_before"] = before
 
 sgd = EAL.load_asset(SGD_TL_PATH)
 if sgd is None:
-    R["fatal"] = "could not load SGD_TL_A at %s" % SGD_TL_PATH
-    print(json.dumps(R, indent=1, default=str))
-    mcp_result = R
-    raise SystemExit
+    fatal("could not load SGD_TL_A at %s" % SGD_TL_PATH, dup_actor=dup)
 sgd_path = sgd.get_path_name()
 R["sgd_path"] = sgd_path
 
 m = re.search(r'ShapeGrammarDefinition="([^"]*)"', before)
 if not m:
-    R["fatal"] = "ShapeGrammarDefinition field not found in bag export_text: %r" % before
-    print(json.dumps(R, indent=1, default=str))
-    mcp_result = R
-    raise SystemExit
+    fatal("ShapeGrammarDefinition field not found in bag export_text: %r" % before,
+          dup_actor=dup)
 R["old_sgd_in_bag"] = m.group(1)
 
 new_text = before[:m.start(1)] + sgd_path + before[m.end(1):]
@@ -186,6 +215,17 @@ gi.set_editor_property("parameters_overrides", po)
 after = gi.get_editor_property("parameters_overrides").get_editor_property("parameters").export_text()
 R["bag_after"] = after
 R["sgd_set_correctly"] = sgd_path in after
+
+# ---------- gate: refuse to generate on an unconfirmed swap (Critical 1) ----
+# Previously this flag was computed and never checked, so a future
+# import_text() failure (malformed text, a bag field-order change) would have
+# silently regenerated CHA while this script still printed "generated: true".
+# That is the worst possible outcome for an acceptance test that exists to
+# prove TL specifically -- so refuse outright rather than proceed on a maybe.
+if not R["sgd_set_correctly"]:
+    fatal("SGD swap did not take effect -- bag_after does not contain the TL "
+          "SGD path after import_text(); refusing to generate, since doing so "
+          "would silently re-verify CHA instead of TL", dup_actor=dup)
 
 # ---------- generate ---------------------------------------------------------
 comp.activate(True)          # REQUIRED: without this it is a silent zero
