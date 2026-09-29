@@ -1646,114 +1646,40 @@ properties carrying the style-code string. It is instead a **graph-level user pa
 read and confirm; the setter path must be probed the same way the BDF data was — try, read back,
 and trust only the read-back.
 
-- [ ] **Step 1: Probe the DataTable row-write mechanism before writing the registration script**
+- [ ] **Step 1: Add TL's rows to the two DataTables**
 
-The DataTable edits are genuinely the least certain part of this task, and the earlier plan
-guessed at them. Establish the real mechanism first, in one call, then write the script around
-what works. Do **not** hand-patch a `.uasset`.
+**This step is no longer a probe — the mechanism is measured.** I read both tables directly and
+confirmed the working API on the live `DT_Bldg_MinWidth`:
 
-Create `Content/Python/tl_dt_probe.py`:
+- `DataTable` exposes: `get_row_names`, `does_row_exist`, `get_row_struct`,
+  `fill_from_csv_string`, `fill_from_json_string`, `fill_from_csv_file`,
+  `export_to_csv_string`, `export_to_json_string`, `get_column_names`.
+- **`DataTable` has NO `row_map` property in this build** — `get_editor_property("row_map")` raises
+  `"Failed to find property 'row_map'"`. An earlier draft of this task assumed it. Do not use it.
+- `DT_Bldg_MinWidth`'s `row_struct` is `ST_Bldg_MinWidth` and it currently holds **27 rows** —
+  `CHA CHB CHC CHD CHE CHF CHG CHH CHI CHJ NYAA NYAB NYAC NYAD NYAE NYAF NYG NYGA NYH QBA QBAA SFA
+  SFB SFC SFD SFE SFJ` — **with no `TL`**.
+- `DT_Bldg_LevelMinWidth` uses `ST_Level_MinWidth` with fields `BuildingToken`, `LevelToken`,
+  `LevelNumber`(int32), `F0Grammar`, `CornerModuleSymbol`, `CornerSize`, `MinWidthWorstCase`.
 
-```python
-# tl_dt_probe.py — find how to ADD a row to a DataTable from Python.
-#
-# The two tables TL needs rows in:
-#   DT_Bldg_MinWidth       struct ST_Bldg_MinWidth      fields: buildingToken(Str), minWidth(double)
-#   DT_Bldg_LevelMinWidth  struct ST_Level_MinWidth     fields: BuildingToken, LevelToken,
-#                                                              LevelNumber(int32), F0Grammar,
-#                                                              CornerModuleSymbol, CornerSize,
-#                                                              MinWidthWorstCase
-#
-# READ-ONLY except that it may write one throwaway row and remove it again.
+Use `fill_from_csv_string` with a header row naming the struct's fields. Verify the row landed by
+re-reading `get_row_names` (and `does_row_exist("TL")`) afterwards — **not** by trusting the call's
+return value alone. Save the table with `save_loaded_asset`.
 
-import json
+**If the CSV field names do not match the struct** and the fill silently adds nothing, read
+`get_column_names()` first and build the header from those exact names. Report the real column names in
+your report either way — they are the durable fact for anyone adding a style later.
 
-R = {}
-args = mcp_args or {}
-EAL = unreal.EditorAssetLibrary
+- [ ] **Step 2: Confirm both tables actually gained TL's rows**
 
-TABLES = {
-    "DT_Bldg_MinWidth": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth",
-    "DT_Bldg_LevelMinWidth": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth",
-}
+Re-read both tables and confirm `TL` appears in `get_row_names` for each, with the row count going
+27 → 28 for the width table. Report the counts before and after. **A CSV fill that matches no columns
+can return successfully while adding nothing** — the read-back is the only honest confirmation, and
+this is the same silent-no-op shape that has already cost this plan two fix rounds.
 
-# ---------- what API surface exists for DataTables? ----------------------
-DTFL = unreal.DataTableFunctionLibrary
-R["DTFL_members"] = sorted([m for m in dir(DTFL) if not m.startswith("_")])
+- [ ] **Step 3: Write the registration script**
 
-# does the table object expose row write methods?
-for label, path in TABLES.items():
-    dt = EAL.load_asset(path)
-    rec = {"path": path, "loaded": dt is not None}
-    if dt is None:
-        R[label] = rec
-        continue
-    rec["class"] = dt.get_class().get_name()
-    rec["row_struct"] = str(dt.get_editor_property("row_struct"))
-    rec["members"] = sorted([m for m in dir(dt)
-                             if not m.startswith("_") and
-                             ("row" in m.lower() or "text" in m.lower())])
-    # existing rows + their text form (the text form is what a row-write needs)
-    try:
-        rm = dt.get_editor_property("row_map")
-        keys = [str(k) for k in rm.keys()]
-        rec["row_count"] = len(keys)
-        rec["first_keys"] = keys[:5]
-        rec["last_keys"] = keys[-3:]
-        rec["starts_with_TL"] = [k for k in keys if k.startswith("TL")]
-        # dump ONE existing row as text, to learn the format an add must produce
-        if keys:
-            one = dt.get_editor_property("row_map")
-            row = one[unreal.Name(keys[0])] if hasattr(one, "__getitem__") else None
-            if row is not None:
-                rec["sample_row_key"] = keys[0]
-                try:
-                    rec["sample_row_text"] = row.export_text()
-                except Exception as e:
-                    rec["sample_row_text_err"] = "%s: %s" % (type(e).__name__, e)
-    except Exception as e:
-        rec["row_map_err"] = "%s: %s" % (type(e).__name__, e)
-    R[label] = rec
-
-print("###DTFL_MEMBERS###")
-print(json.dumps(R["DTFL_members"], indent=1))
-for label in TABLES:
-    print("###%s###" % label)
-    rec = R.get(label, {})
-    print("  loaded=%s row_count=%s" % (rec.get("loaded"), rec.get("row_count")))
-    print("  row_struct=%s" % rec.get("row_struct"))
-    print("  members=%s" % rec.get("members"))
-    print("  first_keys=%s" % rec.get("first_keys"))
-    print("  starts_with_TL=%s" % rec.get("starts_with_TL"))
-    if rec.get("sample_row_text"):
-        print("  sample_row[%s] text:" % rec.get("sample_row_key"))
-        print("     %s" % rec["sample_row_text"][:300])
-
-mcp_result = R
-```
-
-- [ ] **Step 2: Run the probe and read what it found**
-
-Run via the bridge: `run_unreal_script(script_path="tl_dt_probe.py")`
-
-Expected: a list of `DataTableFunctionLibrary` members including at least one of
-`fill_data_table_from_csv_string` / `fill_data_table_from_json_string`, the two tables' row struct
-names, their existing row keys (confirming 27 for `DT_Bldg_MinWidth` and the `DT_Bldg_LevelMinWidth`
-key pattern), and **the export text of one existing row** — which is the exact format an added row
-must produce.
-
-**Decision point, and the reason this step is separate:** if
-`fill_data_table_from_csv_string` (or the JSON variant) exists, use it — write TL's rows as a CSV
-string with a header naming the struct's fields and append them. If it does **not** exist, report
-back to the controller before proceeding: the remaining options (constructing rows via export text
-against the struct's mangled field names, the way the RULE assets and the BDF data both had to be
-handled) are a different and larger piece of work, and the controller needs to decide whether to
-take that route or to drop the DataTable edits on the grounds that `BuildingsStyles` alone decides
-participation. **Do not silently skip the tables if the API is missing.**
-
-- [ ] **Step 3: Write the registration script around the working mechanism**
-
-Create `Content/Python/tl_register.py`. Use the mechanism Step 2 proved. The structure:
+Create `Content/Python/tl_register.py`. Use the mechanism proven in Steps 1–2. The structure:
 
 ```python
 # tl_register.py — register TL: two DataTable row sets, the BuildingsStyles
