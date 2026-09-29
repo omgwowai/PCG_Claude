@@ -69,59 +69,57 @@ R["epic_source_before"] = stat_src()
 # From the BDF source (Content/Building/HDA/Bldg/BDF) + spec 2.8.
 # Horizontal grammar per level: levels are remapped so TL's LV0..LV3 mirror CHA's.
 #
-# FIFTH CONTRADICTION -- this one AGAINST A CORRECTION, not the original brief.
-# The coordinator reviewed this file, ran an independent probe, and ruled that
-# MinWallWidth/MinBldgHeight/MaxBldgHeight are vestigial ("0.0 for every one
-# of the 27 styles, CHA included") and directed setting TL's row to 0.0/0.0/
-# 0.0 to match. That ruling's premise was tested directly, live, against the
-# saved asset (see ver["bdf_min_max_all_zero_check"] in the verify section
-# below, added specifically to settle this): reading all 28 BDF rows with
-# MA.get_float_attribute -- the getter matching this group's own
-# get_attributes()-confirmed "float" type for these three fields -- shows
-# ALL 27 PRE-EXISTING STYLES HAVE REAL, NON-ZERO, WIDELY VARYING VALUES, e.g.
-# CHA=1000/3100/10000, CHB=1500/2400/10000, NYAB=110/1000/200000,
-# SFD=475/700/200000 (full 27-row table in the verify output and the
-# report). None of the 27 read 0.0. The coordinator's "all zero" premise is
-# very likely the exact sentinel-default trap this file already documents
-# above (a mismatched-type getter -- e.g. get_double_attribute on a Float
-# attribute -- returns a silent 0.0 instead of raising); the ruling was
-# presumably measured with the wrong getter for this field's real type.
-# ACTING ON THE RULING AS GIVEN WOULD HAVE MADE TL THE ONLY ONE OF 28 ROWS
-# WITH ZERO VALUES -- the exact inconsistency the ruling was meant to avoid,
-# just inverted. So this script does NOT set TL's row to 0.0/0.0/0.0; it
-# keeps the brief's original literal 12.0/5.0/60.0, still flagged (as
-# before) against CHA's real 1000.0/3100.0/10000.0 as a needs-review item,
-# because copying CHA's own envelope onto a much shorter building remains
-# unauthorized by anything in the brief. Report this pushback loudly to
-# whoever issued the ruling before Task 8/9/10 build on the "vestigial"
-# premise -- it is being reported wrong here, not applied silently.
+# SIXTH CONTRADICTION -- correcting the FIFTH. The coordinator re-measured
+# with both get_float_attribute and get_double_attribute on the same rows
+# (CHA MinWallWidth: 1000.0 vs. 0.0; CHA LV1 LevelHeight: 500.0 vs. 0.0) and
+# confirmed the FIFTH CONTRADICTION above: get_double_attribute on a Float
+# attribute returns a silent 0.0 sentinel, which is what produced their
+# original "every style reads 0.0" premise. That premise is retracted. The
+# real defect was different: TL's own MinWallWidth/MinBldgHeight/
+# MaxBldgHeight (12.0/5.0/60.0) and LevelHeight (5.0/5.0/3.0/3.0, in
+# TL_LEVELS below) were carried over from the .bdf JSON's METRE-scale
+# numbers, unconverted, while every sibling style is in CENTIMETRES (CHA's
+# MinWallWidth=1000cm=10m, LV1 LevelHeight=500cm=5m). Corrected per the
+# coordinator's ruling, derived from TL's own geometry rather than copied
+# from CHA's envelope:
+#   MinWallWidth  = 950.0  cm -- TL's own narrowest FLengths.x (LV1/LV2/LV3
+#                               all start at 950), i.e. the narrowest wall
+#                               TL can actually build on.
+#   MinBldgHeight = MaxBldgHeight = 1600.0 cm -- TL's full fixed four-level
+#                               stack: 500(L0)+500(L1)+300(L2)+300(L3). TL's
+#                               grammar does not repeat levels the way CHA's
+#                               does, so unlike CHA's wide 3100-10000 range,
+#                               TL's min and max legitimately coincide.
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
     "VerticalGrammarStaggered": "[LV0][LV1][LV2][LV3]",
-    "MinWallWidth": 12.0,       # brief's value; CONTRADICTS CHA's live 1000.0 -- see above
-    "MinBldgHeight": 5.0,       # brief's value; CONTRADICTS CHA's live 3100.0 -- see above
-    "MaxBldgHeight": 60.0,      # brief's value; CONTRADICTS CHA's live 10000.0 -- see above
+    "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
+    "MinBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 5.0 m, unconverted)
+    "MaxBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 60.0 m, unconverted)
     "RoofData": unreal.Vector4(0.2, 0.1, 0.2, 0.1),   # CHA's Roof_Inset/Offset pair
 }
 
 # level -> the 3 facade variants (BDF F0/F1/F2) and their required length in cm.
 # CHA's own values are the template (spec 2.6 mapping applied).
+# LevelHeight is in CENTIMETRES, matching every sibling style (CHA's LV1
+# reads 500.0) -- corrected here from the original metre-scale 5.0/5.0/3.0/
+# 3.0, the same unit bug as TL_BDF above (SIXTH CONTRADICTION).
 TL_LEVELS = [
-    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 5.0, "Size": 0.0,
+    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 500.0, "Size": 0.0,
      "F0": "[FC][FS2]+[LC]", "F1": "[FC][FS2]+[LC]", "F2": "[FC][FS2]+[LC]",
      "FLengths": unreal.Vector(300.0, 300.0, 300.0), "IsTopper": False},
-    {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 5.0, "Size": 0.0,
+    {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 500.0, "Size": 0.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
      "FLengths": unreal.Vector(950.0, 3725.0, 5400.0), "IsTopper": False},
-    {"LevelNumber": 2, "LevelToken": "LV2", "LevelHeight": 3.0, "Size": 0.0,
+    {"LevelNumber": 2, "LevelToken": "LV2", "LevelHeight": 300.0, "Size": 0.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "FLengths": unreal.Vector(950.0, 3925.0, 5800.0), "IsTopper": False},
-    {"LevelNumber": 3, "LevelToken": "LV3", "LevelHeight": 3.0, "Size": 0.0,
+    {"LevelNumber": 3, "LevelToken": "LV3", "LevelHeight": 300.0, "Size": 0.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
@@ -334,12 +332,49 @@ except Exception as e:
 R["cha_reference"] = cha_ref
 
 # ---------- duplicate, then append ---------------------------------------
+# SEVENTH CONTRADICTION -- the embedded editor Python interpreter's `globals()`
+# namespace is NOT fresh per run_unreal_script call; it persists across runs
+# within the same editor session (confirmed with tl_probe_globals.py: a
+# second run found DEST/dup/TL_BDF/etc. still bound from the previous run's
+# execution of this very script). That is silently dangerous here: if a
+# previous run left "dup"/"d"/"md"/"asset"/etc. bound to Python wrappers of
+# BDF_WithTL's UObjects, EditorAssetLibrary.delete_asset(DEST) below returns
+# False (not an exception) because something still references the object,
+# duplicate_asset then produces a stale/no-op result, and everything after it
+# silently mutates or reads the OLD asset while this run's own R["groups"]
+# stays empty and R["duplicated"] is never true -- exactly what happened on
+# a real re-run here: groups: [], duplicated: false, and the verify block
+# read back last run's values instead of this run's fix. Clearing the known
+# heavy-object globals and forcing GC before delete_asset fixes it.
+for _nm in ("dup", "d", "md", "asset", "src_asset", "src_asset2", "bdf_d",
+            "d0", "d2", "md0", "md2", "existing", "items", "items2", "it",
+            "pt", "last_pt"):
+    globals().pop(_nm, None)
+import gc as _gc
+_gc.collect()
+try:
+    unreal.SystemLibrary.collect_garbage()
+except Exception:
+    pass
+
 if EAL.does_asset_exist(DEST):
-    EAL.delete_asset(DEST)
+    _deleted = EAL.delete_asset(DEST)
+    if not _deleted and EAL.does_asset_exist(DEST):
+        R["errors"].append(
+            "delete_asset(%s) returned False and the asset still exists -- "
+            "a stale Python reference from a previous run in this same "
+            "editor session is the most likely cause; see the comment "
+            "above this block." % DEST)
 
 try:
     dup = EAL.duplicate_asset(SRC, DEST)
     R["duplicated"] = dup is not None
+    if dup is None:
+        R["errors"].append(
+            "duplicate_asset(%s, %s) returned None -- likely because the "
+            "prior delete_asset failed (see above); aborting rather than "
+            "silently reading/writing whatever asset is currently at DEST."
+            % (SRC, DEST))
 except Exception as e:
     R["errors"].append("duplicate_asset: %s: %s" % (type(e).__name__, e))
     dup = None
@@ -417,18 +452,20 @@ try:
         ver["+".join(tg)] = {"points": len(d.get_points()), "tl_points": tl,
                              "token_type": kind}
 
-        # Empirical check of the coordinator's ruling premise ("MinWallWidth/
-        # MinBldgHeight/MaxBldgHeight read 0.0 for all 27 existing styles,
-        # CHA included, so the fields are vestigial"). Measured here with
-        # MA.get_float_attribute -- the getter matching this group's own
-        # get_attributes()-confirmed "float" type -- against the live saved
-        # asset. RESULT: the premise does NOT hold. non_zero_rows below lists
-        # all 27 pre-existing styles, every one with real, distinct, widely
-        # varying values (CHA=1000/3100/10000 through SFJ=830/2600/200000).
-        # None of the 27 read 0.0. TL is therefore left at the brief's
-        # 12.0/5.0/60.0 (see the TL_BDF comment above) rather than 0.0 --
-        # setting it to 0.0 as ruled would have made TL the only one of 28
-        # rows with zero values, the opposite of the intended consistency.
+        # Consistency check for TL's BDF constraint fields, added when the
+        # coordinator's original "these fields are vestigial, set TL to 0.0"
+        # ruling was tested and retracted (see the SIXTH CONTRADICTION note
+        # above TL_BDF). The retraction's root cause: the ruling's probe used
+        # get_double_attribute on a Float-typed attribute, which returns a
+        # silent 0.0 sentinel instead of raising -- the same sentinel-default
+        # trap this file already documents for get_name_attribute et al.
+        # Measured here with MA.get_float_attribute, the type-matched getter
+        # confirmed via get_attributes(). non_zero_rows lists every row whose
+        # three fields aren't all 0.0 -- i.e. every real row, TL included now
+        # that it carries its own geometry-derived values (950.0/1600.0/
+        # 1600.0 cm) rather than the unconverted metre-scale 12.0/5.0/60.0 or
+        # the since-retracted 0.0/0.0/0.0. Use this table to compare TL
+        # against CHA and its other 26 siblings directly.
         if "BDF" in tg:
             bad = []
             for pt in d.get_points():
@@ -442,25 +479,33 @@ try:
                 "non_zero_rows": bad,
             }
 
-        # Empirical check of the coordinator's second claim ("LevelHeight
-        # reads 0.0 for every level of every style, TL's four rows included,
-        # so it is vestigial -- real heights live in FLengths/module Size").
-        # RESULT: this premise also does NOT hold. non_zero_count_all below
-        # equals rows_checked (244 of 244) -- every Levels row, across all 27
-        # pre-existing styles and TL alike, has a non-zero LevelHeight. TL's
-        # own 4 rows read back exactly what TL_LEVELS wrote (5.0/5.0/3.0/3.0),
-        # not 0.0. LevelHeight is NOT vestigial by this measurement; Task 10
-        # should not be told to avoid it on that basis.
+        # Consistency check for Levels.LevelHeight, added for the same reason
+        # as bdf_min_max_all_zero_check above: the coordinator's original
+        # "LevelHeight is vestigial, reads 0.0 everywhere" claim was also a
+        # get_double_attribute-on-Float sentinel artifact, retracted once
+        # re-measured with the type-matched get_float_attribute. TL's own 4
+        # rows now carry centimetre-scale values (500.0/500.0/300.0/300.0)
+        # matching every sibling's unit convention (e.g. CHA LV1 = 500.0),
+        # not the metre-scale 5.0/5.0/3.0/3.0 this script originally wrote.
+        # cha_lh is captured alongside tl_lh so the report can show both
+        # side by side, as requested.
         if "Levels" in tg:
             all_lh = [MA.get_float_attribute(pt, md, "LevelHeight")
                       for pt in d.get_points()]
             tl_lh = [MA.get_float_attribute(pt, md, "LevelHeight")
                      for pt in d.get_points()
                      if str(MA.get_name_attribute(pt, md, "BuildingToken")) == "TL"]
+            cha_lh = [
+                {"LevelToken": MA.get_string_attribute(pt, md, "LevelToken"),
+                 "LevelHeight": MA.get_float_attribute(pt, md, "LevelHeight")}
+                for pt in d.get_points()
+                if str(MA.get_name_attribute(pt, md, "BuildingToken")) == "CHA"
+            ]
             ver["levels_levelheight_check"] = {
                 "rows_checked": len(all_lh),
                 "non_zero_count_all": sum(1 for v in all_lh if v != 0.0),
                 "tl_rows_levelheight": tl_lh,
+                "cha_rows_levelheight": cha_lh,
             }
 
         # Step 3: dual-getter proof for Levels.BuildingToken specifically.
