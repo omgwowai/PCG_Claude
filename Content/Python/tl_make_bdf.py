@@ -147,10 +147,35 @@ R["epic_source_before"] = stat_src()
 # THIS REMAINS A HYPOTHESIS, NOT A PROVEN FIX -- same caveat as the EIGHTH:
 # the real rejecting node in the graph has still not been located, and the
 # proof is a fresh, independent re-run of the Task 9 city stage.
+#
+# TENTH CONTRADICTION -- the NINTH's two fixes (Size, RoofData) were ALSO
+# falsified: Task 9's re-run still generated 0 of 475,722 TL instances. The
+# coordinator moved from field-value hygiene to grammar structure and found
+# TL is the ONLY one of 28 styles whose VerticalGrammar contains no `*`
+# repeat marker (CHA: "...[LV6]*[LV7][LV8][LV9]*..."; CHF: "...[LV2]*...";
+# SFJ: "...[LV3]*..."; CHJ: "[LV0][LV1][LV2]*[LV3]"; TL had plain
+# "[LV0][LV1][LV2][LV3]", no `*` anywhere). `*` marks a repeatable level --
+# the mechanism a style uses to stretch to a requested building height. A
+# grammar with zero repeatable levels can only ever produce one exact
+# height and is rejected by essentially every lot -- which matches the
+# symptom (zero TL, no error, every other style normal) better than either
+# previous hypothesis, because it explains REJECTION outright rather than a
+# malformed value. Fix: both VerticalGrammar and VerticalGrammarStaggered
+# set to "[LV0][LV1][LV2]*[LV3]", mirroring CHJ exactly -- CHJ is TL's
+# closest structural analogue (also a short, 4-level-ish style with one
+# repeat). This also retroactively makes the EIGHTH's MinBldgHeight/
+# MaxBldgHeight band fix meaningful for the first time: with a repeatable
+# level, TL can genuinely grow across the 1600-200000 cm band, rather than
+# that band describing a style that can only ever be one fixed height.
+#
+# THIS REMAINS A HYPOTHESIS, NOT A PROVEN FIX -- Task 9 has now falsified
+# two prior hypotheses on this exact bug; this one is not assumed correct
+# until the city stage, re-run independently (not by this script/session),
+# agrees.
 TL_BDF = {
     "BuildingToken": "TL",
-    "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
-    "VerticalGrammarStaggered": "[LV0][LV1][LV2][LV3]",
+    "VerticalGrammar": "[LV0][LV1][LV2]*[LV3]",
+    "VerticalGrammarStaggered": "[LV0][LV1][LV2]*[LV3]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
     "MinBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 5.0 m, unconverted)
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings (was 1600.0 -- zero span, EIGHTH CONTRADICTION)
@@ -477,12 +502,19 @@ else:
 
 if dup and _patch_mode:
     # Narrow patch: touch only the specific fields this round's fix changed
-    # on TL's EXISTING rows -- BDF.MaxBldgHeight + BDF.RoofData (NINTH
-    # CONTRADICTION: RoofData corrected to centimetre scale) and each
-    # Levels row's Size (NINTH CONTRADICTION: Size now mirrors LevelHeight).
-    # Do not re-append rows to Levels/Modules/Props -- they are already
-    # correct from the prior successful full build, and re-appending here
-    # (without the delete+duplicate reset) would duplicate them.
+    # on TL's EXISTING rows. TENTH CONTRADICTION: VerticalGrammar and
+    # VerticalGrammarStaggered (both String-typed, confirmed via
+    # discover_types()/get_attributes() the same way every other field in
+    # this script was type-confirmed) are set to "[LV0][LV1][LV2]*[LV3]",
+    # replacing the repeat-free "[LV0][LV1][LV2][LV3]". MaxBldgHeight and
+    # RoofData from the EIGHTH/NINTH rounds are re-applied too (idempotent --
+    # TL_BDF already holds their corrected values from those rounds; this
+    # keeps the patch block self-contained rather than relying on a prior
+    # run having already landed them). Levels.Size is likewise re-applied
+    # (idempotent, NINTH CONTRADICTION). Do not re-append rows to
+    # Levels/Modules/Props -- they are already correct from the prior
+    # successful full build, and re-appending here (without the
+    # delete+duplicate reset) would duplicate them.
     items = dup.get_editor_property("data").get_editor_property("tagged_data")
     patched_bdf = False
     patched_levels = 0
@@ -503,11 +535,16 @@ if dup and _patch_mode:
                         pt, md, "MaxBldgHeight", TL_BDF["MaxBldgHeight"])
                     pt = MA.set_vector4_attribute(
                         pt, md, "RoofData", TL_BDF["RoofData"])
+                    pt = MA.set_string_attribute(
+                        pt, md, "VerticalGrammar", TL_BDF["VerticalGrammar"])
+                    pt = MA.set_string_attribute(
+                        pt, md, "VerticalGrammarStaggered",
+                        TL_BDF["VerticalGrammarStaggered"])
                     patched_bdf = True
                 new_pts.append(pt)
             d.set_points(new_pts)
             R["groups"].append({"tags": tuple(sorted(tags)),
-                                "patched_maxbldgheight_and_roofdata": patched_bdf,
+                                "patched_maxbldgheight_roofdata_grammar": patched_bdf,
                                 "total": len(d.get_points())})
 
         elif "Levels" in tags:
@@ -649,9 +686,17 @@ try:
         # and CHF side by side with the type-matched get_vector4_attribute,
         # so the report can show TL's value is now centimetre-scale like its
         # siblings rather than the metre-scale 0.2/0.1 it originally carried.
+        #
+        # grammar_check (TENTH CONTRADICTION) reads VerticalGrammar and
+        # VerticalGrammarStaggered for TL, CHA, CHF, and CHJ (TL's closest
+        # structural analogue) side by side with get_string_attribute, so the
+        # report can show TL's grammar now contains a `*` repeat marker like
+        # every sibling, rather than the repeat-free fixed sequence it
+        # originally carried.
         if "BDF" in tg:
             bad = []
             roofdata = {}
+            grammar = {}
             for pt in d.get_points():
                 bt = MA.get_string_attribute(pt, md, "BuildingToken")
                 vals = {nm: MA.get_float_attribute(pt, md, nm) for nm in
@@ -666,11 +711,24 @@ try:
                         roofdata[bt] = [rd.x, rd.y, rd.z, rd.w]
                     except Exception as e:
                         roofdata[bt] = "ERROR: %s" % e
+                if bt in ("TL", "CHA", "CHF", "CHJ"):
+                    try:
+                        vg = MA.get_string_attribute(pt, md, "VerticalGrammar")
+                        vgs = MA.get_string_attribute(
+                            pt, md, "VerticalGrammarStaggered")
+                        grammar[bt] = {
+                            "VerticalGrammar": vg,
+                            "VerticalGrammarStaggered": vgs,
+                            "has_star": "*" in vg,
+                        }
+                    except Exception as e:
+                        grammar[bt] = "ERROR: %s" % e
             ver["bdf_min_max_all_zero_check"] = {
                 "rows_checked": len(d.get_points()),
                 "non_zero_rows": bad,
             }
             ver["roofdata_check"] = roofdata
+            ver["grammar_check"] = grammar
 
         # Consistency check for Levels.LevelHeight, added for the same reason
         # as bdf_min_max_all_zero_check above: the coordinator's original
