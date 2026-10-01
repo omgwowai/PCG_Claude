@@ -90,13 +90,41 @@ R["epic_source_before"] = stat_src()
 #                               grammar does not repeat levels the way CHA's
 #                               does, so unlike CHA's wide 3100-10000 range,
 #                               TL's min and max legitimately coincide.
+#
+# EIGHTH CONTRADICTION -- correcting the SIXTH's MaxBldgHeight, after Task 9
+# ran the real city pipeline (PCG_3_3_1_Buildings) end to end: 475,728 total
+# instances generated, 0 of them TL, while CH/SF/NY/QB all generated
+# normally. The coordinator then read all 28 styles' height bands directly
+# and found TL is the ONLY one with a zero span (minH=maxH=1600, span=0);
+# every other style has a strictly positive span, and 21 of the 28
+# (including every CH* and most others) use MaxBldgHeight=200000.0 as a
+# shared open-ended sentinel upper bound. The SIXTH's "min and max
+# legitimately coincide because TL doesn't repeat levels" reasoning was
+# wrong about how this field is actually consumed: it is read as a MATCH
+# WINDOW against a requested height, not merely descriptive metadata, and a
+# zero-width window is exactly the shape that fails an overlap/normalization
+# test and makes a style unselectable. Fix: MaxBldgHeight -> 200000.0,
+# matching the dominant (21-of-28) sibling convention, giving TL a positive
+# 1600-200000 span with an open-ended top like most of its siblings.
+# MinBldgHeight stays 1600.0 (Task 9 independently ruled out MinWallWidth=
+# 950.0 as a factor -- 97.33% of 1272 real lots fit it -- so that field is
+# untouched here).
+#
+# THIS IS A HYPOTHESIS, NOT A PROVEN FIX. Neither Task 9 nor the coordinator
+# has located the specific node that rejects the degenerate zero-span band --
+# Task 9 traced as far as Fill_Areas_WithFittingAssets (plugin content)
+# without finding it, and the graph's own MinHeight=1000/MaxHeight=5000
+# parameters would NOT reject a 1600 band by simple containment. The
+# empirical test is a fresh re-run of the Task 9 city stage, done
+# separately and NOT by this script/session, specifically so the
+# verification is independent of the agent that made the change.
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
     "VerticalGrammarStaggered": "[LV0][LV1][LV2][LV3]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
     "MinBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 5.0 m, unconverted)
-    "MaxBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 60.0 m, unconverted)
+    "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings (was 1600.0 -- zero span, EIGHTH CONTRADICTION)
     "RoofData": unreal.Vector4(0.2, 0.1, 0.2, 0.1),   # CHA's Roof_Inset/Offset pair
 }
 
@@ -357,6 +385,7 @@ try:
 except Exception:
     pass
 
+_patch_mode = False
 if EAL.does_asset_exist(DEST):
     _deleted = EAL.delete_asset(DEST)
     if not _deleted and EAL.does_asset_exist(DEST):
@@ -366,20 +395,102 @@ if EAL.does_asset_exist(DEST):
             "editor session is the most likely cause; see the comment "
             "above this block." % DEST)
 
-try:
-    dup = EAL.duplicate_asset(SRC, DEST)
-    R["duplicated"] = dup is not None
-    if dup is None:
-        R["errors"].append(
-            "duplicate_asset(%s, %s) returned None -- likely because the "
-            "prior delete_asset failed (see above); aborting rather than "
-            "silently reading/writing whatever asset is currently at DEST."
-            % (SRC, DEST))
-except Exception as e:
-    R["errors"].append("duplicate_asset: %s: %s" % (type(e).__name__, e))
-    dup = None
+        # NEW FINDING (2026-10-01, EIGHTH CONTRADICTION re-run) -- the
+        # delete can ALSO fail for a completely different reason than the
+        # stale-Python-globals bug documented above: a genuine engine-level
+        # referencer. tl_probe_referencers.py found BDF_WithTL has a live
+        # referencer, /CitySamplePCG/.../Subgraphs/LoadCitySampleData, with
+        # the editor's current world still L_CitySamplePCG_Demo -- almost
+        # certainly left wired up by Task 9's own city-pipeline test run.
+        # ForceDeleteObject then logs "this package is now potentially
+        # corrupt" and the subsequent duplicate_asset fails because the
+        # (undeleted) destination still exists. Retrying delete does not
+        # help, because the referencer is real, not stale.
+        #
+        # Rather than force-delete an asset something else now legitimately
+        # points at (risking corrupting that referencer, per the engine's
+        # own warning), fall back to PATCHING THE EXISTING DEST ASSET IN
+        # PLACE: load it directly (no delete, no duplicate, no re-append of
+        # rows that are already there from the prior successful build) and
+        # mutate only the one field this round actually changed --
+        # BDF.MaxBldgHeight on TL's existing row. This is strictly narrower
+        # than the normal full-rebuild path below and is only taken when
+        # delete_asset has demonstrably failed with DEST still present.
+        R["patch_mode"] = True
+        _patch_mode = True
 
-if dup:
+if _patch_mode:
+    dup = EAL.load_asset(DEST)
+    R["duplicated"] = False
+    if dup is None:
+        R["errors"].append("patch_mode: load_asset(%s) returned None" % DEST)
+else:
+    try:
+        dup = EAL.duplicate_asset(SRC, DEST)
+        R["duplicated"] = dup is not None
+        if dup is None:
+            R["errors"].append(
+                "duplicate_asset(%s, %s) returned None -- likely because the "
+                "prior delete_asset failed (see above); aborting rather than "
+                "silently reading/writing whatever asset is currently at DEST."
+                % (SRC, DEST))
+    except Exception as e:
+        R["errors"].append("duplicate_asset: %s: %s" % (type(e).__name__, e))
+        dup = None
+
+if dup and _patch_mode:
+    # Narrow patch: touch only the BDF group's existing TL row's
+    # MaxBldgHeight. Do not re-append rows to Levels/Modules/Props -- they
+    # are already correct from the prior successful full build, and
+    # re-appending here (without the delete+duplicate reset) would duplicate
+    # them.
+    items = dup.get_editor_property("data").get_editor_property("tagged_data")
+    patched = False
+    for it in items:
+        tags = [str(t) for t in it.get_editor_property("tags")]
+        if "BDF" in tags and "BDFData" in tags:
+            d = it.get_editor_property("data").get_editor_property("data")
+            if d is None:
+                continue
+            md = d.mutable_metadata()
+            pts = list(d.get_points())
+            new_pts = []
+            for pt in pts:
+                bt = MA.get_string_attribute(pt, md, "BuildingToken")
+                if bt == "TL":
+                    pt = MA.set_float_attribute(
+                        pt, md, "MaxBldgHeight", TL_BDF["MaxBldgHeight"])
+                    patched = True
+                new_pts.append(pt)
+            d.set_points(new_pts)
+            R["groups"].append({"tags": tuple(sorted(tags)),
+                                "patched_maxbldgheight": patched,
+                                "total": len(d.get_points())})
+    R["patched"] = patched
+    if not patched:
+        R["errors"].append(
+            "patch_mode: no existing TL row found in the BDF group to patch "
+            "-- DEST exists but doesn't have the TL row this script expects; "
+            "aborting the save rather than writing a half-patched asset.")
+    else:
+        # NEW FINDING (2026-10-01): in patch_mode, save_loaded_asset(dup)
+        # reported no error but the .uasset on disk did NOT get a fresh
+        # mtime (tl_probe_save_state.py: disk_mtime stayed at the Sep-29
+        # value after a save_loaded_asset-only path, then changed only after
+        # an explicit EAL.save_asset(DEST, only_if_is_dirty=False) call, and
+        # a fresh load confirmed TL's MaxBldgHeight=200000.0 only after
+        # that). save_asset is the one proven (measured, not assumed) to
+        # actually flush to disk here; use it instead of/alongside
+        # save_loaded_asset in patch_mode.
+        try:
+            R["saved"] = EAL.save_loaded_asset(dup)
+        except Exception as e:
+            R["errors"].append("save (patch_mode): %s: %s" % (type(e).__name__, e))
+        try:
+            R["saved_to_disk"] = EAL.save_asset(DEST, only_if_is_dirty=False)
+        except Exception as e:
+            R["errors"].append("save_asset (patch_mode): %s: %s" % (type(e).__name__, e))
+elif dup:
     items = dup.get_editor_property("data").get_editor_property("tagged_data")
     for it in items:
         tags = [str(t) for t in it.get_editor_property("tags")]
@@ -462,10 +573,13 @@ try:
         # Measured here with MA.get_float_attribute, the type-matched getter
         # confirmed via get_attributes(). non_zero_rows lists every row whose
         # three fields aren't all 0.0 -- i.e. every real row, TL included now
-        # that it carries its own geometry-derived values (950.0/1600.0/
-        # 1600.0 cm) rather than the unconverted metre-scale 12.0/5.0/60.0 or
-        # the since-retracted 0.0/0.0/0.0. Use this table to compare TL
-        # against CHA and its other 26 siblings directly.
+        # that it carries its own geometry-derived values (950.0/200000.0 cm,
+        # EIGHTH CONTRADICTION) rather than the unconverted metre-scale
+        # 12.0/5.0/60.0, the since-retracted 0.0/0.0/0.0, or the zero-span
+        # 950.0/1600.0/1600.0 that Task 9 showed makes TL unselectable.
+        # "span" (MaxBldgHeight - MinBldgHeight) is reported per row so the
+        # report can show TL now has a positive span like every sibling,
+        # rather than the degenerate 0 the EIGHTH CONTRADICTION fixes.
         if "BDF" in tg:
             bad = []
             for pt in d.get_points():
@@ -473,7 +587,9 @@ try:
                 vals = {nm: MA.get_float_attribute(pt, md, nm) for nm in
                          ("MinWallWidth", "MinBldgHeight", "MaxBldgHeight")}
                 if any(v != 0.0 for v in vals.values()):
-                    bad.append({"BuildingToken": bt, **vals})
+                    bad.append({"BuildingToken": bt,
+                                "span": vals["MaxBldgHeight"] - vals["MinBldgHeight"],
+                                **vals})
             ver["bdf_min_max_all_zero_check"] = {
                 "rows_checked": len(d.get_points()),
                 "non_zero_rows": bad,
