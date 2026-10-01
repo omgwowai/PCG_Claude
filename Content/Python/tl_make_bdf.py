@@ -118,6 +118,35 @@ R["epic_source_before"] = stat_src()
 # empirical test is a fresh re-run of the Task 9 city stage, done
 # separately and NOT by this script/session, specifically so the
 # verification is independent of the agent that made the change.
+#
+# NINTH CONTRADICTION -- the EIGHTH's hypothesis was FALSIFIED: Task 9's
+# re-run with MaxBldgHeight=200000.0 still generated 0 TL instances (of
+# 475,723 total). The coordinator then diffed TL's rows field-by-field
+# against CHA's and CHF's (both of which generate) and found two more
+# structural defects, both unit/mirror-field mistakes carried over from the
+# .bdf JSON's metre-scale source, the same error class as the SIXTH and
+# EIGHTH contradictions:
+#   1. Levels.Size was 0.0 for all four TL rows. Every working sibling's
+#      Size MIRRORS its own LevelHeight (CHA_LV1: LevelHeight=500.0,
+#      Size=500.0; CHF_LV1: LevelHeight=550.0, Size=550.0). TL_LEVELS below
+#      is corrected so Size == LevelHeight per row (500/500/300/300).
+#   2. RoofData was metre-scale (0.2, 0.1, 0.2, 0.1), carried unconverted
+#      from the .bdf JSON's Roof_Inset/Roof_Offset fields. Siblings are in
+#      centimetres (CHA: [20.0,-140.0,20.0,...], CHF: [100.0,-80.0,125.0,
+#      ...]). Scaled TL's values x100 to centimetres: (20.0, 10.0, 20.0,
+#      10.0).
+# Two further differences were found but are NOT changed here, per the
+# coordinator's explicit instruction to record-not-fix them: TL's Levels.F
+# is the bracket form of its own F0, where CHA's F uses a distinct
+# angle-bracket master grammar ([FC]<W1>*<WS111>[LC]); and TL's module rows
+# have HasProps=False/HasWindow=False where siblings have True. Neither has
+# a known-correct replacement value, so both are left as originally
+# implemented and flagged here for a future round if this round's fix is
+# also insufficient.
+#
+# THIS REMAINS A HYPOTHESIS, NOT A PROVEN FIX -- same caveat as the EIGHTH:
+# the real rejecting node in the graph has still not been located, and the
+# proof is a fresh, independent re-run of the Task 9 city stage.
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2][LV3]",
@@ -125,7 +154,7 @@ TL_BDF = {
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
     "MinBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 5.0 m, unconverted)
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings (was 1600.0 -- zero span, EIGHTH CONTRADICTION)
-    "RoofData": unreal.Vector4(0.2, 0.1, 0.2, 0.1),   # CHA's Roof_Inset/Offset pair
+    "RoofData": unreal.Vector4(20.0, 10.0, 20.0, 10.0),   # cm; was 0.2/0.1 metre-scale, NINTH CONTRADICTION
 }
 
 # level -> the 3 facade variants (BDF F0/F1/F2) and their required length in cm.
@@ -133,21 +162,28 @@ TL_BDF = {
 # LevelHeight is in CENTIMETRES, matching every sibling style (CHA's LV1
 # reads 500.0) -- corrected here from the original metre-scale 5.0/5.0/3.0/
 # 3.0, the same unit bug as TL_BDF above (SIXTH CONTRADICTION).
+#
+# Size now MIRRORS LevelHeight per row (NINTH CONTRADICTION) -- confirmed
+# live against CHA (LV1: LevelHeight=500.0, Size=500.0) and CHF (LV1:
+# LevelHeight=550.0, Size=550.0); every working sibling's Size equals its
+# own LevelHeight. TL's rows originally had Size=0.0 (as both the plan's
+# TL_LEVELS table and this script originally specified), which is exactly
+# the shape of value that fails a fit/scale test.
 TL_LEVELS = [
-    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 500.0, "Size": 0.0,
+    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 500.0, "Size": 500.0,
      "F0": "[FC][FS2]+[LC]", "F1": "[FC][FS2]+[LC]", "F2": "[FC][FS2]+[LC]",
      "FLengths": unreal.Vector(300.0, 300.0, 300.0), "IsTopper": False},
-    {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 500.0, "Size": 0.0,
+    {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 500.0, "Size": 500.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
      "FLengths": unreal.Vector(950.0, 3725.0, 5400.0), "IsTopper": False},
-    {"LevelNumber": 2, "LevelToken": "LV2", "LevelHeight": 300.0, "Size": 0.0,
+    {"LevelNumber": 2, "LevelToken": "LV2", "LevelHeight": 300.0, "Size": 300.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "FLengths": unreal.Vector(950.0, 3925.0, 5800.0), "IsTopper": False},
-    {"LevelNumber": 3, "LevelToken": "LV3", "LevelHeight": 300.0, "Size": 0.0,
+    {"LevelNumber": 3, "LevelToken": "LV3", "LevelHeight": 300.0, "Size": 300.0,
      "F0": "[FC][WS1][W1]+[LC]",
      "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
      "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
@@ -412,10 +448,11 @@ if EAL.does_asset_exist(DEST):
         # own warning), fall back to PATCHING THE EXISTING DEST ASSET IN
         # PLACE: load it directly (no delete, no duplicate, no re-append of
         # rows that are already there from the prior successful build) and
-        # mutate only the one field this round actually changed --
-        # BDF.MaxBldgHeight on TL's existing row. This is strictly narrower
-        # than the normal full-rebuild path below and is only taken when
-        # delete_asset has demonstrably failed with DEST still present.
+        # mutate only the specific fields each round actually changed (see
+        # the patch_mode block below for what that is on this run). This is
+        # strictly narrower than the normal full-rebuild path below and is
+        # only taken when delete_asset has demonstrably failed with DEST
+        # still present.
         R["patch_mode"] = True
         _patch_mode = True
 
@@ -439,20 +476,24 @@ else:
         dup = None
 
 if dup and _patch_mode:
-    # Narrow patch: touch only the BDF group's existing TL row's
-    # MaxBldgHeight. Do not re-append rows to Levels/Modules/Props -- they
-    # are already correct from the prior successful full build, and
-    # re-appending here (without the delete+duplicate reset) would duplicate
-    # them.
+    # Narrow patch: touch only the specific fields this round's fix changed
+    # on TL's EXISTING rows -- BDF.MaxBldgHeight + BDF.RoofData (NINTH
+    # CONTRADICTION: RoofData corrected to centimetre scale) and each
+    # Levels row's Size (NINTH CONTRADICTION: Size now mirrors LevelHeight).
+    # Do not re-append rows to Levels/Modules/Props -- they are already
+    # correct from the prior successful full build, and re-appending here
+    # (without the delete+duplicate reset) would duplicate them.
     items = dup.get_editor_property("data").get_editor_property("tagged_data")
-    patched = False
+    patched_bdf = False
+    patched_levels = 0
     for it in items:
         tags = [str(t) for t in it.get_editor_property("tags")]
+        d = it.get_editor_property("data").get_editor_property("data")
+        if d is None:
+            continue
+        md = d.mutable_metadata()
+
         if "BDF" in tags and "BDFData" in tags:
-            d = it.get_editor_property("data").get_editor_property("data")
-            if d is None:
-                continue
-            md = d.mutable_metadata()
             pts = list(d.get_points())
             new_pts = []
             for pt in pts:
@@ -460,18 +501,41 @@ if dup and _patch_mode:
                 if bt == "TL":
                     pt = MA.set_float_attribute(
                         pt, md, "MaxBldgHeight", TL_BDF["MaxBldgHeight"])
-                    patched = True
+                    pt = MA.set_vector4_attribute(
+                        pt, md, "RoofData", TL_BDF["RoofData"])
+                    patched_bdf = True
                 new_pts.append(pt)
             d.set_points(new_pts)
             R["groups"].append({"tags": tuple(sorted(tags)),
-                                "patched_maxbldgheight": patched,
+                                "patched_maxbldgheight_and_roofdata": patched_bdf,
                                 "total": len(d.get_points())})
-    R["patched"] = patched
-    if not patched:
+
+        elif "Levels" in tags:
+            # Levels.BuildingToken is NAME-typed (not String -- see the
+            # dual-getter proof in the verify block / levels_lh checks
+            # elsewhere in this script), so TL rows must be matched with
+            # get_name_attribute here, not get_string_attribute.
+            pts = list(d.get_points())
+            new_pts = []
+            for pt in pts:
+                bt = str(MA.get_name_attribute(pt, md, "BuildingToken"))
+                if bt == "TL":
+                    lh = MA.get_float_attribute(pt, md, "LevelHeight")
+                    pt = MA.set_float_attribute(pt, md, "Size", lh)
+                    patched_levels += 1
+                new_pts.append(pt)
+            d.set_points(new_pts)
+            R["groups"].append({"tags": tuple(sorted(tags)),
+                                "patched_levels_size_rows": patched_levels,
+                                "total": len(d.get_points())})
+
+    R["patched"] = patched_bdf and patched_levels == 4
+    if not (patched_bdf and patched_levels == 4):
         R["errors"].append(
-            "patch_mode: no existing TL row found in the BDF group to patch "
-            "-- DEST exists but doesn't have the TL row this script expects; "
-            "aborting the save rather than writing a half-patched asset.")
+            "patch_mode: expected to patch 1 BDF row and 4 Levels rows for "
+            "TL, got patched_bdf=%s patched_levels=%d -- DEST may not match "
+            "this script's expectations; aborting the save rather than "
+            "writing a half-patched asset." % (patched_bdf, patched_levels))
     else:
         # NEW FINDING (2026-10-01): in patch_mode, save_loaded_asset(dup)
         # reported no error but the .uasset on disk did NOT get a fresh
@@ -580,8 +644,14 @@ try:
         # "span" (MaxBldgHeight - MinBldgHeight) is reported per row so the
         # report can show TL now has a positive span like every sibling,
         # rather than the degenerate 0 the EIGHTH CONTRADICTION fixes.
+        #
+        # roofdata_check (NINTH CONTRADICTION) reads RoofData for TL, CHA,
+        # and CHF side by side with the type-matched get_vector4_attribute,
+        # so the report can show TL's value is now centimetre-scale like its
+        # siblings rather than the metre-scale 0.2/0.1 it originally carried.
         if "BDF" in tg:
             bad = []
+            roofdata = {}
             for pt in d.get_points():
                 bt = MA.get_string_attribute(pt, md, "BuildingToken")
                 vals = {nm: MA.get_float_attribute(pt, md, nm) for nm in
@@ -590,10 +660,17 @@ try:
                     bad.append({"BuildingToken": bt,
                                 "span": vals["MaxBldgHeight"] - vals["MinBldgHeight"],
                                 **vals})
+                if bt in ("TL", "CHA", "CHF"):
+                    try:
+                        rd = MA.get_vector4_attribute(pt, md, "RoofData")
+                        roofdata[bt] = [rd.x, rd.y, rd.z, rd.w]
+                    except Exception as e:
+                        roofdata[bt] = "ERROR: %s" % e
             ver["bdf_min_max_all_zero_check"] = {
                 "rows_checked": len(d.get_points()),
                 "non_zero_rows": bad,
             }
+            ver["roofdata_check"] = roofdata
 
         # Consistency check for Levels.LevelHeight, added for the same reason
         # as bdf_min_max_all_zero_check above: the coordinator's original
@@ -605,6 +682,12 @@ try:
         # not the metre-scale 5.0/5.0/3.0/3.0 this script originally wrote.
         # cha_lh is captured alongside tl_lh so the report can show both
         # side by side, as requested.
+        #
+        # size_check (NINTH CONTRADICTION) reads Size alongside LevelHeight
+        # for TL, CHA, and CHF so the report can show Size now mirrors
+        # LevelHeight on TL's rows (500/500/300/300) the same way it already
+        # does on every sibling, instead of the 0.0 the plan's TL_LEVELS
+        # table originally specified and this script originally copied.
         if "Levels" in tg:
             all_lh = [MA.get_float_attribute(pt, md, "LevelHeight")
                       for pt in d.get_points()]
@@ -623,6 +706,19 @@ try:
                 "tl_rows_levelheight": tl_lh,
                 "cha_rows_levelheight": cha_lh,
             }
+            size_rows = {}
+            for bt_want in ("TL", "CHA", "CHF"):
+                rows = []
+                for pt in d.get_points():
+                    bt = str(MA.get_name_attribute(pt, md, "BuildingToken"))
+                    if bt == bt_want:
+                        rows.append({
+                            "LevelToken": MA.get_string_attribute(pt, md, "LevelToken"),
+                            "LevelHeight": MA.get_float_attribute(pt, md, "LevelHeight"),
+                            "Size": MA.get_float_attribute(pt, md, "Size"),
+                        })
+                size_rows[bt_want] = rows
+            ver["size_check"] = size_rows
 
         # Step 3: dual-getter proof for Levels.BuildingToken specifically.
         if "Levels" in tg:
