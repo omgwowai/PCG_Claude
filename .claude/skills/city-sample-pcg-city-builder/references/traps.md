@@ -176,3 +176,20 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **31** | **截图是异步的，落盘延迟约 1–2 分钟**，不是「下一帧」。同一次调用里查 `os.path.exists()` 会读到 `False`，90 秒的轮询也会超时 —— 于是**六张已经成功的截图被判为失败**，并因此产生了四个被证伪的假设（文件名复用、同调用内移机位、realtime 开关、窗口最小化） | **不要用同一次调用的结果判断截图成败**；核验放到**下一次调用**（或主机侧等 1–2 分钟再查盘）。`pcg_sa_drive.py` 的两个 phase 都内建了这个等待，并把 `WAIT(<name>)` 作为「上一张还没落盘」的信号返回 |
 | **32** | **截图文件名是一次性的：automation 会拒绝写过一次的名字，即使文件已被删除。** 而它记住了什么**从 Python 侧读不到** | 用「带时间戳或 `_rN` 后缀的新名字」；把已用过的名字**落盘记账**（`Saved/Reports/sa_shot_names.json`），并在下一次调用把 `_rN` 改名回规范名。**不要靠 `os.path.exists` 推断名字是否可用** —— 删掉文件后它照样拒绝 |
 | **33** | **一次调用里批量重新生成全部 18 个阶段会破坏阶段间依赖。** 图之间靠 `Get_ActorDataByRef` 读上游 Actor 数据；并发重跑让下游阶段读到「正在重建」的上游数据。实测：阶段 17 的 6,400 个实例**全部丢失**、阶段 13 少了 8,177 个建筑 | **严格按阶段号顺序重跑**，一阶段一次调用，中间留出生成时间。判断修复成功的方法不是「没报错」，而是**逐阶段把 `real_instances` 与一份已定稿的 census 比对**（`pcg_sa_census_cmp.py` 就是干这个的） |
+
+---
+
+## 6. 2026-10-07 第四次实测新增（新增建筑样式码 TL 时踩到）
+
+> 这次的主症状是**新样式 0 实例、0 报错、其他样式一切正常**，前后试了五个假设才找到真因。真因是第 34、35 两条，它们在 BDF 数据之前就把样式码过滤掉了；36–38 是样式能进语法之后才暴露的数据问题。
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **34** | **`PCG_3_3_1_Buildings` 的三个 `Assign_CitySampleBuildings` 调用各自覆写了 `BuildingsStyles`**（Small 6 码 / Medium 19 码 / Large 8 码）。只改子图的用户参数默认值**完全无效** | 改每个调用节点 `subgraph_instance` 上的覆写：`PCGGraphParametersHelpers.get/set_string_parameter(inst, "BuildingsStyles", …)`，`is_overridden()` 可确认。字节 grep `.uasset` 找逗号分隔的样式码列表，比扫节点属性可靠 |
+| **35** | **样式码还要过一道名单：`CitySampleBuildingBDF_NamesOnly_PCG`**（27 个 Name）。CoreProcess 把名单 JOIN 成串，请求的样式码**不是其子串就被丢掉** | 复制名单资产到 `/Game` 追加新码，`LoadCitySampleData.PCGLoadDataAsset_1.asset` 指过去（`tl_names_with_tl.py`）。`PCGParamData` 加条目：`set_name_attribute(unreal.PCGPoint(), md, "Name", code)`；按 key 读：`p = PCGPoint(); p.import_text("(MetadataEntry=%d)" % k)` |
+| **36** | **元数据 getter 类型不匹配时不抛异常，返回哨兵值**：Float 上用 `get_double_attribute` 得 `0.0`，String 上用 `get_name_attribute` 得 `"None"`。曾因此误判「27 个样式的高度字段全是 0」 | 先 `md.get_attributes()` 拿真实类型再选 getter。`Levels.BuildingToken` 是 **Name**，其他 `BuildingToken` 是 String；`Mod_Name` 是 String |
+| **37** | **BDF 行里有一批「派生字段」，照抄源数据就错**：`Levels.Size` = `LevelHeight`；LV0 高 0.5；`MaxBldgHeight` 开放上限 200000；`VerticalGrammar` 必须带 `*`；`PivotOffset = (0, -run 中心, -LevelHeight/2)`；外角符号必须有 `C_E`。单位全是厘米 | 照 `migrated-citysample-library.md` §3.2 的表逐项对照。日志里的 **`Unmatched token found in grammar: C_E`** 意味着某层缺符号行，样式其实已经进了语法 |
+| **38** | **刚 `save_asset` 了被图引用的资产，紧接着的 `generate_local` 会被取消**：`generated` 停在 False，实例数 0，无报错 | 存盘与生成分两次调用；生成后读 `generated`，为 False 就再触发一次。另外：保存被图引用的资产会让组件输出清空，此时读到的 0 不是结果 |
+| **39** | **`generate_local` 后立刻再读，可能拿到上一轮的完整结果**（实例数与上轮逐位相同） | 先 `cleanup_local(True)` 并读到 0，再生成；或比对不应相同的数字。`tl_city_flush_regen.py` 把 `pcg.FlushCache` + cleanup + generate 放在一起 |
+| **40** | **一个被引用的资产无法 delete+duplicate 重建**：`ForceDeleteObject` 拒绝并警告 package 可能损坏，随后 `duplicate_asset` 因目标已存在而失败 | 原地修补：读出点、改值、`set_points`，最后用 `EditorAssetLibrary.save_asset(path, only_if_is_dirty=False)` 落盘（单独 `save_loaded_asset` 实测没刷新 mtime） |
+| **41** | **切关卡前不要在同一调用里 `unreal.SystemLibrary.collect_garbage()`**：实测在 `LoadLevel` 内触发断言 `!LevelList.Contains(TickTaskLevel)`（`FTickTaskManager::FreeTickTaskLevel`）编辑器崩溃 | 只做 Python 侧 `gc.collect()` 与清全局（第 25 条），引擎 GC 交给 `LoadLevel` 自己。崩溃后 `Saved/Autosaves/PackageRestoreData.json` 会让下次启动卡在恢复弹窗、桥不响应：先挪走 `Saved/Autosaves` 再启动 |
