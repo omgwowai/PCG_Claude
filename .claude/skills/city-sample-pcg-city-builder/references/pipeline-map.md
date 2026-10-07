@@ -203,8 +203,9 @@ position in Z"*。
 `Write_DistanceFrom`、`Write_Attribute_fromTexture`、
 `LoopCreate{Extruded,Planar}MeshActorPerData`。
 
-**图内有硬编码的 19 个样式码白名单**（非全部 27 个）：
-`CHA,CHB,CHC,CHE,CHF,CHG,CHH,CHI,CHJ,NYG,NYGA,NYH,QBA,QBAA,SFA,SFC,SFD,SFE,SFJ`
+**样式码白名单是三次调用各自的 `BuildingsStyles` 覆写**（Small 6 码 / Medium 19 码 /
+Large 8 码），另有 `CitySampleBuildingBDF_NamesOnly_PCG` 名单把关。详见
+`migrated-citysample-library.md` §3.2 与 `traps.md` 34–35。
 
 标签体系：`Building_S_` / `Building_M_` / `Building_L_`（+ `_Col` 碰撞变体），
 `FilterTags_/AddTags_/DeleteTags_{Small,Medium,Large}Districts`。
@@ -397,11 +398,12 @@ Buildings/BDF 扩展」的组合。**
 | **旧金山（SF）** | `SFA` `SFB` `SFC` `SFD` `SFE` `SFJ` | 6 |
 | **其他** | `QBA` `QBAA` | 2 |
 
-**但 `PCG_3_3_1_Buildings` 图内只硬编码了其中 19 个**：
-`CHA,CHB,CHC,CHE,CHF,CHG,CHH,CHI,CHJ,NYG,NYGA,NYH,QBA,QBAA,SFA,SFC,SFD,SFE,SFJ`
-
-**未进入白名单的 8 个**：`CHD`、`NYAA` `NYAB` `NYAC` `NYAD` `NYAE` `NYAF`、`SFB`。
-→ 想让它们参与生成，需要**改图的样式码白名单**。
+**`PCG_3_3_1_Buildings` 的三次 `Assign_CitySampleBuildings` 调用各自覆写 `BuildingsStyles`**：
+Small = `NYAA,NYAB,NYAC,NYAD,NYAE,NYAF`；
+Medium = `CHA,CHB,CHC,CHE,CHF,CHG,CHH,CHI,CHJ,NYG,NYGA,NYH,QBA,QBAA,SFA,SFC,SFD,SFE,SFJ`；
+Large = `CHJ,CHE,CHF,CHH,SFC,SFD,SFE,SFJ`。并集 26 码，`CHD`、`SFB` 不参与。
+→ 想让一个样式码参与生成，要改调用节点上的覆写，并把它加进名单资产与 BDF 数据库
+（`migrated-citysample-library.md` §3.2）。
 
 ### 每目录的层数不一
 `CHA` 有 `L00–L20`（21 条规则），`NYAA` 有 `L00–L05`，`SFD` 有 `L00–L04`。

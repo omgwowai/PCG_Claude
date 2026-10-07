@@ -130,8 +130,8 @@ mtime 保持出厂日期不变（复制不会写源关卡）。
 同目录下还有 **240 个形状语法规则** `RULE_<CODE>_L##`（每样式码按层高分级，
 `L1`…`L21`），以及 `DataAssets/{RoofTops,Roads,Plazas,Piers}` 下 **220 个**屋顶/道路/广场/码头规则。
 
-**怎么用**：`Assign_BldgStyles_per_MinWallWidth` 与 `AssignBuildingShape`
-（都在 `/CitySamplePCG/PCG/`）是入口；样式资产本身由形状语法消费。
+**怎么用**：城市流水线消费的是 BDF 数据库，不是这些 SGD，见 §3.2。
+`SGD_<CODE>_A` 与 `RULE_*` 由单栋预览图（`PCG_Bldg_SGD_test`）消费。
 
 > 注意：27 个样式资产的**闭包约 9.15 GB**（主要是 `/Game/Building` 的 8.9 GB 建筑美术 +
 > 插件内 84 个网格）。只取样式码子集时，`/Game/Building/CH|NY|QB|SF` 要一并带上。
@@ -170,6 +170,64 @@ mtime 保持出厂日期不变（复制不会写源关卡）。
    `SKILL.md`「如何验证」一节。
 2. 该图**不依赖上游阶段**（自含），所以能这样单独跑。它是 `Examples/` 下的示例，
    与 18 张阶段图不同 —— 拿不准时先试跑一次，别假设。
+
+### 3.2 城市流水线**不读** `SGD_*`：它读 BDF 数据库（2026-10-07 实测）
+
+`SGD_<CODE>_A` 只供单栋预览图使用（如 `PCG_Bldg_SGD_test`，它以图参数接收一个 SGD）。
+18 阶段里的建筑阶段走的是另一条链：
+
+```
+PCG_3_3_1_Buildings
+  └─ Assign_CitySampleBuildings（Small / Medium / Large 三次调用）
+       └─ Assign_CitySampleBuildings_CoreProcess
+            ├─ LoadCitySampleData
+            │    ├─ PCGLoadDataAsset_1 → CitySampleBuildingBDF_NamesOnly_PCG（样式码名单）
+            │    └─ PCGLoadDataAsset_2 → CitySampleBuildingBDF_Asset_PCG（BDF 数据库）
+            └─ Subgraph_1 → BDF_Input_Processor → BDF_BuildingFromSpline → Loop_Subdivide
+```
+
+`LoadCitySampleData` 节点上存资产的属性名是 **`asset`**（不是 `data_asset`）。
+`Subgraph` 属性受引擎保护读不到；进子图走 `settings.subgraph_instance.get_editor_property("graph")`。
+
+**BDF 数据库** = 一个 `UPCGDataAsset`，pin `In` 上四组带标签的 `PCGPointData`：
+
+| 标签 | 行数（Epic 原版） | 属性（类型） |
+|---|---|---|
+| `BDF`,`BDFData` | 27（每样式 1 行） | `BuildingToken`(String) `VerticalGrammar` `VerticalGrammarStaggered`(String) `MinWallWidth` `MinBldgHeight` `MaxBldgHeight`(**Float**) `RoofData`(Vector4) |
+| `Levels`,`BDFData` | 240（每层 1 行，与 `RULE_<CODE>_L##` 一一对应） | `BuildingToken`(**Name**) `LevelNumber`(Int32) `LevelToken`(String) `LevelHeight` `Size`(Float) `F` `F0` `F1` `F2`(String) `FLengths`(Vector) `IsTopper`(Bool) |
+| `Modules`,`BDFData` | 2916 | `BuildingToken`(String) `Level`(Int32) `Symbol`(String) `Size`(Double) `Mod_Name`(**String**) `Mesh`(SoftObjectPath) `HasProps` `HasWindow` `bScalable`(Bool) `PivotOffset`(Vector) `MeshForwardAxis`(Double) `PropOffset`(Vector) `PtID`(Int32) |
+| `Props`,`BDFData` | 1966 | 立面道具 |
+
+**单位全是厘米**；`.bdf` 源文件是米。每层三个水平语法 `F0/F1/F2` 按墙长选用，长度门槛在 `FLengths`。
+
+**派生字段（照抄源数据必错的那几个）**，全部来自 27 个样式的实测：
+
+| 字段 | 规律 |
+|---|---|
+| `Levels.Size` | 等于该行 `LevelHeight` |
+| `Levels` 的 LV0 | `LevelHeight = Size = 0.5`（27/27） |
+| `MaxBldgHeight` | 21/28 用 `200000` 作开放上限；**不能等于** `MinBldgHeight`（零跨度） |
+| `VerticalGrammar` | 至少一个 `*`（可重复层），27/27 都有 |
+| `VerticalGrammarStaggered` | 从上层开始（CHJ：`[LV2][LV2]*[LV3]`），不是从 LV0 |
+| `Modules.PivotOffset` | `(0, -run 中心, -LevelHeight/2)`：BDF 路线以**槽位水平中心、层高中点**放模块。35 行抽查中 30 行严格符合，例外都是 L/R 侧角件 |
+| Level 0 模块 | 27 个样式共用 NY 的 `FS2` / `C_E` / `C_I` 三件（`Kit_Bldg_NY_L0_A`） |
+| 角件符号 | 外角用 `C_E`（每层都要），`C_CE` 是额外的角帽 |
+
+**新增一个样式码，必须改的五处**（缺任何一处都是 0 实例、0 报错）：
+
+1. `BDF_WithTL`（复制 Epic 数据库后追加行；Epic 原件不动）。
+2. `CitySampleBuildingBDF_NamesOnly_PCG` 的副本（`BDF_NamesOnly_WithTL`）追加样式码：
+   CoreProcess 把名单 JOIN 成一个串，**只保留是其子串的请求样式码**（`AttributeReduce_1` →
+   `AttributeStringOp_0` → `AttributeFilter_1`）。
+3. `LoadCitySampleData` 的两个 `asset` 指向上面两个副本。
+4. **`PCG_3_3_1_Buildings` 里三个 `Assign_CitySampleBuildings` 调用各自覆写了 `BuildingsStyles`**，
+   子图自身的默认值永远读不到。改 `subgraph_instance` 上的覆写：
+   `PCGGraphParametersHelpers.set_string_parameter(inst, "BuildingsStyles", ...)`。
+5. `DT_Bldg_MinWidth` 与 `DT_Bldg_LevelMinWidth` 各加行（`fill_from_csv_string` 是**整表替换**：
+   先 export 再追加再写回）。
+
+脚本：`Content/Python/tl_make_bdf.py`、`tl_names_with_tl.py`、`tl_whitelist_city.py`、`tl_register.py`；
+复测 `tl_verify_city.py` + `tl_verify_city_read.py`，拼缝检查 `tl_city_joints.py`。
 
 ---
 
