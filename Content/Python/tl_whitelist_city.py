@@ -72,10 +72,22 @@ def main(apply):
 
     plan = {}
     for t in TARGET_NODES:
-        codes = [c for c in H.get_string_parameter(nodes[t], PARAM).split(",") if c]
+        current = H.get_string_parameter(nodes[t], PARAM)
+        if current == "":
+            # An empty override means "all styles". Appending TL here would
+            # produce "TL", which narrows the call to TL alone instead of
+            # widening it -- refuse rather than silently breaking the call.
+            R["errors"].append(
+                "%s: %s is empty (means 'all styles'); appending TL would "
+                "narrow the call to TL alone -- refusing, fix by hand"
+                % (t, PARAM))
+            continue
+        codes = [c for c in current.split(",") if c]
         if CODE not in codes:
             plan[t] = ",".join(codes + [CODE])
     R["plan"] = plan
+    if R["errors"]:
+        return R
     if not apply or not plan:
         R["note"] = "dry run" if not apply else "already contains TL"
         return R

@@ -1614,6 +1614,13 @@ properties carrying the style-code string. It is instead a **graph-level user pa
 - **No consumer overrides it.** All 3 subgraph nodes in `PCG_3_3_1_Buildings` and all 10 in
   `Assign_BldgStyles_per_MinWallWidth` have `subgraph_override == None`, so every consumer is
   currently taking the "all styles" default.
+
+  > **2026-10-07 correction**: this was wrong about `PCG_3_3_1_Buildings`. Its three
+  > `Assign_CitySampleBuildings` calls DO override `BuildingsStyles` -- on `subgraph_instance`'s
+  > parameter overrides, not the `subgraph_override` field this scan read, which is why the scan
+  > found nothing. The real whitelist is those three call-site overrides plus the
+  > `CitySampleBuildingBDF_NamesOnly_PCG` NamesOnly list. See
+  > `migrated-citysample-library.md` §3.2.
 - Inside `Assign_CitySampleBuildings_CoreProcess`, the value is materialized as a point-data
   attribute `BuildingsStyles` and consumed by two nodes: `FilterDataByAttribute_4`
   (`attribute = "@Data.BuildingsStyles"`) and `DataAttributesToTags_1`
@@ -1693,6 +1700,11 @@ Create `Content/Python/tl_register.py`. Use the mechanism proven in Steps 1–2.
 #   * No consumer overrides it (all 13 instantiating subgraph nodes across the
 #     two graphs have subgraph_override == None), so everyone currently takes
 #     the "all styles" empty-string default.
+#   * 2026-10-07 correction: PCG_3_3_1_Buildings DOES override BuildingsStyles,
+#     on subgraph_instance's parameter overrides (not the subgraph_override
+#     field this scan read). The real whitelist is those three call-site
+#     overrides plus the NamesOnly list -- see
+#     migrated-citysample-library.md §3.2.
 #   * Reading it: user_parameters.to_dict() returns {} -- useless. export_text()
 #     returns the real value.
 #

@@ -181,15 +181,14 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 
 ## 6. 2026-10-07 第四次实测新增（新增建筑样式码 TL 时踩到）
 
-> 这次的主症状是**新样式 0 实例、0 报错、其他样式一切正常**，前后试了五个假设才找到真因。真因是第 34、35 两条，它们在 BDF 数据之前就把样式码过滤掉了；36–38 是样式能进语法之后才暴露的数据问题。
+> 这次的主症状是**新样式 0 实例、0 报错、其他样式一切正常**，前后试了五个假设才找到真因。真因是第 34、35 两条，它们在 BDF 数据之前就把样式码过滤掉了；36–37 是样式能进语法之后才暴露的数据问题；38–40 是本轮另外踩到的工具/流程坑。
 
 | # | 坑 | 规避 |
 |---|---|---|
-| **34** | **`PCG_3_3_1_Buildings` 的三个 `Assign_CitySampleBuildings` 调用各自覆写了 `BuildingsStyles`**（Small 6 码 / Medium 19 码 / Large 8 码）。只改子图的用户参数默认值**完全无效** | 改每个调用节点 `subgraph_instance` 上的覆写：`PCGGraphParametersHelpers.get/set_string_parameter(inst, "BuildingsStyles", …)`，`is_overridden()` 可确认。字节 grep `.uasset` 找逗号分隔的样式码列表，比扫节点属性可靠 |
+| **34** | **`PCG_3_3_1_Buildings` 里共五处样式码列表**：三个 `Assign_CitySampleBuildings` 调用各自覆写了 `BuildingsStyles`（Small 6 码 / Medium 19 码 / Large 8 码，并集 25 码），另两个 `SetComplexBuildings` 节点各带一份拼写不同的 `BuildingStyles`（喂复杂足迹建筑，TL 不需要进去）。只改子图的用户参数默认值**完全无效** | 改每个调用节点 `subgraph_instance` 上的覆写：`PCGGraphParametersHelpers.get/set_string_parameter(inst, "BuildingsStyles", …)`，`is_overridden()` 可确认。字节 grep `.uasset` 找逗号分隔的样式码列表，比扫节点属性可靠 |
 | **35** | **样式码还要过一道名单：`CitySampleBuildingBDF_NamesOnly_PCG`**（27 个 Name）。CoreProcess 把名单 JOIN 成串，请求的样式码**不是其子串就被丢掉** | 复制名单资产到 `/Game` 追加新码，`LoadCitySampleData.PCGLoadDataAsset_1.asset` 指过去（`tl_names_with_tl.py`）。`PCGParamData` 加条目：`set_name_attribute(unreal.PCGPoint(), md, "Name", code)`；按 key 读：`p = PCGPoint(); p.import_text("(MetadataEntry=%d)" % k)` |
 | **36** | **元数据 getter 类型不匹配时不抛异常，返回哨兵值**：Float 上用 `get_double_attribute` 得 `0.0`，String 上用 `get_name_attribute` 得 `"None"`。曾因此误判「27 个样式的高度字段全是 0」 | 先 `md.get_attributes()` 拿真实类型再选 getter。`Levels.BuildingToken` 是 **Name**，其他 `BuildingToken` 是 String；`Mod_Name` 是 String |
 | **37** | **BDF 行里有一批「派生字段」，照抄源数据就错**：`Levels.Size` = `LevelHeight`；LV0 高 0.5；`MaxBldgHeight` 开放上限 200000；`VerticalGrammar` 必须带 `*`；`PivotOffset = (0, -run 中心, -LevelHeight/2)`；外角符号必须有 `C_E`。单位全是厘米 | 照 `migrated-citysample-library.md` §3.2 的表逐项对照。日志里的 **`Unmatched token found in grammar: C_E`** 意味着某层缺符号行，样式其实已经进了语法 |
-| **38** | **刚 `save_asset` 了被图引用的资产，紧接着的 `generate_local` 会被取消**：`generated` 停在 False，实例数 0，无报错 | 存盘与生成分两次调用；生成后读 `generated`，为 False 就再触发一次。另外：保存被图引用的资产会让组件输出清空，此时读到的 0 不是结果 |
-| **39** | **`generate_local` 后立刻再读，可能拿到上一轮的完整结果**（实例数与上轮逐位相同） | 先 `cleanup_local(True)` 并读到 0，再生成；或比对不应相同的数字。`tl_city_flush_regen.py` 把 `pcg.FlushCache` + cleanup + generate 放在一起 |
-| **40** | **一个被引用的资产无法 delete+duplicate 重建**：`ForceDeleteObject` 拒绝并警告 package 可能损坏，随后 `duplicate_asset` 因目标已存在而失败 | 原地修补：读出点、改值、`set_points`，最后用 `EditorAssetLibrary.save_asset(path, only_if_is_dirty=False)` 落盘（单独 `save_loaded_asset` 实测没刷新 mtime） |
-| **41** | **切关卡前不要在同一调用里 `unreal.SystemLibrary.collect_garbage()`**：实测在 `LoadLevel` 内触发断言 `!LevelList.Contains(TickTaskLevel)`（`FTickTaskManager::FreeTickTaskLevel`）编辑器崩溃 | 只做 Python 侧 `gc.collect()` 与清全局（第 25 条），引擎 GC 交给 `LoadLevel` 自己。崩溃后 `Saved/Autosaves/PackageRestoreData.json` 会让下次启动卡在恢复弹窗、桥不响应：先挪走 `Saved/Autosaves` 再启动 |
+| **38** | **三次实测：紧跟在保存一个被图引用的资产之后，同一次调用里依次跑 `pcg.FlushCache` + `cleanup_local` + `generate_local`，`generated` 都停在 False、实例数 0。** 每次换成另起一次调用、只跑一个 `generate_local`，都成功了。成因未定位，可能是前面的保存，也可能是同一调用里的 `FlushCache`，两者没有分开测过 | 把保存和生成分到不同调用里；生成后读 `generated`，为 False 就再单独触发一次 |
+| **39** | **一个被引用的资产无法 delete+duplicate 重建**：`ForceDeleteObject` 拒绝并警告 package 可能损坏，随后 `duplicate_asset` 因目标已存在而失败 | 原地修补：读出点、改值、`set_points`，最后用 `EditorAssetLibrary.save_asset(path, only_if_is_dirty=False)` 落盘（单独 `save_loaded_asset` 实测没刷新 mtime） |
+| **40** | **切关卡前不要在同一调用里 `unreal.SystemLibrary.collect_garbage()`**：实测在 `LoadLevel` 内触发断言 `!LevelList.Contains(TickTaskLevel)`（`FTickTaskManager::FreeTickTaskLevel`）编辑器崩溃 | 只做 Python 侧 `gc.collect()` 与清全局（第 25 条），引擎 GC 交给 `LoadLevel` 自己。崩溃后 `Saved/Autosaves/PackageRestoreData.json` 会让下次启动卡在恢复弹窗、桥不响应：先挪走 `Saved/Autosaves` 再启动 |
