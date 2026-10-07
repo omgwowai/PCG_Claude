@@ -12,11 +12,11 @@ sits at the BOTTOM of the piece in Z and at ONE END of the wall run in Y:
     y in [-width_m, 0]         (the wall run; origin at the y=0 end)
     z in [0, height_m]         (up; origin at the bottom)
 
-This is exactly CHA's measured L1 wall footprint pattern (y in [-325, 0],
-z in [0, 500], origin at (0,0,0)), scaled to each part's own width/height.
-CHA compensates with a per-module PivotOffset of (0, +width/2, -height/2)
-(magnitude confirmed, sign unconfirmed -- see tl_facts.json); TL relies on
-the same external compensation being applied downstream, unchanged.
+This is the BLENDER-authored (pre-import) span. In UE, the FBX importer flips
+Y (FbxUtilsImport.cpp:68), so imported TL meshes span y in [0, width_m], not
+[-width_m, 0]. That mirrors CHA's own imported span, which is why the BDF
+PivotOffset is -width/2 (confirmed in Content/Python/tl_make_bdf.py); TL
+relies on the same external compensation being applied downstream, unchanged.
 
 Blender is Z-up and UE is Z-up, so no axis flip is needed in-engine; the FBX
 exporter's own axis settings are set explicitly below (see the real,
@@ -104,8 +104,7 @@ def export(obj, out_dir, name):
 
     The keyword arguments below were verified against THIS Blender build
     (5.2.1 LTS) at runtime via
-    `bpy.ops.export_scene.fbx.get_rna_type().properties` (see
-    Tools/tl_kit/_probe_fbx_export.py / _probe_fbx_enums.py, run once as a
+    `bpy.ops.export_scene.fbx.get_rna_type().properties` (run once as a
     throwaway headless probe) rather than written from memory, per the
     coordinator's instruction that the FBX exporter's arguments have moved
     across Blender versions. Every keyword used here (use_selection,

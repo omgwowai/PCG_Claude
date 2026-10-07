@@ -198,14 +198,17 @@ position in Z"*。
 
 ### 3.3.1 Buildings —— 形状语法中枢
 `Assign_CitySampleBuildings` → `Assign_CitySampleBuildings_CoreProcess` →
-`LoadCitySampleData`；另加 `AssignBuildingShape`、`SetComplexBuildings`、
-`FilterSquareShapes`、`Filter_Areas_within_Areas`、`Create_Mesh_Extrude`、`Write_Noise`、
-`Write_DistanceFrom`、`Write_Attribute_fromTexture`、
+`Subgraph_1`（`BDF_Input_Processor`） → `PartitionBDF_PerSpline` →
+`BDF_BuildingFromSpline` → `Loop_Subdivide`；`LoadCitySampleData` 是并列的兄弟节点，
+喂给 `Assign_CitySampleBuildings` 第二路输入；另加 `AssignBuildingShape`、
+`SetComplexBuildings`、`FilterSquareShapes`、`Filter_Areas_within_Areas`、
+`Create_Mesh_Extrude`、`Write_Noise`、`Write_DistanceFrom`、`Write_Attribute_fromTexture`、
 `LoopCreate{Extruded,Planar}MeshActorPerData`。
 
-**样式码白名单是三次调用各自的 `BuildingsStyles` 覆写**（Small 6 码 / Medium 19 码 /
-Large 8 码），另有 `CitySampleBuildingBDF_NamesOnly_PCG` 名单把关。详见
-`migrated-citysample-library.md` §3.2 与 `traps.md` 34–35。
+**样式码列表共五处**：三次调用各自的 `BuildingsStyles` 覆写（Small 6 码 / Medium 19 码 /
+Large 8 码，并集 25 码）+ 两个 `SetComplexBuildings` 节点上拼写不同的 `BuildingStyles`
+参数（喂给复杂足迹建筑，TL 不在内）；另有 `CitySampleBuildingBDF_NamesOnly_PCG` 名单把关。
+详见 `migrated-citysample-library.md` §3.2 与 `traps.md` 34–35。
 
 标签体系：`Building_S_` / `Building_M_` / `Building_L_`（+ `_Col` 碰撞变体），
 `FilterTags_/AddTags_/DeleteTags_{Small,Medium,Large}Districts`。
@@ -401,7 +404,9 @@ Buildings/BDF 扩展」的组合。**
 **`PCG_3_3_1_Buildings` 的三次 `Assign_CitySampleBuildings` 调用各自覆写 `BuildingsStyles`**：
 Small = `NYAA,NYAB,NYAC,NYAD,NYAE,NYAF`；
 Medium = `CHA,CHB,CHC,CHE,CHF,CHG,CHH,CHI,CHJ,NYG,NYGA,NYH,QBA,QBAA,SFA,SFC,SFD,SFE,SFJ`；
-Large = `CHJ,CHE,CHF,CHH,SFC,SFD,SFE,SFJ`。并集 26 码，`CHD`、`SFB` 不参与。
+Large = `CHJ,CHE,CHF,CHH,SFC,SFD,SFE,SFJ`。并集 25 码，`CHD`、`SFB` 不参与。
+另有两个 `SetComplexBuildings` 节点（参数拼写不同：`BuildingStyles`）各带一份复杂足迹
+样式码子集，TL 不在其中。
 → 想让一个样式码参与生成，要改调用节点上的覆写，并把它加进名单资产与 BDF 数据库
 （`migrated-citysample-library.md` §3.2）。
 

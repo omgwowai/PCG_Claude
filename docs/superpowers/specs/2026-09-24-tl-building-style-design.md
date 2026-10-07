@@ -99,6 +99,11 @@ package 的数据**做重新挂载。所以 Python 造的 `UPCGPointData` 要么
 | `PCG_3_3_1_Buildings` 图内 | **硬编码 19 码白名单** | 加 `TL`，否则不进城市 |
 | `Assign_BldgStyles_per_MinWallWidth` | 全 27 码 + 7 个按墙宽递减的桶 | 按 `minWallWidth` 把 `TL` 插进合适的桶 |
 
+> **2026-10-07 更正**：「白名单」不是这里写的图内硬编码字符串，而是 `PCG_3_3_1_Buildings`
+> 三次 `Assign_CitySampleBuildings` 调用各自的 `BuildingsStyles` 覆写，外加
+> `CitySampleBuildingBDF_NamesOnly_PCG` 名单资产的过滤。详见
+> `migrated-citysample-library.md` §3.2。
+
 → **只加资产目录是无效的。** 白名单不改，`TL` 永不出现。
 
 ### 2.5 一个有用的先例
@@ -339,6 +344,10 @@ Texture  : .../Kit_Bldg_<CODE>_L<n>_<V>/Texture/T_<CODE>_<...>
    - `Assign_BldgStyles_per_MinWallWidth` 的 7 个墙宽桶，按 `minWallWidth = 12`
      把 `TL` 插进合适的桶
 
+> **2026-10-07 更正**：白名单实际是调用覆写（`BuildingsStyles` 参数）加
+> `CitySampleBuildingBDF_NamesOnly_PCG` 名单资产，不是图内字符串。详见
+> `migrated-citysample-library.md` §3.2。
+
 **验收**：跑 `PCG_3_3_1_Buildings`（或 3.3.1 那一段），
 在生成结果里**数出 `TL` 的网格实例**，并确认与既有样式混合出现。
 用已有脚本 `Content/Python/pcg_sa_*.py` 的读法。
@@ -361,7 +370,7 @@ Texture  : .../Kit_Bldg_<CODE>_L<n>_<V>/Texture/T_<CODE>_<...>
 | UE 导入脚本 | `Content/Python/tl_import_kit.py` | 传统 FBX 路径导入 + 槽位赋值 + 读回 assert |
 | 网格规格表 | `Tools/tl_kit/tl_kit_spec.json` | 部件名/尺寸/pivot/材质槽的**唯一事实源**，被上面三个脚本共读 |
 | BDF 写入脚本 | `Content/Python/tl_register_bdf.py` | 块 C 的注册（含备份） |
-| 白名单修改脚本 | `Content/Python/tl_whitelist.py` | 改两张图的样式码字符串 |
+| 白名单修改脚本 | `Content/Python/tl_whitelist.py` | 改两张图的样式码字符串（2026-10-07 更正：实际实现是 `tl_whitelist_city.py` 改调用覆写 + `tl_names_with_tl.py` 改名单资产，见 `migrated-citysample-library.md` §3.2） |
 | 验证脚本 | `Content/Python/tl_verify_sgd.py` / `tl_verify_city.py` | 块 B / 块 C 的验收 |
 | 设计文档 | `docs/superpowers/specs/2026-09-24-tl-building-style-design.md` | 本文 |
 | 技能文档更新 | `.claude/skills/city-sample-pcg-city-builder/references/migrated-citysample-library.md` | 补 §2.2 / §2.6 两条推翻性发现 |

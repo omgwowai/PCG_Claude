@@ -81,13 +81,16 @@ def main(apply):
             R["dest_names"] = names_of(dest)
         return R
 
+    duplicated_now = False
     if dest is None:
         dest = EAL.duplicate_asset(SRC, DEST)
         if dest is None:
             R["errors"].append("duplicate_asset returned None")
             return R
+        duplicated_now = True
 
-    if CODE not in names_of(dest):
+    added_now = CODE not in names_of(dest)
+    if added_now:
         d = dest.get_editor_property("data").get_editor_property("tagged_data")[0] \
             .get_editor_property("data").get_editor_property("data")
         md = d.mutable_metadata()
@@ -95,7 +98,10 @@ def main(apply):
         R["new_entry_key"] = pt.get_editor_property("metadata_entry")
         dest.modify()
     R["dest_names"] = names_of(dest)
-    R["dest_saved"] = EAL.save_asset(DEST, only_if_is_dirty=False)
+    if duplicated_now or added_now:
+        R["dest_saved"] = EAL.save_asset(DEST, only_if_is_dirty=False)
+    else:
+        R["dest_saved"] = "skipped (TL already present, nothing duplicated)"
 
     if loader_path and not loader_path.startswith(DEST):
         if not os.path.exists(BACKUP):

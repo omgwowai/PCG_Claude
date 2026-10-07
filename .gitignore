@@ -57,7 +57,8 @@ __pycache__/
 # ---------------------------------------------------------------------------
 /Content/AI/
 /Content/Audio/
-/Content/Building/
+/Content/Building/*
+!/Content/Building/TL/
 /Content/Character/
 /Content/Cinematics/
 /Content/City/

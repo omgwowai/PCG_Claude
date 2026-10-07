@@ -1,5 +1,5 @@
-# tl_register.py -- register TL: two DataTable row sets, the BuildingsStyles
-# whitelist parameter, and the LoadCitySampleData repoint.
+# tl_register.py -- register TL: two DataTable row sets and the
+# LoadCitySampleData repoint.
 #
 # MEASURED BACKGROUND (Task 8 probing, this run):
 #   * DataTable.fill_from_csv_string() is a FULL REPLACE, not a merge. Feeding
@@ -18,15 +18,13 @@
 #     MinWidthWorstCase=280.0 -- a universal convention, not CHA-specific.
 #     TL's LV0 row must match it; TL's own LV1-LV3 profile (C_CE/150/650/950,
 #     mirroring CHA's LV1-LV3 and Task 7's BDF group data) is used for LV1-LV3.
-#   * The style whitelist is a graph-LEVEL USER PARAMETER named "BuildingsStyles"
-#     (String, default "") on Assign_CitySampleBuildings' user_parameters
-#     InstancedPropertyBag -- not a literal string on any node (Task 1 scanned
-#     the full 48-graph closure and found zero node-level hits).
-#   * InstancedPropertyBag.set_editor_property()/set_editor_properties() both
-#     raise "Failed to find property 'BuildingsStyles'" -- there is no working
-#     setter by property name. The working mechanism is bag.import_text(text),
-#     where text is bag.export_text() with the BuildingsStyles="..." substring
-#     replaced. Proven to persist through a save/reload cycle.
+#   * The style whitelist consumed by the city stage is not a literal string
+#     on any node, and it is not `Assign_CitySampleBuildings`' own
+#     `BuildingsStyles` user parameter default either: `PCG_3_3_1_Buildings`
+#     overrides `BuildingsStyles` on each of its three
+#     `Assign_CitySampleBuildings` call sites (on `subgraph_instance`), so the
+#     subgraph's own default is never read there. That call-site whitelist is
+#     handled separately by `tl_whitelist_city.py`.
 #   * LoadCitySampleData has TWO PCGLoadDataAssetSettings nodes: one loads
 #     CitySampleBuildingBDF_NamesOnly_PCG (leave alone), the other loads
 #     CitySampleBuildingBDF_Asset_PCG (the one to repoint at BDF_WithTL). The
@@ -43,13 +41,8 @@ EAL = unreal.EditorAssetLibrary
 
 DT_MIN = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth"
 DT_LVL = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth"
-ASG    = "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings"
 LOAD   = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData"
 NEW_BDF = "/Game/PCG/DataAssets/BDF/BDF_WithTL"
-
-ALL_27 = ["CHA", "CHB", "CHC", "CHD", "CHE", "CHF", "CHG", "CHH", "CHI", "CHJ",
-          "NYAA", "NYAB", "NYAC", "NYAD", "NYAE", "NYAF", "NYG", "NYGA", "NYH",
-          "QBA", "QBAA", "SFA", "SFB", "SFC", "SFD", "SFE", "SFJ"]
 
 
 def note(step, **kw):
@@ -90,7 +83,8 @@ try:
                 "DT_Bldg_MinWidth: fill produced unexpected result "
                 "(rows_lost=%s, has_TL=%s)" % (rows_lost, dt.does_row_exist("TL")))
         else:
-            EAL.save_loaded_asset(dt)
+            if not EAL.save_loaded_asset(dt):
+                R["errors"].append("DT_Bldg_MinWidth: save_loaded_asset returned False")
 except Exception as e:
     R["errors"].append("DT_Bldg_MinWidth: %s: %s" % (type(e).__name__, e))
 
@@ -137,78 +131,14 @@ try:
                 "DT_Bldg_LevelMinWidth: fill produced unexpected result "
                 "(rows_lost=%s, rows_gained=%s)" % (rows_lost2, rows_gained2))
         else:
-            EAL.save_loaded_asset(dt2)
+            if not EAL.save_loaded_asset(dt2):
+                R["errors"].append("DT_Bldg_LevelMinWidth: save_loaded_asset returned False")
 except Exception as e:
     R["errors"].append("DT_Bldg_LevelMinWidth: %s: %s" % (type(e).__name__, e))
 
 dt2 = None
 
-# ---------- 3. BuildingsStyles whitelist parameter --------------------------
-try:
-    g = EAL.load_asset(ASG)
-    bag = g.get_editor_property("user_parameters")
-    before_text = bag.export_text()
-
-    # Extract the current BuildingsStyles="..." value, if any.
-    marker = 'BuildingsStyles="'
-    idx = before_text.find(marker)
-    if idx == -1:
-        raise RuntimeError("BuildingsStyles=\"...\" substring not found in export_text()")
-    start = idx + len(marker)
-    end = before_text.find('"', start)
-    current_value = before_text[start:end]
-    current_codes = [c for c in current_value.split(",") if c]
-
-    if "TL" in current_codes:
-        note("BuildingsStyles", action="already contains TL, skipped",
-             before_text=before_text, current_value=current_value)
-    else:
-        if current_value == "":
-            new_codes = ALL_27 + ["TL"]
-        else:
-            # Unexpected: the parameter was already set to something other
-            # than the empty default, and it doesn't contain TL yet. Extend
-            # the existing list rather than clobbering it, and flag loudly.
-            new_codes = current_codes + ["TL"]
-            R["errors"].append(
-                "BuildingsStyles: parameter was non-empty and did not match "
-                "the expected all-27 baseline before this run (value=%r); "
-                "extended it with TL instead of overwriting -- verify by hand."
-                % current_value)
-        new_value = ",".join(new_codes)
-        new_text = before_text.replace(
-            marker + current_value + '"', marker + new_value + '"')
-        import_ok = bag.import_text(new_text)
-        after_text = bag.export_text()
-        after_idx = after_text.find(marker)
-        after_start = after_idx + len(marker)
-        after_end = after_text.find('"', after_start)
-        after_value = after_text[after_start:after_end]
-        after_codes = [c for c in after_value.split(",") if c]
-        missing_from_27 = [c for c in ALL_27 if c not in after_codes]
-        note("BuildingsStyles",
-             action="set via import_text",
-             import_text_return=bool(import_ok),
-             before_value=current_value,
-             target_value=new_value,
-             after_value=after_value,
-             has_TL_after="TL" in after_codes,
-             all_27_survive=(len(missing_from_27) == 0),
-             missing_from_27=missing_from_27)
-        if not import_ok or "TL" not in after_codes or missing_from_27:
-            R["errors"].append(
-                "BuildingsStyles: edit did not verify cleanly "
-                "(import_ok=%s, has_TL=%s, missing=%s)"
-                % (import_ok, "TL" in after_codes, missing_from_27))
-        else:
-            EAL.save_loaded_asset(g)
-except Exception as e:
-    R["errors"].append("BuildingsStyles: %s: %s" % (type(e).__name__, e))
-
-g = None
-bag = None
-
-# ---------- 4. repoint LoadCitySampleData at BDF_WithTL ---------------------
+# ---------- 3. repoint LoadCitySampleData at BDF_WithTL ---------------------
 try:
     lg = EAL.load_asset(LOAD)
     target_settings = None
@@ -268,7 +198,8 @@ try:
             R["errors"].append(
                 "LoadCitySampleData: asset property did not read back as BDF_WithTL")
         else:
-            EAL.save_loaded_asset(lg)
+            if not EAL.save_loaded_asset(lg):
+                R["errors"].append("LoadCitySampleData: save_loaded_asset returned False")
 except Exception as e:
     R["errors"].append("LoadCitySampleData: %s: %s" % (type(e).__name__, e))
 

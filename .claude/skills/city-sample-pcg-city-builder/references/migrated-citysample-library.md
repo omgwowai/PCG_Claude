@@ -178,12 +178,14 @@ mtime 保持出厂日期不变（复制不会写源关卡）。
 
 ```
 PCG_3_3_1_Buildings
+  ├─ LoadCitySampleData（与 Assign_CitySampleBuildings 并列的兄弟节点，
+  │    喂给 Assign_CitySampleBuildings 第二路输入）
+  │    ├─ PCGLoadDataAsset_1 → CitySampleBuildingBDF_NamesOnly_PCG（样式码名单）
+  │    └─ PCGLoadDataAsset_2 → CitySampleBuildingBDF_Asset_PCG（BDF 数据库）
   └─ Assign_CitySampleBuildings（Small / Medium / Large 三次调用）
        └─ Assign_CitySampleBuildings_CoreProcess
-            ├─ LoadCitySampleData
-            │    ├─ PCGLoadDataAsset_1 → CitySampleBuildingBDF_NamesOnly_PCG（样式码名单）
-            │    └─ PCGLoadDataAsset_2 → CitySampleBuildingBDF_Asset_PCG（BDF 数据库）
-            └─ Subgraph_1 → BDF_Input_Processor → BDF_BuildingFromSpline → Loop_Subdivide
+            └─ Subgraph_1（即 BDF_Input_Processor） → PartitionBDF_PerSpline →
+               BDF_BuildingFromSpline → Loop_Subdivide
 ```
 
 `LoadCitySampleData` 节点上存资产的属性名是 **`asset`**（不是 `data_asset`）。
@@ -194,26 +196,43 @@ PCG_3_3_1_Buildings
 | 标签 | 行数（Epic 原版） | 属性（类型） |
 |---|---|---|
 | `BDF`,`BDFData` | 27（每样式 1 行） | `BuildingToken`(String) `VerticalGrammar` `VerticalGrammarStaggered`(String) `MinWallWidth` `MinBldgHeight` `MaxBldgHeight`(**Float**) `RoofData`(Vector4) |
-| `Levels`,`BDFData` | 240（每层 1 行，与 `RULE_<CODE>_L##` 一一对应） | `BuildingToken`(**Name**) `LevelNumber`(Int32) `LevelToken`(String) `LevelHeight` `Size`(Float) `F` `F0` `F1` `F2`(String) `FLengths`(Vector) `IsTopper`(Bool) |
+| `Levels`,`BDFData` | 240（每层 1 行，行数与 `RULE_<CODE>_L##` 的数量相同，但只是数量相同，不是逐层身份对应） | `BuildingToken`(**Name**) `LevelNumber`(Int32) `LevelToken`(String) `LevelHeight` `Size`(Float) `F` `F0` `F1` `F2`(String) `FLengths`(Vector) `IsTopper`(Bool) |
 | `Modules`,`BDFData` | 2916 | `BuildingToken`(String) `Level`(Int32) `Symbol`(String) `Size`(Double) `Mod_Name`(**String**) `Mesh`(SoftObjectPath) `HasProps` `HasWindow` `bScalable`(Bool) `PivotOffset`(Vector) `MeshForwardAxis`(Double) `PropOffset`(Vector) `PtID`(Int32) |
 | `Props`,`BDFData` | 1966 | 立面道具 |
 
 **单位全是厘米**；`.bdf` 源文件是米。每层三个水平语法 `F0/F1/F2` 按墙长选用，长度门槛在 `FLengths`。
 
-**派生字段（照抄源数据必错的那几个）**，全部来自 27 个样式的实测：
+**字段规律**，全部来自 27 个样式的实测，分两类：
+
+**三项实测会改变 TL 的生成结果**（measured effect）：
 
 | 字段 | 规律 |
 |---|---|
-| `Levels.Size` | 等于该行 `LevelHeight` |
-| `Levels` 的 LV0 | `LevelHeight = Size = 0.5`（27/27） |
-| `MaxBldgHeight` | 21/28 用 `200000` 作开放上限；**不能等于** `MinBldgHeight`（零跨度） |
-| `VerticalGrammar` | 至少一个 `*`（可重复层），27/27 都有 |
-| `VerticalGrammarStaggered` | 从上层开始（CHJ：`[LV2][LV2]*[LV3]`），不是从 LV0 |
+| `Levels.LV0` | `LevelHeight = Size = 0.5`、`PivotOffset` 影响层叠与接缝（27/27 一致） |
+| `VerticalGrammar`/`PivotOffset` | 见下方派生字段表 |
+| `Modules` 的 `C_E` 行 | 补上后消除了 `Unmatched token` 告警 |
+
+**三项被测试为城市阶段零实例的原因，均已证伪**（不是这三项造成的）：
+
+- `MaxBldgHeight` ≠ `MinBldgHeight`
+- `VerticalGrammar` 带 `*`
+- `Size` = `LevelHeight`
+
+**一项未测出可观察效果**：`VerticalGrammarStaggered` 的改动（对现有人口普查无影响）。
+
+派生字段细表（兄弟样式的**约定**，为与其余 27 个样式保持一致而遵循，不是已证实会改变生成结果的必要条件，除非上面标了 measured effect）：
+
+| 字段 | 规律 |
+|---|---|
+| `Levels.Size` | 约定等于该行 `LevelHeight`（27/27 遵循此约定） |
+| `MaxBldgHeight` | 21/28 用 `200000` 作开放上限；**不能等于** `MinBldgHeight`（零跨度，已证实会导致该样式不可选） |
+| `VerticalGrammar` | 至少一个 `*`（可重复层），27/27 都有；**已证实**无 `*` 的语法只能生成单一高度，几乎总被拒绝 |
+| `VerticalGrammarStaggered` | 约定从上层开始（CHJ：`[LV2][LV2]*[LV3]`），不是从 LV0；对 TL 未测出可观察效果 |
 | `Modules.PivotOffset` | `(0, -run 中心, -LevelHeight/2)`：BDF 路线以**槽位水平中心、层高中点**放模块。35 行抽查中 30 行严格符合，例外都是 L/R 侧角件 |
-| Level 0 模块 | 27 个样式共用 NY 的 `FS2` / `C_E` / `C_I` 三件（`Kit_Bldg_NY_L0_A`） |
+| Level 0 模块 | 27 个样式共用 NY 的 `Kit_Bldg_NY_L0_A` 基础/角件部件（Epic 数据库引用的是这组 NY L0 网格，不是某个固定的三件集合） |
 | 角件符号 | 外角用 `C_E`（每层都要），`C_CE` 是额外的角帽 |
 
-**新增一个样式码，必须改的五处**（缺任何一处都是 0 实例、0 报错）：
+**新增一个样式码，必须改的四处**（缺任何一处都是 0 实例、0 报错）：
 
 1. `BDF_WithTL`（复制 Epic 数据库后追加行；Epic 原件不动）。
 2. `CitySampleBuildingBDF_NamesOnly_PCG` 的副本（`BDF_NamesOnly_WithTL`）追加样式码：
@@ -222,12 +241,41 @@ PCG_3_3_1_Buildings
 3. `LoadCitySampleData` 的两个 `asset` 指向上面两个副本。
 4. **`PCG_3_3_1_Buildings` 里三个 `Assign_CitySampleBuildings` 调用各自覆写了 `BuildingsStyles`**，
    子图自身的默认值永远读不到。改 `subgraph_instance` 上的覆写：
-   `PCGGraphParametersHelpers.set_string_parameter(inst, "BuildingsStyles", ...)`。
-5. `DT_Bldg_MinWidth` 与 `DT_Bldg_LevelMinWidth` 各加行（`fill_from_csv_string` 是**整表替换**：
-   先 export 再追加再写回）。
+   `PCGGraphParametersHelpers.set_string_parameter(inst, "BuildingsStyles", ...)`。三处并集是
+   25 码（27 减去 `CHD`、`SFB`）。另有两个 `SetComplexBuildings` 节点（参数拼写不同：
+   `BuildingStyles`，喂复杂足迹建筑）——TL 是四层简单样式，不需要加进这两处。
+
+第 5 项是可选的：`DT_Bldg_MinWidth` 与 `DT_Bldg_LevelMinWidth` 各加行（`fill_from_csv_string`
+是**整表替换**：先 export 再追加再写回）。18 阶段城市流水线**不读取**这两张表——
+`DT_Bldg_LevelMinWidth` 没有任何引用者；`DT_Bldg_MinWidth` 唯一的引用者是
+`Filter_Footprints_for_bldgs`，而没有任何图引用 `Filter_Footprints_for_bldgs`。保留这一步是
+为了 `Filter_Footprints_for_bldgs` 与完整性，不是因为它会造成 0 实例——**「缺任一处都是 0
+实例」只适用于上面的第 1-4 项**。
 
 脚本：`Content/Python/tl_make_bdf.py`、`tl_names_with_tl.py`、`tl_whitelist_city.py`、`tl_register.py`；
 复测 `tl_verify_city.py` + `tl_verify_city_read.py`，拼缝检查 `tl_city_joints.py`。
+
+**补丁 vs 重建**：`tl_make_bdf.py` 默认在 `BDF_WithTL` 已存在时原地打补丁（patch），因为
+`LoadCitySampleData` 引用着它，强制 `delete_asset` 会让引用悬空并记一条「package 可能已损坏」
+的日志。要做完整重建，需同时满足 `{"rebuild": true}` 和
+`find_package_referencers_for_asset(DEST, False)` 返回空列表。
+
+**改动了的 Epic 插件资产**：下列四个 `Plugins/CitySamplePCG/Content/` 下的资产被原地改动，
+且全部被 gitignore：
+
+- `PCG_3_3_1_Buildings`
+- `LoadCitySampleData`
+- `DT_Bldg_MinWidth`
+- `DT_Bldg_LevelMinWidth`
+
+前两个有文件备份在 `Saved/TL_backups/`（`LoadCitySampleData` 的备份是 Task 8 之后取的，
+已经指向 `BDF_WithTL`）。原始文件在 `E:/CitySample 5.8`。用
+`Tools/sync-citysample-assets.ps1` 重新同步会覆盖这四个资产；要重新应用改动，按顺序运行：
+
+1. `tl_register.py`
+2. `tl_names_with_tl.py {"apply":true}`
+3. `tl_whitelist_city.py {"apply":true}`
+4. `tl_make_bdf.py`（仅当 `BDF_WithTL` 本身丢失时才需要）
 
 ---
 

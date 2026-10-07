@@ -286,7 +286,7 @@ Plugins/Experimental/CitySamplePCG/          ← 插件总重约 8.8 GB
 | **3.2.1 Ground** | `Assign_Rule` + `Assign_ShapeGrammarDefinition`(`SGD_Sidewalk_A`、`SGD_Sidewalk_Corners`)、`Fill_Areas_Uniformly`、`Compose_Spline_Cut`、`Transform_Splines_Reverse`、`Extract_Segments` | 生成 `/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_A..G`、栅栏、栏杆。**含形状语法帮助文本**：*"A means to place the module with symbol A."* / *"A, B means to place modules A and B once, in sequence."*。参数注释：`ArteryWidth / 2 (Sidewalk Expansion Amount)` |
 | **3.2.2 LeftOverLots** | `Fill_Areas_WithFittingAssets_CoreProcess` / `_with_Corrective` | 填充 42 个 Plaza/Storage `*_PCG` 数据资产 + 树（`SM_Black_Alder_01_A..D`、`SM_Common_Hazel_01_A/B`、`SM_European_Beech_01_A..C`、`SM_BlackAlder_Field_01..05_PP`） |
 | **3.2.3 Parkings** | `Subdivide_Areas_withGrid`、`Fill_Areas_Uniformly`、`Assign_Rule`、`Place_OnSpline`、`Transform_Truncate/Outline/Resample` | — |
-| **3.3.1 Buildings** | `Assign_CitySampleBuildings` → `Assign_CitySampleBuildings_CoreProcess` → `LoadCitySampleData`；`AssignBuildingShape`、`SetComplexBuildings`、`FilterSquareShapes`、`Filter_Areas_within_Areas`、`Create_Mesh_Extrude`、`Write_Noise`、`Write_DistanceFrom`、`Write_Attribute_fromTexture`、`LoopCreate{Extruded,Planar}MeshActorPerData` | **图内三次调用各自覆写样式码白名单**（见 §7.1）。标签体系 `Building_S_` / `_M_` / `_L_`（+`_Col` 碰撞变体），`FilterTags_/AddTags_/DeleteTags_{Small,Medium,Large}Districts`。tooltip：*"Maximum height in centimeters of the spawned building"* |
+| **3.3.1 Buildings** | `Assign_CitySampleBuildings` → `Assign_CitySampleBuildings_CoreProcess` → `Subgraph_1`（即 `BDF_Input_Processor`） → `PartitionBDF_PerSpline` → `BDF_BuildingFromSpline` → `Loop_Subdivide`；`LoadCitySampleData` 是 `PCG_3_3_1_Buildings` 内与 `Assign_CitySampleBuildings` 并列的兄弟节点，喂给它的第二路输入；另有 `AssignBuildingShape`、`SetComplexBuildings`、`FilterSquareShapes`、`Filter_Areas_within_Areas`、`Create_Mesh_Extrude`、`Write_Noise`、`Write_DistanceFrom`、`Write_Attribute_fromTexture`、`LoopCreate{Extruded,Planar}MeshActorPerData` | **图内五处样式码列表**（三处调用覆写 + 两处 `SetComplexBuildings`，见 §7.1）。标签体系 `Building_S_` / `_M_` / `_L_`（+`_Col` 碰撞变体），`FilterTags_/AddTags_/DeleteTags_{Small,Medium,Large}Districts`。tooltip：*"Maximum height in centimeters of the spawned building"* |
 | **3.3.2 Rooftops** | `Fill_Areas_WithFittingAssets_*`、`Compose_Points_Difference`、`Filter_Areas_BySize` | 消费 56 个 `RoofTops/*_PCG` 数据资产 |
 | **4.1 / 4.2 视觉** | 最大的两张图，英雄资产装扮 | 4.1 拉 WFC 屋顶组 + `SGD_Sidewalk_Simple` + `Transform_Align`；4.2 拉 `SGD_Road_City`、`SGD_Sidewalk_A`、`SGD_Sidewalk_CITY_EDGE`、`SGD_WalkpathSplineMesh`、`Fill_Areas_Randomly`、`Filter_AttributeValue`、`Write_Attribute`、`Write_Noise` |
 | **5.1 CityEdge** | `Assign_Assets` + `Spawn_Assets` over 5 个 Piers 数据资产 | 极简 |
@@ -353,7 +353,8 @@ Buildings/CHA/
 ```
 
 **注意**：18 阶段城市流水线**不读**这些 `SGD_*` / `RULE_*`。建筑阶段读的是 BDF 数据库
-`CitySampleBuildingBDF_Asset_PCG`（四组带标签的点数据，与 RULE 逐层一一对应）。
+`CitySampleBuildingBDF_Asset_PCG`（四组带标签的点数据，行数与 `RULE_<CODE>_L##` 数量相同，
+但只是数量相同，不是逐层身份对应）。
 `SGD_*` 只供单栋预览图 `PCG_Bldg_SGD_test` 使用。见 §7.1。
 
 > 另有配套的 `Skill_PCGShapeGrammarDefinition` 智能体技能资产，
@@ -483,8 +484,11 @@ E:\UnrealEngine\Engine\Plugins\Experimental\PCGPrimitives\
 ### 7.1 **关键**：哪些样式码真正参与生成（2026-10-07 修正）
 
 白名单**不是**图里的一个字符串常量，而是 `Assign_CitySampleBuildings` 的用户参数
-`BuildingsStyles`（String，默认 `""` = 全部样式）。`PCG_3_3_1_Buildings` 调用它三次，
-**每次都在 `subgraph_instance` 上覆写了这个参数**：
+`BuildingsStyles`（String，默认 `""` = 全部样式）。`PCG_3_3_1_Buildings` 里共有**五处**
+样式码列表，不是三处：
+
+**三处调用覆写**（在 `Assign_CitySampleBuildings` 调用的 `subgraph_instance` 上，
+参数名 `BuildingsStyles`）：
 
 | 调用节点 | `BuildingsStyles` 覆写值 |
 |---|---|
@@ -492,7 +496,18 @@ E:\UnrealEngine\Engine\Plugins\Experimental\PCGPrimitives\
 | `Assign City Sample Buildings - Medium` | `CHA,CHB,CHC,CHE,CHF,CHG,CHH,CHI,CHJ,NYG,NYGA,NYH,QBA,QBAA,SFA,SFC,SFD,SFE,SFJ` |
 | `Assign City Sample Buildings - Large` | `CHJ,CHE,CHF,CHH,SFC,SFD,SFE,SFJ` |
 
-三份并集是 26 码；`CHD` 与 `SFB` 不在任何一份里。之前说的「19 码白名单」只是 Medium 那一份。
+**另两处是 `SetComplexBuildings` 节点**，参数名拼写不同（`BuildingStyles`，没有中间的 `s`）：
+
+| 值 |
+|---|
+| `QBA,CHJ,CHF,CHH,SFC,SFD,SFE,SFJ` |
+| `CHJ,CHH,SFC,SFD,SFE,SFJ` |
+
+`SetComplexBuildings_InnerLoop` 调用 `Assign_CitySampleBuildings`，所以这两份喂给的是
+复杂足迹（complex-footprint）建筑。TL 刻意不在这两份里：它是四层的简单样式。
+
+三处调用覆写的并集是 **25 码**（27 减去 `CHD` 与 `SFB`），不是 26；之前说的「19 码白名单」
+只是 Medium 那一份。
 
 请求的样式码还要再过一道名单：`LoadCitySampleData` 加载的
 `CitySampleBuildingBDF_NamesOnly_PCG`（27 个 Name）。CoreProcess 把名单 JOIN 成串，
