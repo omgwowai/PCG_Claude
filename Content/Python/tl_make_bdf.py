@@ -175,9 +175,11 @@ R["epic_source_before"] = stat_src()
 TL_BDF = {
     "BuildingToken": "TL",
     "VerticalGrammar": "[LV0][LV1][LV2]*[LV3]",
-    "VerticalGrammarStaggered": "[LV0][LV1][LV2]*[LV3]",
+    # Staggered sections sit on top of the main volume, so like every sibling
+    # (CHJ: [LV2][LV2]*[LV3]) they start at an upper storey, not the ground floor.
+    "VerticalGrammarStaggered": "[LV2][LV2]*[LV3]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
-    "MinBldgHeight": 1600.0,     # cm; TL's fixed 4-level stack (was 5.0 m, unconverted)
+    "MinBldgHeight": 1600.0,     # cm; same value as CHF
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings (was 1600.0 -- zero span, EIGHTH CONTRADICTION)
     "RoofData": unreal.Vector4(20.0, 10.0, 20.0, 10.0),   # cm; was 0.2/0.1 metre-scale, NINTH CONTRADICTION
 }
@@ -195,7 +197,9 @@ TL_BDF = {
 # TL_LEVELS table and this script originally specified), which is exactly
 # the shape of value that fails a fit/scale test.
 TL_LEVELS = [
-    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 500.0, "Size": 500.0,
+    # LV0 is the foundation band: 0.5 cm in all 27 sibling styles, and the
+    # same 0.5 the SGD route's RULE_TL_L00 produces in Lvl_TL_Building.
+    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 0.5, "Size": 0.5,
      "F0": "[FC][FS2]+[LC]", "F1": "[FC][FS2]+[LC]", "F2": "[FC][FS2]+[LC]",
      "FLengths": unreal.Vector(300.0, 300.0, 300.0), "IsTopper": False},
     {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 500.0, "Size": 500.0,
@@ -223,32 +227,38 @@ SYM = {"Wall_01": ("W1", False), "Column_01": ("P1", False),
        "CornerInL_01": ("C_IL", False), "CornerInR_01": ("C_IR", False)}
 
 TL_MESH_ROOT = "/Game/Building/TL/A"
+TL_LEVEL_HEIGHT = {r["LevelNumber"]: r["LevelHeight"] for r in TL_LEVELS}
 
-def tl_modules():
-    rows = []
+def tl_modules(level0_rows):
+    """TL's Modules rows.
+
+    The BDF route places each module with its slot origin at the slot's
+    horizontal centre and the level's mid-height, so every sibling style sets
+    PivotOffset = (0, -run_centre, -LevelHeight/2). TL's kit is corner/base
+    pivoted (run along +Y over [0, width], height over [0, LevelHeight]), so
+    its offset is (0, -width/2, -LevelHeight/2). The SGD route
+    (Lvl_TL_Building) does not read these rows.
+
+    Level 0 is CHA's level 0 (`level0_rows`, cloned from the asset), the same
+    choice RULE_TL_L00 makes for the SGD route: the kit authors no foundation.
+    Every sibling's corner grammar also uses C_E for exterior corners, so each
+    TL level gets a C_E row on the same CornerEx mesh as its C_CE row, as CHA
+    does.
+    """
+    rows = [dict(r, BuildingToken="TL") for r in level0_rows]
     ptid = 0
-    # L0 filler. RULE_TL_L00 (Task 4) deliberately keeps CHA's borrowed NY
-    # foundation mesh for the level-0 row (kit only authors levels 1-3), so
-    # this row must not invent a path; it points at TL's own L1 wall mesh
-    # instead (a real mesh that exists), matching the rule's own filler
-    # intent for a bare BDF row that needs *some* real geometry.
-    rows.append({"BuildingToken": "TL", "Level": 0, "Symbol": "FS2", "Size": 200.0,
-                 "Mod_Name": "L0_Filler", "bScalable": True,
-                 "Mesh": "%s/Kit_Bldg_TL_L1_A/Mesh/SM_BLDG_TL_L01_A_Wall_01_N1"
-                         % TL_MESH_ROOT,
-                 "PivotOffset": unreal.Vector(), "MeshForwardAxis": 2.0,
-                 "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
-                 "PtID": ptid})
-    ptid += 1
     for p in spec["parts"]:
         sym, scal = SYM[p["part"]]
+        width = p["width_m"] * 100.0
         mesh_path = "%s/Kit_Bldg_TL_L%d_A/Mesh/%s" % (
             TL_MESH_ROOT, p["level"], p["mesh_name"])
         rows.append({
             "BuildingToken": "TL", "Level": p["level"], "Symbol": sym,
-            "Size": p["width_m"] * 100.0, "Mod_Name": p["mesh_name"],
+            "Size": width, "Mod_Name": p["mesh_name"],
             "bScalable": scal, "Mesh": mesh_path,
-            "PivotOffset": unreal.Vector(), "MeshForwardAxis": 2.0,
+            "PivotOffset": unreal.Vector(0.0, -width / 2.0,
+                                         -TL_LEVEL_HEIGHT[p["level"]] / 2.0),
+            "MeshForwardAxis": 2.0,
             "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
             "PtID": ptid})
         ptid += 1
@@ -256,7 +266,23 @@ def tl_modules():
             rows.append(dict(rows[-1], Symbol="WS1", bScalable=True,
                              Mod_Name=p["mesh_name"] + "_WS", PtID=ptid))
             ptid += 1
+        if sym == "C_CE":
+            rows.append(dict(rows[-1], Symbol="C_E", PtID=ptid))
+            ptid += 1
     return rows
+
+
+def level0_of(d, md, types, token="CHA"):
+    """Every attribute of `token`'s level-0 module rows, as setter-ready dicts."""
+    out = []
+    for pt in d.get_points():
+        if MA.get_string_attribute(pt, md, "BuildingToken") != token:
+            continue
+        if MA.get_integer32_attribute(pt, md, "Level") != 0:
+            continue
+        out.append({nm: getattr(MA, GETTERS[kind])(pt, md, nm)
+                    for nm, kind in types.items()})
+    return out
 
 # ---------- attribute type discovery -------------------------------------
 # CONTRADICTS THE BRIEF: its discover_types() (and this project's earlier BDF
@@ -447,7 +473,13 @@ except Exception:
     pass
 
 _patch_mode = False
-if EAL.does_asset_exist(DEST):
+if args.get("patch_only") and EAL.does_asset_exist(DEST):
+    # Patch DEST in place without trying delete_asset first. A successful
+    # delete would force-delete the asset out from under LoadCitySampleData
+    # (which references it) and null that reference if it is loaded.
+    R["patch_mode"] = True
+    _patch_mode = True
+elif EAL.does_asset_exist(DEST):
     _deleted = EAL.delete_asset(DEST)
     if not _deleted and EAL.does_asset_exist(DEST):
         R["errors"].append(
@@ -511,13 +543,13 @@ if dup and _patch_mode:
     # TL_BDF already holds their corrected values from those rounds; this
     # keeps the patch block self-contained rather than relying on a prior
     # run having already landed them). Levels.Size is likewise re-applied
-    # (idempotent, NINTH CONTRADICTION). Do not re-append rows to
-    # Levels/Modules/Props -- they are already correct from the prior
-    # successful full build, and re-appending here (without the
-    # delete+duplicate reset) would duplicate them.
+    # (idempotent, NINTH CONTRADICTION). TL's Modules rows are replaced
+    # wholesale (old TL rows dropped, fresh ones appended); Props carries no TL
+    # rows and Levels/BDF are patched in place, so nothing is duplicated.
     items = dup.get_editor_property("data").get_editor_property("tagged_data")
     patched_bdf = False
     patched_levels = 0
+    patched_modules = 0
     for it in items:
         tags = [str(t) for t in it.get_editor_property("tags")]
         d = it.get_editor_property("data").get_editor_property("data")
@@ -554,10 +586,12 @@ if dup and _patch_mode:
             # get_name_attribute here, not get_string_attribute.
             pts = list(d.get_points())
             new_pts = []
+            heights = {r["LevelNumber"]: r["LevelHeight"] for r in TL_LEVELS}
             for pt in pts:
                 bt = str(MA.get_name_attribute(pt, md, "BuildingToken"))
                 if bt == "TL":
-                    lh = MA.get_float_attribute(pt, md, "LevelHeight")
+                    lh = heights[MA.get_integer32_attribute(pt, md, "LevelNumber")]
+                    pt = MA.set_float_attribute(pt, md, "LevelHeight", lh)
                     pt = MA.set_float_attribute(pt, md, "Size", lh)
                     patched_levels += 1
                 new_pts.append(pt)
@@ -566,13 +600,26 @@ if dup and _patch_mode:
                                 "patched_levels_size_rows": patched_levels,
                                 "total": len(d.get_points())})
 
-    R["patched"] = patched_bdf and patched_levels == 4
-    if not (patched_bdf and patched_levels == 4):
+        elif "Modules" in tags:
+            # TL's module rows are rebuilt wholesale: drop them, append fresh.
+            types = discover_types(md)
+            kept = [pt for pt in d.get_points()
+                    if MA.get_string_attribute(pt, md, "BuildingToken") != "TL"]
+            fresh = [mk_pt(md, row, types)
+                     for row in tl_modules(level0_of(d, md, types))]
+            d.set_points(kept + fresh)
+            patched_modules = len(fresh)
+            R["groups"].append({"tags": tuple(sorted(tags)),
+                                "replaced_tl_module_rows": patched_modules,
+                                "total": len(d.get_points())})
+
+    R["patched"] = patched_bdf and patched_levels == 4 and patched_modules > 0
+    if not R["patched"]:
         R["errors"].append(
-            "patch_mode: expected to patch 1 BDF row and 4 Levels rows for "
-            "TL, got patched_bdf=%s patched_levels=%d -- DEST may not match "
-            "this script's expectations; aborting the save rather than "
-            "writing a half-patched asset." % (patched_bdf, patched_levels))
+            "patch_mode: expected to patch 1 BDF row, 4 Levels rows and the TL "
+            "Modules rows, got patched_bdf=%s patched_levels=%d "
+            "patched_modules=%d -- aborting the save rather than writing a "
+            "half-patched asset." % (patched_bdf, patched_levels, patched_modules))
     else:
         # NEW FINDING (2026-10-01): in patch_mode, save_loaded_asset(dup)
         # reported no error but the .uasset on disk did NOT get a fresh
@@ -608,7 +655,7 @@ elif dup:
         elif "Levels" in tags:
             new_rows = [dict(r, BuildingToken="TL") for r in TL_LEVELS]
         elif "Modules" in tags:
-            new_rows = tl_modules()
+            new_rows = tl_modules(level0_of(d, md, discover_types(md)))
         else:
             new_rows = []          # Props: phase 1 adds none
 
