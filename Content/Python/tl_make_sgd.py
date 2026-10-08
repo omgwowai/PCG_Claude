@@ -89,14 +89,13 @@ DEST_DIR = "/Game/PCG/DataAssets/Buildings/TL"
 DEST_NAME = "SGD_TL_A"
 DEST_PATH = DEST_DIR + "/" + DEST_NAME
 RULE_MANGLED = "ShapeGrammarRules_42_0CB868434643776AF184F78028144928"
-TL_RULES = {
-    0: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L00",
-    1: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L01",
-    2: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L02",
-    3: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L03",
-}
-TARGET_MAIN_GRAMMAR = "L00, L01, L02, L03"
-TARGET_DESCRIPTION = "TL building - 4 levels, medium facade variant."
+SLOT_SIZE_FIELD = "size"
+LEVELS = 5
+TL_RULES = {i: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L%02d" % i for i in range(LEVELS)}
+# L04 is the cornice topper; L02 repeats to reach the requested height.
+TARGET_MAIN_GRAMMAR = "L00, L01, L02*, L03, L04"
+TARGET_DESCRIPTION = "TL building - brick commercial block, cornice topper."
+SLOT_SIZES_CM = {0: 0.5, 1: 500.0, 2: 300.0, 3: 300.0, 4: 120.0}
 
 
 def read_sgd_fields(sgd_obj, label):
@@ -155,37 +154,35 @@ try:
         created_via = "duplicated_from_" + CHA_SGD_PATH
     R["steps"]["created_via"] = created_via
 
-    # Truncate to the first 4 slots (L00-L03), each a deep copy so mutating
-    # one does not alias another (STC_Slot is a value-type struct; .copy()
-    # matches the pattern already proven safe in the probe).
-    src_slots = asset.get_editor_property("Slots")
-    if len(src_slots) < 4:
-        raise RuntimeError("scaffold has only %d slots, need >=4" % len(src_slots))
-    new_slots = [src_slots[i].copy() for i in range(4)]
-
-    # Sanity: confirm the first 4 scaffold slots really are L00..L03 in
-    # order before rebinding purely by index.
-    got_symbols = [str(s.get_editor_property("symbol")) for s in new_slots]
-    expected_symbols = ["L00", "L01", "L02", "L03"]
+    # One slot per TL level, each a deep copy of a scaffold slot (STC_Slot is a
+    # value-type struct; .copy() keeps them from aliasing). Slots are rebuilt
+    # from SGD_CHA_A's L00..L04 on every run, then renamed, resized and
+    # rebound, so a re-run converges whatever SGD_TL_A held before.
+    src_slots = cha_sgd.get_editor_property("Slots")
+    if len(src_slots) < LEVELS:
+        raise RuntimeError("scaffold has only %d slots, need >=%d" % (len(src_slots), LEVELS))
+    expected_symbols = ["L%02d" % i for i in range(LEVELS)]
+    got_symbols = [str(s.get_editor_property("symbol")) for s in src_slots[:LEVELS]]
     if got_symbols != expected_symbols:
         raise RuntimeError(
-            "scaffold's first 4 slots are %r, expected %r -- refusing to "
+            "scaffold's first %d slots are %r, expected %r -- refusing to "
             "rebind by index against an unexpected slot order"
-            % (got_symbols, expected_symbols)
-        )
+            % (LEVELS, got_symbols, expected_symbols))
+    new_slots = [src_slots[i].copy() for i in range(LEVELS)]
 
-    # Rebind each slot's rule reference to the matching RULE_TL_L0n.
     rebind_report = []
-    for i in range(4):
+    for i in range(LEVELS):
         rule_path = TL_RULES[i]
         rule_obj = EAL.load_asset(rule_path)
         if rule_obj is None:
             raise RuntimeError("could not load %s" % rule_path)
         new_slots[i].set_editor_property(RULE_MANGLED, [rule_obj])
+        new_slots[i].set_editor_property(SLOT_SIZE_FIELD, SLOT_SIZES_CM[i])
         bound_now = new_slots[i].get_editor_property(RULE_MANGLED)
         rebind_report.append({
             "slot_index": i,
             "symbol": got_symbols[i],
+            "size": new_slots[i].get_editor_property(SLOT_SIZE_FIELD),
             "rebound_to": rule_path,
             "in_memory_readback": [b.get_path_name() for b in bound_now],
         })
@@ -200,10 +197,12 @@ try:
     # gate below, same distinction Task 4's review established).
     R["steps"]["in_memory_after_set"] = read_sgd_fields(asset, "SGD_TL_A (in-memory, just mutated)")
 
-    saved_ok = EAL.save_loaded_asset(asset)
+    # save_loaded_asset can report success without writing the package
+    # (measured on BDF_WithTL and RULE_TL_L02/L03); force the write.
+    saved_ok = EAL.save_asset(DEST_PATH, only_if_is_dirty=False)
     R["steps"]["saved_ok"] = bool(saved_ok)
     if not saved_ok:
-        raise RuntimeError("EAL.save_loaded_asset returned falsy for %s" % DEST_PATH)
+        raise RuntimeError("EAL.save_asset returned falsy for %s" % DEST_PATH)
 
     # ---- genuine disk round-trip ----
     pkg = asset.get_outermost()
@@ -240,10 +239,7 @@ try:
         "tl_slot_count": fresh_read["slot_count"],
     }
 
-    expected_binding = {
-        "L00": "RULE_TL_L00", "L01": "RULE_TL_L01",
-        "L02": "RULE_TL_L02", "L03": "RULE_TL_L03",
-    }
+    expected_binding = {"L%02d" % i: "RULE_TL_L%02d" % i for i in range(LEVELS)}
     binding_check = []
     all_bound_ok = True
     for s in fresh_read["slots"]:
@@ -251,19 +247,21 @@ try:
         paths = s["bound_rule_paths"]
         one_binding = (len(paths) == 1)
         bound_name = paths[0].rsplit("/", 1)[-1].split(".")[0] if paths else None
-        ok = one_binding and (bound_name == expected_binding.get(sym))
+        size_ok = abs(s["size"] - SLOT_SIZES_CM[int(sym[1:])]) < 0.01
+        ok = one_binding and (bound_name == expected_binding.get(sym)) and size_ok
         all_bound_ok = all_bound_ok and ok
         binding_check.append({
             "symbol": sym,
             "one_binding": one_binding,
             "bound_rule": bound_name,
             "expected": expected_binding.get(sym),
+            "size": s["size"],
             "ok": ok,
         })
     verdict["binding_check"] = binding_check
     verdict["all_bindings_ok"] = all_bound_ok
     verdict["main_grammar_ok"] = (fresh_read["main_grammar"] == TARGET_MAIN_GRAMMAR)
-    verdict["slot_count_ok"] = (fresh_read["slot_count"] == 4)
+    verdict["slot_count_ok"] = (fresh_read["slot_count"] == LEVELS)
     verdict["overall_ok"] = (
         verdict["all_bindings_ok"] and verdict["main_grammar_ok"]
         and verdict["slot_count_ok"] and fresh_read["use_grammar"] is True

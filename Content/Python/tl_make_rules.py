@@ -1,4 +1,4 @@
-"""tl_make_rules.py -- create RULE_TL_L00..L03 from the kit spec.
+"""tl_make_rules.py -- create RULE_TL_L00..L04 from the kit spec.
 
 ACCESS PATH (measured directly in Task 4, confirmed against RULE_CHA_L00 and
 RULE_CHA_L01 -- see task-4-report.md for the raw export_text() dumps):
@@ -40,9 +40,10 @@ RULE_CHA_L01 -- see task-4-report.md for the raw export_text() dumps):
   script follows the measured, working ground truth (`Y`) rather than the
   mislabeled annotation.
 
-  PivotOffset: per the plan's explicit instruction, TL starts at (0,0,0) for
-  every module -- not CHA's per-module non-zero magnitude -- and Task 6 is
-  where a wrong value would be caught.
+  PivotOffset: (0, -size/2, 0) per module -- see build_module_entry. A zero
+  offset (the first version) shifted every module half its width off its
+  slot: 100 cm gaps between pilasters and entrances, and the run overhanging
+  the corner by half a module.
 
 Because export_text() only serializes fields that differ from the class
 default, the set of fields present varies asset-to-asset (RULE_CHA_L00 has
@@ -61,7 +62,7 @@ writes the grammar field (a same-value round-trip, kept for provenance) and
 leaves ModulesInfos exactly as duplicated from RULE_CHA_L00 -- i.e. it still
 references CHA's borrowed NY foundation mesh, honestly, rather than
 inventing TL-specific foundation content that does not exist. (Ruled
-acceptable in review: Task 3 only built levels 1-3, and GRAMMARS[0] is a pure
+acceptable in review: the kit authors levels 1-4 only, and GRAMMARS[0] is a pure
 filler row, so a borrowed foundation mesh at L00 is an acceptable placeholder
 for a level the kit deliberately does not author.)
 
@@ -81,7 +82,9 @@ loudly instead of quietly losing a module.
 """
 
 import json
+import os
 import re
+import sys
 
 R = {"rules": [], "errors": [], "mesh_check": {}}
 args = mcp_args or {}
@@ -94,28 +97,28 @@ AT = unreal.AssetToolsHelpers.get_asset_tools()
 with open(SPEC, encoding="utf-8") as f:
     spec = json.load(f)
 
+import importlib
+if os.path.dirname(SPEC) not in sys.path:
+    sys.path.insert(0, os.path.dirname(SPEC))
+import kit_common
+importlib.reload(kit_common)
+
 # ---------------------------------------------------------------- mangled names
 GRAMMAR_FIELD = "grammar_10_4003928D40C6099DCA57829F48235D57"
 MODULES_FIELD = "ModulesInfos_38_0EA66FD04214AE8D9F6B83A1B57AC47B"
 
 # ---------------------------------------------------------------- grammar strings
-# From the brief's GRAMMARS dict, taken verbatim.
-GRAMMARS = {
-    0: "[FC][FS2]+[LC]",
-    1: "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
-    2: "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-    3: "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-}
+# A RULE carries one facade grammar; the SGD route uses it for every wall
+# length, so each level takes its F1 grammar (the three-entrance facade). L0
+# is the foundation filler.
+LEVELS = sorted({p["level"] for p in spec["parts"]})
+GRAMMARS = {0: "[FC][FS2]+[LC]"}
+GRAMMARS.update({lv: kit_common.level_grammars(lv)[1] for lv in LEVELS})
 
 # ---------------------------------------------------------------- scaffolds to duplicate
 CHA_BASE = "/CitySamplePCG/PCG/DataAssets/Buildings/CHA"
-SCAFFOLD_CANDIDATES = {
-    0: CHA_BASE + "/RULE_CHA_L00",
-    1: CHA_BASE + "/RULE_CHA_L01",
-    2: CHA_BASE + "/RULE_CHA_L02",
-    3: CHA_BASE + "/RULE_CHA_L03",
-}
-SCAFFOLD_FALLBACK = {3: CHA_BASE + "/RULE_CHA_L02"}
+SCAFFOLD_CANDIDATES = {lv: CHA_BASE + "/RULE_CHA_L%02d" % lv for lv in [0] + LEVELS}
+SCAFFOLD_FALLBACK = {lv: CHA_BASE + "/RULE_CHA_L02" for lv in LEVELS if lv >= 3}
 
 
 # ---------------------------------------------------------------- text-surgery helpers
@@ -190,15 +193,10 @@ def count_top_level_entries(array_inner_text):
 
 
 # ---------------------------------------------------------------- module-array building
-PART_TO_SYMBOL = {
-    "Wall_01": "W1", "Column_01": "P1", "Column_02": "P2",
-    "Entrance_01": "E1", "CornerEx_01": "C_CE", "CornerExL_01": "C_SL",
-    "CornerExR_01": "C_SR", "CornerIn_01": "C_I", "CornerInL_01": "C_IL",
-    "CornerInR_01": "C_IR",
-}
+PART_TO_SYMBOL = kit_common.PART_TO_SYMBOL
 
 # cosmetic only -- matched to CHA's own per-symbol debug colors where the
-# symbol exists there, invented for the one TL-only symbol (P2)
+# symbol exists there
 SYMBOL_COLOR = {
     "W1": (0, 255, 255), "WS1": (0, 255, 255),
     "P1": (241, 0, 255), "P2": (200, 150, 255),
@@ -213,6 +211,10 @@ def mesh_asset_path(level, mesh_name):
 
 
 def build_module_entry(symbol, mesh_path, size_cm, scalable):
+    """One STC_Module entry. The SGD route centres each module on its slot, so
+    PivotOffset moves the mesh's run centre onto that point: TL meshes run over
+    local y in [0, size], hence Y = -size/2 (CHA's meshes run over [-size, 0]
+    and its RULEs carry +size/2). Z stays 0: the slot sits at the storey base."""
     b, g, r = SYMBOL_COLOR.get(symbol, (128, 128, 128))
     fields = []
     fields.append('Mesh_69_ABC2F260431A21DAF912F49032642918="/Script/Engine.StaticMesh\'%s.%s\'"'
@@ -221,10 +223,21 @@ def build_module_entry(symbol, mesh_path, size_cm, scalable):
     if scalable:
         fields.append('Scalable_68_5F7BC934476923AF3C7BBCB6F7239ECF=True')
     fields.append('Size_67_AA4253B1485ED7A89506FCA171AC20BA=%.6f' % size_cm)
-    fields.append('PivotOffset_28_063B0B4741DD9478C20E8E83A4DFF20A=(X=0.000000,Y=0.000000,Z=0.000000)')
+    fields.append('PivotOffset_28_063B0B4741DD9478C20E8E83A4DFF20A=(X=0.000000,Y=%.6f,Z=0.000000)'
+                  % (-size_cm / 2.0))
     fields.append('MeshForwardAxis_35_62B04DFB4A4BA73267F123A1D53AC25F=Y')
     fields.append('DebugColor_83_34BC0D8C4720597367B304B35AAFEE3F=(B=%d,G=%d,R=%d,A=255)' % (b, g, r))
     return "(" + ",".join(fields) + ")"
+
+
+def corner_token_entry(symbol):
+    """The meshless FC / LC entries every CHA rule carries for the corner
+    tokens at each end of the grammar (copied field-for-field from RULE_CHA_L01)."""
+    return ('(Symbol_6_F9FB29564DEA8BEF1EA1DD8AA30C03E3="%s",'
+            'Size_67_AA4253B1485ED7A89506FCA171AC20BA=0.100000,'
+            'GuessPivotOffset_80_DD4DF4EF457AE0DCC42E89ABE8BBB6C2=True,'
+            'MeshForwardAxis_35_62B04DFB4A4BA73267F123A1D53AC25F=Y,'
+            'DebugColor_83_34BC0D8C4720597367B304B35AAFEE3F=(B=128,G=128,R=128,A=255))' % symbol)
 
 
 def build_modules_array_text(level):
@@ -233,6 +246,7 @@ def build_modules_array_text(level):
     missing = []
     unmapped = []
     wall_part = None
+    has_filler = any(p["part"] == "Wall_02" for p in parts)
     for p in parts:
         sym = PART_TO_SYMBOL.get(p["part"])
         if sym is None:
@@ -243,19 +257,22 @@ def build_modules_array_text(level):
         path = mesh_asset_path(level, p["mesh_name"])
         if not EAL.does_asset_exist(path):
             missing.append(path)
-        entries.append(build_module_entry(sym, path, p["width_m"] * 100.0, False))
+        entries.append(build_module_entry(sym, path, p["width_m"] * 100.0,
+                                          sym in kit_common.SCALABLE_SYMBOLS))
         if p["part"] == "Wall_01":
             wall_part = p
     if unmapped:
         raise RuntimeError("unmapped part name(s) with no PART_TO_SYMBOL entry: %s" % sorted(set(unmapped)))
-    if wall_part is not None:
+    if wall_part is not None and not has_filler:
         path = mesh_asset_path(level, wall_part["mesh_name"])
         entries.append(build_module_entry("WS1", path, wall_part["width_m"] * 100.0, True))
+    entries.append(corner_token_entry("FC"))
+    entries.append(corner_token_entry("LC"))
     return "(" + ",".join(entries) + ")", missing, len(entries)
 
 
 # ---------------------------------------------------------------- main
-for level in (0, 1, 2, 3):
+for level in [0] + LEVELS:
     name = "RULE_TL_L%02d" % level
     dest_path = DEST + "/" + name
     rec = {"name": name, "dest_path": dest_path}
@@ -313,10 +330,12 @@ for level in (0, 1, 2, 3):
         else:
             rec["module_count_in_memory"] = 0
 
-        saved_ok = EAL.save_loaded_asset(asset)
+        # save_loaded_asset can report success without writing the package
+        # (measured on BDF_WithTL and RULE_TL_L02/L03); force the write.
+        saved_ok = EAL.save_asset(dest_path, only_if_is_dirty=False)
         rec["saved_ok"] = bool(saved_ok)
         if not saved_ok:
-            raise RuntimeError("EAL.save_loaded_asset returned falsy for %s" % dest_path)
+            raise RuntimeError("EAL.save_asset returned falsy for %s" % dest_path)
 
         # ---- genuine disk round-trip: force the package to reload from the
         # .uasset that was just written, then re-read the rule struct from

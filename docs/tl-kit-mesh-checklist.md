@@ -1,5 +1,8 @@
 # TL 模块网格清单（重做美术用）
 
+> **状态（2026-10-08）：已按本清单重做完成**，见文末「7. 完成情况」。
+> 下面第 0–6 节是重做前写的清单原文，保留作为依据。
+
 日期：2026-10-08。数据全部来自实测：
 - 现有 TL 网格：`Content/Python/tl_probe_mesh_anatomy.py` 读出的顶点数、包围盒和材质槽。
 - CHA 参照：`Content/Building/HDA/Bldg/BDF/CHA_primary.bdf` 源数据，以及 CHA 网格的实测包围盒。
@@ -114,3 +117,50 @@ TL 照抄了 CHA 的写法，结果中段宽度不一致：
 - **角件**：外角做成 L 形，两个面各 1.5 m（参照 CHA 的 `CornerEx`：x −150…+28，y −28…+150）；内角参照 CHA 的 `CornerIn`：x −148…+150，y −148…+150。角件的朝向同样要先用试件验证。
 - **材质槽**：至少分 3 个——石材墙面、玻璃、窗框金属。可以直接复用 CitySample 现成材质（CHA 用的槽名是 `Bldg_block_limestone_beige` / `Bldg_glass` / `Bldg_paintedMetal_black`），不必画贴图。
 - **验收**：做完重跑 `tl_probe_mesh_anatomy.py`，确认顶点数和材质槽确实变了，再跑 `tl_acceptance_regen.py` + `tl_verify_task10_read.py`，以及 `tl_city_joints.py` 检查拼缝。
+
+## 7. 完成情况（2026-10-08）
+
+**风格**：红砖商业楼。石材底座和勒脚，底层是橱窗和内凹门洞（带门楣、拱心石、雨棚），上层是带窗台和窗楣的窗开间，入口上方是石材边框的宽窗（L2 带小阳台栏杆），顶层有檐带，最上面是带齿饰的檐口和压顶。材质直接复用 CitySample 现成的 4 种：`MI_Bldg_BrickOffset_Red`（砖）、`MI_Bldg_Block_Limestone_Beige`（石材）、`MI_Bldg_Glass`（玻璃）、`MI_Bldg_PaintedMetal_Black`（窗框）。
+
+**网格**：共 40 件，每件 4 个材质槽，顶点数在 16 到 669 之间（原来全部是 24 个顶点）。
+
+| 层 | 件数 | 变化 |
+|---|---|---|
+| L1 底商层（5.0 m） | 10 | 新增 `Wall_02` 纯墙补长件 |
+| L2 标准层（3.0 m） | 11 | 新增 `Wall_02`；E1 由 4.75 m 改为 3.25 m |
+| L3 顶层（3.0 m） | 11 | 新增 `Wall_02`；E1 由 4.75 m 改为 3.25 m |
+| **L4 檐口层（1.2 m）** | **8** | 整层新增：W1、P1，以及 6 个角件 |
+
+**语法**：L1–L4 共用一套横向语法，定义在 `Tools/tl_kit/kit_common.py`。L4 把 E1 换成 W1，其余不变。
+
+- F1：`[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]`
+- 竖向语法（BDF 路线）：`[LV0][LV1][LV2]*[LV3][LV4]`
+- 单栋路线的 SGD 主语法：`L00, L01, L02*, L03, L04`
+- WS1 现在对应各层的 `Wall_02`（可拉伸），W1 只放固定宽度的窗开间。
+
+**实测结果**：
+
+| 指标 | 单栋（`Lvl_TL_Building`） | 城市（`PCG_3_3_1_Buildings`） |
+|---|---|---|
+| TL 实例 / TL 网格种类 | 992 / 14 | 6,872 / 22 |
+| 上下层对位：壁柱对壁柱 | 100%（208/208，16/16，16/16） | 100%（822/822，119/119，119/119） |
+| 上下层对位：窗对入口 | 100%（156/156，12/12） | 100%（663/663，96/96） |
+| 立面连续性 | 一整面从 −2050 连续到 +2050 cm，无缝 | 91.8% 的端点与相邻模块相接（CHA 为 83.7%） |
+| 层高 | L1→L2 500 cm，标准层每层 300 cm | 同左 |
+
+另外，3×3 交付区回归检查通过（41 个实例）。
+
+**修好的一个关键问题**：单栋路线的 RULE 中，`PivotOffset` 原来是 (0,0,0)，导致每个模块偏离槽位半个模块宽，壁柱和入口之间出现 100 cm 的缝，建筑转角处也开口。现在改为 `(0, −宽/2, 0)`，并补上了 CHA 规则里都有的 `FC`/`LC` 空模块。
+
+**生成和更新流程**：
+1. `Tools/tl_kit/build_tl_kit.py`：Blender 无头运行，生成 FBX；加 `--preview` 会额外渲染一张转角预览图。
+2. `tl_kit_rebuild_meshes.py`：把网格原地替换进 UE，资产路径和引用都不变。
+3. `tl_make_rules.py` → `tl_make_sgd.py` → `tl_make_bdf.py` → `tl_register.py`：重建规则和数据。
+4. 验收：`tl_acceptance_regen.py` + `tl_verify_task10_read.py`（单栋），`tl_verify_city.py` + `tl_verify_city_read.py`（城市），以及 `tl_city_alignment.py`、`tl_city_joints.py`。
+
+预览图：`docs/img/tl_kit_preview.jpg`（Blender）、`docs/img/tl_kit_lvl_corner.jpg`（单栋转角）、`docs/img/tl_kit_city.jpg`（城市中）。
+
+**还没做的**：
+- 角件的左右半件（C_SL/C_SR/C_IL/C_IR）只做了简单版本，城市实测中没有被调用。
+- LV0 地基仍沿用 NY 的。
+- 没有招牌、空调机等立面道具。
