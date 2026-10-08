@@ -5,13 +5,12 @@ import kit_common
 
 SPEC = os.path.join(os.path.dirname(__file__), "tl_kit_spec.json")
 
-# CHA dimensions TL aligns to (spec 2.8). Widths in meters, heights in meters.
-CHA_L1_PARTS = {"Wall_01": 3.25, "Column_01": 1.25, "Entrance_01": 3.25,
-                "CornerEx_01": 1.5, "CornerExL_01": 1.5, "CornerExR_01": 1.5,
-                "CornerIn_01": 1.5, "CornerInL_01": 1.5, "CornerInR_01": 1.5}
-CHA_L2_PARTS = dict(CHA_L1_PARTS)
-CHA_L2_PARTS["Entrance_01"] = 4.75
-CHA_L2_PARTS["Column_02"] = 0.25
+KNOWN_KINDS = {
+    "shopfront", "filler", "entrance", "pilaster", "pilaster_thin",
+    "window", "window_top", "feature_window", "feature_window_top",
+    "corner_ex", "corner_in", "corner_half",
+    "cornice", "cornice_pier", "cornice_corner_ex", "cornice_corner_in", "cornice_half",
+}
 
 
 def load():
@@ -19,72 +18,72 @@ def load():
         return json.load(f)
 
 
-def test_covers_three_levels():
-    spec = load()
-    levels = {p["level"] for p in spec["parts"]}
-    assert levels == {1, 2, 3}, levels
+def parts_at(spec, level):
+    return {p["part"]: p for p in spec["parts"] if p["level"] == level}
 
 
-def test_level1_heights_and_widths():
-    spec = load()
-    l1 = [p for p in spec["parts"] if p["level"] == 1]
-    for p in l1:
-        assert p["height_m"] == 5.0, p
-        assert p["width_m"] == CHA_L1_PARTS[p["part"]], p
+def test_covers_four_levels():
+    assert {p["level"] for p in load()["parts"]} == {1, 2, 3, 4}
 
 
-def test_level2_3_heights_and_widths():
-    spec = load()
-    for lvl, want in ((2, CHA_L2_PARTS), (3, CHA_L2_PARTS)):
-        for p in [x for x in spec["parts"] if x["level"] == lvl]:
-            assert p["height_m"] == 3.0, p
-            assert p["width_m"] == want[p["part"]], p
-
-
-def test_每_part_has_a_material_and_pivot():
+def test_heights_follow_the_level_table():
     spec = load()
     for p in spec["parts"]:
-        assert p["material"], p
-        assert "pivot_z_m" in p, p
+        assert p["height_m"] == spec["levels"][str(p["level"])]["height_m"], p
+
+
+def test_cha_aligned_heights():
+    spec = load()
+    assert [spec["levels"][k]["height_m"] for k in ("1", "2", "3")] == [5.0, 3.0, 3.0]
+
+
+def test_bays_line_up_vertically():
+    # One horizontal grammar for every level only aligns the bays if each
+    # symbol has the same width on every level.
+    spec = load()
+    for part in ("Wall_01", "Column_01", "CornerEx_01", "CornerIn_01"):
+        widths = {parts_at(spec, lv)[part]["width_m"] for lv in (1, 2, 3, 4)}
+        assert len(widths) == 1, (part, widths)
+    widths = {parts_at(spec, lv)["Entrance_01"]["width_m"] for lv in (1, 2, 3)}
+    assert widths == {parts_at(spec, 1)["Wall_01"]["width_m"]}, widths
+
+
+def test_flengths_match_the_f1_and_f2_grammars():
+    spec = load()
+    w = {kit_common.PART_TO_SYMBOL[p]: v["width_m"] * 100 for p, v in parts_at(spec, 1).items()}
+    corners = 2 * w["C_CE"]
+    for grammar, want in zip(kit_common.level_grammars(1), kit_common.FLENGTHS_CM):
+        tokens = grammar.replace("]+", "]").replace("[", " ").replace("]", " ").replace(",", " ").split()
+        total = corners + sum(w[t] for t in tokens if t not in ("FC", "LC"))
+        assert abs(total - want) < 0.01, (grammar, total, want)
+
+
+def test_every_level_has_its_symbols():
+    spec = load()
+    for lv in (1, 2, 3, 4):
+        syms = {kit_common.PART_TO_SYMBOL[p] for p in parts_at(spec, lv)}
+        needed = {"W1", "P1", "C_CE", "C_I"}
+        if lv < 4:
+            needed |= {"E1", "WS1"}
+        assert needed <= syms, (lv, needed - syms)
+
+
+def test_kinds_are_known_and_materials_declared():
+    spec = load()
+    assert set(spec["materials"]) == {"TL_Brick", "TL_Stone", "TL_Glass", "TL_Metal"}
+    for p in spec["parts"]:
+        assert p["kind"] in KNOWN_KINDS, p
+        assert p["part"] in kit_common.PART_TO_SYMBOL, p
 
 
 def test_names_follow_the_convention():
-    # NOTE: the plan brief's original assertion here was
-    # `mesh_name.endswith("_01_N1")` for every part. That is wrong: real,
-    # on-disk CHA assets (e.g.
-    # Content/Building/CH/A/Kit_Bldg_CHA_L2_A/Mesh/SM_BLDG_CHA_L02_A_Column_02_N1.uasset)
-    # prove the mesh name embeds the PART's own numeric suffix (Column_01 ->
-    # "..._Column_01_N1", Column_02 -> "..._Column_02_N1"), not a fixed
-    # "_01". The TL spec's Column_02 parts correctly follow that real
-    # convention, so this test's blanket "_01_N1" check is the defect (it
-    # would fail against genuine CHA data too) and is corrected here to
-    # check against each part's own suffix instead of hardcoding "01".
-    spec = load()
-    for p in spec["parts"]:
-        assert p["mesh_name"].startswith("SM_BLDG_TL_L"), p
-        assert p["mesh_name"].endswith(p["part"] + "_N1"), p
+    for p in load()["parts"]:
+        assert p["mesh_name"] == "SM_BLDG_TL_L%02d_A_%s_N1" % (p["level"], p["part"]), p
 
 
 def test_part_count_matches_expected():
-    # Guards the "fail loudly on a short/truncated spec" property: if the
-    # spec ever gains or loses a part without kit_common.EXPECTED_PART_COUNT
-    # being updated deliberately, this test (and build_tl_kit.py's own
-    # runtime check) catches it instead of silently building a partial or
-    # oversized kit.
-    spec = load()
-    assert len(spec["parts"]) == kit_common.EXPECTED_PART_COUNT, len(spec["parts"])
+    assert len(load()["parts"]) == kit_common.EXPECTED_PART_COUNT
 
 
 def test_declared_lods_match_what_the_build_script_produces():
-    # Reviewer finding on Task 2: tl_kit_spec.json declared "lods": [0, 1]
-    # while build_tl_kit.py only ever builds/exports LOD0 (the "lod"
-    # parameter was dropped from build_part() because both its branches
-    # produced identical geometry). That drift was invisible because nothing
-    # in this suite checked the "lods" field against reality -- a Task 3
-    # importer trusting "lods": [0, 1] would go looking for 29 "_LOD1" FBX
-    # files that were never produced. This test pins the spec's declared
-    # LOD set to kit_common.LODS_PRODUCED, the single source of truth for
-    # what build_tl_kit.py actually builds, so the two cannot drift apart
-    # silently again.
-    spec = load()
-    assert spec["lods"] == kit_common.LODS_PRODUCED, spec["lods"]
+    assert load()["lods"] == kit_common.LODS_PRODUCED

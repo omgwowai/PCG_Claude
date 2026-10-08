@@ -16,8 +16,8 @@
 #   * Every one of the 27 existing styles' LV0 row uses the identical corner
 #     profile CornerModuleSymbol=C_E, CornerSize=40.0, WallContribution=200.0,
 #     MinWidthWorstCase=280.0 -- a universal convention, not CHA-specific.
-#     TL's LV0 row must match it; TL's own LV1-LV3 profile (C_CE/150/650/950,
-#     mirroring CHA's LV1-LV3 and Task 7's BDF group data) is used for LV1-LV3.
+#     TL's LV0 row must match it; TL's LV1-LV4 use its own profile
+#     (C_CE/150/650/950, mirroring CHA's upper levels). LV4 is the topper.
 #   * The style whitelist consumed by the city stage is not a literal string
 #     on any node, and it is not `Assign_CitySampleBuildings`' own
 #     `BuildingsStyles` user parameter default either: `PCG_3_3_1_Buildings`
@@ -31,8 +31,8 @@
 #     settings property holding the data asset is named "asset", not
 #     "data_asset".
 #
-# Idempotent: every edit checks for TL's presence first and is a no-op if
-# already registered. Safe to re-run.
+# Idempotent: every edit checks the current state first and is a no-op when
+# it already matches. Safe to re-run.
 
 import json
 
@@ -90,49 +90,42 @@ except Exception as e:
 
 dt = None
 
-# ---------- 2. DT_Bldg_LevelMinWidth: add TL's LV0-LV3 rows -----------------
+# ---------- 2. DT_Bldg_LevelMinWidth: TL's per-level rows ------------------
+# TL_LV0..TL_LV4. The table is rewritten to exactly these TL rows on every run
+# (other styles' rows are kept verbatim), so a level added to the kit lands
+# here without a manual step. Not read by the 18-stage city; kept for
+# Filter_Footprints_for_bldgs.
+TL_LEVEL_ROWS = [
+    ("TL_LV0", "LV0", 0, "[FC][FS2]+[LC]", "False", "C_E", 40.0, 200.0, 280.0),
+    ("TL_LV1", "LV1", 1, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV2", "LV2", 2, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV3", "LV3", 3, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV4", "LV4", 4, "[FC][WS1][W1]+[LC]", "True", "C_CE", 150.0, 650.0, 950.0),
+]
 try:
     dt2 = EAL.load_asset(DT_LVL)
     before_names2 = [str(n) for n in dt2.get_row_names()]
-    before_count2 = len(before_names2)
-    tl_rows_already = [n for n in before_names2 if n.startswith("TL_")]
-    if tl_rows_already:
-        note("DT_Bldg_LevelMinWidth", action="already has TL rows, skipped",
-             tl_rows=tl_rows_already, row_count=before_count2)
+    want = [r[0] for r in TL_LEVEL_ROWS]
+    if sorted(n for n in before_names2 if n.startswith("TL_")) == sorted(want):
+        note("DT_Bldg_LevelMinWidth", action="TL rows already present, skipped",
+             row_count=len(before_names2))
     else:
-        full_csv2 = dt2.export_to_csv_string()
-        if not full_csv2.endswith("\n"):
-            full_csv2 += "\n"
-        # LV0 uses the universal LV0 corner profile shared by all 27 existing
-        # styles (C_E/40/200/280); LV1-LV3 use TL's own profile, matching
-        # CHA's LV1-LV3 and Task 7's BDF group Levels data (C_CE/150/650/950).
-        new_rows = (
-            'TL_LV0,"TL","LV0","0","[FC][FS2]+[LC]","False","C_E","40.000000","200.000000","280.000000"\n'
-            'TL_LV1,"TL","LV1","1","[FC][WS1][W1]+[LC]","False","C_CE","150.000000","650.000000","950.000000"\n'
-            'TL_LV2,"TL","LV2","2","[FC][WS1][W1]+[LC]","False","C_CE","150.000000","650.000000","950.000000"\n'
-            'TL_LV3,"TL","LV3","3","[FC][WS1][W1]+[LC]","False","C_CE","150.000000","650.000000","950.000000"\n'
-        )
-        combined2 = full_csv2 + new_rows
-        fill_ok2 = dt2.fill_from_csv_string(combined2)
+        lines = dt2.export_to_csv_string().splitlines()
+        kept = [l for l in lines if not l.startswith("TL_")]
+        new_rows = ['%s,"TL","%s","%d","%s","%s","%s","%f","%f","%f"' % r for r in TL_LEVEL_ROWS]
+        fill_ok2 = dt2.fill_from_csv_string("\n".join(kept + new_rows) + "\n")
         after_names2 = [str(n) for n in dt2.get_row_names()]
-        after_count2 = len(after_names2)
-        rows_lost2 = [n for n in before_names2 if n not in after_names2]
-        rows_gained2 = [n for n in after_names2 if n not in before_names2]
-        note("DT_Bldg_LevelMinWidth",
-             action="appended TL LV0-LV3 rows",
+        others_before = [n for n in before_names2 if not n.startswith("TL_")]
+        rows_lost2 = [n for n in others_before if n not in after_names2]
+        note("DT_Bldg_LevelMinWidth", action="rewrote TL rows",
              fill_from_csv_string_return=bool(fill_ok2),
-             row_count_before=before_count2,
-             row_count_after=after_count2,
-             rows_lost=rows_lost2,
-             rows_gained=rows_gained2,
-             csv_fed=new_rows)
-        if rows_lost2 or len(rows_gained2) != 4:
-            R["errors"].append(
-                "DT_Bldg_LevelMinWidth: fill produced unexpected result "
-                "(rows_lost=%s, rows_gained=%s)" % (rows_lost2, rows_gained2))
-        else:
-            if not EAL.save_loaded_asset(dt2):
-                R["errors"].append("DT_Bldg_LevelMinWidth: save_loaded_asset returned False")
+             row_count_before=len(before_names2), row_count_after=len(after_names2),
+             rows_lost=rows_lost2, tl_rows=sorted(n for n in after_names2 if n.startswith("TL_")))
+        if rows_lost2 or sorted(n for n in after_names2 if n.startswith("TL_")) != sorted(want):
+            R["errors"].append("DT_Bldg_LevelMinWidth: fill produced unexpected result "
+                               "(rows_lost=%s)" % rows_lost2)
+        elif not EAL.save_loaded_asset(dt2):
+            R["errors"].append("DT_Bldg_LevelMinWidth: save_loaded_asset returned False")
 except Exception as e:
     R["errors"].append("DT_Bldg_LevelMinWidth: %s: %s" % (type(e).__name__, e))
 

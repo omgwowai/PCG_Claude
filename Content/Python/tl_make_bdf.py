@@ -83,6 +83,14 @@ MA = unreal.PCGMetadataAccessorHelpers
 with open(SPEC, encoding="utf-8") as f:
     spec = json.load(f)
 
+import importlib
+import sys
+_kit_dir = os.path.join(os.path.dirname(SPEC))
+if _kit_dir not in sys.path:
+    sys.path.insert(0, _kit_dir)
+import kit_common
+importlib.reload(kit_common)
+
 # ---------- record Epic's source stat BEFORE doing anything --------------
 def stat_src():
     st = os.stat(SRC_DISK_PATH)
@@ -121,52 +129,36 @@ R["epic_source_before"] = stat_src()
 # again; see migrated-citysample-library.md §3.2 for the root cause.
 TL_BDF = {
     "BuildingToken": "TL",
-    "VerticalGrammar": "[LV0][LV1][LV2]*[LV3]",
+    # LV4 is the cornice/parapet topper (IsTopper), ending the stack the way
+    # CHJ ends on its LV3 topper and CHA on LV20.
+    "VerticalGrammar": "[LV0][LV1][LV2]*[LV3][LV4]",
     # Staggered sections sit on top of the main volume, so like every sibling
     # (CHJ: [LV2][LV2]*[LV3]) they start at an upper storey, not the ground floor.
-    "VerticalGrammarStaggered": "[LV2][LV2]*[LV3]",
+    "VerticalGrammarStaggered": "[LV2][LV2]*[LV3][LV4]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
     "MinBldgHeight": 1600.0,     # cm; same value as CHF
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings
     "RoofData": unreal.Vector4(20.0, 10.0, 20.0, 10.0),   # cm
 }
 
-# level -> the 3 facade variants (BDF F0/F1/F2) and their required length in cm.
-# CHA's own values are the template (spec 2.6 mapping applied). LevelHeight
-# is in centimetres, matching every sibling style (CHA's LV1 reads 500.0).
-#
-# Size mirrors LevelHeight per row, confirmed live against CHA (LV1:
-# LevelHeight=500.0, Size=500.0) and CHF (LV1: LevelHeight=550.0, Size=550.0);
-# every working sibling's Size equals its own LevelHeight.
-TL_LEVELS = [
-    # LV0 is the foundation band: 0.5 cm in all 27 sibling styles, and the
-    # same 0.5 the SGD route's RULE_TL_L00 produces in Lvl_TL_Building.
-    {"LevelNumber": 0, "LevelToken": "LV0", "LevelHeight": 0.5, "Size": 0.5,
-     "F0": "[FC][FS2]+[LC]", "F1": "[FC][FS2]+[LC]", "F2": "[FC][FS2]+[LC]",
-     "FLengths": unreal.Vector(300.0, 300.0, 300.0), "IsTopper": False},
-    {"LevelNumber": 1, "LevelToken": "LV1", "LevelHeight": 500.0, "Size": 500.0,
-     "F0": "[FC][WS1][W1]+[LC]",
-     "F1": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
-     "F2": "[FC][WS1][W1]+[W1,P1][E1][P1][E1][P1][E1][P1,W1][E1][P1][E1][P1][E1][P1,W1][WS1][W1]+[LC]",
-     "FLengths": unreal.Vector(950.0, 3725.0, 5400.0), "IsTopper": False},
-    {"LevelNumber": 2, "LevelToken": "LV2", "LevelHeight": 300.0, "Size": 300.0,
-     "F0": "[FC][WS1][W1]+[LC]",
-     "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-     "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-     "FLengths": unreal.Vector(950.0, 3925.0, 5800.0), "IsTopper": False},
-    {"LevelNumber": 3, "LevelToken": "LV3", "LevelHeight": 300.0, "Size": 300.0,
-     "F0": "[FC][WS1][W1]+[LC]",
-     "F1": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-     "F2": "[FC][WS1][W1]+[W1,P1][E1][E1][E1][P1,W1][][E1][E1][E1][P1,W1][WS1][W1]+[LC]",
-     "FLengths": unreal.Vector(950.0, 3925.0, 5800.0), "IsTopper": False},
-]
+# Levels rows. Size mirrors LevelHeight (every sibling: CHA LV1 500/500, CHF
+# LV1 550/550). LV1-LV4 share one set of horizontal grammars from
+# Tools/tl_kit/kit_common.py, which is what lines the bays up vertically.
+def _level_row(n, height_cm, topper):
+    if n == 0:
+        f0 = f1 = f2 = "[FC][FS2]+[LC]"
+        flen = unreal.Vector(300.0, 300.0, 300.0)
+    else:
+        f0, f1, f2 = kit_common.level_grammars(n)
+        flen = unreal.Vector(*kit_common.FLENGTHS_CM)
+    return {"LevelNumber": n, "LevelToken": "LV%d" % n, "LevelHeight": height_cm,
+            "Size": height_cm, "F": f0, "F0": f0, "F1": f1, "F2": f2,
+            "FLengths": flen, "IsTopper": topper}
 
-# symbol -> (kit part, scalable); mirrors CHA's symbol set
-SYM = {"Wall_01": ("W1", False), "Column_01": ("P1", False),
-       "Column_02": ("P2", False), "Entrance_01": ("E1", False),
-       "CornerEx_01": ("C_CE", False), "CornerExL_01": ("C_SL", False),
-       "CornerExR_01": ("C_SR", False), "CornerIn_01": ("C_I", False),
-       "CornerInL_01": ("C_IL", False), "CornerInR_01": ("C_IR", False)}
+
+TL_LEVELS = [_level_row(0, 0.5, False)] + [
+    _level_row(int(k), v["height_m"] * 100.0, int(k) == max(int(x) for x in spec["levels"]))
+    for k, v in sorted(spec["levels"].items(), key=lambda kv: int(kv[0]))]
 
 TL_MESH_ROOT = "/Game/Building/TL/A"
 TL_LEVEL_HEIGHT = {r["LevelNumber"]: r["LevelHeight"] for r in TL_LEVELS}
@@ -183,28 +175,29 @@ def tl_modules(level0_rows):
 
     Level 0 is CHA's level 0 (`level0_rows`, cloned from the asset), the same
     choice RULE_TL_L00 makes for the SGD route: the kit authors no foundation.
-    Every sibling's corner grammar also uses C_E for exterior corners, so each
-    TL level gets a C_E row on the same CornerEx mesh as its C_CE row, as CHA
-    does.
+    Each level's exterior corners use C_E, so a C_E row is added on the same
+    CornerEx mesh as its C_CE row, as CHA does. WS1 is the level's Wall_02
+    filler; a level without one (the LV4 cornice) stretches its Wall_01.
     """
     rows = [dict(r, BuildingToken="TL") for r in level0_rows]
     ptid = 0
+    levels_with_filler = {p["level"] for p in spec["parts"] if p["part"] == "Wall_02"}
     for p in spec["parts"]:
-        sym, scal = SYM[p["part"]]
+        sym = kit_common.PART_TO_SYMBOL[p["part"]]
         width = p["width_m"] * 100.0
         mesh_path = "%s/Kit_Bldg_TL_L%d_A/Mesh/%s" % (
             TL_MESH_ROOT, p["level"], p["mesh_name"])
         rows.append({
             "BuildingToken": "TL", "Level": p["level"], "Symbol": sym,
             "Size": width, "Mod_Name": p["mesh_name"],
-            "bScalable": scal, "Mesh": mesh_path,
+            "bScalable": sym in kit_common.SCALABLE_SYMBOLS, "Mesh": mesh_path,
             "PivotOffset": unreal.Vector(0.0, -width / 2.0,
                                          -TL_LEVEL_HEIGHT[p["level"]] / 2.0),
             "MeshForwardAxis": 2.0,
             "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
             "PtID": ptid})
         ptid += 1
-        if p["part"] == "Wall_01":      # the scalable filler per level
+        if sym == "W1" and p["level"] not in levels_with_filler:
             rows.append(dict(rows[-1], Symbol="WS1", bScalable=True,
                              Mod_Name=p["mesh_name"] + "_WS", PtID=ptid))
             ptid += 1
@@ -515,24 +508,17 @@ if dup and _patch_mode:
                                 "total": len(d.get_points())})
 
         elif "Levels" in tags:
-            # Levels.BuildingToken is NAME-typed (not String -- see the
-            # dual-getter proof in the verify block / levels_lh checks
-            # elsewhere in this script), so TL rows must be matched with
-            # get_name_attribute here, not get_string_attribute.
-            pts = list(d.get_points())
-            new_pts = []
-            heights = {r["LevelNumber"]: r["LevelHeight"] for r in TL_LEVELS}
-            for pt in pts:
-                bt = str(MA.get_name_attribute(pt, md, "BuildingToken"))
-                if bt == "TL":
-                    lh = heights[MA.get_integer32_attribute(pt, md, "LevelNumber")]
-                    pt = MA.set_float_attribute(pt, md, "LevelHeight", lh)
-                    pt = MA.set_float_attribute(pt, md, "Size", lh)
-                    patched_levels += 1
-                new_pts.append(pt)
-            d.set_points(new_pts)
+            # TL's Levels rows are rebuilt wholesale from TL_LEVELS, so adding
+            # or removing a level needs no other change. Levels.BuildingToken
+            # is NAME-typed, so TL rows are matched with get_name_attribute.
+            types = discover_types(md)
+            kept = [pt for pt in d.get_points()
+                    if str(MA.get_name_attribute(pt, md, "BuildingToken")) != "TL"]
+            fresh = [mk_pt(md, dict(r, BuildingToken="TL"), types) for r in TL_LEVELS]
+            d.set_points(kept + fresh)
+            patched_levels = len(fresh)
             R["groups"].append({"tags": tuple(sorted(tags)),
-                                "patched_levels_size_rows": patched_levels,
+                                "replaced_tl_level_rows": patched_levels,
                                 "total": len(d.get_points())})
 
         elif "Modules" in tags:
@@ -548,13 +534,13 @@ if dup and _patch_mode:
                                 "replaced_tl_module_rows": patched_modules,
                                 "total": len(d.get_points())})
 
-    R["patched"] = patched_bdf and patched_levels == 4 and patched_modules > 0
+    R["patched"] = patched_bdf and patched_levels == len(TL_LEVELS) and patched_modules > 0
     if not R["patched"]:
         R["errors"].append(
-            "patch_mode: expected to patch 1 BDF row, 4 Levels rows and the TL "
+            "patch_mode: expected to patch 1 BDF row, %d Levels rows and the TL "
             "Modules rows, got patched_bdf=%s patched_levels=%d "
             "patched_modules=%d -- aborting the save rather than writing a "
-            "half-patched asset." % (patched_bdf, patched_levels, patched_modules))
+            "half-patched asset." % (len(TL_LEVELS), patched_bdf, patched_levels, patched_modules))
     else:
         # NEW FINDING (2026-10-01): in patch_mode, save_loaded_asset(dup)
         # reported no error but the .uasset on disk did NOT get a fresh
