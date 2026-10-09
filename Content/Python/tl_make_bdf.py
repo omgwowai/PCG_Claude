@@ -223,71 +223,79 @@ def tl_props():
     def mod(level, part):
         return "SM_BLDG_TL_L%02d_A_%s_N1" % (level, part)
 
-    # A shopfront bay: a fascia sign over the glass and one wall lamp at each
-    # end, so a run of bays reads as a continuous shopfront.
+    # Orientation (read off the prop meshes and checked with test actors in
+    # Lvl_TL_Showcase): the lamp, awning, AC unit and hose outlet mount at
+    # their local y = 0 and project along +Y, so yaw -90 turns them out of a TL
+    # facade (+X). The blade signs (Sign_B01 / Sign_E01) mount at x = 0 and
+    # project along +X, so they keep yaw 0. Rotations are (pitch, yaw, roll).
+    OUT = (0, -90, 0)
+    BLADE = (0, 0, 0)
     w = 325.0
-    add(mod(1, "Wall_01"), _prop(
-        "Group_Wall_1", "Signage", 70, 10, "SignShort", "A",
-        SIGNS + "SM_BLDG_Prop_BA_Sign_E01_N1",
-        ((5.0, w * 0.5, 500.0 - 120.0), (0, 0, 0), (1, 1, 1))))
-    for y in (45.0, w - 45.0):
-        add(mod(1, "Wall_01"), _prop(
-            "Group_Wall_2", "Signage", 55, 10, "Wall", "A",
-            LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
-            ((6.0, y, 500.0 - 170.0), (0, 0, 90), (1, 1, 1))))
 
-    # An entrance: a marquee awning projecting over the door, a sign above it
-    # and a lamp beside it, so a doorway does not read as another shopfront.
-    add(mod(1, "Entrance_01"), _prop(
-        "Group_Door_1", "Signage", 80, 10, "Awning", "A",
+    # A shopfront bay: an awning over the glass, under the stone fascia, and a
+    # short blade sign at the bay's edge.
+    add(mod(1, "Wall_01"), _prop(
+        "Group_Wall_1", "Signage", 70, 10, "Awning", "A",
         SIGNS + "SM_BLDG_Prop_BA_Awning_A01_N1",
-        ((3.5, w * 0.5, 400.0), (0, 0, 90), (0.6, 0.6, 0.6))))
+        ((2.0, w * 0.5, 355.0), OUT, (0.9, 0.9, 0.9))))
+    add(mod(1, "Wall_01"), _prop(
+        "Group_Wall_2", "Signage", 50, 10, "SignShort", "A",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_E01_N1",
+        ((10.0, 22.0, 380.0), BLADE, (1, 1, 1))))
+
+    # An entrance (the kit already models its canopy): a lamp on each jamb and a
+    # blade sign in the fascia above the canopy.
+    for y in (14.0, w - 14.0):
+        add(mod(1, "Entrance_01"), _prop(
+            "Group_Door_1", "Signage", 75, 10, "Wall", "A",
+            LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
+            ((1.0, y, 255.0), OUT, (1, 1, 1))))
     add(mod(1, "Entrance_01"), _prop(
         "Group_Door_2", "Signage", 85, 10, "Sign", "E",
         SIGNS + "SM_BLDG_Prop_BA_Sign_E01_N1",
-        ((5.0, w * 0.5, 500.0), (0, 0, 0), (1, 1, 1))))
-    add(mod(1, "Entrance_01"), _prop(
-        "Group_Door_3", "Signage", 60, 10, "Wall", "A",
-        LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
-        ((6.0, w - 50.0, 385.0), (0, 0, 90), (1, 1, 1))))
+        ((10.0, 40.0, 380.0), BLADE, (1, 1, 1))))
 
-    # Pilasters: a lamp head under the shopfront cornice, and less often a small
-    # sign plate, so a run of bays gets vertical accents between the glass.
+    # Pilasters: a lamp on the pilaster face, and less often a tall blade sign
+    # in the fascia band, so a run of bays gets vertical accents.
     pil = 125.0
     add(mod(1, "Column_01"), _prop(
         "Group_pillar_1", "Signage", 65, 10, "Wall", "A",
         LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
-        ((6.0, pil * 0.5, 310.0), (0, 0, 90), (1, 1, 1))))
+        ((18.0, pil * 0.5, 250.0), OUT, (1, 1, 1))))
     add(mod(1, "Column_01"), _prop(
         "Group_pillar_2", "Signage", 25, 5, "Sign", "B",
         SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
-        ((5.0, pil * 0.5, 440.0), (0, 0, 90), (0.55, 0.55, 0.55))))
+        ((18.0, pil * 0.5, 330.0), BLADE, (0.55, 0.55, 0.55))))
 
-    # The corner: a sign on each face, since a corner shop is read from both
-    # streets, and a hose outlet at street level as CHA's corner cap has.
+    # The corner piece: wing A runs along +Y with its face at x = 0, wing B
+    # runs along -X with its face at y = 0 looking -Y. A blade sign on each
+    # face (a corner shop is read from both streets) and a hose outlet.
     corner = mod(1, "CornerEx_01")
-    for y, yaw in ((66.5, 0), (-6.0, 90)):
-        add(corner, _prop(
-            "Group_pillar_1", "Signage", 60, 10, "Sign", "B",
-            SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
-            ((5.5, y, 280.0), (0, 0, yaw), (0.75, 0.75, 0.75))))
+    add(corner, _prop(
+        "Group_pillar_1", "Signage", 60, 10, "Sign", "B",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
+        ((1.0, 90.0, 280.0), BLADE, (0.75, 0.75, 0.75))))
+    add(corner, _prop(
+        "Group_pillar_1", "Signage", 60, 10, "Sign", "B",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
+        ((-90.0, -1.0, 280.0), (0, -90, 0), (0.75, 0.75, 0.75))))
     add(corner, _prop(
         "Group_Misc_1", "Generic", 45, 10, "Outlet", "A",
         MISC + "SM_BLDG_Prop_FirehoseConn_Outlet_A01_N1",
-        ((5.4, 33.5, 57.5), (0, 0, -90), (1, 1, 1))))
+        ((1.0, 100.0, 50.0), OUT, (1, 1, 1))))
 
-    # Upper storeys: an air-conditioning unit on a bay window's sill, and on the
-    # wide feature window above an entrance. These are what stop the upper
-    # storeys reading as a bare grid of windows.
+    # Upper storeys: an air-conditioning unit on a window sill (the glass is
+    # 12 cm back and the unit 64 cm deep, so it sits half outside). The L3
+    # feature window gets one too; the L2 one has a balcony railing in the way.
     for lv in (2, 3):
         add(mod(lv, "Wall_01"), _prop(
             "Group_WallUp", "Generic", 35, 4, "Window", "A",
             AC + "SM_BLDG_Prop_AC_Window_A02_N1",
-            ((0.0, w * 0.5, 90.0), (0, 0, 90), (1, 1, 1))))
-        add(mod(lv, "Entrance_01"), _prop(
-            "Group_WallUp", "Generic", 40, 4, "Window", "A",
-            AC + "SM_BLDG_Prop_AC_Window_A01_N1",
-            ((0.0, w * 0.5, 60.0), (0, 0, 90), (1, 1, 1))))
+            ((21.0, w * 0.5, 85.0), OUT, (1, 1, 1))))
+    add(mod(3, "Entrance_01"), _prop(
+        "Group_WallUp", "Generic", 40, 4, "Window", "A",
+        AC + "SM_BLDG_Prop_AC_Window_A01_N1",
+        ((21.0, w * 0.5, 55.0), OUT, (1, 1, 1))))
     return P
 
 
@@ -311,7 +319,7 @@ def tl_prop_rows():
             loc, rot, sc = p["xf"]
             xf = unreal.Transform(
                 location=unreal.Vector(*loc),
-                rotation=unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
+                rotation=unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),  # (pitch, yaw, roll)
                 scale=unreal.Vector(*sc))
             bmin, bmax = _prop_bounds(p["mesh"])
             rows.append({
@@ -442,11 +450,15 @@ def tl_modules_with_props():
     copies the Props group onto a module; a module with props but HasProps=False
     silently gets none. PropOffset shifts the whole prop group, which TL does not
     need, so it stays zero.
+
+    The corner mesh flags both its rows: the BDF route resolves every corner
+    token to C_E (or C_I), never C_CE, so a C_CE-only flag left the corner
+    anchors unspawned (measured on the showcase building: 0 of 5 corners).
     """
     from_props = set(TL_PROPS)
     rows = []
     for r in tl_modules():
-        if r["Mod_Name"] in from_props and r["Symbol"] not in ("WS1", "C_E"):
+        if r["Mod_Name"] in from_props and r["Symbol"] != "WS1":
             r = dict(r, HasProps=True)
         rows.append(r)
     return rows

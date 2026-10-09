@@ -82,6 +82,12 @@ def test_foundation_grammar_is_the_shared_filler_row():
         assert g == "[FC][FS2]+[LC]", g
 
 
+def test_fillers_are_scalable():
+    # [FC][FS2]+[LC] and [WS1] close each segment by stretching; without the
+    # flag the remainder stays open (measured: a 119 cm gap at a corner).
+    assert {"WS1", "FS2"} <= kit_common.SCALABLE_SYMBOLS
+
+
 def test_every_level_has_its_symbols():
     spec = load()
     for lv in (1, 2, 3, 4):
