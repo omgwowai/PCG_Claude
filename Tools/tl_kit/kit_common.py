@@ -34,7 +34,11 @@ PART_TO_SYMBOL = {
     "CornerExR_01": "C_SR", "CornerIn_01": "C_I", "CornerInL_01": "C_IL",
     "CornerInR_01": "C_IR",
 }
-SCALABLE_SYMBOLS = {"WS1"}
+# Stretchable symbols: WS1 is each facade level's filler, FS2 the foundation
+# strip. FS2 must stay scalable (it is on every sibling style): the foundation
+# grammar is [FC][FS2]+[LC], so a non-scalable FS2 leaves the remainder of each
+# segment open, a gap of up to one 2 m piece at a building corner.
+SCALABLE_SYMBOLS = {"WS1", "FS2"}
 
 # Horizontal grammars shared by every TL level. W1, E1 and P1 have the same
 # width on L1-L4, so with one grammar the bays line up vertically: pilaster
