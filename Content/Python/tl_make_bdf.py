@@ -129,57 +129,243 @@ R["epic_source_before"] = stat_src()
 # again; see migrated-citysample-library.md §3.2 for the root cause.
 TL_BDF = {
     "BuildingToken": "TL",
-    # LV4 is the cornice/parapet topper (IsTopper), ending the stack the way
-    # CHJ ends on its LV3 topper and CHA on LV20.
+    # LV4 is the cornice/parapet topper (IsTopper). The flat roof itself is the
+    # planar mesh the pipeline builds from the footprint, placed by RoofData.
     "VerticalGrammar": "[LV0][LV1][LV2]*[LV3][LV4]",
     # Staggered sections sit on top of the main volume, so like every sibling
     # (CHJ: [LV2][LV2]*[LV3]) they start at an upper storey, not the ground floor.
     "VerticalGrammarStaggered": "[LV2][LV2]*[LV3][LV4]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
-    "MinBldgHeight": 1600.0,     # cm; same value as CHF
+    # The fixed stack is 500(L1)+300(L2)+300(L3)+120(L4) cm plus one repeat.
+    "MinBldgHeight": 1600.0,     # cm
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings
-    "RoofData": unreal.Vector4(20.0, 10.0, 20.0, 10.0),   # cm
+    # RoofData is (RoofOffset.X, RoofOffset.Y, RoofInset.Z, RoofOffset.W) as the
+    # graph reads it: XYY -> @Data.RoofOffset, ZWW -> @Data.RoofInset. The
+    # offset's Y component is NEGATIVE on all 27 sibling styles (CHA -140,
+    # CHF -80, NYAA -85) because the roof polygon is pushed that far BELOW the
+    # building's top; a positive Y lifts it off the parapet, which is why TL's
+    # roof was floating. -50 lands the deck just under the LV4 coping.
+    # Not changed here: the X/inset pair. CHA's own X of +20 shifts the roof
+    # 20 cm outward from the facade, which is a detail to confirm visually.
+    "RoofData": unreal.Vector4(20.0, -50.0, 20.0, 10.0),   # cm
 }
 
 # Levels rows. Size mirrors LevelHeight (every sibling: CHA LV1 500/500, CHF
 # LV1 550/550). LV1-LV4 share one set of horizontal grammars from
-# Tools/tl_kit/kit_common.py, which is what lines the bays up vertically.
+# Tools/tl_kit/kit_common.py, which is what lines the bays up vertically; LV0
+# has the single-row filler grammar every sibling uses.
+#
+# LV0 is 0.5 cm tall like every sibling's; its meshes hang below the ground floor.
 def _level_row(n, height_cm, topper):
-    if n == 0:
-        f0 = f1 = f2 = "[FC][FS2]+[LC]"
-        flen = unreal.Vector(300.0, 300.0, 300.0)
-    else:
-        f0, f1, f2 = kit_common.level_grammars(n)
-        flen = unreal.Vector(*kit_common.FLENGTHS_CM)
+    f0, f1, f2 = kit_common.level_grammars(n)
+    flen = unreal.Vector(*kit_common.level_flengths_cm(n))
     return {"LevelNumber": n, "LevelToken": "LV%d" % n, "LevelHeight": height_cm,
             "Size": height_cm, "F": f0, "F0": f0, "F1": f1, "F2": f2,
             "FLengths": flen, "IsTopper": topper}
 
 
-TL_LEVELS = [_level_row(0, 0.5, False)] + [
-    _level_row(int(k), v["height_m"] * 100.0, int(k) == max(int(x) for x in spec["levels"]))
-    for k, v in sorted(spec["levels"].items(), key=lambda kv: int(kv[0]))]
+TL_LEVELS = [_level_row(0, kit_common.FOUNDATION_LEVEL_HEIGHT_CM, False)] + [
+    _level_row(int(k), v["height_m"] * 100.0,
+               int(k) == max(int(x) for x in spec["levels"]))
+    for k, v in sorted(spec["levels"].items(), key=lambda kv: int(kv[0])) if int(k) > 0]
 
 TL_MESH_ROOT = "/Game/Building/TL/A"
 TL_LEVEL_HEIGHT = {r["LevelNumber"]: r["LevelHeight"] for r in TL_LEVELS}
 
-def tl_modules(level0_rows):
+# ---------------------------------------------------------------- props
+# Facade props are what turns a wall into a shopfront: signs over the doors, a
+# lamp on each pilaster, an awning over the entrance, an air-conditioning unit
+# on an upper-storey window, a hose outlet beside a corner. Every sibling style
+# supplies them through the Props group; TL had none, so the BDF route's
+# HasProps filter dropped every TL module and only the walls were generated.
+#
+# FRAME. A Props row's RelativeTransform is applied in the module's own mesh
+# frame: measured on CHA, SM_BLDG_Prop_BA_Awning_A01_N1 is placed on
+# SM_BLDG_CHA_L01_A_Wall_01_N1 at translation (-4.3, -161.6, 384.2), which is
+# inside that mesh's own bounds (x -148..28, y -325..0, z 0..500), and every
+# instance of a given prop on a given module has the same relative transform.
+# So these numbers are read off TL's kit geometry, not derived from CHA's: a
+# sign over a TL entrance sits at the entrance mesh's own face, a lamp on a TL
+# pilaster at the pilaster's face, and so on. TL modules run over y in [0, w]
+# (not [-w, 0] like CHA's), and TL's facade is x = 0 with relief at x > 0.
+#
+# Groups follow CHA's: Group_pillar_N on corners and pilasters (signs and
+# lamps), Group_Misc on a corner (hose outlet), Group_Door over an entrance
+# (awning + sign), Group_WallUp on upper-storey walls (AC units). Probability is
+# a percentage; MaxLimit caps how many anchors of a group may be used.
+def _prop(group, gtype, probability, max_limit, kind, var, mesh, xf, decal=False):
+    return {"group": group, "group_type": gtype, "probability": probability,
+            "max_limit": max_limit, "type": kind, "var": var, "mesh": mesh,
+            "xf": xf, "decal": decal}
+
+
+SIGNS = "/Game/Prop/BLDG/B/Kit_Prop_BA/Mesh/"
+LAMPS = "/Game/Prop/BLDG/Kit_Prop_Lamp/Mesh/"
+MISC = "/Game/Prop/BLDG/Kit_Prop_FirehoseConn/Mesh/"
+AC = "/Game/Prop/BLDG/Kit_Prop_AC/Mesh/"
+
+
+def tl_props():
+    """{mod_name: [prop dicts]} for every TL module that carries props.
+
+    `mod_name` keys are TL's own Mod_Name values (the mesh asset name, e.g.
+    "SM_BLDG_TL_L01_A_Wall_01_N1"); the Props group's ModuleName is joined
+    against Modules.Mod_Name by the graph, so the two must match exactly.
+
+    Positions are in each module mesh's own frame (metres in the kit, cm here),
+    with the facade at x = 0, the run over y in [0, w] and the storey base at
+    z = 0. `xf` is (location, rotation in degrees, scale)."""
+    P = {}
+
+    def add(mod, p):
+        P.setdefault(mod, []).append(p)
+
+    def mod(level, part):
+        return "SM_BLDG_TL_L%02d_A_%s_N1" % (level, part)
+
+    # A shopfront bay: a fascia sign over the glass and one wall lamp at each
+    # end, so a run of bays reads as a continuous shopfront.
+    w = 325.0
+    add(mod(1, "Wall_01"), _prop(
+        "Group_Wall_1", "Signage", 70, 10, "SignShort", "A",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_E01_N1",
+        ((5.0, w * 0.5, 500.0 - 120.0), (0, 0, 0), (1, 1, 1))))
+    for y in (45.0, w - 45.0):
+        add(mod(1, "Wall_01"), _prop(
+            "Group_Wall_2", "Signage", 55, 10, "Wall", "A",
+            LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
+            ((6.0, y, 500.0 - 170.0), (0, 0, 90), (1, 1, 1))))
+
+    # An entrance: a marquee awning projecting over the door, a sign above it
+    # and a lamp beside it, so a doorway does not read as another shopfront.
+    add(mod(1, "Entrance_01"), _prop(
+        "Group_Door_1", "Signage", 80, 10, "Awning", "A",
+        SIGNS + "SM_BLDG_Prop_BA_Awning_A01_N1",
+        ((3.5, w * 0.5, 400.0), (0, 0, 90), (0.6, 0.6, 0.6))))
+    add(mod(1, "Entrance_01"), _prop(
+        "Group_Door_2", "Signage", 85, 10, "Sign", "E",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_E01_N1",
+        ((5.0, w * 0.5, 500.0), (0, 0, 0), (1, 1, 1))))
+    add(mod(1, "Entrance_01"), _prop(
+        "Group_Door_3", "Signage", 60, 10, "Wall", "A",
+        LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
+        ((6.0, w - 50.0, 385.0), (0, 0, 90), (1, 1, 1))))
+
+    # Pilasters: a lamp head under the shopfront cornice, and less often a small
+    # sign plate, so a run of bays gets vertical accents between the glass.
+    pil = 125.0
+    add(mod(1, "Column_01"), _prop(
+        "Group_pillar_1", "Signage", 65, 10, "Wall", "A",
+        LAMPS + "SM_BLDG_Prop_Lamp_Wall_A02_N1",
+        ((6.0, pil * 0.5, 310.0), (0, 0, 90), (1, 1, 1))))
+    add(mod(1, "Column_01"), _prop(
+        "Group_pillar_2", "Signage", 25, 5, "Sign", "B",
+        SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
+        ((5.0, pil * 0.5, 440.0), (0, 0, 90), (0.55, 0.55, 0.55))))
+
+    # The corner: a sign on each face, since a corner shop is read from both
+    # streets, and a hose outlet at street level as CHA's corner cap has.
+    corner = mod(1, "CornerEx_01")
+    for y, yaw in ((66.5, 0), (-6.0, 90)):
+        add(corner, _prop(
+            "Group_pillar_1", "Signage", 60, 10, "Sign", "B",
+            SIGNS + "SM_BLDG_Prop_BA_Sign_B01_N1",
+            ((5.5, y, 280.0), (0, 0, yaw), (0.75, 0.75, 0.75))))
+    add(corner, _prop(
+        "Group_Misc_1", "Generic", 45, 10, "Outlet", "A",
+        MISC + "SM_BLDG_Prop_FirehoseConn_Outlet_A01_N1",
+        ((5.4, 33.5, 57.5), (0, 0, -90), (1, 1, 1))))
+
+    # Upper storeys: an air-conditioning unit on a bay window's sill, and on the
+    # wide feature window above an entrance. These are what stop the upper
+    # storeys reading as a bare grid of windows.
+    for lv in (2, 3):
+        add(mod(lv, "Wall_01"), _prop(
+            "Group_WallUp", "Generic", 35, 4, "Window", "A",
+            AC + "SM_BLDG_Prop_AC_Window_A02_N1",
+            ((0.0, w * 0.5, 90.0), (0, 0, 90), (1, 1, 1))))
+        add(mod(lv, "Entrance_01"), _prop(
+            "Group_WallUp", "Generic", 40, 4, "Window", "A",
+            AC + "SM_BLDG_Prop_AC_Window_A01_N1",
+            ((0.0, w * 0.5, 60.0), (0, 0, 90), (1, 1, 1))))
+    return P
+
+
+TL_PROPS = tl_props()
+
+
+def tl_prop_rows():
+    """The Props group's rows for TL, one row per anchor.
+
+    Schema is Epic's own (every column below exists on CHA's rows). The graph
+    copies these points onto each module with CopyPoints, which uses the POINT
+    transform and bounds, so (as on CHA's rows) the point transform equals
+    RelativeTransform and the point bounds are the prop mesh's bounds.
+    Clutter/ClutterLow feed ASM_Clutter_Behavior. WindowHelper stays False:
+    True routes a row to the window-lights pass instead of the mesh spawner.
+    """
+    rows = []
+    actor = 0
+    for mod, plist in sorted(TL_PROPS.items()):
+        for p in plist:
+            loc, rot, sc = p["xf"]
+            xf = unreal.Transform(
+                location=unreal.Vector(*loc),
+                rotation=unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
+                scale=unreal.Vector(*sc))
+            bmin, bmax = _prop_bounds(p["mesh"])
+            rows.append({
+                "BuildingToken": "TL", "ModuleName": mod, "PropGroup": p["group"],
+                "GroupType": p["group_type"], "Type": p["type"],
+                "AnchorType": p["type"], "Var": p["var"],
+                "Probability": float(p["probability"]),
+                "MaxLimit": float(p["max_limit"]),
+                "Mesh": p["mesh"],
+                "Material": _prop_material(p["mesh"]),
+                "HierarchyDepth": 2, "ActorIndex": actor, "ParentIndex": 0,
+                "RelativeTransform": xf,
+                "ASM": True, "Decal": p["decal"], "Clutter": True, "ClutterLow": True,
+                "WindowHelper": False, "CULL": False,
+                "$transform": xf, "$bounds_min": bmin, "$bounds_max": bmax})
+            actor += 1
+    return rows
+
+
+def _prop_bounds(mesh_path):
+    m = EAL.load_asset(mesh_path)
+    bb = m.get_bounding_box()
+    return bb.min, bb.max
+
+
+def _prop_material(mesh_path):
+    """The first material of a prop mesh, as its own package path."""
+    m = EAL.load_asset(mesh_path)
+    if m is None:
+        return None
+    for s in m.get_editor_property("static_materials"):
+        mi = s.get_editor_property("material_interface")
+        if mi is not None:
+            return mi.get_path_name()
+    return None
+
+
+def tl_modules():
     """TL's Modules rows.
 
     The BDF route places each module with its slot origin at the slot's
     horizontal centre and the level's mid-height, so every sibling style sets
-    PivotOffset = (0, -run_centre, -LevelHeight/2). TL's kit is corner/base
-    pivoted (run along +Y over [0, width], height over [0, LevelHeight]), so
-    its offset is (0, -width/2, -LevelHeight/2). The SGD route
+    PivotOffset = (0, -run_centre, -LevelHeight/2). TL's L1-L5 kit is
+    corner/base pivoted (run along +Y over [0, width], height over [0,
+    LevelHeight]), so its offset is (0, -width/2, -LevelHeight/2). LV0's
+    foundation meshes are centred on their own origin instead, exactly like the
+    NY foundation every style shares, so they take no pivot shift. The SGD route
     (Lvl_TL_Building) does not read these rows.
 
-    Level 0 is CHA's level 0 (`level0_rows`, cloned from the asset), the same
-    choice RULE_TL_L00 makes for the SGD route: the kit authors no foundation.
-    Each level's exterior corners use C_E, so a C_E row is added on the same
-    CornerEx mesh as its C_CE row, as CHA does. WS1 is the level's Wall_02
-    filler; a level without one (the LV4 cornice) stretches its Wall_01.
+    WS1 is the level's Wall_02 filler; a level without one (the LV4 cornice, the
+    no filler either) stretches its Wall_01. Exterior corners use C_E, so the corner mesh
+    also gets a C_E row on the same mesh as its C_CE row, as CHA does.
     """
-    rows = [dict(r, BuildingToken="TL") for r in level0_rows]
+    rows = []
     ptid = 0
     levels_with_filler = {p["level"] for p in spec["parts"] if p["part"] == "Wall_02"}
     for p in spec["parts"]:
@@ -191,8 +377,10 @@ def tl_modules(level0_rows):
             "BuildingToken": "TL", "Level": p["level"], "Symbol": sym,
             "Size": width, "Mod_Name": p["mesh_name"],
             "bScalable": sym in kit_common.SCALABLE_SYMBOLS, "Mesh": mesh_path,
-            "PivotOffset": unreal.Vector(0.0, -width / 2.0,
-                                         -TL_LEVEL_HEIGHT[p["level"]] / 2.0),
+            "PivotOffset": (unreal.Vector(0.0, kit_common.FOUNDATION_PIVOT_Y[sym], 0.0)
+                            if p["level"] == 0 else
+                            unreal.Vector(0.0, -width / 2.0,
+                                          -TL_LEVEL_HEIGHT[p["level"]] / 2.0)),
             "MeshForwardAxis": 2.0,
             "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
             "PtID": ptid})
@@ -202,22 +390,15 @@ def tl_modules(level0_rows):
                              Mod_Name=p["mesh_name"] + "_WS", PtID=ptid))
             ptid += 1
         if sym == "C_CE":
-            rows.append(dict(rows[-1], Symbol="C_E", PtID=ptid))
+            row = dict(rows[-1], Symbol="C_E", PtID=ptid)
+            if p["level"] == 0:
+                # LV0 has no corner cap: its exterior corner is only ever C_E.
+                rows[-1] = dict(row, PtID=rows[-1]["PtID"])
+                continue
+            rows.append(row)
             ptid += 1
     return rows
 
-
-def level0_of(d, md, types, token="CHA"):
-    """Every attribute of `token`'s level-0 module rows, as setter-ready dicts."""
-    out = []
-    for pt in d.get_points():
-        if MA.get_string_attribute(pt, md, "BuildingToken") != token:
-            continue
-        if MA.get_integer32_attribute(pt, md, "Level") != 0:
-            continue
-        out.append({nm: getattr(MA, GETTERS[kind])(pt, md, nm)
-                    for nm, kind in types.items()})
-    return out
 
 # ---------- attribute type discovery -------------------------------------
 # CONTRADICTS THE BRIEF: its discover_types() (and this project's earlier BDF
@@ -253,6 +434,23 @@ _ENUM_KIND = {
     "NAME": "name", "SOFT_OBJECT_PATH": "soft_object_path",
     "SOFT_CLASS_PATH": "soft_class_path",
 }
+
+def tl_modules_with_props():
+    """tl_modules() with HasProps / PropOffset filled in.
+
+    HasProps is the flag the graph filters on (AttributeFilter_20) before it
+    copies the Props group onto a module; a module with props but HasProps=False
+    silently gets none. PropOffset shifts the whole prop group, which TL does not
+    need, so it stays zero.
+    """
+    from_props = set(TL_PROPS)
+    rows = []
+    for r in tl_modules():
+        if r["Mod_Name"] in from_props and r["Symbol"] not in ("WS1", "C_E"):
+            r = dict(r, HasProps=True)
+        rows.append(r)
+    return rows
+
 
 def discover_types(md):
     """name -> kind, read straight from the metadata's own declared types."""
@@ -316,7 +514,16 @@ def mk_pt(md, values, types):
     before being handed to the setter.
     """
     p = unreal.PCGPoint()
+    # "$"-keys are point properties, not metadata attributes.
+    if "$transform" in values:
+        p.set_editor_property("transform", values["$transform"])
+        p.set_editor_property("bounds_min", values["$bounds_min"])
+        p.set_editor_property("bounds_max", values["$bounds_max"])
+        p.set_editor_property("density", 1.0)
+        p.set_editor_property("steepness", 1.0)
     for nm, v in values.items():
+        if nm.startswith("$"):
+            continue
         kind = types.get(nm)
         if kind is None or v is None:
             continue
@@ -478,6 +685,7 @@ if dup and _patch_mode:
     patched_bdf = False
     patched_levels = 0
     patched_modules = 0
+    patched_props = 0
     for it in items:
         tags = [str(t) for t in it.get_editor_property("tags")]
         d = it.get_editor_property("data").get_editor_property("data")
@@ -527,20 +735,36 @@ if dup and _patch_mode:
             kept = [pt for pt in d.get_points()
                     if MA.get_string_attribute(pt, md, "BuildingToken") != "TL"]
             fresh = [mk_pt(md, row, types)
-                     for row in tl_modules(level0_of(d, md, types))]
+                     for row in tl_modules_with_props()]
             d.set_points(kept + fresh)
             patched_modules = len(fresh)
             R["groups"].append({"tags": tuple(sorted(tags)),
                                 "replaced_tl_module_rows": patched_modules,
                                 "total": len(d.get_points())})
 
-    R["patched"] = patched_bdf and patched_levels == len(TL_LEVELS) and patched_modules > 0
+        elif "Props" in tags:
+            # TL's prop rows are rebuilt wholesale too. CHA's own props are rows
+            # in this same group, so only TL's are dropped.
+            types = discover_types(md)
+            kept = [pt for pt in d.get_points()
+                    if MA.get_string_attribute(pt, md, "BuildingToken") != "TL"]
+            fresh = [mk_pt(md, row, types) for row in tl_prop_rows()]
+            d.set_points(kept + fresh)
+            patched_props = len(fresh)
+            R["groups"].append({"tags": tuple(sorted(tags)),
+                                "replaced_tl_prop_rows": patched_props,
+                                "total": len(d.get_points())})
+
+    R["patched"] = (patched_bdf and patched_levels == len(TL_LEVELS)
+                    and patched_modules > 0 and patched_props > 0)
     if not R["patched"]:
         R["errors"].append(
-            "patch_mode: expected to patch 1 BDF row, %d Levels rows and the TL "
-            "Modules rows, got patched_bdf=%s patched_levels=%d "
-            "patched_modules=%d -- aborting the save rather than writing a "
-            "half-patched asset." % (len(TL_LEVELS), patched_bdf, patched_levels, patched_modules))
+            "patch_mode: expected to patch 1 BDF row, %d Levels rows, the TL "
+            "Modules rows and the TL Props rows, got patched_bdf=%s "
+            "patched_levels=%d patched_modules=%d patched_props=%d -- aborting "
+            "the save rather than writing a half-patched asset."
+            % (len(TL_LEVELS), patched_bdf, patched_levels, patched_modules,
+               patched_props))
     else:
         # NEW FINDING (2026-10-01): in patch_mode, save_loaded_asset(dup)
         # reported no error but the .uasset on disk did NOT get a fresh
@@ -576,10 +800,19 @@ elif dup:
         elif "Levels" in tags:
             new_rows = [dict(r, BuildingToken="TL") for r in TL_LEVELS]
         elif "Modules" in tags:
-            new_rows = tl_modules(level0_of(d, md, discover_types(md)))
+            new_rows = tl_modules_with_props()
+        elif "Props" in tags:
+            new_rows = tl_prop_rows()
         else:
-            new_rows = []          # Props: phase 1 adds none
+            new_rows = []
 
+        # Rebuilds are wholesale for Modules and Props: the old TL rows are
+        # dropped first, so a re-run converges instead of appending a second
+        # copy of every module and prop.
+        if "Modules" in tags or "Props" in tags:
+            existing = [pt for pt in existing
+                        if MA.get_string_attribute(pt, md, "BuildingToken") != "TL"]
+            keys = tuple(sorted(tags))
         if not new_rows:
             R["groups"].append({"tags": keys, "existing": len(existing),
                                 "added": 0})

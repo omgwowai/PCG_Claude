@@ -35,9 +35,23 @@
 # it already matches. Safe to re-run.
 
 import json
+import os
+import sys
 
 R = {"steps": [], "errors": []}
 EAL = unreal.EditorAssetLibrary
+
+# F0Grammar is the same string the BDF Levels rows carry, so it is taken from
+# the kit's shared grammar table rather than copied by hand.
+_SPEC = "E:/PCG_Claude/Tools/tl_kit/tl_kit_spec.json"
+if os.path.dirname(_SPEC) not in sys.path:
+    sys.path.insert(0, os.path.dirname(_SPEC))
+import importlib
+import kit_common
+importlib.reload(kit_common)
+
+def f0_of(level):
+    return kit_common.level_grammars(level)[0]
 
 DT_MIN = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth"
 DT_LVL = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth"
@@ -94,13 +108,14 @@ dt = None
 # TL_LV0..TL_LV4. The table is rewritten to exactly these TL rows on every run
 # (other styles' rows are kept verbatim), so a level added to the kit lands
 # here without a manual step. Not read by the 18-stage city; kept for
-# Filter_Footprints_for_bldgs.
+# Filter_Footprints_for_bldgs. LV0 keeps the universal LV0 profile every
+# style uses (C_E/40/200/280); TL's own foundation is sized to match it.
 TL_LEVEL_ROWS = [
-    ("TL_LV0", "LV0", 0, "[FC][FS2]+[LC]", "False", "C_E", 40.0, 200.0, 280.0),
-    ("TL_LV1", "LV1", 1, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
-    ("TL_LV2", "LV2", 2, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
-    ("TL_LV3", "LV3", 3, "[FC][WS1][W1]+[LC]", "False", "C_CE", 150.0, 650.0, 950.0),
-    ("TL_LV4", "LV4", 4, "[FC][WS1][W1]+[LC]", "True", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV0", "LV0", 0, f0_of(0), "False", "C_E", 40.0, 200.0, 280.0),
+    ("TL_LV1", "LV1", 1, f0_of(1), "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV2", "LV2", 2, f0_of(2), "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV3", "LV3", 3, f0_of(3), "False", "C_CE", 150.0, 650.0, 950.0),
+    ("TL_LV4", "LV4", 4, f0_of(4), "True", "C_CE", 150.0, 650.0, 950.0),
 ]
 try:
     dt2 = EAL.load_asset(DT_LVL)

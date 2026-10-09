@@ -94,7 +94,7 @@ LEVELS = 5
 TL_RULES = {i: "/Game/PCG/DataAssets/Buildings/TL/RULE_TL_L%02d" % i for i in range(LEVELS)}
 # L04 is the cornice topper; L02 repeats to reach the requested height.
 TARGET_MAIN_GRAMMAR = "L00, L01, L02*, L03, L04"
-TARGET_DESCRIPTION = "TL building - brick commercial block, cornice topper."
+TARGET_DESCRIPTION = "TL building - brick commercial block, own foundation, cornice topper."
 SLOT_SIZES_CM = {0: 0.5, 1: 500.0, 2: 300.0, 3: 300.0, 4: 120.0}
 
 

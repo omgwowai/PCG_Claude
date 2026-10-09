@@ -17,12 +17,17 @@
     "TL_Metal": "/Game/Building/Material/MI/Paint/MI_Bldg_PaintedMetal_Black"
   },
   "levels": {
+    "0": {"height_m": 2.5, "role": "below grade: foundation strip hanging 2.5 m under the ground floor (its grammar level is 0.5 cm tall, like every sibling)"},
     "1": {"height_m": 5.0, "role": "ground floor: shopfronts, entrances, stone base"},
     "2": {"height_m": 3.0, "role": "typical floor: windows (repeats with building height)"},
     "3": {"height_m": 3.0, "role": "top floor: windows with heavier lintels and a frieze band"},
     "4": {"height_m": 1.2, "role": "cornice and parapet (topper)"}
   },
   "parts": [
+    {"part": "Foundation_01",       "level": 0, "width_m": 2.0, "height_m": 2.5, "kind": "foundation",        "mesh_name": "SM_BLDG_TL_L00_A_Foundation_01_N1"},
+    {"part": "CornerEx_01",         "level": 0, "width_m": 0.4, "height_m": 2.5, "kind": "foundation_corner", "mesh_name": "SM_BLDG_TL_L00_A_CornerEx_01_N1"},
+    {"part": "CornerIn_01",         "level": 0, "width_m": 0.1, "height_m": 2.5, "kind": "foundation_corner", "mesh_name": "SM_BLDG_TL_L00_A_CornerIn_01_N1"},
+
     {"part": "Wall_01",       "level": 1, "width_m": 3.25, "height_m": 5.0, "kind": "shopfront", "mesh_name": "SM_BLDG_TL_L01_A_Wall_01_N1"},
     {"part": "Wall_02",       "level": 1, "width_m": 3.25, "height_m": 5.0, "kind": "filler",    "mesh_name": "SM_BLDG_TL_L01_A_Wall_02_N1"},
     {"part": "Column_01",     "level": 1, "width_m": 1.25, "height_m": 5.0, "kind": "pilaster",  "mesh_name": "SM_BLDG_TL_L01_A_Column_01_N1"},
