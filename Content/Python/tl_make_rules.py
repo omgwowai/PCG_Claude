@@ -55,16 +55,10 @@ then doing targeted, balanced-paren-aware text surgery on just those two
 fields. Every other field (Overrideprofilegrammar, upvector,
 SplineMeshangleThreshold, ...) is left exactly as the scaffold had it.
 
-RULE_TL_L00 is a special case: the TL kit has no level-0 (foundation) meshes
-at all (tl_kit_spec.json's parts start at level 1), and GRAMMARS[0] is
-byte-identical to RULE_CHA_L00's own grammar. So for L00 this script only
-writes the grammar field (a same-value round-trip, kept for provenance) and
-leaves ModulesInfos exactly as duplicated from RULE_CHA_L00 -- i.e. it still
-references CHA's borrowed NY foundation mesh, honestly, rather than
-inventing TL-specific foundation content that does not exist. (Ruled
-acceptable in review: the kit authors levels 1-4 only, and GRAMMARS[0] is a pure
-filler row, so a borrowed foundation mesh at L00 is an acceptable placeholder
-for a level the kit deliberately does not author.)
+RULE_TL_L00..L04 are all built from the kit spec, L00 included: LV0 is TL's own
+foundation (a stone strip hanging below grade, with NY's pivots so the shared
+level-0 profile still holds). Earlier versions left L00 as a copy of CHA's,
+borrowing CHA's NY foundation mesh, because the kit had no foundation.
 
 VERIFICATION: after each rule is saved, this script forces a genuine reload
 from disk (unreal.EditorLoadingAndSavingUtils.reload_packages on the asset's
@@ -109,15 +103,14 @@ MODULES_FIELD = "ModulesInfos_38_0EA66FD04214AE8D9F6B83A1B57AC47B"
 
 # ---------------------------------------------------------------- grammar strings
 # A RULE carries one facade grammar; the SGD route uses it for every wall
-# length, so each level takes its F1 grammar (the three-entrance facade). L0
-# is the foundation filler.
+# length, so each level takes its F1 grammar (the three-entrance facade).
+# LV0 (foundation) is the shared single-row filler grammar.
 LEVELS = sorted({p["level"] for p in spec["parts"]})
-GRAMMARS = {0: "[FC][FS2]+[LC]"}
-GRAMMARS.update({lv: kit_common.level_grammars(lv)[1] for lv in LEVELS})
+GRAMMARS = {lv: kit_common.level_grammars(lv)[1] for lv in LEVELS}
 
 # ---------------------------------------------------------------- scaffolds to duplicate
 CHA_BASE = "/CitySamplePCG/PCG/DataAssets/Buildings/CHA"
-SCAFFOLD_CANDIDATES = {lv: CHA_BASE + "/RULE_CHA_L%02d" % lv for lv in [0] + LEVELS}
+SCAFFOLD_CANDIDATES = {lv: CHA_BASE + "/RULE_CHA_L%02d" % lv for lv in LEVELS}
 SCAFFOLD_FALLBACK = {lv: CHA_BASE + "/RULE_CHA_L02" for lv in LEVELS if lv >= 3}
 
 
@@ -210,12 +203,15 @@ def mesh_asset_path(level, mesh_name):
     return "/Game/Building/TL/A/Kit_Bldg_TL_L%d_A/Mesh/%s" % (level, mesh_name)
 
 
-def build_module_entry(symbol, mesh_path, size_cm, scalable):
+def build_module_entry(symbol, mesh_path, size_cm, scalable, pivot_y=None):
     """One STC_Module entry. The SGD route centres each module on its slot, so
     PivotOffset moves the mesh's run centre onto that point: TL meshes run over
     local y in [0, size], hence Y = -size/2 (CHA's meshes run over [-size, 0]
-    and its RULEs carry +size/2). Z stays 0: the slot sits at the storey base."""
+    and its RULEs carry +size/2). Z stays 0: the slot sits at the storey base.
+    `pivot_y` overrides that for the foundation, whose meshes are centred on
+    their own origin like the borrowed NY ones."""
     b, g, r = SYMBOL_COLOR.get(symbol, (128, 128, 128))
+    py = -size_cm / 2.0 if pivot_y is None else pivot_y
     fields = []
     fields.append('Mesh_69_ABC2F260431A21DAF912F49032642918="/Script/Engine.StaticMesh\'%s.%s\'"'
                   % (mesh_path, mesh_path.rsplit("/", 1)[-1]))
@@ -224,7 +220,7 @@ def build_module_entry(symbol, mesh_path, size_cm, scalable):
         fields.append('Scalable_68_5F7BC934476923AF3C7BBCB6F7239ECF=True')
     fields.append('Size_67_AA4253B1485ED7A89506FCA171AC20BA=%.6f' % size_cm)
     fields.append('PivotOffset_28_063B0B4741DD9478C20E8E83A4DFF20A=(X=0.000000,Y=%.6f,Z=0.000000)'
-                  % (-size_cm / 2.0))
+                  % py)
     fields.append('MeshForwardAxis_35_62B04DFB4A4BA73267F123A1D53AC25F=Y')
     fields.append('DebugColor_83_34BC0D8C4720597367B304B35AAFEE3F=(B=%d,G=%d,R=%d,A=255)' % (b, g, r))
     return "(" + ",".join(fields) + ")"
@@ -257,8 +253,11 @@ def build_modules_array_text(level):
         path = mesh_asset_path(level, p["mesh_name"])
         if not EAL.does_asset_exist(path):
             missing.append(path)
+        # The LV0 foundation meshes are centred on their own origin (that is the
+        # frame the borrowed NY foundation has), so they take no pivot shift.
+        pivot_y = kit_common.FOUNDATION_PIVOT_Y[sym] if level == 0 else None
         entries.append(build_module_entry(sym, path, p["width_m"] * 100.0,
-                                          sym in kit_common.SCALABLE_SYMBOLS))
+                                          sym in kit_common.SCALABLE_SYMBOLS, pivot_y))
         if p["part"] == "Wall_01":
             wall_part = p
     if unmapped:
@@ -266,13 +265,24 @@ def build_modules_array_text(level):
     if wall_part is not None and not has_filler:
         path = mesh_asset_path(level, wall_part["mesh_name"])
         entries.append(build_module_entry("WS1", path, wall_part["width_m"] * 100.0, True))
+    # The BDF route resolves the corner tokens to C_E / C_I and finds the corner
+    # mesh under that symbol, so every corner mesh also gets a C_E / C_I row on
+    # the symbol the tokens resolve to. corner_token_entry registers FC and LC
+    # themselves.
+    for p in parts:
+        if p["part"] != "CornerEx_01":
+            continue
+        path = mesh_asset_path(level, p["mesh_name"])
+        entries.append(build_module_entry(
+            "C_E", path, p["width_m"] * 100.0, False,
+            kit_common.FOUNDATION_PIVOT_Y["C_E"] if level == 0 else None))
     entries.append(corner_token_entry("FC"))
     entries.append(corner_token_entry("LC"))
     return "(" + ",".join(entries) + ")", missing, len(entries)
 
 
 # ---------------------------------------------------------------- main
-for level in [0] + LEVELS:
+for level in LEVELS:
     name = "RULE_TL_L%02d" % level
     dest_path = DEST + "/" + name
     rec = {"name": name, "dest_path": dest_path}
@@ -298,16 +308,12 @@ for level in [0] + LEVELS:
         target_grammar = GRAMMARS[level]
         new_txt = replace_field(txt, GRAMMAR_FIELD, '"%s"' % target_grammar)
 
-        if level == 0:
-            rec["modules_written"] = False
-            rec["modules_note"] = "no TL level-0 kit exists; ModulesInfos left as duplicated from scaffold"
-        else:
-            modules_text, missing, n_entries = build_modules_array_text(level)
-            if missing:
-                raise RuntimeError("missing mesh assets: %s" % missing)
-            new_txt = replace_field(new_txt, MODULES_FIELD, modules_text)
-            rec["modules_written"] = True
-            rec["module_count_written"] = n_entries
+        modules_text, missing, n_entries = build_modules_array_text(level)
+        if missing:
+            raise RuntimeError("missing mesh assets: %s" % missing)
+        new_txt = replace_field(new_txt, MODULES_FIELD, modules_text)
+        rec["modules_written"] = True
+        rec["module_count_written"] = n_entries
 
         rule.import_text(new_txt)
         asset.set_editor_property("rule", rule)

@@ -22,7 +22,14 @@ ONLY = set(args.get("only") or [])
 DEST = "/Game/Building/TL/A"
 SCRATCH = "/Game/Building/TL/_ImportScratch"
 TOL_CM = 0.5
-CORNER_KINDS = ("corner_ex", "cornice_corner_ex", "corner_in", "cornice_corner_in")
+CORNER_KINDS = ("corner_ex", "cornice_corner_ex", "corner_in", "cornice_corner_in",
+                "corner_half", "cornice_half", "foundation_corner", "roof_corner")
+# Kinds that do not sit on z = 0: the foundation hangs below the ground floor
+# and the roof deck sits just under the cornice coping.
+BELOW_GRADE_KINDS = ("foundation", "foundation_corner", "roof_deck", "roof_corner")
+# The foundation is centred on its slot (the frame of the NY foundation it
+# replaces), so its run is [-w/2, w/2] instead of [0, w].
+CENTRED_KINDS = ("foundation",)
 
 
 def import_fbx(fbx, folder, name):
@@ -121,10 +128,15 @@ def main():
             errs.append("slots %s" % slot_names)
         if sorted(rec["sections"]) != sorted(rec["src_sections"]):
             errs.append("sections %s != source %s" % (rec["sections"], rec["src_sections"]))
-        if abs(bb.min.z) > TOL_CM:
+        w = p["width_m"] * 100.0
+        if p["kind"] in BELOW_GRADE_KINDS:
+            if bb.max.z > TOL_CM:
+                errs.append("top z %.1f above 0" % bb.max.z)
+        elif abs(bb.min.z) > TOL_CM:
             errs.append("base z %.1f" % bb.min.z)
-        if p["kind"] not in CORNER_KINDS and (abs(bb.min.y) > TOL_CM or abs(bb.max.y - p["width_m"] * 100.0) > TOL_CM):
-            errs.append("run y [%.1f, %.1f] != [0, %.1f]" % (bb.min.y, bb.max.y, p["width_m"] * 100.0))
+        y0, y1 = (-w / 2.0, w / 2.0) if p["kind"] in CENTRED_KINDS else (0.0, w)
+        if p["kind"] not in CORNER_KINDS and (abs(bb.min.y - y0) > TOL_CM or abs(bb.max.y - y1) > TOL_CM):
+            errs.append("run y [%.1f, %.1f] != [%.1f, %.1f]" % (bb.min.y, bb.max.y, y0, y1))
         if not EAL.save_asset(dest_path, only_if_is_dirty=False):
             errs.append("save failed")
         if errs:

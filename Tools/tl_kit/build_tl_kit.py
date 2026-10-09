@@ -46,6 +46,7 @@ import bpy
 
 UV_PER_M = 0.5
 WALL_D = 0.30
+HALF_STUB = 0.45          # half a corner's own wing, sized so one wall turn covers it
 SLOTS = ("TL_Brick", "TL_Stone", "TL_Glass", "TL_Metal")
 PREVIEW_COLORS = {"TL_Brick": (0.45, 0.13, 0.08, 1), "TL_Stone": (0.78, 0.72, 0.60, 1),
                   "TL_Glass": (0.10, 0.16, 0.22, 1), "TL_Metal": (0.04, 0.04, 0.04, 1)}
@@ -70,6 +71,7 @@ class Builder:
         self.bm = bmesh.new()
         self.uv = self.bm.loops.layers.uv.new("UVMap")
         self.panes = set()
+        self.mirror_w = None
         self.place(0.0, 0.0, 0.0, 0)
 
     def place(self, ox, oy, oz, yaw_deg):
@@ -77,8 +79,16 @@ class Builder:
         q = int(round(yaw_deg / 90.0)) % 4
         self.c, self.s = ((1, 0), (0, 1), (-1, 0), (0, -1))[q]
 
+    def mirror(self, w):
+        """Mirror the part's run (y -> w - y) until mirror(None). Used to build
+        the end-of-run half corners from their start-of-run twins. Boxes only:
+        panes are wound for an unmirrored frame."""
+        self.mirror_w = w
+
     def xf(self, x, y, z):
         """Placement in the UE frame, then the UE -> Blender Y flip."""
+        if self.mirror_w is not None:
+            y = self.mirror_w - y
         rx = self.c * x - self.s * y + self.o[0]
         ry = self.s * x + self.c * y + self.o[1]
         return (rx, -ry, z + self.o[2])
@@ -210,6 +220,54 @@ def frieze(b, y0, y1):
     b.box(0.0, 0.05, y0, y1, 2.55, 2.82, "TL_Stone")
 
 
+# ---------------------------------------------------------------- foundation
+# LV0 is the below-grade strip between the terrain and the ground floor: the
+# RULE places it at the base of the building, hanging h below z = 0. It is a
+# plain in-situ wall -- a slightly proud footing with chunky steps, not brick --
+# and its pivot is the strip's centre, so the mesh runs over y in [-w/2, w/2].
+#
+# The corner pieces use the interior-corner convention (both wings on the +X
+# and -Y side of the origin), which is what the borrowed NY foundation corners
+# look like in their own local frame: SM_BLDG_NY_L0_A_CornerEx_01_N1 measures
+# x in [-42, 0], y in [0, 40]. That is the opposite of the L1-L4 kit, so the
+# corner meshes here are built flipped rather than reusing corner_ex.
+FOUNDATION_D = 0.45
+FOUNDATION_STEP = 0.60
+
+
+def _foundation_run(b, y0, y1, h):
+    """One straight run of foundation wall, y0..y1, from -h up to 0. Exterior
+    face at x = 0, thickness into -x."""
+    b.box(-FOUNDATION_D, 0.0, y0, y1, -h, 0.0, "TL_Stone")
+    y = y0 + 0.10
+    while y < y1 - 0.10:                                       # vertical joints
+        b.box(0.0, 0.04, y, y + 0.06, -h + 0.40, -0.30, "TL_Stone")
+        y += 0.55
+    z = -h + FOUNDATION_STEP
+    k = 1
+    while z < -0.40:                                           # stepped footing
+        b.box(0.0, 0.07 if k % 2 else 0.04, y0, y1, z - 0.12, z, "TL_Stone")
+        z += FOUNDATION_STEP
+        k += 1
+
+
+def build_foundation(b, w, h):
+    _foundation_run(b, -w / 2.0, w / 2.0, h)
+
+
+def _foundation_corner(b, wing, h, interior):
+    """Fill block where two foundation runs meet, sized and placed exactly like
+    the NY corner pieces every sibling style uses (measured in UE:
+    SM_BLDG_NY_L0_A_CornerEx_01_N1 x [-42, 0], y [0, 40];
+    SM_BLDG_NY_L0_A_CornerIn_01_N1 x [-30, 10], y [-32, 10]), so the shared
+    level-0 corner profile (C_E 40 cm, C_I 10 cm) keeps holding for TL."""
+    if interior:
+        b.box(-0.30, 0.10, -0.32, 0.10, -h, 0.0, "TL_Stone")
+    else:
+        b.box(-0.42, 0.0, 0.0, wing, -h, 0.0, "TL_Stone")
+        b.box(0.0, 0.04, 0.0, wing, -h + 0.40, -0.30, "TL_Stone")
+
+
 def build_shopfront(b, w, h):
     oy0, oy1 = 0.25, w - 0.25
     wall_with_opening(b, w, h, oy0, oy1, 0.45, 3.55, reveal=0.20)
@@ -220,6 +278,9 @@ def build_shopfront(b, w, h):
 
 def build_filler(b, w, h, level):
     """Plain wall that tolerates stretching along the run: horizontal trim only."""
+    if level == 0:
+        build_foundation(b, w, h)
+        return
     if level == 4:
         cornice(b, w, h)
         return
@@ -359,6 +420,9 @@ def cornice_wing_b(b, wing, h, exterior):
 # ---------------------------------------------------------------- corners
 
 def corner_ex(b, wing, h, level):
+    if level == 0:
+        _foundation_corner(b, wing, h, interior=False)
+        return
     if level == 4:
         cornice(b, wing, h)
         cornice_wing_b(b, wing, h, exterior=True)
@@ -390,6 +454,9 @@ def corner_ex(b, wing, h, level):
 
 
 def corner_in(b, wing, h, level):
+    if level == 0:
+        _foundation_corner(b, wing, h, interior=True)
+        return
     if level == 4:
         cornice(b, wing, h)
         cornice_wing_b(b, wing, h, exterior=False)
@@ -410,12 +477,33 @@ def corner_in(b, wing, h, level):
 
 
 def corner_half(b, wing, h, level, part):
+    """Half of an exterior or interior corner: the corner itself plus one 45 cm
+    wall stub, sized so that one 90-degree wall turn placed at the corner point
+    covers the missing half. The BDF route places the whole corner piece (C_E /
+    C_I) at every building corner and never asks for these; the SGD route has no
+    corner support and leaves the turn open, so an L-shaped building uses these
+    instead (see tl_make_sgd.py)."""
+    if part in ("CornerExL_01", "CornerExR_01"):
+        corner_ex(b, HALF_STUB, h, level)
+        if part == "CornerExR_01":                             # R: run, then stub
+            b.mirror(wing)
+        build_filler(b, wing, h, level)
+        b.mirror(None)
+        return
+    # The interior corner's second wing runs along +X, which is not the wall
+    # direction, so both halves are the same straight run with the corner at one
+    # end; the mirror only decides which end that is.
+    corner_in(b, HALF_STUB, h, level)
+    if part == "CornerInR_01":
+        b.mirror(wing)
     build_filler(b, wing, h, level)
-    y = 0.0 if part.endswith("L_01") else wing - 0.30
-    b.box(0.0, 0.10, y, y + 0.30, 0.0, h, "TL_Stone")
+    b.mirror(None)
 
 
 BUILDERS = {
+    "foundation": lambda b, p: build_foundation(b, p["width_m"], p["height_m"]),
+    "foundation_corner": lambda b, p: (corner_ex if p["part"] == "CornerEx_01"
+                                       else corner_in)(b, p["width_m"], p["height_m"], 0),
     "shopfront": lambda b, p: build_shopfront(b, p["width_m"], p["height_m"]),
     "filler": lambda b, p: build_filler(b, p["width_m"], p["height_m"], p["level"]),
     "entrance": lambda b, p: build_entrance(b, p["width_m"], p["height_m"]),
