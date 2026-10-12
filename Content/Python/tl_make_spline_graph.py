@@ -69,10 +69,26 @@ def build_segments_abc(K, height_node):
 
     # ---- B. footprint and storeys
     spl = K.node("PCGGetSplineSettings")                    # actor selector defaults to Self
+    # Task 11 (Review Focus 1): a footprint drawn on uneven ground gives a
+    # level building at the FIRST point's height. Without this, SplineToSegment
+    # tilted the segments of a raised vertex and their modules climbed the
+    # slope (measured on TL_Tilt: 25 distinct Z per storey). The first sample of
+    # the spline sampler is control point 0; its Z is written to every control
+    # point ($Position on spline data is the control points, world space).
+    samp = K.node("PCGSplineSamplerSettings")
+    K.edge((spl, "Out"), samp, "Spline")
+    first = K.node("PCGAttributeGetFromPointIndexSettings", input_source=Sel("$Position.Z"),
+                   index=0, output_attribute_name=Sel("FirstZ"))
+    K.edge((samp, "Out"), first, "In")
+    flat = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.SET,
+                  input_source1=Sel("$Position.Z"), input_source2=Sel("FirstZ"),
+                  output_target=Sel("$Position.Z"))
+    K.edge((spl, "Out"), flat, "InA")
+    K.edge((first, "Attribute"), flat, "InB")
     clean = K.node("PCGCleanSplineSettings", fuse_colocated_control_points=True,
                    remove_collinear_control_points=True, collinear_angle_threshold=1.0)
     cw = K.node("PCGReverseSplineSettings", operation=unreal.PCGReverseSplineOperation.FORCE_CLOCKWISE)
-    K.edge((spl, "Out"), clean, "In")
+    K.edge((flat, "Out"), clean, "In")
     K.edge((clean, "Out"), cw, "In")
     P["footprint"] = (cw, "Out")
     hvec = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.MULTIPLY,
@@ -104,8 +120,15 @@ def build_segments_abc(K, height_node):
     hz = K.copy("AttributeMathsOp_0")                        # $BoundsMax.Z = Size.Z
     K.edge((seg, "Out"), hz, "InA")
     K.edge((seg, "Out"), hz, "InB")
+    # Task 11 (A1): SplineToSegment gives every segment local bounds Y [0, 1]
+    # (PCGSplineToSegment.cpp), and SubdivideSegment places each module at
+    # Segment.Min + half the size across the segment -- so every wall landed
+    # 0.5 cm inside the facade line while the fans pivot on it. Centre the
+    # 1 cm across-segment extent on the line: bounds Y [-0.5, 0.5].
+    ymin = K.maths((hz, "Out"), "SET", "$BoundsMin.Y", -0.5, "$BoundsMin.Y")
+    ymax = K.maths(ymin, "SET", "$BoundsMax.Y", 0.5, "$BoundsMax.Y")
     mas = K.copy("MatchAndSetAttributes_0")                  # FloorSymbol -> Levels row
-    K.edge((hz, "Out"), mas, "In")
+    K.edge(ymax, mas, "In")
     K.edge((lvl_info, "Out"), mas, "Match Data")
     seglen = K.maths((mas, "Out"), "MULTIPLY", "$BoundsMax.X", 2.0, "SegLen")
     sscale = K.node("PCGAddAttributeSettings", output_target=Sel("ShortScale"),
