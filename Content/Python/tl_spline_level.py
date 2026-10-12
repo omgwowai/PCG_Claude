@@ -51,10 +51,15 @@ BUILDINGS = {
              [(0, 0), (6000, 0), (6000, 3000), (3000, 3000), (3000, 6000), (0, 6000)], 3000.0),
     "TL_Rect": ((12000, 12000, 0),
                 [(0, 0), (6000, 0), (6000, 3000), (0, 3000)], 3000.0),
+    # Review Focus 4: Height 600 is below the fixed stack (920.5 cm: LV0 + LV1 +
+    # LV3 + LV4); the graph clamps it, so this is exactly that stack.
     "TL_Low": ((24000, 0, 0),
-               [(0, 0), (3000, 0), (3000, 2000), (0, 2000)], 1000.0),          # Review Focus 4
-    "TL_Tilt": ((24000, 12000, 0),
-                [(0, 0), (4000, 0), (4000, 3000, 50.0), (0, 3000)], 3000.0),   # vertex 2 raised 50 cm, Review Focus 1
+               [(0, 0), (3000, 0), (3000, 2000), (0, 2000)], 600.0),
+    # Review Focus 1: uneven ground. The actor stands at z = 200; vertex 0 is
+    # raised 80 cm and vertex 2 50 cm, so the FIRST control point (280) is not
+    # the LOWEST (200). The building must be level on the lowest.
+    "TL_Tilt": ((24000, 12000, 200),
+                [(0, 0, 80.0), (4000, 0), (4000, 3000, 50.0), (0, 3000)], 3000.0),
 }
 PROBE_LABEL = "TLPROBE_Spline"
 

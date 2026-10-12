@@ -13,12 +13,24 @@ import tl_graph_kit
 importlib.reload(tl_graph_kit)
 from tl_graph_kit import GraphKit, Sel, Txt
 
+# The reference model (Tools/tl_kit/corner_math.py) owns the numbers the graph
+# and the acceptance probe must agree on: the slice-count epsilon and the
+# height of the fixed storey stack.
+_TL_KIT = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir() + "Tools/tl_kit").rstrip("/")
+if _TL_KIT not in sys.path:
+    sys.path.insert(0, _TL_KIT)
+import kit_common
+import corner_math
+importlib.reload(kit_common)      # corner_math reads it; the editor keeps modules between calls
+importlib.reload(corner_math)
+
 args = mcp_args or {}
 DEST = "/Game/PCG/TL/PCG_TL_SplineBuilding"
 TEMPLATE = "/CitySamplePCG/PCG/DataAssets/Buildings/PCG_Bldg_SGD_test"   # owns the Height parameter (R4)
 SUB = "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/"
 PIER_FILLER_CM = 625.0     # 150 + 325 + 150 (ruling R1)
 FOUND_FILLER_CM = 200.0
+MIN_STACK_CM = corner_math.min_stack_cm()     # 920.5: the TL levels without a `*` repeat
 
 
 def fresh_graph():
@@ -69,31 +81,37 @@ def build_segments_abc(K, height_node):
 
     # ---- B. footprint and storeys
     spl = K.node("PCGGetSplineSettings")                    # actor selector defaults to Self
-    # Task 11 (Review Focus 1): a footprint drawn on uneven ground gives a
-    # level building at the FIRST point's height. Without this, SplineToSegment
-    # tilted the segments of a raised vertex and their modules climbed the
-    # slope (measured on TL_Tilt: 25 distinct Z per storey). The first sample of
-    # the spline sampler is control point 0; its Z is written to every control
-    # point ($Position on spline data is the control points, world space).
-    samp = K.node("PCGSplineSamplerSettings")
-    K.edge((spl, "Out"), samp, "Spline")
-    first = K.node("PCGAttributeGetFromPointIndexSettings", input_source=Sel("$Position.Z"),
-                   index=0, output_attribute_name=Sel("FirstZ"))
-    K.edge((samp, "Out"), first, "In")
+    # Review Focus 1: a footprint drawn on uneven ground gives a level building
+    # standing on its LOWEST control point. Without this, SplineToSegment tilted
+    # the segments of a raised vertex and their modules climbed the slope
+    # (measured on TL_Tilt: 25 distinct Z per storey). The lowest point, not the
+    # first one, so the result does not depend on the point order (reversing
+    # the spline must not move the building, Review Focus 2). $Position on
+    # spline data is the control points in world space, for the reduce and for
+    # the SET alike, so nothing is sampled and the actor bounds play no part.
+    base = K.node("PCGAttributeReduceSettings", input_source=Sel("$Position.Z"),
+                  operation=unreal.PCGAttributeReduceOperation.MIN, output_attribute_name="BaseZ")
+    K.edge((spl, "Out"), base, "In")
     flat = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.SET,
-                  input_source1=Sel("$Position.Z"), input_source2=Sel("FirstZ"),
+                  input_source1=Sel("$Position.Z"), input_source2=Sel("BaseZ"),
                   output_target=Sel("$Position.Z"))
     K.edge((spl, "Out"), flat, "InA")
-    K.edge((first, "Attribute"), flat, "InB")
+    K.edge((base, "Out"), flat, "InB")
     clean = K.node("PCGCleanSplineSettings", fuse_colocated_control_points=True,
                    remove_collinear_control_points=True, collinear_angle_threshold=1.0)
     cw = K.node("PCGReverseSplineSettings", operation=unreal.PCGReverseSplineOperation.FORCE_CLOCKWISE)
     K.edge((flat, "Out"), clean, "In")
     K.edge((clean, "Out"), cw, "In")
     P["footprint"] = (cw, "Out")
+    # Review Focus 4: a Height below the fixed stack (LV0 + LV1 + LV3 + LV4, the
+    # levels the vertical grammar does not repeat) does not fit the grammar at
+    # all -- DuplicateCrossSections logs "Grammar does not fit" and the building
+    # is empty except for a roof at ground level (measured at Height 600).
+    # Clamp it, so such a building is the fixed stack.
+    clamped = K.maths((height_node, "Out"), "MAX", "@Last", MIN_STACK_CM, "ClampedHeight")
     hvec = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.MULTIPLY,
-                  input_source1=Sel("@Last"), output_target=Sel("ExtrudeVector"))
-    K.edge((height_node, "Out"), hvec, "InA")
+                  input_source1=Sel("ClampedHeight"), output_target=Sel("ExtrudeVector"))
+    K.edge(clamped, hvec, "InA")
     K.edge(K.const("Vector", "(X=0.0,Y=0.0,Z=1.0)", "Up"), hvec, "InB")
     addext = K.node("PCGAddAttributeSettings", input_source=Sel("ExtrudeVector"),
                     output_target=Sel("@Data.ExtrudeVector"))
@@ -231,7 +249,6 @@ def build_segment_d(K, P):
 
 
 FAN_TEMPLATE_POINTS = 18     # ceil(180 / 10): enough slices for any turn
-N_CEIL_EPS = 1e-6            # slice-count epsilon before CEIL (see build_segment_e)
 
 
 def build_segment_e(K, P):
@@ -250,10 +267,10 @@ def build_segment_e(K, P):
     s = K.maths(s, "DIVIDE", "AbsTurn", 10.0, "N")
     # Measured on TL_Pent (exact 160 deg turn): AbsTurn / 10 reads back a hair
     # above 16 and CEIL gave 17 slices against corner_math's 16. Subtract the
-    # same epsilon corner_math.fan does (ceil(x - corner_math.CEIL_EPS), 1e-6) before CEIL;
+    # epsilon corner_math.fan does (ceil(x - corner_math.CEIL_EPS)) before CEIL;
     # 1e-6 slice = 1e-5 deg, far below any turn that matters, and N stays >= 1
     # because AbsTurn >= 1 deg here.
-    s = K.maths(s, "SUBTRACT", "N", N_CEIL_EPS, "N")
+    s = K.maths(s, "SUBTRACT", "N", corner_math.CEIL_EPS, "N")
     s = K.maths(s, "CEIL", "N", None, "N")                  # stays Double (bForceRoundingOpToInt off)
     s = K.maths(s, "DIVIDE", "AbsTurn", Sel("N"), "HalfA")
     s = K.maths(s, "MULTIPLY", "HalfA", 0.5, "HalfA")
