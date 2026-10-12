@@ -171,6 +171,47 @@ def build_segments_abc(K, height_node):
     return P
 
 
+def build_segment_d(K, P):
+    # subdivide each segment into wall modules, by storey level (Epic's
+    # Loop_0/Loop_Subdivide: LevelNumber selects the matching ModulesInfo row).
+    part = K.node("PCGMetadataPartitionSettings", partition_attribute_selectors=[Sel("LevelNumber")])
+    K.edge(P["walls_in"], part, "In")
+    minfo = K.node("PCGConvertToAttributeSetSettings")
+    K.edge(P["modules"], minfo, "In")
+    loop = K.copy("Loop_0")                               # Loop_Subdivide, as Epic wires it
+    K.edge((part, "Out"), loop, "In")
+    K.edge((minfo, "Out"), loop, "NewPin")
+    # placement: copied from BDF_BuildingFromSpline (MeshForwardAxis == 2, TL's only value)
+    fwd = K.node("PCGCopyAttributesSettings", input_source=Sel("$Rotation.Forward"),
+                 output_target=Sel("ForwardDir"))
+    K.edge((loop, "Out"), fwd, "Target")
+    K.edge((loop, "Out"), fwd, "Source")
+    swap = K.copy("AttributeMathsOp_17")                  # $Scale = $Scale.yxz
+    K.edge((fwd, "Out"), swap, "InA")
+    K.edge((fwd, "Out"), swap, "InB")
+    rot = K.copy("MakeRotatorAttribute_3")                # MakeRotFromYZ(ForwardDir, $Rotation.Up)
+    K.edge((swap, "Out"), rot, "Y")
+    K.edge((swap, "Out"), rot, "Z")
+    short = K.maths((rot, "Out"), "MULTIPLY", "$Scale.Y", Sel("ShortScale"), "$Scale.Y")
+    piv = K.copy("AttributeMathsOp_22")                   # PivotOffset *= $Scale
+    K.edge(short, piv, "InA")
+    K.edge(short, piv, "InB")
+    tdir = K.copy("AttributeVectorOp_3")                  # PivotOffset into world
+    K.edge((piv, "Out"), tdir, "In")
+    K.edge((piv, "Out"), tdir, "Transform")
+    add = K.copy("AttributeMathsOp_23")                   # $Position += PivotOffset
+    K.edge((tdir, "Out"), add, "InA")
+    K.edge((tdir, "Out"), add, "InB")
+    P["walls"] = (add, "Out")
+    return P["walls"]
+
+
+def build_spawner(K, *ports):
+    sp = K.copy("StaticMeshSpawner_3", synchronous_load=True)   # mesh by attribute "Mesh" (traps.md 4)
+    K.edge(K.merge(*ports), sp, "In")
+    return sp
+
+
 def main():
     g, height_node = fresh_graph()
     K = GraphKit(g)
@@ -179,6 +220,10 @@ def main():
     if seg == "abc":
         # expose the edge stream for the probe; Task 8 replaces this
         K.edge(P["walls_in"], g.get_output_node(), "Out")
+    if seg in ("abcd", "abcde", "all"):
+        build_segment_d(K, P)
+    if seg == "abcd":
+        build_spawner(K, P["walls"])
     ok = unreal.EditorAssetLibrary.save_asset(DEST, only_if_is_dirty=False)
     return {"saved": ok, "nodes": len(g.get_editor_property("nodes")),
             "edges": len(g.get_all_edges()), "segments": seg}
