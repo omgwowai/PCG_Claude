@@ -20,6 +20,10 @@ SLICE_MAX_DEG = 10.0       # one fan slice covers at most this much turn
 SLICE_HALF_DEG = 5.0       # the fan meshes are modelled as +-5 deg wedges
 MAX_FAN_SLICES = 18        # template points per corner: ceil(180 / 10)
 ACUTE_TURN_DEG = 90.0      # a convex corner turning more than this is acute
+# Slice count is ceil(|sweep| / SLICE_MAX_DEG - CEIL_EPS). The graph
+# (tl_make_spline_graph.py) subtracts the same 1e-6 before its ceil, so a turn
+# of exactly 90 deg gives 9 slices on both sides, not 10 on one.
+CEIL_EPS = 1e-6
 
 
 def level_rules(level):
@@ -110,7 +114,7 @@ def fan(pts, i):
     sweep = wrap(nb - na)
     if abs(sweep) < COLLINEAR_DEG:
         return []
-    n = max(1, math.ceil(abs(sweep) / SLICE_MAX_DEG - 1e-9))
+    n = max(1, math.ceil(abs(sweep) / SLICE_MAX_DEG - CEIL_EPS))
     a = abs(sweep) / (2.0 * n)
     sx = math.cos(math.radians(a)) / math.cos(math.radians(SLICE_HALF_DEG))
     sy = math.sin(math.radians(a)) / math.sin(math.radians(SLICE_HALF_DEG))
