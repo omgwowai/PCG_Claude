@@ -39,9 +39,13 @@ BUILDINGS = {
                 for k in range(6)], 3000.0),
     # Review Focus 3: exactly one 20 deg convex corner (vertex 2), next to a
     # 400 cm short edge (edge 1, v1->v2) -- both asserted below before use.
+    # Task 11: vertex 4 raised from y=137.8 to y = x*tan(25 deg) so vertex 0's
+    # interior is 25 deg; at 137.8 it was 12.6 deg, outside the supported
+    # 15-345 deg range (asserted by check_support_range).
     "TL_Pent": ((12000, 0, 0),
                 [(0.0, 0.0), (4913.176731805098, 0.0), (5297.113635227847, 112.21610486089091),
-                 (2566.821000177357, 289.13740426446907), (617.2581639212892, 137.80279593507052)],
+                 (2566.821000177357, 289.13740426446907),
+                 (617.2581639212892, 617.2581639212892 * math.tan(math.radians(25.0)))],
                 3000.0),
     "TL_L": ((0, 12000, 0),
              [(0, 0), (6000, 0), (6000, 3000), (3000, 3000), (3000, 6000), (0, 6000)], 3000.0),
@@ -102,6 +106,22 @@ def check_pentagon():
     if not short_edges:
         raise RuntimeError("TL_Pent's 20 deg corner has no adjacent 400 cm short edge")
     return {"spike_vertex": i, "short_edges": short_edges}
+
+
+def check_support_range():
+    """Every test corner must be inside the supported 15-345 deg interior
+    range, or a failure there would say nothing about the claim."""
+    import corner_math
+    out = {}
+    for label, (_, verts, _) in BUILDINGS.items():
+        pts = corner_math.clean([(v[0], v[1]) for v in verts])
+        interiors = [180.0 - abs(c["turn"]) if c["convex"] else 180.0 + abs(c["turn"])
+                     for c in corner_math.classify(pts)]
+        bad = [round(a, 2) for a in interiors if not 15.0 <= a <= 345.0]
+        if bad:
+            raise RuntimeError("%s has corners outside 15-345 deg: %r" % (label, bad))
+        out[label] = [round(a, 2) for a in interiors]
+    return out
 
 
 def ensure_blueprint():
@@ -228,15 +248,33 @@ def place_building(bp, graph, eas, label, origin, verts_local, height):
     comp = actor.get_component_by_class(unreal.PCGComponent)
     comp.set_graph(graph)
     gi = comp.graph_instance
-    unreal.PCGGraphParametersHelpers.set_double_parameter(gi, "Height", float(height))
+    H = unreal.PCGGraphParametersHelpers
+    H.set_double_parameter(gi, "Height", float(height))
+    got = H.get_double_parameter(gi, "Height")
+    if abs(got - float(height)) > 1e-6:
+        raise RuntimeError("%s: Height override reads back %r, wanted %r" % (label, got, height))
     comp.activate(True)
     comp.generate_local(True)
-    return actor
+    return got
+
+
+def setup_floor(eas):
+    """Task 11: the template's Floor is 80 m square around the origin; the
+    test buildings reach x 28000 / y 18000. Stretch it under all of them
+    (its mesh is 1000 cm per unit of scale, pivot on the top face)."""
+    floor = next((a for a in eas.get_all_level_actors() if a.get_actor_label() == "Floor"), None)
+    if floor is None:
+        return None
+    floor.set_actor_location(unreal.Vector(12500.0, 7700.0, -0.5), False, False)
+    floor.set_actor_scale3d(unreal.Vector(40.0, 30.0, 8.0))
+    o, e = floor.get_actor_bounds(False)
+    return {"origin": [round(v, 1) for v in o.to_tuple()], "extent": [round(v, 1) for v in e.to_tuple()]}
 
 
 def main():
     R = {"purged": purge()}
     R["pentagon_check"] = check_pentagon()
+    R["interior_angles"] = check_support_range()
 
     bp, created = ensure_blueprint()
     R["blueprint_created"] = created
@@ -255,9 +293,22 @@ def main():
         place_building(bp, graph, eas, PROBE_LABEL, origin, verts, height)
         placed.append(PROBE_LABEL)
     else:
+        # Task 11: the test level is saved later, so no TLPROBE_* actor may stay in it
+        removed = []
+        for a in list(eas.get_all_level_actors()):
+            if a.get_actor_label().startswith("TLPROBE_"):
+                removed.append(a.get_actor_label())
+                c = a.get_component_by_class(unreal.PCGComponent)
+                if c is not None:
+                    c.cleanup_local(True)
+                eas.destroy_actor(a)
+        R["removed_probes"] = removed
+        R["floor"] = setup_floor(eas)
+        heights = {}
         for label, (origin, verts, height) in BUILDINGS.items():
-            place_building(bp, graph, eas, label, origin, verts, height)
+            heights[label] = place_building(bp, graph, eas, label, origin, verts, height)
             placed.append(label)
+        R["height_readback"] = heights
     R["placed"] = placed
     R["fired"] = True
     R["note"] = "generation fired asynchronously; read in a separate call"
