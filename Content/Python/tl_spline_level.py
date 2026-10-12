@@ -93,7 +93,10 @@ def check_pentagon():
     """Review Focus 3: assert TL_Pent has exactly one 20 deg convex corner and
     that its short edge is correctly flagged, before it is ever placed."""
     import sys
-    sys.path.insert(0, "E:/PCG_Claude/Tools/tl_kit")
+    tools = unreal.Paths.convert_relative_path_to_full(
+        unreal.Paths.project_dir() + "Tools/tl_kit").rstrip("/")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
     import importlib
     import corner_math
     importlib.reload(corner_math)

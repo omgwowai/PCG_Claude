@@ -106,8 +106,13 @@ R["epic_source_before"] = stat_src()
 # source is metre-scale; TL's values below are the converted ones).
 #   MinWallWidth  = 950.0 cm  -- TL's own narrowest FLengths.x (LV1-LV3 all
 #                                start at 950), the narrowest wall TL can build on.
-#   MinBldgHeight = 1600.0 cm -- TL's full fixed four-level stack:
-#                                500(L0)+500(L1)+300(L2)+300(L3).
+#   MinBldgHeight = 1600.0 cm -- the low end of the height window the BDF
+#                                route matches a requested height against. It
+#                                is a chosen value, not the fixed stack: the
+#                                fixed (non-`*`) stack is LV0+LV1+LV3+LV4 =
+#                                0.5+500+300+120 = 920.5 cm (what the spline
+#                                route clamps to, corner_math.min_stack_cm()),
+#                                so at 1600 cm there is room for two LV2 repeats.
 #   MaxBldgHeight = 200000.0 cm -- an open-ended sentinel, matching 21 of the
 #                                28 styles (including every CH*). This field is
 #                                read as a match window against a requested
@@ -136,7 +141,7 @@ TL_BDF = {
     # (CHJ: [LV2][LV2]*[LV3]) they start at an upper storey, not the ground floor.
     "VerticalGrammarStaggered": "[LV2][LV2]*[LV3][LV4]",
     "MinWallWidth": 950.0,       # cm; TL's own narrowest FLengths.x (was 12.0 m, unconverted)
-    # The fixed stack is 500(L1)+300(L2)+300(L3)+120(L4) cm plus one repeat.
+    # Not the fixed stack (LV0+LV1+LV3+LV4 = 920.5 cm); see the note above.
     "MinBldgHeight": 1600.0,     # cm
     "MaxBldgHeight": 200000.0,   # cm; open-ended sentinel, matching 21/28 siblings
     # RoofData is (RoofOffset.X, RoofOffset.Y, RoofInset.Z, RoofOffset.W) as the
