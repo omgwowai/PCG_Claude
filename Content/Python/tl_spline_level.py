@@ -29,8 +29,10 @@ GRAPH_PATH = "/Game/PCG/TL/PCG_TL_SplineBuilding"
 DEST = "/Game/Map/Lvl_TL_Spline"
 TEMPLATE = "/Engine/Maps/Templates/Template_Default"
 
-# label: (origin (cm), vertices (cm, local, CCW or CW -- either winding is
-# forced clockwise by the graph), Height (cm))
+# label: (origin (cm), vertices, Height (cm)). Each vertex is (x, y) or
+# (x, y, z) in cm, local to origin; a 2-tuple is treated as z=0 (fix round 1,
+# I5: TL_Tilt's vertex 2 needs z=50 for Review Focus 1, previously only a
+# comment -- place_building now actually uses a per-vertex z).
 BUILDINGS = {
     "TL_Hex": ((0, 0, 0),
                [(3000 * math.cos(math.radians(60 * k)), 3000 * math.sin(math.radians(60 * k)))
@@ -48,7 +50,7 @@ BUILDINGS = {
     "TL_Low": ((24000, 0, 0),
                [(0, 0), (3000, 0), (3000, 2000), (0, 2000)], 1000.0),          # Review Focus 4
     "TL_Tilt": ((24000, 12000, 0),
-                [(0, 0), (4000, 0), (4000, 3000), (0, 3000)], 3000.0),        # vertex 2 raised 50 cm, Review Focus 1
+                [(0, 0), (4000, 0), (4000, 3000, 50.0), (0, 3000)], 3000.0),   # vertex 2 raised 50 cm, Review Focus 1
 }
 PROBE_LABEL = "TLPROBE_Spline"
 
@@ -156,14 +158,39 @@ def ensure_blueprint():
 
 
 def ensure_level():
+    """Fix round 1 (I4): the original version called load_level and ignored
+    its return value, so a failed level switch left TLPROBE actors to be
+    spawned into whatever level happened to still be current -- silently.
+    Now: skip the switch entirely when the editor world is already DEST
+    (load_level would just reload it, which is unnecessary and has its own
+    failure mode); otherwise check load_level's/new_level_from_template's
+    return; then, regardless of which path was taken, assert the editor
+    world's path actually is DEST before returning, so a caller can never
+    proceed to spawn actors into the wrong level."""
     EAL = unreal.EditorAssetLibrary
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
-    if EAL.does_asset_exist(DEST):
-        les.load_level(DEST)
-        return "loaded_existing"
-    if not les.new_level_from_template(DEST, TEMPLATE):
-        raise RuntimeError("new_level_from_template failed for %s" % DEST)
-    return "freshly_created"
+    ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
+
+    def current_world_matches_dest():
+        w = ues.get_editor_world()
+        return w is not None and w.get_path_name().startswith(DEST)
+
+    if current_world_matches_dest():
+        result = "already_current"
+    elif EAL.does_asset_exist(DEST):
+        if not les.load_level(DEST):
+            raise RuntimeError("load_level(%r) returned False" % DEST)
+        result = "loaded_existing"
+    else:
+        if not les.new_level_from_template(DEST, TEMPLATE):
+            raise RuntimeError("new_level_from_template(%r, %r) returned False" % (DEST, TEMPLATE))
+        result = "freshly_created"
+
+    if not current_world_matches_dest():
+        w = ues.get_editor_world()
+        raise RuntimeError("editor world is %r after ensure_level(%r), refusing to spawn actors"
+                           % (w.get_path_name() if w else None, DEST))
+    return result
 
 
 def place_building(bp, graph, eas, label, origin, verts_local, height):
@@ -188,8 +215,10 @@ def place_building(bp, graph, eas, label, origin, verts_local, height):
 
     sc = actor.get_component_by_class(unreal.SplineComponent)
     sc.clear_spline_points(False)
-    for i, (lx, ly) in enumerate(verts_local):
-        world = loc + unreal.Vector(float(lx), float(ly), 0.0)
+    for i, v in enumerate(verts_local):
+        lx, ly = v[0], v[1]
+        lz = v[2] if len(v) > 2 else 0.0   # fix round 1, I5: per-vertex z
+        world = loc + unreal.Vector(float(lx), float(ly), float(lz))
         sc.add_spline_point(world, unreal.SplineCoordinateSpace.WORLD, False)
     for i in range(len(verts_local)):
         sc.set_spline_point_type(i, unreal.SplinePointType.LINEAR, False)
