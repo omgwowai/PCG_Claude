@@ -310,6 +310,84 @@ def build_segment_e(K, P):
     return P["fans"]
 
 
+def build_props(K, P):
+    """Facade props (task-10-brief.md Step 1), copied from Epic's
+    BDF_BuildingFromSpline with its PropOffset-rotation step dropped (ruling R6:
+    TL's PropOffset is zero). Filters P["walls"] BEFORE any merge with the fans
+    (Symbol is a Name on walls, a String on fans)."""
+    has, _ = K.filt(P["walls"], "HasProps", "EQUAL", value=("Boolean", "BoolValue=True"))
+    ren = K.copy("AttributeRename_0")                     # ModuleName -> Mod_Name
+    K.edge(P["props"], ren, "In")
+    part = K.copy("AttributePartition_5")                 # by Mod_Name
+    K.edge((ren, "Out"), part, "In")
+    loop = K.copy("Loop_3")                               # Loop_GroupedPropsCopy
+    K.edge((part, "Out"), loop, "Props")
+    K.edge(has, loop, "Modules")
+    win = K.copy("AttributeFilter_21")                    # WindowHelper == False
+    K.edge((loop, "Props"), win, "In")
+    tp = K.copy("TransformPoints_1")
+    K.edge((win, "InsideFilter"), tp, "In")
+    merge3 = K.copy("MergeAttributes_1")
+    for c in ("CreateConstant_26", "CreateConstant_27", "CreateConstant_28"):
+        K.edge((K.copy(c), "Out"), merge3, "In")
+    add3 = K.copy("AddAttribute_3")
+    K.edge((tp, "Out"), add3, "In")
+    K.edge((merge3, "Out"), add3, "Attributes")
+    clutter = K.copy("Subgraph_0")                        # ASM_Clutter_Behavior, Epic's overrides
+    K.edge((add3, "Out"), clutter, "Points In")
+    decal = K.copy("AttributeFilter_22")                  # Decal == False
+    K.edge((clutter, "Points Out"), decal, "In")
+    P["props_out"] = (decal, "InsideFilter")
+    return P["props_out"]
+
+
+# Measured (Task 10, read-only dump of this graph): Subgraph_2 is "Rooftop Mesh
+# for All Layers" (/PCGPrimitives/.../Create_Mesh_Planar) and Subgraph_5 is
+# "Place Rooftop Assemblies Only on Last Layer" (/PCGPrimitives/.../
+# Fill_Areas_WithFittingAssets); both take their data on "PrimaryInput".
+BLDG_BDF_GRAPH = "/Game/PCG/TL/PCG_TL_Building_BDF"     # holds the planar-mesh and rooftop-fill nodes
+ROOF_DROP_CM = 50.0          # RoofData.Y (ruling R5)
+ROOF_INSET_CM = 20.0
+
+
+def build_roof(K, P):
+    """Roof (task-10-brief.md Step 2). Roof height = max over storey edges of
+    ($Position.Z + Size) - 50 cm (ruling R5). The planar subgraph spawns the
+    dynamic-mesh roof and the fill subgraph spawns the rooftop assemblies
+    themselves, so neither feeds the graph's output node."""
+    # Measured (Task 10): P["segs"] is one point data PER STOREY (DuplicateCrossSections
+    # output), and AttributeReduce reduces each input data on its own -- the brief's
+    # direct wiring gave one RoofZ per storey and so one roof slab and one rooftop
+    # fill per storey (DynamicMesh Z -50.5..4770.5). Merge the storeys into one data
+    # first so the MAX is taken over every storey edge (ruling R5).
+    allsegs = K.merge(P["segs"])
+    top = K.maths(allsegs, "ADD", "$Position.Z", Sel("Size"), "TopZ")
+    red = K.node("PCGAttributeReduceSettings", input_source=Sel("TopZ"),
+                 operation=unreal.PCGAttributeReduceOperation.MAX, output_attribute_name="RoofZ")
+    K.edge(top, red, "In")
+    roofz = K.maths((red, "Out"), "ADD", "RoofZ", -ROOF_DROP_CM, "RoofZ")
+    poly = K.node("PCGCreatePolygon2DSettings")
+    K.edge(P["footprint"], poly, "In")
+    off = K.node("PCGOffsetPolygon2DSettings", offset=-ROOF_INSET_CM,
+                 join_type=unreal.PCGPolygonJoinType.MITER)
+    K.edge((poly, "Out"), off, "In")
+    pts = K.node("PCGCollapseSettings")
+    K.edge((off, "Out"), pts, "In")
+    setz = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.SET,
+                  input_source1=Sel("$Position.Z"), input_source2=Sel("RoofZ"),
+                  output_target=Sel("$Position.Z"))
+    K.edge((pts, "Out"), setz, "InA")
+    K.edge(roofz, setz, "InB")
+    spl = K.node("PCGCreateSplineSettings", closed_loop=True, linear=True)
+    K.edge((setz, "Out"), spl, "In")
+    planar = K.copy("Subgraph_2", graph_path=BLDG_BDF_GRAPH)            # Create_Mesh_Planar, bitumen
+    K.edge((spl, "Out"), planar, "PrimaryInput")
+    fill = K.copy("Subgraph_5", graph_path=BLDG_BDF_GRAPH)              # 14 rooftop assemblies
+    K.edge((spl, "Out"), fill, "PrimaryInput")
+    P["roof"] = (planar, fill)
+    return P["roof"]
+
+
 def build_spawner(K, *ports):
     sp = K.copy("StaticMeshSpawner_3", synchronous_load=True)   # mesh by attribute "Mesh" (traps.md 4)
     K.edge(K.merge(*ports), sp, "In")
@@ -329,10 +407,14 @@ def main():
         # output edge; only what feeds the spawner differs:
         #   abcd  = walls
         #   abcde = walls + fans
-        #   all   = walls + fans (+ props and roof, Task 10)
+        #   all   = walls + fans + props; the roof's two subgraphs spawn
+        #           their own output and add no edge to the output node
         spawn_in = [build_segment_d(K, P)]
         if seg in ("abcde", "all"):
             spawn_in.append(build_segment_e(K, P))
+        if seg == "all":
+            spawn_in.append(build_props(K, P))
+            build_roof(K, P)
         K.edge(build_spawner(K, *spawn_in), g.get_output_node(), "Out")
     elif seg != "abc":
         raise RuntimeError("unknown segments %r" % seg)
