@@ -75,3 +75,9 @@ def level_flengths_cm(level):
     if level == 0:
         return FOUNDATION_FLENGTHS_CM
     return FLENGTHS_CM
+
+
+# Spline building (docs/superpowers/specs/2026-10-09-tl-spline-building-design.md).
+# End piers replace the corner pieces: one 150 cm pier at each end of every
+# wall, flat-ended, so two walls butt at the vertex at any angle.
+END_PIER_CM = 150.0
