@@ -40,6 +40,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kit_common
+import kit_geometry
 
 import bmesh
 import bpy
@@ -124,6 +125,19 @@ class Builder:
         f = self._face([v[0], v[3], v[2], v[1]], slot)
         self.panes.add(f)
 
+    def prism(self, pts_xy, z0, z1, slot):
+        """A vertical prism over a counter-clockwise plan outline (UE frame)."""
+        if z1 - z0 < 1e-4 or len(pts_xy) < 3:
+            return
+        bot = [self.bm.verts.new(self.xf(x, y, z0)) for x, y in pts_xy]
+        top = [self.bm.verts.new(self.xf(x, y, z1)) for x, y in pts_xy]
+        faces = [self._face(list(reversed(bot)), slot), self._face(top, slot)]
+        n = len(pts_xy)
+        for i in range(n):
+            j = (i + 1) % n
+            faces.append(self._face([bot[i], bot[j], top[j], top[i]], slot))
+        bmesh.ops.recalc_face_normals(self.bm, faces=faces)
+
     def finish(self, name):
         bm = self.bm
         for f in bm.faces:
@@ -153,6 +167,24 @@ class Builder:
         obj = bpy.data.objects.new(name, mesh)
         bpy.context.scene.collection.objects.link(obj)
         return obj
+
+
+class CollectBuilder(Builder):
+    """Records boxes instead of meshing them, so a facade builder's output can
+    be cut (acute pier) or revolved (fan) by kit_geometry. Panes are dropped:
+    end piers and fans carry no glass."""
+
+    def __init__(self):
+        super().__init__()
+        self.boxes = []
+
+    def box(self, x0, x1, y0, y1, z0, z1, slot):
+        if x1 - x0 < 1e-4 or y1 - y0 < 1e-4 or z1 - z0 < 1e-4:
+            return
+        self.boxes.append((x0, x1, y0, y1, z0, z1, slot))
+
+    def pane(self, *a, **k):
+        return
 
 
 def material(name):
@@ -500,6 +532,33 @@ def corner_half(b, wing, h, level, part):
     b.mirror(None)
 
 
+# ---------------------------------------------------------------- spline building
+# docs/superpowers/specs/2026-10-09-tl-spline-building-design.md section 5.
+# The pier is a 1.5 m stretch of the storey's filler profile with flat ends;
+# the fans revolve that profile +-5 deg about the vertical axis through the
+# vertex (the mesh origin), so slices placed side by side close any turn.
+
+def _filler_boxes(level, w, h):
+    c = CollectBuilder()
+    build_filler(c, w, h, level)
+    return c.boxes
+
+
+def build_end_pier(b, w, h, level, acute):
+    boxes = _filler_boxes(level, w, h)
+    if acute:
+        boxes = kit_geometry.acute_clip(boxes, kit_geometry.section(boxes, w / 2.0))
+    for x0, x1, y0, y1, z0, z1, slot in boxes:
+        b.box(x0, x1, y0, y1, z0, z1, slot)
+
+
+def build_fan(b, h, level, kind):
+    y_probe = 0.0 if level == 0 else 0.5
+    sec = kit_geometry.section(_filler_boxes(level, 1.0, h), y_probe)
+    for r0, r1, z0, z1, slot in kit_geometry.fan_rings(sec, kind):
+        b.prism(kit_geometry.ring_sector_xy(r0, r1, kind), z0, z1, slot)
+
+
 BUILDERS = {
     "foundation": lambda b, p: build_foundation(b, p["width_m"], p["height_m"]),
     "foundation_corner": lambda b, p: (corner_ex if p["part"] == "CornerEx_01"
@@ -521,6 +580,10 @@ BUILDERS = {
     "cornice_corner_in": lambda b, p: corner_in(b, p["width_m"], p["height_m"], 4),
     "corner_half": lambda b, p: corner_half(b, p["width_m"], p["height_m"], p["level"], p["part"]),
     "cornice_half": lambda b, p: corner_half(b, p["width_m"], p["height_m"], 4, p["part"]),
+    "end_pier": lambda b, p: build_end_pier(b, p["width_m"], p["height_m"], p["level"], False),
+    "end_pier_acute": lambda b, p: build_end_pier(b, p["width_m"], p["height_m"], p["level"], True),
+    "fan_front": lambda b, p: build_fan(b, p["height_m"], p["level"], "front"),
+    "fan_back": lambda b, p: build_fan(b, p["height_m"], p["level"], "back"),
 }
 
 
@@ -653,7 +716,7 @@ def main():
         b.place(0.0, x, 0.0, 0)
         build_into(b, part)
         b.finish(part["mesh_name"])
-        x += part["width_m"] + 1.0
+        x += max(part["width_m"], 0.5) + 1.0
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(args.out, "TL_Kit.blend"))
     if args.preview:
         clear_scene()

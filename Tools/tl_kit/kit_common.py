@@ -23,7 +23,9 @@ LODS_PRODUCED = [0]
 # truncated spec fails loudly. There is no roof level: modules only run along
 # the facade, so the roof is the planar mesh the pipeline builds from the
 # footprint (placed by BDF RoofData).
-EXPECTED_PART_COUNT = 43
+# +18 spline-building parts: per storey L1-L4 EndPier_01, EndPierAcute_01,
+# FanFront_01, FanBack_01; L0 the two fans.
+EXPECTED_PART_COUNT = 61
 
 # Grammar symbol per kit part. Wall_02 is the scalable filler (WS1); a level
 # without one reuses its Wall_01 as WS1.
@@ -34,6 +36,13 @@ PART_TO_SYMBOL = {
     "CornerExR_01": "C_SR", "CornerIn_01": "C_I", "CornerInL_01": "C_IL",
     "CornerInR_01": "C_IR",
 }
+PART_TO_SYMBOL.update({
+    "EndPier_01": "EL", "EndPierAcute_01": "EAL",     # ER / EAR share these meshes
+    "FanFront_01": "FF", "FanBack_01": "FB",
+})
+# Symbols of the spline building only. tl_make_rules.py skips them, so the
+# RULE_TL_* assets (SGD route) stay exactly as before.
+NON_RULE_SYMBOLS = {"EL", "ER", "EAL", "EAR", "FF", "FB"}
 # Stretchable symbols: WS1 is each facade level's filler, FS2 the foundation
 # strip. FS2 must stay scalable (it is on every sibling style): the foundation
 # grammar is [FC][FS2]+[LC], so a non-scalable FS2 leaves the remainder of each
