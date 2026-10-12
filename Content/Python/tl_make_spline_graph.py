@@ -5,6 +5,7 @@
 # (each task extends the graph and verifies before the next).
 import importlib
 import json
+import math
 import sys
 
 sys.path.insert(0, unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_content_dir() + "Python"))
@@ -206,6 +207,109 @@ def build_segment_d(K, P):
     return P["walls"]
 
 
+FAN_TEMPLATE_POINTS = 18     # ceil(180 / 10): enough slices for any turn
+N_CEIL_EPS = 1e-6            # slice-count epsilon before CEIL (see build_segment_e)
+
+
+def build_segment_e(K, P):
+    """Corner fans (task-9-brief.md). One fan per storey vertex, built from the
+    segment that STARTS there: PreviousAngle is the signed turn at the vertex
+    (> 0 convex, measured: the footprint's shoelace area is positive after
+    FORCE_CLOCKWISE and the L-shape's five convex corners read +90, its concave
+    one -90), the vertex is $Position - Forward * SegLen / 2, the incoming
+    exterior normal is $Rotation.Yaw - PreviousAngle - 90 and the fan sweeps
+    PreviousAngle from it (corner_math.fan with area_sign = +1)."""
+    s = K.maths(P["segs"], "ABS", "PreviousAngle", None, "AbsTurn")
+    s, _ = K.filt(s, "AbsTurn", "GREATER_OR_EQUAL", value=("Double", "DoubleValue=1.000000"))
+    s = K.maths(s, "MULTIPLY", "SegLen", 0.5, "HalfLen")
+    s = K.maths(s, "MULTIPLY", "$Rotation.Forward", Sel("HalfLen"), "HalfVec")
+    s = K.maths(s, "SUBTRACT", "$Position", Sel("HalfVec"), "VPos")
+    s = K.maths(s, "DIVIDE", "AbsTurn", 10.0, "N")
+    # Measured on TL_Pent (exact 160 deg turn): AbsTurn / 10 reads back a hair
+    # above 16 and CEIL gave 17 slices against corner_math's 16. Subtract the
+    # same kind of epsilon corner_math.fan does (ceil(x - 1e-9)) before CEIL;
+    # 1e-6 slice = 1e-5 deg, far below any turn that matters, and N stays >= 1
+    # because AbsTurn >= 1 deg here.
+    s = K.maths(s, "SUBTRACT", "N", N_CEIL_EPS, "N")
+    s = K.maths(s, "CEIL", "N", None, "N")                  # stays Double (bForceRoundingOpToInt off)
+    s = K.maths(s, "DIVIDE", "AbsTurn", Sel("N"), "HalfA")
+    s = K.maths(s, "MULTIPLY", "HalfA", 0.5, "HalfA")
+    s = K.maths(s, "SUBTRACT", "$Rotation.Yaw", Sel("PreviousAngle"), "Yaw0")
+    s = K.maths(s, "SUBTRACT", "Yaw0", 90.0, "Yaw0")
+    for op, a, out in (("DEG_TO_RAD", "HalfA", "HalfRad"), ("COS", "HalfRad", "CosA"), ("SIN", "HalfRad", "SinA")):
+        n = K.node("PCGMetadataTrigSettings", operation=getattr(unreal.PCGMetadataTrigOperation, op),
+                   input_source1=Sel(a), output_target=Sel(out))
+        K.edge(s, n, "In")
+        s = (n, "Out")
+    s = K.maths(s, "DIVIDE", "CosA", math.cos(math.radians(5.0)), "Sx")
+    s = K.maths(s, "DIVIDE", "SinA", math.sin(math.radians(5.0)), "Sy")
+    corners = s
+
+    # 18 template points at x = 100 k. K is made an integer (ruling 2): Round
+    # with bForceRoundingOpToInt writes Integer64. KH = k + 0.5 is computed
+    # here, as a Double, before CopyPoints overwrites $Position.
+    pts = []
+    for k in range(FAN_TEMPLATE_POINTS):
+        p = unreal.PCGPoint()
+        p.set_editor_property("transform", unreal.Transform(location=unreal.Vector(100.0 * k, 0.0, 0.0)))
+        pts.append(p)
+    tmpl = K.node("PCGCreatePointsSettings", points_to_create=pts,
+                  coordinate_space=unreal.PCGCoordinateSpace.WORLD)
+    if len(tmpl.get_settings().get_editor_property("points_to_create")) != FAN_TEMPLATE_POINTS:
+        raise RuntimeError("CreatePoints did not take %d template points" % FAN_TEMPLATE_POINTS)
+    kf = K.maths((tmpl, "Out"), "DIVIDE", "$Position.X", 100.0, "KF")
+    kh = K.maths(kf, "ADD", "KF", 0.5, "KH")
+    kk = K.node("PCGMetadataMathsSettings", operation=unreal.PCGMetadataMathsOperation.ROUND,
+                force_rounding_op_to_int=True, input_source1=Sel("KF"), output_target=Sel("K"))
+    if not kk.get_settings().get_editor_property("force_rounding_op_to_int"):
+        raise RuntimeError("K rounding node did not take force_rounding_op_to_int")
+    K.edge(kh, kk, "In")
+
+    # Source = the template, Target = the corners (ruling 4): every output
+    # point inherits the corner's attributes (SOURCE_FIRST takes the source's
+    # metadata as root and copies the target's other attributes onto it).
+    cp = K.node("PCGCopyPointsSettings",
+                attribute_inheritance=unreal.PCGCopyPointsMetadataInheritanceMode.SOURCE_FIRST)
+    K.edge((kk, "Out"), cp, "Source")
+    K.edge(corners, cp, "Target")
+    # keep k < n. Written as N > K: the threshold is broadcast to the target's
+    # type, and Integer64 -> Double broadcasts while Double -> Integer64 does not.
+    s, _ = K.filt((cp, "Out"), "N", "GREATER", against="K")
+    s = K.maths(s, "DIVIDE", "PreviousAngle", Sel("N"), "Step")
+    s = K.maths(s, "MULTIPLY", "KH", Sel("Step"), "YawD")
+    s = K.maths(s, "ADD", "Yaw0", Sel("YawD"), "Yaw")
+    rot = K.node("PCGMetadataMakeRotatorSettings",
+                 operation=unreal.PCGMetadataMakeRotatorOp.MAKE_ROT_FROM_ANGLES,
+                 input_source1=Sel("@Last"), input_source2=Sel("@Last"), input_source3=Sel("Yaw"),
+                 output_target=Sel("$Rotation"))
+    K.edge(K.const("Double", 0.0, "Zero"), rot, "Roll")
+    K.edge(K.const("Double", 0.0, "Zero"), rot, "Pitch")
+    K.edge(s, rot, "Yaw")
+    # output_type must be Vector: the default (Vector2) has no Z pin.
+    vec = K.node("PCGMetadataMakeVectorSettings", output_type=unreal.PCGMetadataTypes.VECTOR,
+                 input_source1=Sel("Sx"), input_source2=Sel("Sy"),
+                 input_source3=Sel("@Last"), output_target=Sel("$Scale"))
+    K.edge((rot, "Out"), vec, "X")
+    K.edge((rot, "Out"), vec, "Y")
+    K.edge(K.const("Double", 1.0, "One"), vec, "Z")
+    pos = K.node("PCGCopyAttributesSettings", input_source=Sel("VPos"), output_target=Sel("$Position"))
+    K.edge((vec, "Out"), pos, "Target")
+    K.edge((vec, "Out"), pos, "Source")
+    convex, concave = K.filt((pos, "Out"), "PreviousAngle", "GREATER", value=("Double", "DoubleValue=0.000000"))
+    outs = []
+    for port, sym in ((convex, "FF"), (concave, "FB")):
+        tab, _ = K.filt(P["modules"], "Symbol", "EQUAL", value=("String", 'StringValue="%s"' % sym))
+        tab_set = K.node("PCGConvertToAttributeSetSettings")
+        K.edge(tab, tab_set, "In")
+        m = K.node("PCGMatchAndSetAttributesSettings", match_attributes=True,
+                   input_attribute=Sel("LevelNumber"), match_attribute=Sel("Level"), keep_unmatched=False)
+        K.edge(port, m, "In")
+        K.edge((tab_set, "Out"), m, "Match Data")
+        outs.append((m, "Out"))
+    P["fans"] = K.merge(*outs)
+    return P["fans"]
+
+
 def build_spawner(K, *ports):
     sp = K.copy("StaticMeshSpawner_3", synchronous_load=True)   # mesh by attribute "Mesh" (traps.md 4)
     K.edge(K.merge(*ports), sp, "In")
@@ -221,15 +325,17 @@ def main():
         # expose the edge stream for the probe; Task 8 replaces this
         K.edge(P["walls_in"], g.get_output_node(), "Out")
     if seg in ("abcd", "abcde", "all"):
-        build_segment_d(K, P)
-        # fix round 1: wire the spawner to the graph's own output node for
-        # every dispatch that reaches this point, so the endpoint is never
-        # left dangling (Epic's own StaticMeshSpawner_3 feeds
-        # DefaultOutputNode.MeshPoints). Segments E ("abcde") and the full
-        # chain ("all") are not implemented yet (Tasks 9-10); until they add
-        # their own geometry after segment D, they spawn exactly what
-        # segment D produced, same as "abcd".
-        K.edge(build_spawner(K, P["walls"]), g.get_output_node(), "Out")
+        # Every dispatch past segment C ends in exactly ONE spawner and ONE
+        # output edge; only what feeds the spawner differs:
+        #   abcd  = walls
+        #   abcde = walls + fans
+        #   all   = walls + fans (+ props and roof, Task 10)
+        spawn_in = [build_segment_d(K, P)]
+        if seg in ("abcde", "all"):
+            spawn_in.append(build_segment_e(K, P))
+        K.edge(build_spawner(K, *spawn_in), g.get_output_node(), "Out")
+    elif seg != "abc":
+        raise RuntimeError("unknown segments %r" % seg)
     ok = unreal.EditorAssetLibrary.save_asset(DEST, only_if_is_dirty=False)
     return {"saved": ok, "nodes": len(g.get_editor_property("nodes")),
             "edges": len(g.get_all_edges()), "segments": seg}
