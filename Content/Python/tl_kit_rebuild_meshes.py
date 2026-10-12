@@ -130,10 +130,17 @@ def main():
         if sorted(rec["sections"]) != sorted(rec["src_sections"]):
             errs.append("sections %s != source %s" % (rec["sections"], rec["src_sections"]))
         w = p["width_m"] * 100.0
+        h = p["height_m"] * 100.0
         below = p["kind"] in BELOW_GRADE_KINDS or (p["kind"].startswith("fan_") and p["level"] == 0)
         if below:
             if bb.max.z > TOL_CM:
                 errs.append("top z %.1f above 0" % bb.max.z)
+        elif p["kind"].startswith("fan_"):
+            # Corner fans above the ground floor can start above the storey
+            # base (e.g. above a string course or frieze), so only require
+            # the mesh to lie within the storey's own height span.
+            if bb.min.z < -TOL_CM or bb.max.z > h + TOL_CM:
+                errs.append("fan z [%.1f, %.1f] outside [0, %.1f]" % (bb.min.z, bb.max.z, h))
         elif abs(bb.min.z) > TOL_CM:
             errs.append("base z %.1f" % bb.min.z)
         y0, y1 = (-w / 2.0, w / 2.0) if p["kind"] in CENTRED_KINDS else (0.0, w)
