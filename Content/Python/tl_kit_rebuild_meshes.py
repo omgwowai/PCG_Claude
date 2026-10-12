@@ -23,7 +23,8 @@ DEST = "/Game/Building/TL/A"
 SCRATCH = "/Game/Building/TL/_ImportScratch"
 TOL_CM = 0.5
 CORNER_KINDS = ("corner_ex", "cornice_corner_ex", "corner_in", "cornice_corner_in",
-                "corner_half", "cornice_half", "foundation_corner", "roof_corner")
+                "corner_half", "cornice_half", "foundation_corner", "roof_corner",
+                "fan_front", "fan_back")
 # Kinds that do not sit on z = 0: the foundation hangs below the ground floor
 # and the roof deck sits just under the cornice coping.
 BELOW_GRADE_KINDS = ("foundation", "foundation_corner", "roof_deck", "roof_corner")
@@ -129,7 +130,8 @@ def main():
         if sorted(rec["sections"]) != sorted(rec["src_sections"]):
             errs.append("sections %s != source %s" % (rec["sections"], rec["src_sections"]))
         w = p["width_m"] * 100.0
-        if p["kind"] in BELOW_GRADE_KINDS:
+        below = p["kind"] in BELOW_GRADE_KINDS or (p["kind"].startswith("fan_") and p["level"] == 0)
+        if below:
             if bb.max.z > TOL_CM:
                 errs.append("top z %.1f above 0" % bb.max.z)
         elif abs(bb.min.z) > TOL_CM:

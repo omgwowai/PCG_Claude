@@ -11,6 +11,7 @@ KNOWN_KINDS = {
     "window", "window_top", "feature_window", "feature_window_top",
     "corner_ex", "corner_in", "corner_half",
     "cornice", "cornice_pier", "cornice_corner_ex", "cornice_corner_in", "cornice_half",
+    "end_pier", "end_pier_acute", "fan_front", "fan_back",
 }
 
 
@@ -117,6 +118,30 @@ def test_part_count_matches_expected():
 
 def test_declared_lods_match_what_the_build_script_produces():
     assert load()["lods"] == kit_common.LODS_PRODUCED
+
+
+def test_spline_building_parts():
+    spec = load()
+    for lv in (1, 2, 3, 4):
+        p = parts_at(spec, lv)
+        assert p["EndPier_01"]["kind"] == "end_pier"
+        assert p["EndPierAcute_01"]["kind"] == "end_pier_acute"
+        assert p["EndPier_01"]["width_m"] * 100 == kit_common.END_PIER_CM
+        assert p["EndPierAcute_01"]["width_m"] * 100 == kit_common.END_PIER_CM
+    for lv in (0, 1, 2, 3, 4):
+        p = parts_at(spec, lv)
+        assert p["FanFront_01"]["kind"] == "fan_front"
+        assert p["FanBack_01"]["kind"] == "fan_back"
+    assert "EndPier_01" not in parts_at(spec, 0)
+
+
+def test_spline_symbols_never_reach_the_rules():
+    # RULE_TL_* (the SGD route) must not change: the new symbols are skipped there.
+    assert {"EL", "EAL", "FF", "FB"} <= kit_common.NON_RULE_SYMBOLS
+    for s in kit_common.NON_RULE_SYMBOLS:
+        for lv in range(5):
+            for g in kit_common.level_grammars(lv):
+                assert "[%s]" % s not in g
 
 
 def test_no_duplicate_symbols_within_a_level():

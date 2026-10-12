@@ -244,6 +244,8 @@ def build_modules_array_text(level):
     wall_part = None
     has_filler = any(p["part"] == "Wall_02" for p in parts)
     for p in parts:
+        if PART_TO_SYMBOL.get(p["part"]) in kit_common.NON_RULE_SYMBOLS:
+            continue    # spline-building pieces are BDF-only; RULE_TL_* stay as they were
         sym = PART_TO_SYMBOL.get(p["part"])
         if sym is None:
             # Fail loudly rather than silently dropping a module: a kit that
@@ -270,6 +272,8 @@ def build_modules_array_text(level):
     # the symbol the tokens resolve to. corner_token_entry registers FC and LC
     # themselves.
     for p in parts:
+        if PART_TO_SYMBOL.get(p["part"]) in kit_common.NON_RULE_SYMBOLS:
+            continue    # spline-building pieces are BDF-only; RULE_TL_* stay as they were
         if p["part"] != "CornerEx_01":
             continue
         path = mesh_asset_path(level, p["mesh_name"])

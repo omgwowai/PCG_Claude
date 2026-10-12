@@ -70,6 +70,33 @@
     {"part": "CornerExR_01",  "level": 4, "width_m": 1.5,  "height_m": 1.2, "kind": "cornice_half", "mesh_name": "SM_BLDG_TL_L04_A_CornerExR_01_N1"},
     {"part": "CornerIn_01",   "level": 4, "width_m": 1.5,  "height_m": 1.2, "kind": "cornice_corner_in", "mesh_name": "SM_BLDG_TL_L04_A_CornerIn_01_N1"},
     {"part": "CornerInL_01",  "level": 4, "width_m": 1.5,  "height_m": 1.2, "kind": "cornice_half", "mesh_name": "SM_BLDG_TL_L04_A_CornerInL_01_N1"},
-    {"part": "CornerInR_01",  "level": 4, "width_m": 1.5,  "height_m": 1.2, "kind": "cornice_half", "mesh_name": "SM_BLDG_TL_L04_A_CornerInR_01_N1"}
+    {"part": "CornerInR_01",  "level": 4, "width_m": 1.5,  "height_m": 1.2, "kind": "cornice_half", "mesh_name": "SM_BLDG_TL_L04_A_CornerInR_01_N1"},
+
+    {"part": "EndPier_01", "level": 1, "width_m": 1.5, "height_m": 5.0, "kind": "end_pier", "mesh_name": "SM_BLDG_TL_L01_A_EndPier_01_N1"},
+    {"part": "EndPierAcute_01", "level": 1, "width_m": 1.5, "height_m": 5.0, "kind": "end_pier_acute", "mesh_name": "SM_BLDG_TL_L01_A_EndPierAcute_01_N1"},
+
+    {"part": "EndPier_01", "level": 2, "width_m": 1.5, "height_m": 3.0, "kind": "end_pier", "mesh_name": "SM_BLDG_TL_L02_A_EndPier_01_N1"},
+    {"part": "EndPierAcute_01", "level": 2, "width_m": 1.5, "height_m": 3.0, "kind": "end_pier_acute", "mesh_name": "SM_BLDG_TL_L02_A_EndPierAcute_01_N1"},
+
+    {"part": "EndPier_01", "level": 3, "width_m": 1.5, "height_m": 3.0, "kind": "end_pier", "mesh_name": "SM_BLDG_TL_L03_A_EndPier_01_N1"},
+    {"part": "EndPierAcute_01", "level": 3, "width_m": 1.5, "height_m": 3.0, "kind": "end_pier_acute", "mesh_name": "SM_BLDG_TL_L03_A_EndPierAcute_01_N1"},
+
+    {"part": "EndPier_01", "level": 4, "width_m": 1.5, "height_m": 1.2, "kind": "end_pier", "mesh_name": "SM_BLDG_TL_L04_A_EndPier_01_N1"},
+    {"part": "EndPierAcute_01", "level": 4, "width_m": 1.5, "height_m": 1.2, "kind": "end_pier_acute", "mesh_name": "SM_BLDG_TL_L04_A_EndPierAcute_01_N1"},
+
+    {"part": "FanFront_01", "level": 0, "width_m": 0.0, "height_m": 2.5, "kind": "fan_front", "mesh_name": "SM_BLDG_TL_L00_A_FanFront_01_N1"},
+    {"part": "FanBack_01", "level": 0, "width_m": 0.0, "height_m": 2.5, "kind": "fan_back", "mesh_name": "SM_BLDG_TL_L00_A_FanBack_01_N1"},
+
+    {"part": "FanFront_01", "level": 1, "width_m": 0.0, "height_m": 5.0, "kind": "fan_front", "mesh_name": "SM_BLDG_TL_L01_A_FanFront_01_N1"},
+    {"part": "FanBack_01", "level": 1, "width_m": 0.0, "height_m": 5.0, "kind": "fan_back", "mesh_name": "SM_BLDG_TL_L01_A_FanBack_01_N1"},
+
+    {"part": "FanFront_01", "level": 2, "width_m": 0.0, "height_m": 3.0, "kind": "fan_front", "mesh_name": "SM_BLDG_TL_L02_A_FanFront_01_N1"},
+    {"part": "FanBack_01", "level": 2, "width_m": 0.0, "height_m": 3.0, "kind": "fan_back", "mesh_name": "SM_BLDG_TL_L02_A_FanBack_01_N1"},
+
+    {"part": "FanFront_01", "level": 3, "width_m": 0.0, "height_m": 3.0, "kind": "fan_front", "mesh_name": "SM_BLDG_TL_L03_A_FanFront_01_N1"},
+    {"part": "FanBack_01", "level": 3, "width_m": 0.0, "height_m": 3.0, "kind": "fan_back", "mesh_name": "SM_BLDG_TL_L03_A_FanBack_01_N1"},
+
+    {"part": "FanFront_01", "level": 4, "width_m": 0.0, "height_m": 1.2, "kind": "fan_front", "mesh_name": "SM_BLDG_TL_L04_A_FanFront_01_N1"},
+    {"part": "FanBack_01", "level": 4, "width_m": 0.0, "height_m": 1.2, "kind": "fan_back", "mesh_name": "SM_BLDG_TL_L04_A_FanBack_01_N1"}
   ]
 }
