@@ -385,7 +385,7 @@ def tl_modules():
             "BuildingToken": "TL", "Level": p["level"], "Symbol": sym,
             "Size": width, "Mod_Name": p["mesh_name"],
             "bScalable": sym in kit_common.SCALABLE_SYMBOLS, "Mesh": mesh_path,
-            "PivotOffset": (unreal.Vector(0.0, kit_common.FOUNDATION_PIVOT_Y[sym], 0.0)
+            "PivotOffset": (unreal.Vector(0.0, kit_common.FOUNDATION_PIVOT_Y.get(sym, 0.0), 0.0)
                             if p["level"] == 0 else
                             unreal.Vector(0.0, -width / 2.0,
                                           -TL_LEVEL_HEIGHT[p["level"]] / 2.0)),
@@ -393,6 +393,19 @@ def tl_modules():
             "PropOffset": unreal.Vector(), "HasProps": False, "HasWindow": False,
             "PtID": ptid})
         ptid += 1
+        # Spline-building symbols (kit_common.NON_RULE_SYMBOLS): the fans (FF/FB)
+        # are a flat 1 cm decal-like cap with no pivot shift at any level --
+        # FOUNDATION_PIVOT_Y has no FF/FB entry (hence the .get(..., 0.0) above
+        # for L0), and L1-L4 would otherwise get the generic run-centred pivot
+        # computed just above, so both paths are overridden here uniformly.
+        # EL/EAL (EndPier_01/EndPierAcute_01) are single-sided meshes; ER/EAR
+        # share the same flat-ended pier mesh (ruling R2 in the design doc) and
+        # so are appended as a second row pointing at the same Mod_Name/Mesh.
+        if sym in ("FF", "FB"):
+            rows[-1] = dict(rows[-1], Size=1.0, PivotOffset=unreal.Vector(0.0, 0.0, 0.0))
+        if sym in ("EL", "EAL"):
+            rows.append(dict(rows[-1], Symbol={"EL": "ER", "EAL": "EAR"}[sym], PtID=ptid))
+            ptid += 1
         if sym == "W1" and p["level"] not in levels_with_filler:
             rows.append(dict(rows[-1], Symbol="WS1", bScalable=True,
                              Mod_Name=p["mesh_name"] + "_WS", PtID=ptid))
@@ -454,11 +467,21 @@ def tl_modules_with_props():
     The corner mesh flags both its rows: the BDF route resolves every corner
     token to C_E (or C_I), never C_CE, so a C_CE-only flag left the corner
     anchors unspawned (measured on the showcase building: 0 of 5 corners).
+
+    The spline-building symbols (kit_common.NON_RULE_SYMBOLS: EL/ER/EAL/EAR/
+    FF/FB -- end piers and fans) need no exclusion here: their Mod_Name values
+    (EndPier_01/EndPierAcute_01/FanFront_01/FanBack_01 mesh names) never
+    appear in TL_PROPS (tl_props() only keys Wall_01/Entrance_01/Column_01/
+    CornerEx_01), so the `Mod_Name in from_props` check already leaves their
+    HasProps at tl_modules()'s default False -- confirmed by inspecting
+    tl_props()'s mod() calls and by the verify block's modules_with_props
+    check below.
     """
     from_props = set(TL_PROPS)
     rows = []
     for r in tl_modules():
-        if r["Mod_Name"] in from_props and r["Symbol"] != "WS1":
+        if (r["Mod_Name"] in from_props and r["Symbol"] != "WS1"
+                and r["Symbol"] not in kit_common.NON_RULE_SYMBOLS):
             r = dict(r, HasProps=True)
         rows.append(r)
     return rows
