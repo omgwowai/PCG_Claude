@@ -4,19 +4,25 @@
 # BUILDING_HEIGHTS) from the spawned ISM instances' world transforms, and checks
 # them against Tools/tl_kit/corner_math.py and the TL kit spec.
 #
+# There is no "gen" phase here: Content/Python/tl_spline_level.py places and
+# generates the buildings (it sets each component's graph and its Height). This
+# probe never calls set_graph, which would reset Height to the graph default.
+#
 # Args: {"phase": "read" | "gen_reverse" | "read_reverse" | "gen_bdf" | "read_bdf",
 #        "full": true}  (read returns a compact view unless full; every phase
 #        writes its complete result to Saved/tl11/probe_<phase>.json)
-#   read          A1-A3, A5, A6 (+ storey stacks), Review Focus 1 and 4 on every
-#                 building; also writes TL_L's instance snapshot (Focus 2 baseline),
-#                 so run it with TL_L's spline in its ORIGINAL order.
-#   gen_reverse   sets TL_L's spline to the reverse of the order the read phase
-#                 recorded and regenerates (keeps the component's graph and its
-#                 Height override -- never set_graph, which resets Height to
-#                 the graph default 5000). {"restore": true} puts the recorded
-#                 order back. {"step": "cleanup"} then {"step": "generate"} in
-#                 two calls proves the later read is fresh output.
-#   read_reverse  Review Focus 2: TL_L's instances vs the baseline snapshot.
+#   read          height, storey stack, roof Z, A1-A3, A5, A6, Review Focus 1, 3
+#                 (pentagon) and 4 on every building. Also writes the instance
+#                 snapshot of each REVERSIBLE building (the Focus 2 baseline),
+#                 so run it with those splines in their ORIGINAL order.
+#   gen_reverse   {"label": "TL_L" | "TL_Tilt"}: sets that building's spline to
+#                 the reverse of the order the read phase recorded and
+#                 regenerates. {"rotate": k} starts the loop k points later
+#                 instead; {"restore": true} puts the recorded order back.
+#                 {"step": "cleanup"} then {"step": "generate"} in two calls
+#                 proves the later read is fresh output.
+#   read_reverse  Review Focus 2 (same label / rotate args): the building's
+#                 instances and roof vs the baseline snapshot.
 #   gen_bdf       A4: spawns TLPROBE_Bdf, a PCGVolume running
 #                 /Game/PCG/TL/PCG_TL_Building_BDF with WingA = WingB = 6000 x 3000.
 #   read_bdf      A4: TL_Rect's L1 runs vs TLPROBE_Bdf's; destroys TLPROBE_Bdf.
@@ -30,8 +36,9 @@ import os
 import re
 import sys
 
-TOOLS = "E:/PCG_Claude/Tools/tl_kit"
-sys.path.insert(0, TOOLS)
+TOOLS = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir() + "Tools/tl_kit").rstrip("/")
+if TOOLS not in sys.path:
+    sys.path.insert(0, TOOLS)
 import importlib
 import corner_math
 import kit_common
@@ -43,24 +50,31 @@ PHASE = args.get("phase", "read")
 GRAPH_PATH = "/Game/PCG/TL/PCG_TL_SplineBuilding"
 BDF_GRAPH = "/Game/PCG/TL/PCG_TL_Building_BDF"
 BDF_LABEL = "TLPROBE_Bdf"
-SNAP_DIR = "E:/PCG_Claude/Saved/tl11"
+SNAP_DIR = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_saved_dir() + "tl11").rstrip("/")
 
-# Requested Height per building -- must match tl_spline_level.BUILDINGS.
+# REQUESTED Height per building -- must match tl_spline_level.BUILDINGS. The
+# expected storey stack is built from these, never from what the component
+# reports, so a lost Height override fails the probe.
 BUILDING_HEIGHTS = {"TL_Hex": 3000.0, "TL_Pent": 3000.0, "TL_L": 3000.0,
-                    "TL_Rect": 3000.0, "TL_Low": 1000.0, "TL_Tilt": 3000.0}
+                    "TL_Rect": 3000.0, "TL_Low": 600.0, "TL_Tilt": 3000.0}
+REVERSIBLE = ("TL_L", "TL_Tilt")        # Review Focus 2 baselines
 
 PIER_TOL_CM = 0.05      # A1
 YAW_TOL_DEG = 0.01      # A2 / A3
 SCALE_TOL = 1e-4        # A2
 LINE_TOL_CM = 0.05      # A6 module ends on the facade line / abutting
 Z_TOL_CM = 0.05
+WALL_TILT_TOL_DEG = 1e-4   # A6: wall modules stand upright (pitch = roll = 0)
+ROOF_DROP_CM = 50.0        # the roof deck's top sits this far below the top of
+                           # the highest storey (TL RoofData.Y = -50, ruling R5)
 
-# ---- independent data: the kit spec (widths, storey heights) and TL's BDF row
-SPEC = json.load(open(TOOLS + "/tl_kit_spec.json"))
+# ---- independent data: the kit spec (module widths) and the storey stack
+# model, corner_math.storey_stack (vertical grammar + level heights, under
+# pytest), neither of which reads anything the graph produced.
+with open(TOOLS + "/tl_kit_spec.json", encoding="utf-8") as _f:
+    SPEC = json.load(_f)
 WIDTH = {(p["level"], p["part"]): p["width_m"] * 100.0 for p in SPEC["parts"]}
-LEVEL_H = {int(k): v["height_m"] * 100.0 for k, v in SPEC["levels"].items()}
-LEVEL_H[0] = kit_common.FOUNDATION_LEVEL_HEIGHT_CM   # LV0 is 0.5 cm in the grammar
-VERTICAL_GRAMMAR = "[LV0][LV1][LV2]*[LV3][LV4]"      # tl_make_bdf.TL_BDF["VerticalGrammar"]
+LEVEL_H = corner_math.level_heights_cm()             # LV0 is 0.5 cm in the grammar
 
 SYM_PART = {"EL": "EndPier_01", "ER": "EndPier_01", "EAL": "EndPierAcute_01",
             "EAR": "EndPierAcute_01", "W1": "Wall_01", "E1": "Entrance_01",
@@ -74,27 +88,6 @@ def sym_part(sym, lv):
 
 
 # ------------------------------------------------------------------ models
-def storey_stack(height):
-    """Expected (level, base z) list for a building of `height`, from
-    VERTICAL_GRAMMAR and the spec's level heights: fixed levels once, the
-    `*` level as many whole times as fit (non-scalable levels, so no stretch)."""
-    toks = re.findall(r"\[LV(\d)\]([*+]?)", VERTICAL_GRAMMAR)
-    fixed = sum(LEVEL_H[int(l)] for l, r in toks if r != "*")
-    reps = {}
-    for l, r in toks:
-        if r:
-            n = int(math.floor((height - fixed) / LEVEL_H[int(l)] + 1e-9))
-            reps[int(l)] = max(n + (1 if r == "+" else 0), 1 if r == "+" else 0)
-    out, z = [], 0.0
-    for l, r in toks:
-        lv = int(l)
-        for _ in range(reps.get(lv, 1) if r else 1):
-            out.append((lv, z))
-            z += LEVEL_H[lv]
-    return {"fixed_cm": fixed, "repeats": reps, "storeys": out, "top": z,
-            "fits": height >= fixed}
-
-
 BOUNDARY_CM = 1e-6      # an edge this close to a whole-module boundary may expand either way
 
 
@@ -189,6 +182,7 @@ def instances(a):
 
 
 def dynmesh_boxes(a):
+    """World bounds (origin xyz + extent xyz) of each dynamic mesh: the roof."""
     res = []
     for d in a.get_components_by_class(unreal.DynamicMeshComponent):
         o, e, _ = unreal.SystemLibrary.get_component_bounds(d)
@@ -222,22 +216,24 @@ def check_building(label, a):
     eff_h = H.get_double_parameter(comp.graph_instance, "Height")
     graph = comp.get_graph()
     p3 = footprint3(a)
-    base_z = p3[0][2]
+    base_z = min(p[2] for p in p3)     # the building stands on its lowest control point
     pts = corner_math.clean([(p[0], p[1]) for p in p3])
     cls = corner_math.classify(pts)
     inst = instances(a)
     kit = [r for r in inst if r["part"] is not None]
     walls = [r for r in kit if not r["part"].startswith("Fan")]
     fans = [r for r in kit if r["part"].startswith("Fan")]
-    stack = storey_stack(eff_h)
-    R = {"height_requested": BUILDING_HEIGHTS[label], "height_effective": eff_h,
+    req_h = BUILDING_HEIGHTS[label]
+    stack = corner_math.storey_stack(req_h)      # from the REQUESTED height, clamped by the model
+    R = {"height_requested": req_h, "height_effective": eff_h, "height_clamped": stack["height"],
+         "base_z": base_z, "first_point_z": p3[0][2], "control_point_z": [round(p[2], 3) for p in p3],
          "graph": graph.get_path_name() if graph else None,
          "n_instances": len(inst), "n_kit": len(kit), "n_fans": len(fans),
          "footprint_clean": [[round(x, 3) for x in p] for p in pts],
          "interior_deg": [round(180 - abs(c["turn"]) if c["convex"] else 180 + abs(c["turn"]), 3) for c in cls],
          "acute_vertices": [i for i, c in enumerate(cls) if c["acute"]],
-         "stack_model": {"repeats": stack["repeats"], "top": stack["top"], "fits": stack["fits"]}}
-    R["height_ok"] = abs(eff_h - BUILDING_HEIGHTS[label]) < 1e-6
+         "stack_model": {"repeats": stack["repeats"], "top": stack["top"]}}
+    R["height_ok"] = abs(eff_h - req_h) < 1e-6
 
     # ---- storeys: expected bases per level (independent) vs distinct Z found
     exp_bases = collections.defaultdict(list)
@@ -260,8 +256,18 @@ def check_building(label, a):
         st_rows.append({"lv": lv, "n_expected": len(e), "n_walls": len(g), "n_fans": len(f), "ok": ok,
                         "expected_z": e[:3] + (["..."] if len(e) > 3 else []),
                         "walls_z": g[:3] + (["..."] if len(g) > 3 else [])})
-    R["storeys"] = {"pass": all(r["ok"] for r in st_rows), "levels": st_rows,
-                    "stack": "+".join("L%d" % lv for lv, _ in stack["storeys"])}
+    R["storeys"] = {"pass": R["height_ok"] and all(r["ok"] for r in st_rows), "levels": st_rows,
+                    "height_ok": R["height_ok"],
+                    "stack": "+".join("L%d" % lv for lv, _ in stack["storeys"]),
+                    "found": {str(lv): sorted(got_bases.get(lv, set())) for lv in range(5)}}
+
+    # ---- roof: one deck, its top ROOF_DROP_CM below the top of the highest storey
+    roofs = dynmesh_boxes(a)
+    roof_want = base_z + stack["top"] - ROOF_DROP_CM
+    roof_top = [b[2] + b[5] for b in roofs]
+    R["roof"] = {"n": len(roofs), "expected_top_z": roof_want, "top_z": roof_top,
+                 "err_cm": abs(roof_top[0] - roof_want) if len(roofs) == 1 else None}
+    R["roof"]["pass"] = len(roofs) == 1 and R["roof"]["err_cm"] <= Z_TOL_CM
 
     def storey_of(r):
         z = r["pos"][2] - (LEVEL_H[0] / 2.0 if (r["lv"] == 0 and not r["part"].startswith("Fan")) else 0.0)
@@ -371,6 +377,7 @@ def check_building(label, a):
     a6_rows = []
     boundary = []
     off_line = 0.0
+    wall_tilt = max([max(abs(r["pitch"]), abs(r["roll"])) for r in walls] or [1e9])
     for lv, z in stack["storeys"]:
         st = (lv, round(base_z + z, 1))
         for i in range(n):
@@ -396,7 +403,8 @@ def check_building(label, a):
             a6_rows.append(row)
     bad6 = [r for r in a6_rows if not r["ok"]]
     R["A6"] = {"pass": bool(a6_rows) and not bad6 and not unassigned and off_line <= LINE_TOL_CM
-               and R["storeys"]["pass"],
+               and wall_tilt <= WALL_TILT_TOL_DEG and R["storeys"]["pass"],
+               "worst_wall_tilt_deg": wall_tilt,
                "n_storey_edges": len(a6_rows), "n_bad": len(bad6), "bad": bad6[:6],
                "worst_cover_cm": worst(a6_rows, "cover_err"), "worst_off_line_cm": off_line,
                "n_unassigned": len(unassigned), "unassigned": unassigned[:4],
@@ -465,14 +473,32 @@ def regen(a, step=None):
     return R
 
 
+def reverse_target():
+    label = args.get("label", "TL_L")
+    if label not in REVERSIBLE:
+        raise RuntimeError("label must be one of %r" % (REVERSIBLE,))
+    return label
+
+
+def requested_order(base):
+    """The point order the gen_reverse args ask for, from the recorded one."""
+    if args.get("restore"):
+        return list(base), "original"
+    if "rotate" in args:
+        k = int(args["rotate"]) % len(base)
+        return list(base[k:]) + list(base[:k]), "rotated by %d" % k
+    return list(reversed(base)), "reversed"
+
+
 def phase_gen_reverse():
-    """Set TL_L's spline to the REVERSE of the order the read phase recorded
-    (or back to that order with {"restore": true}) and regenerate."""
-    A = actors()
-    a = A["TL_L"]
+    """Set the building's spline to the REVERSE of the order the read phase
+    recorded (or rotate it, or restore it) and regenerate."""
+    label = reverse_target()
+    a = actors()[label]
     sc = a.get_component_by_class(unreal.SplineComponent)
-    base = [tuple(p) for p in json.load(open(SNAP_DIR + "/TL_L_read.json"))["spline"]]
-    order = base if args.get("restore") else list(reversed(base))
+    with open("%s/%s_read.json" % (SNAP_DIR, label)) as f:
+        base = [tuple(p) for p in json.load(f)["spline"]]
+    order, name = requested_order(base)
     step = args.get("step")
     if step != "generate":
         sc.clear_spline_points(False)
@@ -484,14 +510,17 @@ def phase_gen_reverse():
         sc.update_spline()
     comp = a.get_component_by_class(unreal.PCGComponent)
     h = unreal.PCGGraphParametersHelpers.get_double_parameter(comp.graph_instance, "Height")
-    if abs(h - BUILDING_HEIGHTS["TL_L"]) > 1e-6:
-        raise RuntimeError("TL_L Height override is %r, not %r" % (h, BUILDING_HEIGHTS["TL_L"]))
+    if abs(h - BUILDING_HEIGHTS[label]) > 1e-6:
+        raise RuntimeError("%s Height override is %r, not %r" % (label, h, BUILDING_HEIGHTS[label]))
     R = regen(a, step)
     now = footprint3(a)
-    R.update(fired=step != "cleanup", step=step, height_effective=h, order="original" if args.get("restore") else "reversed",
+    R.update(label=label, fired=step != "cleanup", step=step, height_effective=h, order=name,
              spline_now=[[round(v, 1) for v in p] for p in now],
              signed_area=corner_math.signed_area([(p[0], p[1]) for p in now]))
     return R
+
+
+CHECKS = ("height", "storeys", "roof", "A1", "A2", "A3", "A5", "A6")
 
 
 def phase_read():
@@ -502,50 +531,92 @@ def phase_read():
         if label not in A:
             R["buildings"][label] = {"error": "missing"}
             continue
-        R["buildings"][label] = check_building(label, A[label])
+        b = check_building(label, A[label])
+        b["height"] = {"pass": b["height_ok"], "requested": b["height_requested"],
+                       "effective": b["height_effective"]}
+        R["buildings"][label] = b
     B = R["buildings"]
-    # Review Focus 1: TL_Tilt (one vertex 50 cm up) -- every storey one Z, the
-    # same Zs as the flat TL_Rect of the same Height.
-    tilt, rect = B.get("TL_Tilt", {}), B.get("TL_Rect", {})
-    f1_same = [r["expected_z"] == s["expected_z"] and r["walls_z"] == s["walls_z"]
-               for r, s in zip(tilt.get("storeys", {}).get("levels", []), rect.get("storeys", {}).get("levels", []))]
-    R["Focus1"] = {"pass": bool(tilt) and tilt["storeys"]["pass"] and all(f1_same),
-                   "tilt_levels": tilt.get("storeys", {}).get("levels")}
+    R["missing_buildings"] = [lab for lab, b in B.items() if "error" in b]
+
+    # Review Focus 1: TL_Tilt stands on uneven ground. Every storey's modules
+    # share one Z, and the base is the LOWEST control point's Z -- which the
+    # fixture makes different from the first point's, or the check says nothing.
+    tilt = B.get("TL_Tilt", {})
+    f1 = {"pass": False}
+    if tilt and "error" not in tilt:
+        cz = tilt["control_point_z"]
+        l1 = tilt["storeys"]["found"]["1"]
+        f1 = {"control_point_z": cz, "lowest_z": min(cz), "first_point_z": cz[0],
+              "fixture_ok": cz[0] > min(cz) + 1.0 and abs(min(cz)) > 1.0,
+              "l1_wall_z_found": l1, "l1_wall_z_expected": min(cz) + LEVEL_H[0],
+              "distinct_z_found_expected_per_level": {str(r["lv"]): [r["n_walls"], r["n_expected"]]
+                                                      for r in tilt["storeys"]["levels"]},
+              "storeys_pass": tilt["storeys"]["pass"], "roof_pass": tilt["roof"]["pass"],
+              "roof_top_z": tilt["roof"]["top_z"], "roof_expected_top_z": tilt["roof"]["expected_top_z"]}
+        f1["pass"] = bool(f1["fixture_ok"] and f1["storeys_pass"] and f1["roof_pass"] and len(l1) == 1
+                          and abs(l1[0] - f1["l1_wall_z_expected"]) <= Z_TOL_CM)
+    R["Focus1"] = f1
+
+    # Review Focus 4: TL_Low asks for a Height BELOW the fixed stack. It must be
+    # exactly that stack (no L2), with its roof ROOF_DROP_CM under the top of L4.
     low = B.get("TL_Low", {})
-    lv = {r["lv"]: r["n_walls"] for r in low.get("storeys", {}).get("levels", [])}
-    R["Focus4"] = {"pass": lv.get(1, 0) > 0 and lv.get(4, 0) > 0, "walls_storeys_per_level": lv,
-                   "stack": low.get("storeys", {}).get("stack"), "top_cm": low.get("stack_model", {}).get("top")}
+    f4 = {"pass": False}
+    if low and "error" not in low:
+        lv = {str(r["lv"]): r["n_walls"] for r in low["storeys"]["levels"]}
+        l4 = low["storeys"]["found"]["4"]
+        f4 = {"height_requested": low["height_requested"], "min_stack_cm": corner_math.min_stack_cm(),
+              "fixture_ok": low["height_requested"] < corner_math.min_stack_cm(),
+              "stack_expected": "L0+L1+L3+L4", "stack_model": low["storeys"]["stack"],
+              "storeys_found_per_level": lv, "storeys_pass": low["storeys"]["pass"],
+              "top_of_l4": (l4[0] + LEVEL_H[4]) if len(l4) == 1 else None,
+              "roof_top_z": low["roof"]["top_z"], "roof_pass": low["roof"]["pass"]}
+        f4["pass"] = bool(f4["fixture_ok"] and f4["stack_model"] == f4["stack_expected"] and f4["storeys_pass"]
+                          and lv == {"0": 1, "1": 1, "2": 0, "3": 1, "4": 1} and f4["roof_pass"]
+                          and f4["top_of_l4"] is not None and len(f4["roof_top_z"]) == 1
+                          and abs(f4["roof_top_z"][0] - (f4["top_of_l4"] - ROOF_DROP_CM)) <= Z_TOL_CM)
+    R["Focus4"] = f4
+
     pent = B.get("TL_Pent", {})
     R["Focus3_pent"] = {"pass": all(pent.get(k, {}).get("pass") for k in ("A1", "A2", "A3", "A5", "A6")),
                         "interior_deg": pent.get("interior_deg"), "acute_vertices": pent.get("acute_vertices")}
-    for k in ("A1", "A2", "A3", "A5", "A6"):
+    # a check passes only when EVERY building is there and passes it
+    for k in CHECKS:
         rows = {lab: b[k] for lab, b in B.items() if k in b}
-        R[k] = {"pass": bool(rows) and all(v["pass"] for v in rows.values())}
-    R["summary"] = {k: R[k]["pass"] for k in ("A1", "A2", "A3", "A5", "A6", "Focus1", "Focus4", "Focus3_pent")}
-    # Focus 2 baseline
+        R[k] = {"pass": len(rows) == len(BUILDING_HEIGHTS) and all(v["pass"] for v in rows.values()),
+                "n_buildings": len(rows)}
+    R["summary"] = {k: R[k]["pass"] for k in CHECKS + ("Focus1", "Focus4", "Focus3_pent")}
+    R["summary"]["all_buildings_present"] = not R["missing_buildings"]
+    # Focus 2 baselines
     os.makedirs(SNAP_DIR, exist_ok=True)
-    snap = snapshot(A["TL_L"])
-    with open(SNAP_DIR + "/TL_L_read.json", "w") as f:
-        json.dump(snap, f)
-    R["focus2_baseline_rows"] = len(snap["rows"])
+    R["focus2_baseline_rows"] = {}
+    for label in REVERSIBLE:
+        if label in A:
+            snap = snapshot(A[label])
+            with open("%s/%s_read.json" % (SNAP_DIR, label), "w") as f:
+                json.dump(snap, f)
+            R["focus2_baseline_rows"][label] = len(snap["rows"])
     return R
 
 
 def phase_read_reverse():
-    A = actors()
-    base = json.load(open(SNAP_DIR + "/TL_L_read.json"))
-    now = snapshot(A["TL_L"])
-    reversed_ok = [list(map(lambda v: round(v, 3), p)) for p in reversed(base["spline"])] == \
-        [list(map(lambda v: round(v, 3), p)) for p in now["spline"]]
+    label = reverse_target()
+    a = actors()[label]
+    with open("%s/%s_read.json" % (SNAP_DIR, label)) as f:
+        base = json.load(f)
+    now = snapshot(a)
+    order, name = requested_order([tuple(p) for p in base["spline"]])
+    rnd = lambda pts: [[round(v, 3) for v in p] for p in pts]
+    order_ok = rnd(order) == rnd(now["spline"])
     cmp = compare_snap(base, now)
-    kit_only = compare_snap({"rows": [r for r in base["rows"] if r[0].startswith("SM_BLDG_TL_")], "dyn": base["dyn"]},
-                            {"rows": [r for r in now["rows"] if r[0].startswith("SM_BLDG_TL_")], "dyn": now["dyn"]})
-    comp = A["TL_L"].get_component_by_class(unreal.PCGComponent)
+    kit = lambda snap: {"rows": [r for r in snap["rows"] if r[0].startswith("SM_BLDG_TL_")], "dyn": snap["dyn"]}
+    kit_only = compare_snap(kit(base), kit(now))
+    comp = a.get_component_by_class(unreal.PCGComponent)
     h = unreal.PCGGraphParametersHelpers.get_double_parameter(comp.graph_instance, "Height")
-    ok = (reversed_ok and not cmp["count_diff"] and not cmp["n_unmatched"] and not cmp["meshes_with_diffs"]
-          and cmp["dyn_equal"])
-    return {"Focus2": {"pass": ok, "spline_is_reversed": reversed_ok, "height_effective": h,
-                       "all_instances": cmp, "kit_only": kit_only}}
+    same = lambda c: not c["count_diff"] and not c["n_unmatched"] and not c["meshes_with_diffs"] and c["dyn_equal"]
+    return {"Focus2": {"label": label, "order": name, "pass": order_ok and name != "original" and same(cmp),
+                       "kit_and_roof_identical": same(kit_only), "spline_is_in_requested_order": order_ok,
+                       "first_point_z_baseline": base["spline"][0][2], "first_point_z_now": now["spline"][0][2],
+                       "height_effective": h, "all_instances": cmp, "kit_only": kit_only}}
 
 
 # ------------------------------------------------------------------ A4
@@ -647,7 +718,10 @@ def phase_read_bdf():
         for c in corners:
             t = c["pos"][0] * d[0] + c["pos"][1] * d[1]
             ac = c["pos"][0] * d[1] - c["pos"][1] * d[0]
-            if abs(corner_math.wrap(c["yaw"] - yaw)) < 1.0 and abs(ac - f["across"]) < 5.0 and 0 < first - t < 200.0                     and abs(c["pos"][2] - min(x["pos"][2] for x in corners)) < Z_TOL_CM:
+            same_yaw = abs(corner_math.wrap(c["yaw"] - yaw)) < 1.0
+            on_line = abs(ac - f["across"]) < 5.0
+            lowest = abs(c["pos"][2] - min(x["pos"][2] for x in corners)) < Z_TOL_CM
+            if same_yaw and on_line and lowest and 0 < first - t < 200.0:
                 cand.append((t, ac))
         if len(cand) != 1:
             R.setdefault("facades_without_one_start_corner", []).append({"key": f["key"], "n": len(cand)})
@@ -696,13 +770,18 @@ def phase_read_bdf():
 def brief(R):
     """Compact view of a read result: per building one line per check with its
     worst value, and the details of anything that failed."""
-    out = {"world": R["world"], "summary": R["summary"], "buildings": {}}
+    out = {"world": R["world"], "summary": R["summary"], "missing_buildings": R["missing_buildings"],
+           "buildings": {}}
     for label, b in R["buildings"].items():
         if "error" in b:
             out["buildings"][label] = b
             continue
-        row = {"height": b["height_effective"], "stack": b["storeys"]["stack"],
+        row = {"height_requested_effective_clamped": [b["height_requested"], b["height_effective"],
+                                                      b["height_clamped"]],
+               "base_z": b["base_z"], "stack": b["storeys"]["stack"],
                "storeys_pass": b["storeys"]["pass"], "top_cm": b["stack_model"]["top"],
+               "roof_pass_n_top_expected": [b["roof"]["pass"], b["roof"]["n"], b["roof"]["top_z"],
+                                            b["roof"]["expected_top_z"]],
                "n_kit": b["n_kit"], "interior_deg": b["interior_deg"],
                "A1": [b["A1"]["pass"], b["A1"]["n_piers"], b["A1"]["worst_cm"]],
                "A2": [b["A2"]["pass"], b["A2"]["n_groups"], b["A2"]["n_slices"], b["A2"]["worst_dyaw"],
@@ -710,11 +789,12 @@ def brief(R):
                "A3": [b["A3"]["pass"], b["A3"]["n_groups"], b["A3"]["worst_deg"]],
                "A5": [b["A5"]["pass"], b["A5"]["n_piers"], b["A5"]["n_acute_piers"]],
                "A6": [b["A6"]["pass"], b["A6"]["n_storey_edges"], b["A6"]["n_bad"], b["A6"]["worst_cover_cm"],
-                      b["A6"]["worst_off_line_cm"], b["A6"]["n_unassigned"], b["A6"]["n_boundary_ties"]]}
+                      b["A6"]["worst_off_line_cm"], b["A6"]["n_unassigned"], b["A6"]["n_boundary_ties"],
+                      b["A6"]["worst_wall_tilt_deg"]]}
         fails = {}
         if not b["storeys"]["pass"]:
             fails["storeys"] = [r for r in b["storeys"]["levels"] if not r["ok"]]
-        for k in ("A1", "A2", "A3", "A5", "A6"):
+        for k in ("roof", "A1", "A2", "A3", "A5", "A6"):
             if not b[k]["pass"]:
                 fails[k] = b[k]
         if b["A6"]["n_boundary_ties"]:
@@ -723,7 +803,8 @@ def brief(R):
             row["fails"] = fails
         out["buildings"][label] = row
     for k in ("Focus1", "Focus4", "Focus3_pent"):
-        out[k] = R[k] if k != "Focus1" else {"pass": R[k]["pass"]}
+        out[k] = R[k]
+    out["focus2_baseline_rows"] = R["focus2_baseline_rows"]
     return out
 
 

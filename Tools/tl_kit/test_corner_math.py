@@ -133,3 +133,47 @@ def test_acute_ends_use_the_acute_piers():
 def test_cornice_level_uses_its_own_grammar():
     g = cm.edge_plan(rect(6000, 4000), 0, 4)["grammar"]
     assert "[E1]" not in g and g.startswith("[EL]") and g.endswith("[ER]")
+
+
+def test_slice_count_ignores_noise_just_above_a_multiple_of_ten():
+    # the graph subtracts CEIL_EPS (1e-6 slices) before its ceil; a turn a hair
+    # above 90 deg (float noise from the engine's own angle maths) is 9 slices
+    t = math.radians(90.0 + 5e-7)
+    pts = [(0.0, 0.0), (1000.0, 0.0), (1000.0 + 1000.0 * math.cos(t), 1000.0 * math.sin(t)), (0.0, 1000.0)]
+    assert abs(cm.classify(pts)[1]["turn"] - (90.0 + 5e-7)) < 1e-9
+    assert len(cm.fan(pts, 1)) == 9
+    # ... while a turn clearly above it is 10
+    t = math.radians(90.001)
+    pts[2] = (1000.0 + 1000.0 * math.cos(t), 1000.0 * math.sin(t))
+    assert len(cm.fan(pts, 1)) == 10
+
+
+def test_min_stack_is_the_levels_without_a_repeat():
+    # LV0 0.5 + LV1 500 + LV3 300 + LV4 120; LV2 is the only repeat
+    assert cm.min_stack_cm() == 920.5
+    assert cm.level_heights_cm() == {0: 0.5, 1: 500.0, 2: 300.0, 3: 300.0, 4: 120.0}
+
+
+def test_storey_stack_counts_whole_repeats():
+    s = cm.storey_stack(3000.0)
+    assert s["repeats"] == {2: 6}
+    assert [lv for lv, _ in s["storeys"]] == [0, 1, 2, 2, 2, 2, 2, 2, 3, 4]
+    assert s["storeys"][2] == (2, 500.5) and s["storeys"][-1] == (4, 2600.5)
+    assert s["top"] == 2720.5
+    assert cm.storey_stack(1220.4)["repeats"] == {2: 0}
+    assert cm.storey_stack(1220.5)["repeats"] == {2: 1}
+
+
+def test_storey_stack_clamps_to_the_fixed_stack():
+    low = cm.storey_stack(600.0)
+    assert low["height"] == 920.5
+    assert [lv for lv, _ in low["storeys"]] == [0, 1, 3, 4]
+    assert low["storeys"] == [(0, 0.0), (1, 0.5), (3, 500.5), (4, 800.5)]
+    assert low["top"] == 920.5
+    assert low == cm.storey_stack(920.5)
+
+
+def test_vertical_grammar_matches_the_bdf_script():
+    here = os.path.dirname(os.path.abspath(__file__))
+    text = open(os.path.join(here, "..", "..", "Content", "Python", "tl_make_bdf.py"), encoding="utf-8").read()
+    assert '"VerticalGrammar": "%s"' % kit_common.VERTICAL_GRAMMAR in text

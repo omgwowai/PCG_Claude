@@ -8,11 +8,15 @@ footprint is the closed facade line as a list of (x, y) vertices, either
 winding. The graph is checked against this model (acceptance A1-A6), so every
 rule the graph applies to a corner or an edge is written here first.
 """
+import json
 import math
 import os
+import re
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
 import kit_common  # noqa: E402
 
 COLLINEAR_DEG = 1.0        # |turn| below this: the vertex is dropped (CleanSpline)
@@ -150,3 +154,45 @@ def edge_plan(pts, i, level):
         g = g.replace("[FC", "[EAL" if cls[i]["acute"] else "[EL")
         g = g.replace("[LC", "[EAR" if cls[(i + 1) % len(pts)]["acute"] else "[ER")
     return {"length": length, "short": False, "symbol": None, "scale": 1.0, "grammar": g}
+
+
+def level_heights_cm():
+    """Storey height per TL level, cm: LV1..LV4 from tl_kit_spec.json (what
+    tl_make_bdf.py writes into the Levels rows), LV0 the 0.5 cm the foundation
+    takes in the vertical grammar."""
+    with open(os.path.join(_HERE, "tl_kit_spec.json"), encoding="utf-8") as f:
+        levels = json.load(f)["levels"]
+    h = {int(k): v["height_m"] * 100.0 for k, v in levels.items()}
+    h[0] = kit_common.FOUNDATION_LEVEL_HEIGHT_CM
+    return h
+
+
+def _vertical_tokens():
+    return [(int(l), r) for l, r in re.findall(r"\[LV(\d)\]([*+]?)", kit_common.VERTICAL_GRAMMAR)]
+
+
+def min_stack_cm():
+    """Height of the fixed stack: every level of the vertical grammar that is
+    not a `*` repeat. The graph clamps Height to this, so a building asked to
+    be lower is the fixed stack rather than nothing."""
+    h = level_heights_cm()
+    return sum(h[lv] for lv, rep in _vertical_tokens() if rep != "*")
+
+
+def storey_stack(height):
+    """The storeys of a building of `height` cm: Height is clamped to
+    min_stack_cm(), the fixed levels appear once and each `*` level as many
+    whole times as fit in what is left (levels never stretch). Returns
+    {"height": clamped, "repeats": {level: n}, "storeys": [(level, base z)],
+    "top": top of the highest storey}; z is measured from the footprint."""
+    h = level_heights_cm()
+    toks = _vertical_tokens()
+    fixed = min_stack_cm()
+    height = max(float(height), fixed)
+    repeats = {lv: int(math.floor((height - fixed) / h[lv] + 1e-9)) for lv, rep in toks if rep == "*"}
+    storeys, z = [], 0.0
+    for lv, rep in toks:
+        for _ in range(repeats[lv] if rep == "*" else 1):
+            storeys.append((lv, z))
+            z += h[lv]
+    return {"height": height, "repeats": repeats, "storeys": storeys, "top": z}

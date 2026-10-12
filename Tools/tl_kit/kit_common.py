@@ -70,6 +70,14 @@ FOUNDATION_PIVOT_Y = {"FS2": 0.0, "C_CE": -20.173994, "C_E": -20.173994, "C_I": 
 FOUNDATION_LEVEL_HEIGHT_CM = 0.5
 
 
+# TL's vertical grammar: foundation, ground floor, any number of L2 storeys,
+# the top storey and the cornice. tl_make_bdf.py writes the same string into
+# BDF_WithTL (TL_BDF["VerticalGrammar"]); test_corner_math.py checks the two
+# stay equal. Only [LV2] repeats, so the levels without a `*` are the fixed
+# stack every TL building has.
+VERTICAL_GRAMMAR = "[LV0][LV1][LV2]*[LV3][LV4]"
+
+
 def level_grammars(level):
     """(F0, F1, F2) for a TL level."""
     if level == 0:
