@@ -227,7 +227,7 @@ def build_segment_e(K, P):
     s = K.maths(s, "DIVIDE", "AbsTurn", 10.0, "N")
     # Measured on TL_Pent (exact 160 deg turn): AbsTurn / 10 reads back a hair
     # above 16 and CEIL gave 17 slices against corner_math's 16. Subtract the
-    # same kind of epsilon corner_math.fan does (ceil(x - 1e-9)) before CEIL;
+    # same epsilon corner_math.fan does (ceil(x - corner_math.CEIL_EPS), 1e-6) before CEIL;
     # 1e-6 slice = 1e-5 deg, far below any turn that matters, and N stays >= 1
     # because AbsTurn >= 1 deg here.
     s = K.maths(s, "SUBTRACT", "N", N_CEIL_EPS, "N")
