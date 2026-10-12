@@ -209,7 +209,7 @@ def build_segment_d(K, P):
 def build_spawner(K, *ports):
     sp = K.copy("StaticMeshSpawner_3", synchronous_load=True)   # mesh by attribute "Mesh" (traps.md 4)
     K.edge(K.merge(*ports), sp, "In")
-    return sp
+    return (sp, "Out")
 
 
 def main():
@@ -222,8 +222,14 @@ def main():
         K.edge(P["walls_in"], g.get_output_node(), "Out")
     if seg in ("abcd", "abcde", "all"):
         build_segment_d(K, P)
-    if seg == "abcd":
-        build_spawner(K, P["walls"])
+        # fix round 1: wire the spawner to the graph's own output node for
+        # every dispatch that reaches this point, so the endpoint is never
+        # left dangling (Epic's own StaticMeshSpawner_3 feeds
+        # DefaultOutputNode.MeshPoints). Segments E ("abcde") and the full
+        # chain ("all") are not implemented yet (Tasks 9-10); until they add
+        # their own geometry after segment D, they spawn exactly what
+        # segment D produced, same as "abcd".
+        K.edge(build_spawner(K, P["walls"]), g.get_output_node(), "Out")
     ok = unreal.EditorAssetLibrary.save_asset(DEST, only_if_is_dirty=False)
     return {"saved": ok, "nodes": len(g.get_editor_property("nodes")),
             "edges": len(g.get_all_edges()), "segments": seg}
