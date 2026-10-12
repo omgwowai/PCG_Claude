@@ -25,6 +25,25 @@ def test_section_keeps_only_continuous_boxes():
     assert all(len(s) == 5 for s in sec)
 
 
+def test_section_excludes_a_short_box_sitting_on_the_probe():
+    # L4-like run: a dentil-style short box (y 0.68-0.82) straddles the probe
+    # y = 0.75 and must not enter the section, nor deepen the acute body.
+    run = [(-0.30, 0.0, 0.0, 1.5, 0.0, 1.08, "TL_Brick"),
+           (0.0, 0.06, 0.0, 1.5, 0.15, 0.28, "TL_Stone"),
+           (0.06, 0.18, 0.68, 0.82, 0.15, 0.28, "TL_Stone")]
+    sec = kg.section(run, 0.75)
+    assert sec == [(-0.30, 0.0, 0.0, 1.08, "TL_Brick"), (0.0, 0.06, 0.15, 0.28, "TL_Stone")]
+    assert kg.front_at(sec, 0.15, 0.28) == 0.06
+    assert sorted(r[1] for r in kg.fan_rings(sec, "front")) == [0.06]
+
+
+def test_section_of_a_centred_run_keeps_its_full_length_boxes():
+    # LV0 runs over y in [-w/2, w/2]; a joint at the probe is excluded.
+    run = [(-0.45, 0.0, -0.5, 0.5, -2.5, 0.0, "TL_Stone"),
+           (0.0, 0.04, -0.03, 0.03, -2.1, -0.3, "TL_Stone")]
+    assert kg.section(run, 0.0) == [(-0.45, 0.0, -2.5, 0.0, "TL_Stone")]
+
+
 def test_front_depth_per_band():
     sec = kg.section(L1, 0.75)
     assert kg.front_at(sec, 0.0, 0.45) == 0.06

@@ -14,11 +14,21 @@ FAN_HALF_DEG = 5.0          # every fan mesh is a +-5 deg wedge about local +X
 ACUTE_MIN_BODY_M = 0.01     # an acute pier keeps at least 1 cm of body
 
 
+RUN_TOL_M = 1e-3            # a continuous box may stop this short of the run's ends
+
+
 def section(boxes, y_probe):
-    """The cross-section of a straight run at y = y_probe: every box whose
-    run spans y_probe, with y dropped. Boxes that do not span it (dentils,
-    joints, short ornaments) are not part of the continuous profile."""
-    return [(b[0], b[1], b[4], b[5], b[6]) for b in boxes if b[2] < y_probe < b[3]]
+    """The continuous cross-section of a straight run at y = y_probe, with y
+    dropped: every box that spans y_probe AND the whole run (the y extent of
+    all the boxes, within RUN_TOL_M). Boxes that only cover part of the run
+    (dentils, joints, short ornaments) are not part of the continuous profile,
+    even when one of them happens to sit on the probe."""
+    if not boxes:
+        return []
+    ry0 = min(b[2] for b in boxes)
+    ry1 = max(b[3] for b in boxes)
+    return [(b[0], b[1], b[4], b[5], b[6]) for b in boxes
+            if b[2] < y_probe < b[3] and b[2] <= ry0 + RUN_TOL_M and b[3] >= ry1 - RUN_TOL_M]
 
 
 def z_breaks(sec):
