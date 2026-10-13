@@ -176,7 +176,7 @@ L1–L4 每层 6 件，L0 两件，一共 **26 件**。原有的 43 件不动，
    - 外凸角用 `FanFront`，内凹角用 `FanBack`；
    - Z 方向按该层层高放置。
 6. **道具与生成**：直墙模块走 BDF 路线的同一套流程：HasProps → `Loop_GroupedPropsCopy` → WindowHelper/Decal 过滤 → `ASM_Clutter_Behavior`。最后所有模块、扇片、道具一起进 `StaticMeshSpawner`。
-7. **屋顶**：顶层轮廓往里收 20 cm（尖角收法，`Offset Polygon2D`，Miter），用 `Create_Mesh_Planar` 生成平面网格，高度 = 建筑顶 + `RoofData.Y`。屋顶设备照用 `Fill_Areas_WithFittingAssets`。
+7. **屋顶**：顶层轮廓往里收 0.5 cm（2026-10-13 由 20 cm 改为 0.5 cm，与 BDF 路线一致，避免锐角端柱顶上的敞口槽；尖角收法，`Offset Polygon2D`，Miter），用 `Create_Mesh_Planar` 生成平面网格，高度 = 建筑顶 + `RoofData.Y`。屋顶设备照用 `Fill_Areas_WithFittingAssets`。
 
 蓝图 `/Game/PCG/TL/BP_TL_SplineBuilding`：一个闭合 SplineComponent 加一个 PCGComponent，用户参数是 `BuildingHeight` 和 `Seed`。
 traps.md 第 26 条记过 Python 不能给 Actor 新挂组件。如果用 Python 建带组件的蓝图也行不通，就改用带标签的 spline Actor 加一个按标签读它的 PCGVolume。
