@@ -387,7 +387,10 @@ def build_props(K, P):
 # Fill_Areas_WithFittingAssets); both take their data on "PrimaryInput".
 BLDG_BDF_GRAPH = "/Game/PCG/TL/PCG_TL_Building_BDF"     # holds the planar-mesh and rooftop-fill nodes
 ROOF_DROP_CM = 50.0          # RoofData.Y (ruling R5)
-ROOF_INSET_CM = 20.0
+# 0.5 cm, as on the BDF route (user decision 2026-10-13): the L4 acute end pier
+# keeps only 1 cm of body in the parapet band, so a deeper inset left an open
+# slot between the coping and the deck at every acute corner.
+ROOF_INSET_CM = 0.5
 
 
 def build_roof(K, P):
