@@ -396,7 +396,7 @@ namespace PyPCGTools::Private
 		Out->SetStringField(TEXT("title"), Node->NodeTitle.IsNone() ? FString() : Node->NodeTitle.ToString());
 #if WITH_EDITORONLY_DATA
 		const FLinearColor Color = Node->NodeTitleColor;
-		if (!Color.Equals(FLinearColor::White, 0.0f))
+		if (Color != FLinearColor::White)
 		{
 			Out->SetField(TEXT("title_color"), NumberArray({Color.R, Color.G, Color.B, Color.A}));
 		}
@@ -615,9 +615,20 @@ FString UPyPCGToolsLibrary::SetPinDefaultValue(UPCGSettings* Settings, int32 Pin
 		{
 			return FString::Printf(TEXT("unknown metadata type %s"), *TypeName);
 		}
-		if (Provider->GetPinDefaultValueType(Pin) != static_cast<EPCGMetadataTypes>(Type))
+		const EPCGMetadataTypes RequestedType = static_cast<EPCGMetadataTypes>(Type);
+		if (Provider->GetPinDefaultValueType(Pin) != RequestedType)
 		{
-			Provider->ConvertPinDefaultValueMetadataType(Pin, static_cast<EPCGMetadataTypes>(Type));
+			Provider->ConvertPinDefaultValueMetadataType(Pin, RequestedType);
+		}
+		// The conversion is silently ignored when the pin cannot hold that type; refuse rather than
+		// write the value into a property that still has the old type.
+		const EPCGMetadataTypes ActualType = Provider->GetPinDefaultValueType(Pin);
+		if (ActualType != RequestedType)
+		{
+			return FString::Printf(TEXT("pin %d (%s) cannot hold type %s; it is %s"),
+				PinIndex, *Pin.ToString(),
+				*StaticEnum<EPCGMetadataTypes>()->GetNameStringByValue(static_cast<int64>(RequestedType)),
+				*StaticEnum<EPCGMetadataTypes>()->GetNameStringByValue(static_cast<int64>(ActualType)));
 		}
 		// Creates the bag property; the exact value is written below from JSON.
 		Provider->SetPinDefaultValue(Pin, FString(), true);

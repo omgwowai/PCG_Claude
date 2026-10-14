@@ -91,6 +91,8 @@ bool FPyPCGToolsPinDefaults::RunTest(const FString& Parameters)
 	TestEqual(TEXT("index 1 value"), UPyPCGToolsLibrary::SetPinDefaultValue(Settings, 1, TEXT("Double"), TEXT(R"({"v":-1820.4246063232422})"), true, true), FString());
 	TestEqual(TEXT("index 0 activate only"), UPyPCGToolsLibrary::SetPinDefaultValue(Settings, 0, FString(), FString(), false, true), FString());
 	TestNotEqual(TEXT("index 9 refused"), UPyPCGToolsLibrary::SetPinDefaultValue(Settings, 9, FString(), FString(), false, true), FString());
+	// A type the pin cannot hold must be refused, not silently written into the old-typed property.
+	TestNotEqual(TEXT("impossible type refused"), UPyPCGToolsLibrary::SetPinDefaultValue(Settings, 1, TEXT("Transform"), TEXT(R"({"v":{"X":0,"Y":0,"Z":0}})"), true, true), FString());
 	const TArray<TSharedPtr<FJsonValue>> Defaults = NodeIR(Graph, Node)->GetArrayField(TEXT("pin_defaults"));
 	bool bSaw0 = false;
 	bool bSaw1 = false;
@@ -106,7 +108,8 @@ bool FPyPCGToolsPinDefaults::RunTest(const FString& Parameters)
 		{
 			bSaw1 = Entry->GetBoolField(TEXT("activated"));
 			TestEqual(TEXT("type"), Entry->GetStringField(TEXT("type")), FString(TEXT("Double")));
-			TestEqual(TEXT("exact value"), Entry->GetNumberField(TEXT("value")), -1820.4246063232422);
+			// Exact: the default tolerance (UE_KINDA_SMALL_NUMBER) would pass a 6-decimal round trip.
+			TestEqual(TEXT("exact value"), Entry->GetNumberField(TEXT("value")), -1820.4246063232422, 0.0);
 		}
 	}
 	TestTrue(TEXT("index 0 activated"), bSaw0);
@@ -145,7 +148,8 @@ bool FPyPCGToolsInstanceParameters::RunTest(const FString& Parameters)
 	TestEqual(TEXT("AbsoluteOffset"), UPyPCGToolsLibrary::SetInstanceParameter(Instance, TEXT("AbsoluteOffset"), SameAsParent), FString());
 
 	const TSharedPtr<FJsonObject> Overrides = Parse(UPyPCGToolsLibrary::ExportInstanceOverrides(Instance));
-	TestEqual(TEXT("offset.Z exact"), Overrides->GetObjectField(TEXT("offset"))->GetNumberField(TEXT("Z")), -1820.4246063232422);
+	// Exact: the default tolerance (UE_KINDA_SMALL_NUMBER) would pass a 6-decimal round trip.
+	TestEqual(TEXT("offset.Z exact"), Overrides->GetObjectField(TEXT("offset"))->GetNumberField(TEXT("Z")), -1820.4246063232422, 0.0);
 	TestTrue(TEXT("default-valued override kept"), Overrides->HasField(TEXT("AbsoluteOffset")));
 	TestEqual(TEXT("only the two set"), Overrides->Values.Num(), 2);
 	TestNotEqual(TEXT("unknown param refused"), UPyPCGToolsLibrary::SetInstanceParameter(Instance, TEXT("Nope"), TEXT(R"({"v":1})")), FString());
@@ -176,6 +180,8 @@ bool FPyPCGToolsCommentsAndBoxes::RunTest(const FString& Parameters)
 
 	UPCGSettings* Settings = nullptr;
 	UPCGNode* Node = Graph->AddNodeOfType(UPCGMetadataMathsSettings::StaticClass(), Settings);
+	// A fresh node has the default white title, so no title_color is emitted at all.
+	TestFalse(TEXT("default white title has no title_color"), NodeIR(Graph, Node)->HasField(TEXT("title_color")));
 	TestEqual(TEXT("comment"), UPyPCGToolsLibrary::SetNodeComment(Node, TEXT("hello"), true, false), FString());
 	const TSharedPtr<FJsonObject> NodeJson = NodeIR(Graph, Node);
 	TestEqual(TEXT("comment text"), NodeJson->GetStringField(TEXT("comment")), FString(TEXT("hello")));
