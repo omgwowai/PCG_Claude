@@ -117,12 +117,15 @@ a `.py` file from `Content/Python/` in the editor embedded Python interpreter.
 
 ## Tests
 
-**This project registers no C++ automation tests.** `Source/` contains no
-`IMPLEMENT_*_AUTOMATION_TEST`, so a filter like `Automation RunTests PCG_Claude` matches nothing and
-exits **255** with `No automation tests matched 'PCG_Claude'`. Add tests under `Source/PCG_Claude/`
-wrapped in `#if WITH_DEV_AUTOMATION_TESTS` before that filter means anything.
+**C++ automation tests live in the `PyPCGTools` plugin** (`Plugins/PyPCGTools/Source/PyPCGTools/Private/Tests/`).
+Run them headlessly with `-ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); six tests,
+all must report `Result={Success}`. The game module `PCG_Claude` still registers none, so a
+`PCG_Claude` filter matches nothing and exits **255**.
 
-The tests that do exist cover the MCP server. Run them against the project venv from the repo root:
+The `pypcg` package (Python form of the 18 City Sample stage graphs) is tested offline with
+`C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` (system Python 3.14; the MCP venv lacks Pillow).
+
+The MCP server's own tests run against the project venv from the repo root:
 
 ```powershell
 # whole suite
@@ -138,6 +141,12 @@ Verified against an engine self-test (`System.Core.Algo.Unique` to `Result={Succ
 
 ```powershell
 & "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests System.Core.Algo; Quit" -unattended -nopause -nosplash -nullrhi -log
+```
+
+The `PyPCGTools` plugin's six tests run the same way:
+
+```powershell
+& "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests PyPCGTools; Quit" -unattended -nopause -nosplash -nullrhi -log
 ```
 
 - List the registered test names with `-ExecCmds="Automation List; Quit"`.

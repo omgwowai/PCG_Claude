@@ -48,6 +48,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "PyPCGTools",
+			"Enabled": true
+		},
+		{
 			"Name": "CitySamplePCG",
 			"Enabled": true
 		},

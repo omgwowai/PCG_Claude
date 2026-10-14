@@ -1,0 +1,2982 @@
+{
+"Plugins/CitySamplePCG/Content/Levels/DataLayers/DL_Late_Afternoon.uasset": [
+1788235098,
+1492
+],
+"Plugins/CitySamplePCG/Content/Levels/DataLayers/DL_Vancouver_Sunset.uasset": [
+1788235098,
+1502
+],
+"Plugins/CitySamplePCG/Content/Levels/L_CitySamplePCG_Demo.umap": [
+1788235098,
+15752
+],
+"Plugins/CitySamplePCG/Content/Levels/MPD_CitySamplePCG_Demo.uasset": [
+1788235098,
+2778
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_1_1_Terrain.uasset": [
+1788235098,
+328230
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_1_2_BG_Buildings.uasset": [
+1788235098,
+156077
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_1_3_BG_Mountains.uasset": [
+1788235098,
+94356
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_2_1_MainTower_Footprint.uasset": [
+1788235098,
+77623
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_2_2_CentralPark_Footprint.uasset": [
+1788235098,
+52440
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_1_1_Districts.uasset": [
+1788235098,
+605394
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_1_2_Roads.uasset": [
+1788235098,
+1807662
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_1_3_Highways.uasset": [
+1788235098,
+351204
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_1_4_Lots.uasset": [
+1788235098,
+1424497
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_2_1_Ground.uasset": [
+1788235098,
+1323743
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_2_2_LeftOverLots.uasset": [
+1788235098,
+1659495
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_2_3_Parkings.uasset": [
+1788235098,
+1078274
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_3_1_Buildings.uasset": [
+1791367073,
+1712231
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_3_3_2_Rooftops.uasset": [
+1788235098,
+354830
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_4_1_MainTower_Visuals.uasset": [
+1788235098,
+2011824
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_4_2_CentralPark_Visuals.uasset": [
+1788235098,
+2367872
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_5_1_CityEdge.uasset": [
+1788235098,
+218555
+],
+"Plugins/CitySamplePCG/Content/Levels/PCG/PCG_5_2_OuterForest.uasset": [
+1788235098,
+784278
+],
+"Plugins/CitySamplePCG/Content/Levels/TP_DefaultPreviewSection.uasset": [
+1788235098,
+1997
+],
+"Plugins/CitySamplePCG/Content/PCG/AssignBuildingShape.uasset": [
+1788235101,
+686915
+],
+"Plugins/CitySamplePCG/Content/PCG/Assign_BldgStyles_per_MinWallWidth.uasset": [
+1788235101,
+425664
+],
+"Plugins/CitySamplePCG/Content/PCG/Crosswalks.uasset": [
+1788235101,
+1319538
+],
+"Plugins/CitySamplePCG/Content/PCG/Custom_Projector_with_rotation_fix.uasset": [
+1788235101,
+246788
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/Bldg_SGD_level.umap": [
+1788235101,
+6217919
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L01.uasset": [
+1788235101,
+8839
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L02.uasset": [
+1788235101,
+9317
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L03.uasset": [
+1788235101,
+9035
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L04.uasset": [
+1788235101,
+8305
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L05.uasset": [
+1788235101,
+8305
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L06.uasset": [
+1788235101,
+8787
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L07.uasset": [
+1788235101,
+8305
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L08.uasset": [
+1788235101,
+8305
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L09.uasset": [
+1788235101,
+8305
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L10.uasset": [
+1788235101,
+8313
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L11.uasset": [
+1788235101,
+8074
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L12.uasset": [
+1788235101,
+7180
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L13.uasset": [
+1788235101,
+7419
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L14.uasset": [
+1788235101,
+7419
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L15.uasset": [
+1788235101,
+7419
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L16.uasset": [
+1788235101,
+7419
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L17.uasset": [
+1788235101,
+7854
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L18.uasset": [
+1788235101,
+8293
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L19.uasset": [
+1788235101,
+7415
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/RULE_CHA_L20.uasset": [
+1788235101,
+8026
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHA/SGD_CHA_A.uasset": [
+1788235101,
+6947
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L01.uasset": [
+1788235101,
+5277
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L02.uasset": [
+1788235101,
+4995
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L03.uasset": [
+1788235101,
+7223
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L04.uasset": [
+1788235101,
+7983
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L05.uasset": [
+1788235101,
+7501
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/RULE_CHB_L06.uasset": [
+1788235101,
+5068
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHB/SGD_CHB_A.uasset": [
+1788235101,
+5199
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L01.uasset": [
+1788235101,
+10725
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L02.uasset": [
+1788235101,
+10389
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L03.uasset": [
+1788235101,
+10436
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L04.uasset": [
+1788235101,
+10154
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L05.uasset": [
+1788235101,
+9472
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L06.uasset": [
+1788235101,
+10424
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L07.uasset": [
+1788235101,
+9894
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L08.uasset": [
+1788235101,
+9894
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L09.uasset": [
+1788235101,
+9894
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L10.uasset": [
+1788235101,
+10437
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L11.uasset": [
+1788235101,
+10437
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L12.uasset": [
+1788235101,
+9954
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L13.uasset": [
+1788235101,
+9954
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L14.uasset": [
+1788235101,
+9954
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/RULE_CHC_L15.uasset": [
+1788235101,
+9768
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHC/SGD_CHC_A.uasset": [
+1788235101,
+8353
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L01.uasset": [
+1788235101,
+5262
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L02.uasset": [
+1788235101,
+4568
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L03.uasset": [
+1788235101,
+5097
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L04.uasset": [
+1788235101,
+7005
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L05.uasset": [
+1788235101,
+7005
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L06.uasset": [
+1788235101,
+6521
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L07.uasset": [
+1788235101,
+7415
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/RULE_CHD_L08.uasset": [
+1788235101,
+4568
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHD/SGD_CHD_A.uasset": [
+1788235101,
+5564
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L01.uasset": [
+1788235101,
+5539
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L02.uasset": [
+1788235101,
+5539
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L03.uasset": [
+1788235101,
+5539
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L04.uasset": [
+1788235101,
+5539
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L05.uasset": [
+1788235101,
+5052
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L06.uasset": [
+1788235101,
+5052
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L07.uasset": [
+1788235101,
+5052
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L08.uasset": [
+1788235101,
+5247
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/RULE_CHE_L09.uasset": [
+1788235101,
+9954
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHE/SGD_CHE_A.uasset": [
+1788235101,
+6249
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L01.uasset": [
+1788235101,
+14374
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L02.uasset": [
+1788235101,
+12908
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L03.uasset": [
+1788235101,
+11755
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L04.uasset": [
+1788235101,
+10976
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/RULE_CHF_L05.uasset": [
+1788235101,
+10433
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHF/SGD_CHF_A.uasset": [
+1788235101,
+4849
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L01.uasset": [
+1788235101,
+10580
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L02.uasset": [
+1788235101,
+10298
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L03.uasset": [
+1788235101,
+10090
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L04.uasset": [
+1788235101,
+11291
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L05.uasset": [
+1788235101,
+9771
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/RULE_CHG_L06.uasset": [
+1788235101,
+9771
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHG/SGD_CHG_A.uasset": [
+1788235101,
+5199
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L01.uasset": [
+1788235101,
+5545
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L02.uasset": [
+1788235101,
+11863
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L03.uasset": [
+1788235101,
+11863
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L04.uasset": [
+1788235101,
+11863
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L05.uasset": [
+1788235101,
+15088
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L06.uasset": [
+1788235101,
+14251
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L07.uasset": [
+1788235101,
+8842
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L08.uasset": [
+1788235101,
+7727
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/RULE_CHH_L09.uasset": [
+1788235101,
+3744
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHH/SGD_CHH_A.uasset": [
+1788235101,
+5200
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L01.uasset": [
+1788235101,
+7220
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L02.uasset": [
+1788235101,
+6660
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L03.uasset": [
+1788235101,
+8765
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L04.uasset": [
+1788235101,
+12133
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L05.uasset": [
+1788235101,
+12133
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L06.uasset": [
+1788235101,
+12614
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L07.uasset": [
+1788235101,
+11648
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L08.uasset": [
+1788235101,
+11362
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/RULE_CHI_L09.uasset": [
+1788235101,
+13404
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHI/SGD_CHI_A.uasset": [
+1788235101,
+6249
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHJ/RULE_CHJ_L00.uasset": [
+1788235101,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHJ/RULE_CHJ_L01.uasset": [
+1788235101,
+8039
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHJ/RULE_CHJ_L02.uasset": [
+1788235101,
+7561
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHJ/RULE_CHJ_L03.uasset": [
+1788235101,
+7561
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/CHJ/SGD_CHJ_A.uasset": [
+1788235101,
+4149
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L01.uasset": [
+1788235101,
+5969
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L02.uasset": [
+1788235101,
+12167
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L03.uasset": [
+1788235101,
+12119
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L04.uasset": [
+1788235101,
+11834
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/RULE_NYAA_L05.uasset": [
+1788235101,
+11882
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAA/SGD_NYAA_A.uasset": [
+1788235101,
+4877
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L01.uasset": [
+1788235101,
+12964
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L02.uasset": [
+1788235101,
+8733
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L03.uasset": [
+1788235101,
+8908
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L04.uasset": [
+1788235101,
+8731
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L05.uasset": [
+1788235101,
+8524
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/RULE_NYAB_L06.uasset": [
+1788235101,
+10477
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAB/SGD_NYAB_A.uasset": [
+1788235101,
+5231
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L01.uasset": [
+1788235101,
+12278
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L02.uasset": [
+1788235101,
+8579
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L03.uasset": [
+1788235101,
+8579
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L04.uasset": [
+1788235101,
+5963
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L05.uasset": [
+1788235101,
+8579
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/RULE_NYAC_L06.uasset": [
+1788235101,
+6379
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAC/SGD_NYAC_A.uasset": [
+1788235101,
+5231
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L01.uasset": [
+1788235101,
+6977
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L02.uasset": [
+1788235101,
+9093
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L03.uasset": [
+1788235101,
+10366
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L04.uasset": [
+1788235101,
+8638
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/RULE_NYAD_L05.uasset": [
+1788235101,
+9230
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAD/SGD_NYAD_A.uasset": [
+1788235101,
+4876
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L01.uasset": [
+1788235101,
+6320
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L02.uasset": [
+1788235101,
+4819
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L03.uasset": [
+1788235101,
+4819
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L04.uasset": [
+1788235101,
+4819
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L05.uasset": [
+1788235101,
+4819
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/RULE_NYAE_L06.uasset": [
+1788235101,
+4819
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAE/SGD_NYAE_A.uasset": [
+1788235101,
+5229
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L00.uasset": [
+1788235101,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L01.uasset": [
+1788235101,
+15249
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L02.uasset": [
+1788235101,
+5239
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L03.uasset": [
+1788235101,
+5239
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L04.uasset": [
+1788235101,
+5239
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L05.uasset": [
+1788235101,
+5239
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L06.uasset": [
+1788235101,
+5239
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/RULE_NYAF_L07.uasset": [
+1788235102,
+6704
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYAF/SGD_NYAF_A.uasset": [
+1788235102,
+5582
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L01.uasset": [
+1788235102,
+6315
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L02.uasset": [
+1788235102,
+6118
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L03.uasset": [
+1788235102,
+5833
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L04.uasset": [
+1788235102,
+5833
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L05.uasset": [
+1788235102,
+5833
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L06.uasset": [
+1788235102,
+6315
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L07.uasset": [
+1788235102,
+6315
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L08.uasset": [
+1788235102,
+7018
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L09.uasset": [
+1788235102,
+5816
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L10.uasset": [
+1788235102,
+5821
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L11.uasset": [
+1788235102,
+5377
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L12.uasset": [
+1788235102,
+5821
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L13.uasset": [
+1788235102,
+5821
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L14.uasset": [
+1788235102,
+5821
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/RULE_NYG_L17.uasset": [
+1788235102,
+6298
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYG/SGD_NYG_A.uasset": [
+1788235102,
+5899
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L00.uasset": [
+1788235102,
+4512
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L01.uasset": [
+1788235102,
+6306
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L02.uasset": [
+1788235102,
+6310
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L03.uasset": [
+1788235102,
+5824
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L04.uasset": [
+1788235102,
+5824
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L05.uasset": [
+1788235102,
+5824
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L06.uasset": [
+1788235102,
+6306
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L07.uasset": [
+1788235102,
+6306
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L08.uasset": [
+1788235102,
+7026
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L09.uasset": [
+1788235102,
+5824
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L10.uasset": [
+1788235102,
+5829
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L11.uasset": [
+1788235102,
+5385
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L12.uasset": [
+1788235102,
+5829
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L13.uasset": [
+1788235102,
+5829
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L14.uasset": [
+1788235102,
+5829
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/RULE_NYGA_L17.uasset": [
+1788235102,
+5836
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYGA/SGD_NYGA_A.uasset": [
+1788235102,
+5935
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L01.uasset": [
+1788235102,
+5707
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L02.uasset": [
+1788235102,
+5553
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L03.uasset": [
+1788235102,
+5553
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L04.uasset": [
+1788235102,
+5553
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L05.uasset": [
+1788235102,
+5553
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L08.uasset": [
+1788235102,
+6048
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L09.uasset": [
+1788235102,
+5069
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L10.uasset": [
+1788235102,
+5562
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L11.uasset": [
+1788235102,
+5562
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/RULE_NYH_L12.uasset": [
+1788235102,
+5065
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/NYH/SGD_NYH_A.uasset": [
+1788235102,
+6599
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/PCGD_ComplexBuildingShapes.uasset": [
+1788235101,
+1225568
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/PCG_Bldg_SGD_test.uasset": [
+1791366224,
+92929
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L00.uasset": [
+1788235102,
+4292
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L01.uasset": [
+1788235102,
+6423
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L02.uasset": [
+1788235102,
+5311
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L03.uasset": [
+1788235102,
+5225
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L04.uasset": [
+1788235102,
+4956
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L05.uasset": [
+1788235102,
+5488
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L06.uasset": [
+1788235102,
+4889
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L07.uasset": [
+1788235102,
+4966
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/RULE_QBA_L08.uasset": [
+1788235102,
+5110
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBA/SGD_QBA_A.uasset": [
+1788235102,
+5549
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L00.uasset": [
+1788235102,
+4300
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L01.uasset": [
+1788235102,
+6431
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L02.uasset": [
+1788235102,
+5319
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L03.uasset": [
+1788235102,
+5233
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L04.uasset": [
+1788235102,
+4964
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L05.uasset": [
+1788235102,
+5496
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L06.uasset": [
+1788235102,
+4897
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L07.uasset": [
+1788235102,
+4949
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/RULE_QBAA_L08.uasset": [
+1788235102,
+5623
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/QBAA/SGD_QBAA_A.uasset": [
+1788235102,
+5935
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L01.uasset": [
+1788235102,
+10095
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L02.uasset": [
+1788235102,
+10095
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L03.uasset": [
+1788235102,
+9810
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L04.uasset": [
+1788235102,
+9835
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L05.uasset": [
+1788235102,
+9810
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L06.uasset": [
+1788235102,
+9810
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L07.uasset": [
+1788235102,
+9810
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L08.uasset": [
+1788235102,
+9835
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/RULE_SFA_L09.uasset": [
+1788235102,
+9538
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFA/SGD_SFA_A.uasset": [
+1788235102,
+6249
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L01.uasset": [
+1788235102,
+10693
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L02.uasset": [
+1788235102,
+11686
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L03.uasset": [
+1788235102,
+11661
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L04.uasset": [
+1788235102,
+11751
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/RULE_SFB_L05.uasset": [
+1788235102,
+11177
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFB/SGD_SFB_A.uasset": [
+1788235102,
+4849
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/RULE_SFC_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/RULE_SFC_L01.uasset": [
+1788235102,
+8777
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/RULE_SFC_L02.uasset": [
+1788235102,
+8337
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/RULE_SFC_L03.uasset": [
+1788235102,
+8337
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/RULE_SFC_L04.uasset": [
+1788235102,
+7542
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFC/SGD_SFC_A.uasset": [
+1788235102,
+4499
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/RULE_SFD_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/RULE_SFD_L01.uasset": [
+1788235102,
+5325
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/RULE_SFD_L02.uasset": [
+1788235102,
+4514
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/RULE_SFD_L03.uasset": [
+1788235102,
+4301
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/RULE_SFD_L04.uasset": [
+1788235102,
+4301
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFD/SGD_SFD_A.uasset": [
+1788235102,
+4499
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L01.uasset": [
+1788235102,
+4578
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L02.uasset": [
+1788235102,
+4578
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L03.uasset": [
+1788235102,
+4603
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L04.uasset": [
+1788235102,
+4578
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/RULE_SFE_L05.uasset": [
+1788235102,
+7484
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFE/SGD_SFE_A.uasset": [
+1788235102,
+4849
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L00.uasset": [
+1788235102,
+4504
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L01.uasset": [
+1788235102,
+6856
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L02.uasset": [
+1788235102,
+4998
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L03.uasset": [
+1788235102,
+4998
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L04.uasset": [
+1788235102,
+5023
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/RULE_SFJ_L05.uasset": [
+1788235102,
+7626
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Buildings/SFJ/SGD_SFJ_A.uasset": [
+1788235102,
+4499
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Dock_A_PCG.uasset": [
+1788235102,
+133243
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Dock_B.umap": [
+1788235102,
+42958
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Dock_B_PCG.uasset": [
+1788235102,
+199882
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_A.umap": [
+1788235102,
+69994
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_A_PCG.uasset": [
+1788235102,
+250396
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_B.umap": [
+1788235102,
+113453
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_B_PCG.uasset": [
+1788235102,
+289498
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_C.umap": [
+1788235102,
+86459
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Piers/Warehouse_C_PCG.uasset": [
+1788235102,
+92535
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Curb_A_PCG.uasset": [
+1788235102,
+12318
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Curb_B_PCG.uasset": [
+1788235102,
+12146
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Curb_C_PCG.uasset": [
+1788235102,
+11832
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Debris_A_PCG.uasset": [
+1788235102,
+15988
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Debris_B_PCG.uasset": [
+1788235102,
+13484
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Debris_C_PCG.uasset": [
+1788235102,
+15465
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Park_Debris_D_PCG.uasset": [
+1788235102,
+13981
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_A_PCG.uasset": [
+1788235102,
+46953
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_B_PCG.uasset": [
+1788235102,
+59294
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_C_PCG.uasset": [
+1788235102,
+38009
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_D_PCG.uasset": [
+1788235102,
+49672
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_E_PCG.uasset": [
+1788235102,
+45445
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_F_PCG.uasset": [
+1788235102,
+23821
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_G_PCG.uasset": [
+1788235102,
+45074
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_H_PCG.uasset": [
+1788235102,
+37772
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Large_I_PCG.uasset": [
+1788235102,
+25802
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_A_PCG.uasset": [
+1788235102,
+32934
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_B_PCG.uasset": [
+1788235102,
+25387
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_C_PCG.uasset": [
+1788235102,
+33157
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_D_PCG.uasset": [
+1788235102,
+30933
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_E_PCG.uasset": [
+1788235102,
+30108
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_F_PCG.uasset": [
+1788235102,
+19930
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_G_PCG.uasset": [
+1788235102,
+23090
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Medium_H_PCG.uasset": [
+1788235102,
+25300
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_PlayerStart_PCG.uasset": [
+1788235102,
+32162
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_A_PCG.uasset": [
+1788235102,
+19979
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_B_PCG.uasset": [
+1788235102,
+16421
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_C_PCG.uasset": [
+1788235102,
+15030
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_D_PCG.uasset": [
+1788235102,
+15184
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_E_PCG.uasset": [
+1788235102,
+18437
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_F_PCG.uasset": [
+1788235102,
+16119
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_G_PCG.uasset": [
+1788235102,
+16151
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_H_PCG.uasset": [
+1788235102,
+16934
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_I_PCG.uasset": [
+1788235102,
+15602
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_J_PCG.uasset": [
+1788235102,
+18174
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_K_PCG.uasset": [
+1788235102,
+14166
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Small_L_PCG.uasset": [
+1788235102,
+12354
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Plaza_Triangle_B_PCG.uasset": [
+1788235102,
+2262
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Storage_A_PCG.uasset": [
+1788235102,
+19306
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Storage_B_PCG.uasset": [
+1788235102,
+17190
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Storage_C_PCG.uasset": [
+1788235102,
+19632
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Plazas/Storage_D_PCG.uasset": [
+1788235102,
+108608
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/Rules/RULE_Road_Car_Lane.uasset": [
+1788235102,
+2958
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/Rules/RULE_Road_Manhole_A.uasset": [
+1788235102,
+4095
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/Rules/RULE_Road_Trash.uasset": [
+1788235102,
+6087
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/Rules/RULE_Road_TrashBags.uasset": [
+1788235102,
+3852
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/Rules/RULE_Road_TrashBags_B.uasset": [
+1788235102,
+3864
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/BackAlley/SGD_BackAlley.uasset": [
+1788235102,
+5893
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/City_river/Rules/RULE_River.uasset": [
+1788235102,
+2663
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/City_river/Rules/RULE_River_Edge.uasset": [
+1788235102,
+3191
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/City_river/Rules/RULE_Road_White_Line_L.uasset": [
+1788235102,
+3578
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/City_river/Rules/RULE_Road_White_Line_R.uasset": [
+1788235102,
+3578
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/City_river/SGD_City_river.uasset": [
+1788235102,
+7008
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_ElevatedHighway_Car_Lane.uasset": [
+1788235102,
+3966
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_ElevatedHighway_Divider.uasset": [
+1788235102,
+4135
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_ElevatedHighway_Lane.uasset": [
+1788235102,
+3238
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_ElevatedHighway_Pillar.uasset": [
+1788235102,
+3265
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_ElevatedHighway_Wall_A.uasset": [
+1788235102,
+4207
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_HighWay_Lampost_A.uasset": [
+1788235102,
+3144
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_Road_Separator_Lane.uasset": [
+1788235102,
+3012
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_Road_White_Line_200.uasset": [
+1788235102,
+3463
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_Road_Yellow_Line_L.uasset": [
+1788235102,
+3657
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/Rules/RULE_Road_Yellow_Line_R.uasset": [
+1788235102,
+3657
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/SGD_ElevatedHighway.uasset": [
+1788235102,
+7850
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/ElevatedHighway/SGD_ElevatedHighway_oneWay.uasset": [
+1788235102,
+8230
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/PCG_SGD_test.uasset": [
+1788235102,
+1400
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Car_Lane.uasset": [
+1788235102,
+2958
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Car_Lane_200_L.uasset": [
+1788235102,
+3006
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Car_Lane_200_R.uasset": [
+1788235102,
+3006
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Separator_Lane.uasset": [
+1788235102,
+3000
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Separator_Lane_200.uasset": [
+1788235102,
+3016
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Yellow_Line_L.uasset": [
+1788235102,
+3645
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Yellow_Line_L_200.uasset": [
+1788235102,
+3661
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Yellow_Line_R.uasset": [
+1788235102,
+3645
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/Rules/RULE_Road_Yellow_Line_R_200.uasset": [
+1788235102,
+3661
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/SGD_Road_City.uasset": [
+1788235102,
+4623
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/SGD_Road_City_HighRes.uasset": [
+1788235102,
+5125
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/SGD_Road_City_HighRes_NoLines.uasset": [
+1788235102,
+4773
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_City/SGD_Road_Simple.uasset": [
+1788235102,
+3498
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_SGD_level.umap": [
+1788235102,
+6683410
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Road_SGD_test.uasset": [
+1788235102,
+66151
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Curb.uasset": [
+1788235102,
+6947
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_FireHydrants.uasset": [
+1788235102,
+3111
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Lampost_A.uasset": [
+1788235102,
+3116
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_MailBoxes.uasset": [
+1788235102,
+2952
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_ParkMeter.uasset": [
+1788235102,
+3102
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Parked_Cars.uasset": [
+1788235102,
+5448
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Parking_Marks.uasset": [
+1788235102,
+3330
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Parking_Signs.uasset": [
+1788235102,
+3457
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Road_Sidewalk_A_BlockStyle.uasset": [
+1788235102,
+7513
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/Rules/RULE_Sidewalk_Corner.uasset": [
+1788235102,
+4188
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/SGD_Sidewalk_A.uasset": [
+1788235102,
+5779
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/SGD_Sidewalk_A_noParking.uasset": [
+1788235102,
+5135
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_A/SGD_Sidewalk_Corners.uasset": [
+1788235102,
+3324
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_Basic/Rules/RULE_Road_Sidewalk_A_BlockStyle.uasset": [
+1788235102,
+7629
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_Basic/Rules/RULE_Sidewalk_Corner.uasset": [
+1788235102,
+4199
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_Basic/SGD_Sidewalk_Simple.uasset": [
+1788235102,
+3349
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/Rules/RULE_Road_Curb.uasset": [
+1788235102,
+6959
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/Rules/RULE_Road_Sidewalk_A_BlockStyle.uasset": [
+1788235102,
+7529
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/Rules/RULE_Sidewalk_Edge.uasset": [
+1788235102,
+3199
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/Rules/RULE_Sidewalk_Fence_A.uasset": [
+1788235102,
+3811
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/SGD_Sidewalk_CITY_EDGE.uasset": [
+1788235102,
+4694
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Sidewalk_CITY_EDGE/SGD_Sidewalk_CITY_EDGE_Cars.uasset": [
+1788235102,
+6058
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Walkpath/Rules/RULE_Walkpath.uasset": [
+1788235102,
+3128
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Walkpath/Rules/RULE_WalkpathSplineMesh.uasset": [
+1788235102,
+3407
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Walkpath/SGD_Walkpath.uasset": [
+1788235102,
+3531
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/Roads/Walkpath/SGD_WalkpathSplineMesh.uasset": [
+1788235102,
+3746
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_A_PCG.uasset": [
+1788235102,
+14319
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_B_PCG.uasset": [
+1788235102,
+14502
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_C_PCG.uasset": [
+1788235102,
+13338
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_D_PCG.uasset": [
+1788235102,
+12983
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_E_PCG.uasset": [
+1788235102,
+12934
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/AC_Vent_F_PCG.uasset": [
+1788235102,
+14061
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Antenna_A_PCG.uasset": [
+1788235102,
+13418
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_House_A_PCG.uasset": [
+1788235103,
+14312
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_House_B_PCG.uasset": [
+1788235103,
+15141
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_House_C_PCG.uasset": [
+1788235103,
+16215
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_House_D_PCG.uasset": [
+1788235103,
+20803
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Metal_A_PCG.uasset": [
+1788235103,
+13733
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Metal_B_PCG.uasset": [
+1788235103,
+17443
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Metal_C_PCG.uasset": [
+1788235103,
+12873
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Pipe_A_PCG.uasset": [
+1788235103,
+14124
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Pipe_B_PCG.uasset": [
+1788235103,
+13780
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Pipe_C_PCG.uasset": [
+1788235103,
+14598
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Pipe_D_PCG.uasset": [
+1788235103,
+17908
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Pipe_E_PCG.uasset": [
+1788235103,
+13050
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_A_PCG.uasset": [
+1788235103,
+14597
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_C_PCG.uasset": [
+1788235103,
+12335
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_D_PCG.uasset": [
+1788235103,
+14195
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_E_PCG.uasset": [
+1788235103,
+13231
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_F_PCG.uasset": [
+1788235103,
+12204
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Platform_G_PCG.uasset": [
+1788235103,
+11604
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Window_A_PCG.uasset": [
+1788235103,
+13074
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Window_B_PCG.uasset": [
+1788235103,
+13298
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Roof_Window_C_PCG.uasset": [
+1788235103,
+14498
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_A1_PCG.uasset": [
+1788235102,
+43741
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_A_PCG.uasset": [
+1788235102,
+39397
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_B_PCG.uasset": [
+1788235102,
+39531
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_C_PCG.uasset": [
+1788235102,
+62542
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_D_PCG.uasset": [
+1788235102,
+34044
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_E_PCG.uasset": [
+1788235102,
+31494
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_F_PCG.uasset": [
+1788235102,
+44205
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_G_PCG.uasset": [
+1788235102,
+22226
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_H_PCG.uasset": [
+1788235102,
+16169
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_I_PCG.uasset": [
+1788235102,
+33075
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_J_PCG.uasset": [
+1788235102,
+15705
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_K_PCG.uasset": [
+1788235102,
+21721
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_L_PCG.uasset": [
+1788235102,
+31876
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_M_PCG.uasset": [
+1788235103,
+19722
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_N_PCG.uasset": [
+1788235103,
+37328
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_P_PCG.uasset": [
+1788235103,
+31295
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_Q_PCG.uasset": [
+1788235103,
+33718
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_T_PCG.uasset": [
+1788235103,
+18501
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_U_PCG.uasset": [
+1788235103,
+29330
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_V_PCG.uasset": [
+1788235103,
+28941
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_W_PCG.uasset": [
+1788235103,
+26079
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_X_PCG.uasset": [
+1788235103,
+35586
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_Y_PCG.uasset": [
+1788235103,
+41366
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Medium_Z_PCG.uasset": [
+1788235103,
+43259
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_A_PCG.uasset": [
+1788235103,
+44409
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_B_PCG.uasset": [
+1788235103,
+33561
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_C_PCG.uasset": [
+1788235103,
+32986
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_D_PCG.uasset": [
+1788235103,
+36131
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_E_PCG.uasset": [
+1788235103,
+36848
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_F_PCG.uasset": [
+1788235103,
+29194
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_G_PCG.uasset": [
+1788235103,
+41978
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_H_PCG.uasset": [
+1788235103,
+33775
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_I_PCG.uasset": [
+1788235103,
+25658
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_J_PCG.uasset": [
+1788235103,
+27206
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_K_PCG.uasset": [
+1788235103,
+28238
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_L_PCG.uasset": [
+1788235103,
+32120
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_M_PCG.uasset": [
+1788235103,
+33561
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_N_PCG.uasset": [
+1788235103,
+32986
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_P_PCG.uasset": [
+1788235103,
+32423
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_R_PCG.uasset": [
+1788235103,
+35606
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_S_PCG.uasset": [
+1788235103,
+28735
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_T_PCG.uasset": [
+1788235103,
+34322
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_A_PCG.uasset": [
+1788235103,
+23726
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_B_PCG.uasset": [
+1788235103,
+21568
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_C_PCG.uasset": [
+1788235103,
+36989
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_D_PCG.uasset": [
+1788235103,
+17914
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_E_PCG.uasset": [
+1788235103,
+18569
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_F_PCG.uasset": [
+1788235103,
+18183
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_G_PCG.uasset": [
+1788235103,
+15443
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_H_PCG.uasset": [
+1788235103,
+16167
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_I_PCG.uasset": [
+1788235103,
+26091
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_J_PCG.uasset": [
+1788235103,
+14041
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_K_PCG.uasset": [
+1788235103,
+16144
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_L_PCG.uasset": [
+1788235103,
+16079
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_N_PCG.uasset": [
+1788235103,
+18696
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_Q_PCG.uasset": [
+1788235103,
+20931
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_R_PCG.uasset": [
+1788235103,
+17754
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_S_PCG.uasset": [
+1788235103,
+24952
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_T_PCG.uasset": [
+1788235103,
+14731
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_U_PCG.uasset": [
+1788235103,
+21193
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_V_PCG.uasset": [
+1788235103,
+22205
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_W_PCG.uasset": [
+1788235103,
+25386
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_Small_X_PCG.uasset": [
+1788235103,
+15460
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_A_PCG.uasset": [
+1788235103,
+12451
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_B_PCG.uasset": [
+1788235103,
+12446
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_C_PCG.uasset": [
+1788235103,
+12431
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_D_PCG.uasset": [
+1788235103,
+12439
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_E_PCG.uasset": [
+1788235103,
+12476
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_F_PCG.uasset": [
+1788235103,
+12447
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_G_PCG.uasset": [
+1788235103,
+12019
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_A_PCG.uasset": [
+1788235103,
+12969
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_B_PCG.uasset": [
+1788235103,
+12868
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_C_PCG.uasset": [
+1788235103,
+12859
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_A_PCG.uasset": [
+1788235103,
+13280
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_B_PCG.uasset": [
+1788235103,
+13443
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_C_PCG.uasset": [
+1788235103,
+13677
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_D_PCG.uasset": [
+1788235103,
+13994
+],
+"Plugins/CitySamplePCG/Content/PCG/DataAssets/VistaCliffs_PCG.uasset": [
+1788235101,
+37183
+],
+"Plugins/CitySamplePCG/Content/PCG/FilterPolygonByEdgeLength.uasset": [
+1788235101,
+169214
+],
+"Plugins/CitySamplePCG/Content/PCG/FilterSquareShapes.uasset": [
+1788235101,
+240525
+],
+"Plugins/CitySamplePCG/Content/PCG/GridPartition.uasset": [
+1788235101,
+184077
+],
+"Plugins/CitySamplePCG/Content/PCG/Intersection_solving.uasset": [
+1788235101,
+1323953
+],
+"Plugins/CitySamplePCG/Content/PCG/LoopCreateExtrudedMeshActorPerData.uasset": [
+1788235101,
+388248
+],
+"Plugins/CitySamplePCG/Content/PCG/LoopCreatePlanarMeshActorPerData.uasset": [
+1788235101,
+347294
+],
+"Plugins/CitySamplePCG/Content/PCG/LoopSpawnActorPerData.uasset": [
+1788235101,
+288742
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Assign_CitySampleBuildings.uasset": [
+1788235103,
+128953
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/ASM_Clutter_Behavior.uasset": [
+1788235103,
+334647
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Assign_CitySampleBuildings_CoreProcess.uasset": [
+1788235103,
+501083
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/BDF_BuildingFromSpline.uasset": [
+1788235103,
+1779202
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/BDF_Input_Processor.uasset": [
+1788235103,
+366580
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/BDF_ModulePreprocessor.uasset": [
+1788235103,
+528804
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/CitySampleBuildingBDF_Asset_PCG.uasset": [
+1788235103,
+2958616
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/CitySampleBuildingBDF_NamesOnly_PCG.uasset": [
+1788235103,
+6502
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_LevelMinWidth.uasset": [
+1791432433,
+102663
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/DT_Bldg_MinWidth.uasset": [
+1790836421,
+7139
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Filter_Footprints_for_bldgs.uasset": [
+1788235103,
+1320518
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData.uasset": [
+1791368069,
+37326
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Loop_Building_Actor.uasset": [
+1788235103,
+165559
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Loop_GroupedPropsCopy.uasset": [
+1788235103,
+55078
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Loop_Subdivide.uasset": [
+1788235103,
+74206
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/PartitionBDF_PerSpline.uasset": [
+1788235103,
+124784
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/RoundSegmentAngles.uasset": [
+1788235103,
+73977
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/ST_Bldg_MinWidth.uasset": [
+1788235103,
+6510
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/ST_Level_MinWidth.uasset": [
+1788235103,
+13256
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/Skill_BDF_LevelMinWidth.uasset": [
+1788235103,
+33908
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Buildings/Subgraphs/SpawntoBuildingActor.uasset": [
+1788235103,
+167562
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Fill_Areas_WithFittingAssets_CoreProcess.uasset": [
+1788235103,
+902883
+],
+"Plugins/CitySamplePCG/Content/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.uasset": [
+1788235103,
+100611
+],
+"Plugins/CitySamplePCG/Content/PCG/SetComplexBuildings.uasset": [
+1788235101,
+101692
+],
+"Plugins/CitySamplePCG/Content/PCG/SetComplexBuildings_InnerLoop.uasset": [
+1788235101,
+500057
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/0F/KM2ZCRV92T30FAT8EGST11.uasset": [
+1788235103,
+36730
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/37/PZGZEG2V0UGV36EV0D4VCQ.uasset": [
+1788235103,
+4150
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/44/RWZE1M0STQWIDKUFO0C7ZY.uasset": [
+1788235103,
+31029
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/7L/N14IKZWZXFZX2MIQ9E6RDD.uasset": [
+1788235103,
+214573
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/CC/MBKQ2HXH3K2BG0GM43RJAZ.uasset": [
+1788235103,
+38178
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/CN/O8NVW4XXYSTGR8HSGBS1KR.uasset": [
+1788235103,
+36690
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/DF/VHNX5ZX5TFE9DHRA3QMIBJ.uasset": [
+1788235103,
+202820
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/F2/40RE9900Y1UT7FW6LKXE4N.uasset": [
+1788235103,
+117990
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/H4/9Y88IRR1HC484R77H43YS4.uasset": [
+1788235103,
+117990
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/I4/JJ8LGZAXUS21PKL7CBOQTT.uasset": [
+1788235103,
+118928
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/J6/NDFYI5PIGAMPB23V07V3RS.uasset": [
+1788235103,
+5507
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/JD/EQTHA98QNLFPE6H9ZMHD7E.uasset": [
+1788235103,
+121760
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/JY/331UQ9OATHX3RWRY02QZXI.uasset": [
+1788235103,
+4076
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/QC/AOTJAXI7G48IEKGP006UAL.uasset": [
+1788235103,
+36730
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/WY/EHVTTTGBT923JTSB7L077R.uasset": [
+1788235103,
+7804122
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/XV/JA7WEPGM93A8MSBF3F79RI.uasset": [
+1788235103,
+36556
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/YW/4IH2ZMO75WFAE0SO3VW0MJ.uasset": [
+1788235103,
+117950
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/0/ZY/D7ZA6P38GM045HLGBRKVXD.uasset": [
+1788235103,
+15072
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/0A/I9KMRCSH8IH6LQG3JGBO4H.uasset": [
+1788235103,
+115618
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/45/T8JIGU4HQY4OUDRDBV2VML.uasset": [
+1788235103,
+33869
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/5Z/7LPIBFKFB9RRE8W5KOSR96.uasset": [
+1788235103,
+115434
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/7T/A8BN68MLW684GPQVM8PKB4.uasset": [
+1788235103,
+38178
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/81/0CUK9JJ7DICSY0TM9XC0KC.uasset": [
+1788235103,
+2317880
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/B5/JXJO5WVSMCHS58D5WLYDDQ.uasset": [
+1788235103,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/BT/YBE8XKWUVN1LO93AATYC1F.uasset": [
+1788235103,
+115434
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/HI/2RIC2KSJIFF3506EWE1EQU.uasset": [
+1788235103,
+73161
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/LC/X0NCIXNO4M1Z79Y0Y59E83.uasset": [
+1788235103,
+36792
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/R2/MG4Q6YKO12214QVYP313FO.uasset": [
+1788235103,
+115604
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/R3/TE0WMZ3YV4DJ0CNCT2ANUB.uasset": [
+1788235103,
+115548
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/R6/K79RF16A4DRVXUW6C5511U.uasset": [
+1788235103,
+19200
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/S3/AJY3M6XPIK50W1D0KA8H9B.uasset": [
+1788235103,
+36636
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/UC/A08278PZ8F1XWVUODE5GGL.uasset": [
+1788235103,
+12584446
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/WD/K7JJDJHFOBSFYB81PKH5ZX.uasset": [
+1788235103,
+37308
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/X0/4KQ5URUHZCAJWUW0V8I7KL.uasset": [
+1788235103,
+5610236
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/1/XF/FDV8P3LTCDOKCKLT9V4WJV.uasset": [
+1788235103,
+117756
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/0B/9VK8OPLCC564HWL0OSGPVV.uasset": [
+1788235103,
+36640
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/4E/12AXDA08QFYZ3EAG9F0XB3.uasset": [
+1788235103,
+116844
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/5L/HPQI3SYKFVFOE28HGVPDTY.uasset": [
+1788235103,
+116580
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/9T/QUHMETDVCQRLZTVLI7ZUPV.uasset": [
+1788235103,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/JK/X92U9FY6C0VXKWTSYLADQE.uasset": [
+1788235103,
+114882
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/NC/UN2G1VBRFTTVUAZ1U9XJM5.uasset": [
+1788235103,
+121760
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/PE/EGCLILHPLJL71S74M7AD5P.uasset": [
+1791366224,
+167685477
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/PP/R5R9FQ32QBID0NA6HKIHQ1.uasset": [
+1788235103,
+115208
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/QS/HS785WKI0J0DUV1TE0QRTK.uasset": [
+1788235103,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/T8/JITCCYR4EIVI7ZHRN8ZRN6.uasset": [
+1788235103,
+5864
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/TR/9JKKWCU184Z6Q91VAR0GLU.uasset": [
+1788235103,
+38190
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/2/U9/JJWKOR40SS1538C7I4DH7K.uasset": [
+1788235103,
+115434
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/42/A3U5AQLJ8NY2XTXZZE4JJR.uasset": [
+1788235103,
+36566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/93/RB0FU1TUQQXRJZWN0KBTNK.uasset": [
+1788235103,
+7099274
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/AJ/3CXS0MS0VDB8Y07GXV5CI8.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/BL/EQE2GMCAWF1XMB2D7IE6CN.uasset": [
+1788235103,
+36792
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/BU/MA4TYP34BD1FZEX2NWL531.uasset": [
+1788235103,
+36692
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/EI/HY0GKHTY8JK1GMHAWJ07SF.uasset": [
+1788235103,
+3750
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/FA/H4CPLHJCZXIUTGL0GNSEUU.uasset": [
+1788235103,
+37286
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/GK/8IK02YYQEM0X6N7VPYYUET.uasset": [
+1788235103,
+115232
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/IA/P6UIQR4UPZPKRYIMZHTPMM.uasset": [
+1788235103,
+117950
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/JF/4QF71XVCF17MV1LT5LUHID.uasset": [
+1788235103,
+115220
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/L2/O2HDM0ROBL7VSS6T91AH8Q.uasset": [
+1788235103,
+37334
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/SB/78T4JTHFG5ITYVPRPWX3ZJ.uasset": [
+1788235103,
+4667
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/VT/Z3QJ1UGTGCG8ONMZQA9GW7.uasset": [
+1788235103,
+4220
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/W0/OOCBRKZ4X9DQ27JBDD2BDO.uasset": [
+1788235103,
+148775
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/3/YK/WGLBVFN0QSBEEV8XGP7JXQ.uasset": [
+1788235103,
+37248
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/5B/YA69V5D1UV5I7BLW9YGQVR.uasset": [
+1788235103,
+4094
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/8G/03Y8SB748WAGQXQDE8GXXD.uasset": [
+1788235103,
+2923
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/CI/JF6A1JPV6OTI0VB39TJKRS.uasset": [
+1788235103,
+115434
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/G1/9XEW85V9PBB99UW831D3US.uasset": [
+1788235103,
+37320
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/GK/ZDNVYYSVT6HJP83LC4EN2Y.uasset": [
+1788235103,
+118922
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/HM/Y7ZURKRMFXYG9FXL38PR96.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/ID/GO0DLZU6QPCGWKEOR288OX.uasset": [
+1788235103,
+4665
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/K3/1G08J5IFF7LEL5C21EADCE.uasset": [
+1788235103,
+121764
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/KN/KM1D8G2XKYHYBTKUDL0C2R.uasset": [
+1788235103,
+115548
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/MZ/3D5WLD1YRP1KARCBH0W7DQ.uasset": [
+1788235103,
+36940
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/Q6/IMYJTXXQ2YSXV5P6X6JP86.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/T6/SY2DW7YJNM8LMLT9WWNS5U.uasset": [
+1788235103,
+4316
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/VK/2H0S4GUQKUINVVGJFQ6K89.uasset": [
+1788235103,
+4128
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/YY/4J3J3R6ERK438JKD28OI2B.uasset": [
+1788235103,
+37516
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/4/ZG/GYO4PJRVZ6XZII4QINZ961.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/3U/DIYFCNVUZ9VGSDIOOCUI2R.uasset": [
+1788235103,
+37286
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/4G/024F4NNHKPVL6EX0ND33N1.uasset": [
+1788235103,
+36730
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/5E/GFOIAGHAS93T3RL2MP9LDQ.uasset": [
+1788235103,
+36692
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/9W/F8T5H5X3QEFHKEOPTBJRUL.uasset": [
+1788235103,
+36636
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/C0/9OZRP2PL6ID3AGDW1NEXV6.uasset": [
+1788235103,
+121760
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/DS/6HOVRUJJ5YPI54ZI19FI9I.uasset": [
+1788235103,
+4076
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/GH/PT2AUC9HOQ12D5PF32YTM2.uasset": [
+1788235103,
+117968
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/H1/BBUVXQGKAF1MJ6TO41HSUC.uasset": [
+1791366224,
+74696105
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/HF/J8JSM9U2N31XHAY3JYDT3R.uasset": [
+1788235103,
+115232
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/PK/B69F9BXDFZBO5T77OJ6GLH.uasset": [
+1788235103,
+117614
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/SK/USZKUZ0L252GKEJ78O2K5A.uasset": [
+1788235103,
+114882
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/TS/T7P0DLP9766WA96R7R84YQ.uasset": [
+1788235103,
+117566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/UL/EDY7GQVLZ65N341ECOL3NF.uasset": [
+1788235103,
+45431
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/5/V3/7NEU91X1H7DHP3728NS1B3.uasset": [
+1788235103,
+121764
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/44/8GOHJ7C6IUM4LPI4RG3ERR.uasset": [
+1788235103,
+36940
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/5X/QIIV7VY5PRWTPH6907TECN.uasset": [
+1788235103,
+37252
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/7X/4QDOCX198CN04YAGI9PYJ7.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/E4/2SB6I9KU7W7WBVOC70PT69.uasset": [
+1788235103,
+33763
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/GC/G550IZ1MT42TQEZGZ634QV.uasset": [
+1788235103,
+37320
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/II/S7GSEMCVV50FJ8UXU0E0XE.uasset": [
+1788235103,
+14681
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/LZ/Q6PKK0TS6DF28BPA4TCBBZ.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/OD/21DJ1XF5KQ8OD1WP3XVD3S.uasset": [
+1788235103,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/OF/3SD9O93X265SOIT73SAQ0T.uasset": [
+1788235103,
+37308
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/RS/JZC17A7M5DV8D7458NGPE2.uasset": [
+1788235103,
+38190
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/6/Y4/W2VZLTLXG7VZL4PSTV70Q0.uasset": [
+1791366224,
+4608732
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/2R/64NM5C382H9WFQDTCX9YFP.uasset": [
+1788235103,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/34/NHMGED1OTQEHP065R86YDW.uasset": [
+1791366224,
+5388929
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/86/YEWICZB5MSKC1XHSLGR2FP.uasset": [
+1788235103,
+154321
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/AL/DUDKO0CP0LVL0CJDPI22S7.uasset": [
+1788235103,
+36618
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/CJ/HITWZRMGNCR4RIS6N5PKM4.uasset": [
+1788235103,
+115232
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/FG/Z7TZ185OHSYL4KLWN8BZH5.uasset": [
+1788235103,
+117950
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/H7/ZRES1XQNAK1C30HL1Z4XS1.uasset": [
+1788235103,
+36688
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/JC/1XFSN2RDBICX951S9FQZUY.uasset": [
+1788235104,
+121764
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/MB/X9S4I5EPR37G2LJONDVXJB.uasset": [
+1788235104,
+114882
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/MP/J2WLHVM3BPRUOK96L3ZMJK.uasset": [
+1788235104,
+120546
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/NS/SH8N2I4PP0RDHWQPG1OZAL.uasset": [
+1788235104,
+117566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/P7/F0OSCGY08B6P9W34GEWN8F.uasset": [
+1788235104,
+4348
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/SV/FSFJWHGF0E59WW3MG94PJR.uasset": [
+1788235104,
+36640
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/7/ZW/QP24TLUC8B158X30SKCN60.uasset": [
+1788235104,
+36698
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/0A/U7URDE3B9090KV97PN6MOL.uasset": [
+1788235104,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/9C/VTU2E5HSUS8TY9010S1I2T.uasset": [
+1788235104,
+4049
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/C8/OBRBE4YYUNBT6VPO5H7D2F.uasset": [
+1788235104,
+36636
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/FT/23USEKECT1VG3N8PT6VKD7.uasset": [
+1788235104,
+64542
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/NI/FPZH22ZQG5E0L83SIMV9UB.uasset": [
+1788235104,
+56059
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/NT/6DPOD9HPQTSBY1XUYFA7OI.uasset": [
+1788235104,
+4027
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/SU/GRELUXY8JACQYPZ1XHFPNG.uasset": [
+1788235104,
+4122
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/VA/RIGNCKI9XDMA038X9ZER1L.uasset": [
+1788235104,
+38178
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/8/Z1/TKSEJMOYG8T0X86WU6IHZK.uasset": [
+1788235104,
+36792
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/2C/1TH54VL4NCPNVMKESA1BOC.uasset": [
+1788235104,
+117566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/LN/AFWXW2ARHRO8THKQ7D0FTB.uasset": [
+1788235104,
+15072
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/LN/FLDL6MWR02E1DS3V9KZ3QS.uasset": [
+1788235104,
+36730
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/P3/1EZ5WTLDK2VDYGYRUH94NT.uasset": [
+1788235104,
+35533916
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/U9/U8LJ0NF100M7KUHG7ZCLHV.uasset": [
+1788235104,
+3866224
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/9/XY/AE121JTL4HBY7NXX7Q4Z4L.uasset": [
+1788235104,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/A/2H/KDB4W2UDGGTGL6CVFQU0XV.uasset": [
+1788235104,
+114792
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/A/DM/D5NPB8SWC3RAORY5J3Z17D.uasset": [
+1788235104,
+5667
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/A/LQ/IIYS9BCP1ZBKPLT6PQQJ07.uasset": [
+1788235104,
+34401
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/A/QO/W9VMPXVGNJSQ3ZSJZBWHBX.uasset": [
+1788235104,
+14492564
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/A/Z0/JRWRJAI8KBCIHIYY2UEZPN.uasset": [
+1788235104,
+114882
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/20/B0LKQ54VGZWUCM2UW7KDXE.uasset": [
+1788235104,
+36692
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/2Q/C414FKR8TEVJE3Q2NF5OWZ.uasset": [
+1788235104,
+28271
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/52/2VX6UQGCQDVVZ345HU8JJ1.uasset": [
+1788235104,
+37308
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/7Y/AGCJ0I9GJEFNW259K1CZ13.uasset": [
+1788235104,
+36566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/9V/3X3VN6V5W5KFCOINXRPDVR.uasset": [
+1788235104,
+120566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/AL/0SQNEFAV899K5PR1VBB0UL.uasset": [
+1788235104,
+115048
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/B7/4F1M9Z1GLXQY3N9H3ONPFZ.uasset": [
+1788235104,
+36576
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/BF/WTFGI0OD12N8SQ5GPLQMSO.uasset": [
+1788235104,
+121764
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/BX/P0QN2AVR5OMEAZI13EPTZ7.uasset": [
+1788235104,
+5481
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/IQ/45ODT7V51YXXCU1A3AT5H3.uasset": [
+1788235104,
+38176
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/JX/ETDGOSID3OVY3XCF1RBSJ0.uasset": [
+1788235104,
+117988
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/NA/41BQ03754SAKFQF32VTRZ3.uasset": [
+1788235104,
+36940
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/NO/2NMQ6NHY1LZWZK89T5DVMA.uasset": [
+1788235104,
+4117
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/R9/KONR3EUZVVT23YWD3P9BY9.uasset": [
+1788235104,
+4178
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/RD/2NJ3R1WQMS4PMPX1PJ6JY3.uasset": [
+1788235104,
+36792
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/B/V9/RVIIPT3FLXCW7ACW975CFF.uasset": [
+1788235104,
+38190
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/12/U3WT3TH0B04J20TZH8DTT8.uasset": [
+1788235104,
+36578
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/5A/6VSB599NNGKZQSFWMGPW4B.uasset": [
+1788235104,
+4527
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/7M/F8K4R2A72QIB3AV65MQN5W.uasset": [
+1788235104,
+37308
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/AG/TQKEEBHQ36Q4PIYL0XSYKY.uasset": [
+1788235104,
+117968
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/AQ/167U4MHIOYYJCS8UH4IO3F.uasset": [
+1788235104,
+4133
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/DM/4IPCQ6RK75GX4C4DKPZO8S.uasset": [
+1788235104,
+121760
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/EW/VZ3OUL5W490NTY4GWFOMR9.uasset": [
+1788235104,
+117990
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/ID/E97VK4CX2Z70N9KRSFDBHI.uasset": [
+1788235104,
+114790
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/KG/PJ61BKVO3BVY504GS7Y1FA.uasset": [
+1788235104,
+117968
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/M8/Y58VTHXGXSMDQ9ODKNBJQV.uasset": [
+1788235104,
+12695
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/N4/MU2MYMD4UFNFLR1GCR6YNM.uasset": [
+1788235104,
+4162
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/ND/SAMWANZNUQQVIYHVR3J5PW.uasset": [
+1788235104,
+36702
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/OZ/QRV4BRRRNQZ9NBAZU8XEX7.uasset": [
+1788235104,
+36636
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/P2/NIKTFDR8AAI0SF7SRMBM33.uasset": [
+1788235104,
+4225
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/V6/NCPS5ONVLPCJIOMXJ8O4GK.uasset": [
+1788235104,
+117950
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/YQ/RKE5G2OQ6QIICJ0T0KTQA6.uasset": [
+1788235104,
+36566
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/YW/QAZRMFMCZ2QF1ARCYV2XXF.uasset": [
+1788235104,
+115548
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/C/ZC/5DPL169CQNFRSA7LXQ5XVV.uasset": [
+1788235104,
+36640
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/07/BP6CSXRV0ENU46GGR02YD0.uasset": [
+1788235104,
+17845
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/8B/FXDAL3HFXUS2Y9W3SJDNAK.uasset": [
+1788235104,
+36642
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/FW/X4YQERVY95FRGOHRN52H2J.uasset": [
+1788235104,
+116572
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/HN/8ISEIHKOQOA1E21HKHGINU.uasset": [
+1788235104,
+4675
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/P8/Q9Z0OBKBJZ5LIH6ROK7L39.uasset": [
+1788235104,
+36940
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/RL/QYZ7446ZDPYG31HEXK8BG3.uasset": [
+1788235104,
+4079
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/UX/DE180ILGGZBAD6ZFJYFOVA.uasset": [
+1788235104,
+12800
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/UX/SL7V3GBJ1DUBVR4OS1ZR8U.uasset": [
+1788235104,
+36692
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/D/YL/GSGHCPHZZ8IVS3S6H9IG0L.uasset": [
+1788235104,
+21951
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/1P/NGMNAPPPN63B8ZK5U7YZPC.uasset": [
+1788235104,
+115232
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/2H/8ISISCVX0F49CSXYHRDBCS.uasset": [
+1788235104,
+2559
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/3A/06UCKKAYA7PFB7Q4E57138.uasset": [
+1788235104,
+71378549
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/EL/M8XKJHPSWRZ5TG9GM4YXU3.uasset": [
+1788235104,
+1010810
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/HN/U36P2QPM221G4FGLHFCXKD.uasset": [
+1788235104,
+37320
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/IF/3WWNZEMHPQNWKTWLWPVKS6.uasset": [
+1788235104,
+36640
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/IX/LOXL5L4ZQKUF5O6RV6XG8Z.uasset": [
+1788235104,
+115548
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/RK/O33WP8M8NXY9DHF0S2DCLB.uasset": [
+1788235104,
+19204
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/TH/Y8ICU9W25O9XJ0TFVD65RC.uasset": [
+1788235104,
+37286
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/TS/BB5NN9ATMJFP655KE3IQ0B.uasset": [
+1788235104,
+36590
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/TZ/YT14UFSVDVCY3OS65D5O1U.uasset": [
+1788235104,
+37286
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/V2/RNDXZNJLQTRK25MX8282JD.uasset": [
+1788235104,
+36616
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/W2/8ZQFC9P2KX5S5PGVGUXRGM.uasset": [
+1788235104,
+117968
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/E/Z1/0WJG3AZEZQWW993B8HMAR9.uasset": [
+1788235104,
+5984
+],
+"Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo/F/2E/CXQYDV46SBP4P42J1T7F7C.uasset": [
+1788235104,
+114930
+]
+}
