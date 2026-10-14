@@ -15,6 +15,8 @@ _DEFAULTS = {"title": "", "title_color": None, "comment": "", "bubble_visible": 
 PARAM_FIELDS = ("name", "type", "container", "type_object", "value", "category", "tooltip", "meta")
 IGNORED_META = ("Category", "ToolTip")      # carried by the hierarchy instead (ruling R5)
 _WHITE = (1.0, 1.0, 1.0, 1.0)
+_MISSING = object()                         # sentinel: key absent, distinct from an explicit None
+_INDIVIDUALISED = [0]                       # bumped each time match() breaks a symmetric tie
 
 
 def canon(v):
@@ -109,6 +111,8 @@ def view(ir, fresh_seeds):
         f["subgraph"] = f["subgraph"] or ""
         f["getter_param"] = f["getter_param"] or ""
         inputs = [(p["label"], [tuple(e) for e in p["edges"]]) for p in n.get("inputs", []) if p.get("edges")]
+        if n["name"] in nodes:
+            raise ValueError("duplicate node name %r" % (n["name"],))
         nodes[n["name"]] = {"fields": f, "inputs": inputs, "pos": n.get("pos"),
                             "where": n.get("src") or n.get("title") or n["name"], "step": n.get("step")}
     return nodes
@@ -119,9 +123,16 @@ def match(va, vb):
     sides = {"a": va, "b": vb}
     color = {}
     outs = {}
+    ids = {}
+
+    def intern(key):
+        """Small sequential ints for colours: hash() can collide (hash(-1) == hash(-2) in
+        CPython), which would silently merge two structurally different nodes into one colour."""
+        return ids.setdefault(key, len(ids))
+
     for s, v in sides.items():
         for name, n in v.items():
-            color[(s, name)] = hash(("io", name)) if name in _ir.IO_NODES else hash(canon(_blank_refs(n["fields"])))
+            color[(s, name)] = intern(("io", name)) if name in _ir.IO_NODES else intern(canon(_blank_refs(n["fields"])))
             outs[(s, name)] = []
         for name, n in v.items():
             for label, edges in n["inputs"]:
@@ -139,7 +150,7 @@ def match(va, vb):
                               for label, edges in n["inputs"] for i, (src, pin) in enumerate(edges)), key=repr)
                 o = sorted(((pin, color[(s, d)], label, i) for pin, d, label, i in outs[(s, name)]), key=repr)
                 r = sorted(repr(color.get((s, x))) for x in refs(n["fields"]["settings"]))
-                new[(s, name)] = hash((c, tuple(ins), tuple(o), tuple(r)))
+                new[(s, name)] = intern((c, tuple(ins), tuple(o), tuple(r)))
             stable = len(set(new.values())) == len(set(color.values()))
             color = new
             if stable:
@@ -172,8 +183,9 @@ def match(va, vb):
         if ambiguous is None:
             break
         counter += 1
+        _INDIVIDUALISED[0] += 1
         a0, b0 = sorted(ambiguous["a"])[0], sorted(ambiguous["b"])[0]
-        color[("a", a0)] = color[("b", b0)] = hash(("individualised", counter))
+        color[("a", a0)] = color[("b", b0)] = intern(("individualised", counter))
         refine()
     # Weak pass: nodes that differ in some field still pair when class, subgraph and title agree
     # (then class + subgraph), so a changed value reports as one field diff, not missing + extra.
@@ -230,10 +242,15 @@ def diff(a, b, fresh_seeds, check_layout=False):
         for k in NODE_FIELDS:
             if k in ("settings", "overrides"):
                 for key in sorted(set(fa[k]) | set(fb[k])):
-                    av = _rename_refs(fa[k].get(key), mapping)
-                    bv = fb[k].get(key)
-                    if canon(av) != canon(bv):
-                        add("node", va[x]["where"], "%s.%s" % (k, key), av, bv)
+                    a_has, b_has = key in fa[k], key in fb[k]
+                    av = _rename_refs(fa[k].get(key), mapping) if a_has else _MISSING
+                    bv = fb[k].get(key) if b_has else _MISSING
+                    a_cmp = ("missing",) if av is _MISSING else canon(av)
+                    b_cmp = ("missing",) if bv is _MISSING else canon(bv)
+                    if a_cmp != b_cmp:
+                        add("node", va[x]["where"], "%s.%s" % (k, key),
+                            "<missing>" if av is _MISSING else av,
+                            "<missing>" if bv is _MISSING else bv)
             elif canon(fa[k]) != canon(fb[k]):
                 add("node", va[x]["where"], k, fa[k], fb[k])
         ia = {label: [(mapping.get(s, "?" + s), p) for s, p in edges] for label, edges in va[x]["inputs"]}

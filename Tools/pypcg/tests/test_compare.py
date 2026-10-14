@@ -1,5 +1,7 @@
 import copy
 
+import pytest
+
 from pypcg import compare
 
 FRESH = {"PCGRerouteSettings": 111, "PCGSubgraphSettings": 222, "PCGGraphInputOutputSettings": 333}
@@ -153,3 +155,40 @@ def test_layout_membership_mismatch_is_reported():
     a["nodes"][3]["pos"] = [100, 0]          # moves the reroute into the box
     fields = [x["field"] for x in compare.diff(a, b, FRESH, check_layout=True)]
     assert "comment_boxes[0].members" in fields
+
+
+def test_individualisation_pairs_automorphic_branches():
+    # One source feeds two identical untitled dead-end reroutes plus the output: colour
+    # refinement alone can't tell the two reroutes apart (they're automorphic), so match()
+    # must fall into its individualisation loop to pair them at all.
+    def g(r1, r2):
+        return graph(node("src", title="Src"), node(r1, inputs=[("In", [("src", "Out")])]),
+                     node(r2, inputs=[("In", [("src", "Out")])]),
+                     out=[("src", "Out")])
+    compare._INDIVIDUALISED[0] = 0
+    assert compare.diff(g("ra", "rb"), g("Reroute_9", "Reroute_3"), FRESH) == []
+    assert compare._INDIVIDUALISED[0] >= 1
+
+
+def test_colours_do_not_collide_on_hash_negative_one_and_two():
+    # hash(-1) == hash(-2) in CPython; a colour scheme built from raw hash() would merge two
+    # siblings whose only difference is an X=-1 vs X=-2 setting into the same equivalence class.
+    def g(x1, x2):
+        return graph(node("s1", title="A", settings={"X": x1}), node("s2", title="A", settings={"X": x2}),
+                     node("m", "PCGGatherSettings", inputs=[("In", [("s1", "Out"), ("s2", "Out")])]),
+                     out=[("m", "Out")])
+    assert compare.diff(g(-1, -2), g(-1, -2), FRESH) == []
+
+
+def test_view_rejects_duplicate_node_names():
+    a = chain(("n0", "n1"))
+    a["nodes"].append(node("n0", title="Dupe"))
+    with pytest.raises(ValueError, match="duplicate node name"):
+        compare.view(a, FRESH)
+
+
+def test_missing_key_differs_from_explicit_null():
+    a, b = chain(("n0", "n1")), chain(("n0", "n1"))
+    b["nodes"][2]["overrides"]["Extra"] = None
+    d = compare.diff(a, b, FRESH)
+    assert [(x["field"], x["a"], x["b"]) for x in d] == [("overrides.Extra", "<missing>", None)]
