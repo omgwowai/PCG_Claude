@@ -1,0 +1,1969 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Flatten over city footprint",
+   "NodeDetails": "",
+   "NodeHeight": 720,
+   "NodePosX": 3040,
+   "NodePosY": -144,
+   "NodeWidth": 880,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.6499999761581421,
+    "G": 0.3499999940395355,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "READ TERRAIN",
+   "NodeDetails": "",
+   "NodeHeight": 208,
+   "NodePosX": -1360,
+   "NodePosY": -48,
+   "NodeWidth": 848,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.25,
+    "G": 0.550000011920929,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "HILLS GENERATION",
+   "NodeDetails": "",
+   "NodeHeight": 272,
+   "NodePosX": 606,
+   "NodePosY": -50,
+   "NodeWidth": 560,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.05000000074505806,
+    "G": 0.41999998688697815,
+    "R": 0.6499999761581421
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "FLATTEN REGION SETUP\n(annular exclusion zone around city circle)",
+   "NodeDetails": "",
+   "NodeHeight": 496,
+   "NodePosX": -340,
+   "NodePosY": 328,
+   "NodeWidth": 1472,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.44999998807907104,
+    "G": 0.11999999731779099,
+    "R": 0.550000011920929
+   },
+   "CommentDepth": -2,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "CITY FLAT ZONE & BLEND\n(flatten city footprint, blend with hills, write terrain)",
+   "NodeDetails": "",
+   "NodeHeight": 1360,
+   "NodePosX": 1242,
+   "NodePosY": -282,
+   "NodeWidth": 3072,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_1_1_Terrain.PCG_1_1_Terrain",
+ "graph_props": {
+  "Description": "This PCG is Shaping procedurally the mesh terrain to create the island base on which the city will exist."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -590,
+    -190
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "WriteMeshTerrain_0",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4624,
+    16
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionBoundSize"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionTarget"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryType"
+    },
+    {
+     "edges": [],
+     "label": "ModifierLayerPriority"
+    },
+    {
+     "edges": [],
+     "label": "ModifierSubPriority"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryInclusive"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Channels"
+    }
+   ],
+   "name": "GetMeshTerrain_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "MeshPartitionBoundSize": {
+     "X": 300000,
+     "Y": 300000,
+     "Z": 30000
+    },
+    "ModifierSubPriority": 1
+   },
+   "pin_defaults": [],
+   "pos": [
+    -1310,
+    2
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
+   "title": "Get Mesh Terrain",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "GetMeshTerrain_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "ExtractMeshTerrainPoints_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -846,
+    2
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
+   "title": "Extract Mesh Terrain Points",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "ExtractMeshTerrainPoints_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_HillsHeight",
+       "Out"
+      ]
+     ],
+     "label": "NoiseAmplitude"
+    },
+    {
+     "edges": [],
+     "label": "NoiseIterations"
+    },
+    {
+     "edges": [],
+     "label": "NoiseOffset"
+    },
+    {
+     "edges": [],
+     "label": "NoiseScale"
+    },
+    {
+     "edges": [],
+     "label": "NoiseBlur"
+    },
+    {
+     "edges": [],
+     "label": "NoiseBlurIterations"
+    },
+    {
+     "edges": [],
+     "label": "NoiseBlurDistance"
+    },
+    {
+     "edges": [],
+     "label": "Distort"
+    },
+    {
+     "edges": [],
+     "label": "DistortAmplitude"
+    },
+    {
+     "edges": [],
+     "label": "DistortIterations"
+    },
+    {
+     "edges": [],
+     "label": "DistortOffset"
+    },
+    {
+     "edges": [],
+     "label": "DistortScale"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "SpatialNoise_Hills",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Distort": true,
+    "DistortAmplitude": 33000,
+    "DistortIterations": 3,
+    "DistortScale": {
+     "X": 0.3,
+     "Y": 0.3,
+     "Z": 0.3
+    },
+    "NoiseAmplitude": 7001,
+    "NoiseBlur": true,
+    "NoiseBlurDistance": 12000,
+    "NoiseBlurIterations": 2,
+    "NoiseIterations": 2,
+    "NoiseScale": {
+     "X": 0.3,
+     "Y": 0.3,
+     "Z": 1
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    816,
+    0
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Points_SpatialNoise.Transform_Points_SpatialNoise",
+   "title": "Hills Noise",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionBoundSize"
+    },
+    {
+     "edges": [],
+     "label": "AffectedMeshPartition"
+    },
+    {
+     "edges": [],
+     "label": "ModifierLayerPriority"
+    },
+    {
+     "edges": [],
+     "label": "ModifierSubPriority"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Channels"
+    }
+   ],
+   "name": "WriteMeshTerrain_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "MeshPartitionBoundSize": {
+     "X": 300000,
+     "Y": 300000,
+     "Z": 30000
+    },
+    "ModifierSubPriority": 1
+   },
+   "pin_defaults": [],
+   "pos": [
+    3984,
+    0
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Write/Write_MeshTerrain.Write_MeshTerrain",
+   "title": "Write Mesh Terrain",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorTag"
+    }
+   ],
+   "name": "GetActorData_TerrainShaping1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorTag": "Terrain_shaping_1"
+   },
+   "pin_defaults": [],
+   "pos": [
+    306,
+    674
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
+   "title": "Get Terrain_shaping_1 Spline",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_1",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PlanarSurface"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleFactor"
+    },
+    {
+     "edges": [],
+     "label": "AsPoint"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "TraceBoundFootprint_TerrainShaping1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PlanarSurface": "Top",
+    "ScaleFactor": {
+     "X": 1,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    -30,
+    450
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Trace/Trace_Bound_Footprint.Trace_Bound_Footprint",
+   "title": "Trace Bound Footprint (Top)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Square footprint minus the Terrain_shaping_1 circle = annular flatten region.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_6",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "ComposeExclusion_SquareMinusCircle",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    1376,
+    448
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
+   "title": "Square Minus Circle",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Projects hilly points onto the flat annular region with gradient blend at the boundary (= circle edge).",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "SpatialNoise_Hills",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "ComposeExclusion_SquareMinusCircle",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPositions"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotations"
+    },
+    {
+     "edges": [],
+     "label": "ProjectScales"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseFalloff"
+    },
+    {
+     "edges": [],
+     "label": "StartFalloffDistance"
+    },
+    {
+     "edges": [],
+     "label": "EndFalloffDistance"
+    },
+    {
+     "edges": [],
+     "label": "SetFalloffAsDensity"
+    },
+    {
+     "edges": [],
+     "label": "ConvertClosedSplineToPolygon2D"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "FlattenProject_AroundCircle",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ConvertClosedSplineToPolygon2D": true,
+    "EndFalloffDistance": 50000,
+    "ProjectPositions": true,
+    "StartFalloffDistance": 0,
+    "UseFalloff": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    2304,
+    0
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
+   "title": "Flatten Around Circle (Falloff)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Move down",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_2",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PerPoints": false,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": -1820.424606
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    640,
+    448
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Offset Footprint Down",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "ExtractMeshTerrainPoints_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "CombineAllInputsIntoSinglePoint"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -286,
+    450
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Bounds.Extract_Bounds",
+   "title": "Extract Bounds",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "TraceBoundFootprint_TerrainShaping1",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Expand"
+    },
+    {
+     "edges": [],
+     "label": "UnionBeforeOutputting"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_2",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Expand": 60000
+   },
+   "pin_defaults": [],
+   "pos": [
+    290,
+    450
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
+   "title": "Expand Footprint 600m",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorTag"
+    }
+   ],
+   "name": "Subgraph_3",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorTag": "City"
+   },
+   "pin_defaults": [],
+   "pos": [
+    2048,
+    416
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
+   "title": "Get City Shape Spline",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_2",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_4",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 3000
+    },
+    "rotationOffset": {
+     "Pitch": 0,
+     "Roll": 0,
+     "Yaw": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2640,
+    416
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Move City Shape Up",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FlattenProject_AroundCircle",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_4",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPositions"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotations"
+    },
+    {
+     "edges": [],
+     "label": "ProjectScales"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseFalloff"
+    },
+    {
+     "edges": [],
+     "label": "StartFalloffDistance"
+    },
+    {
+     "edges": [],
+     "label": "EndFalloffDistance"
+    },
+    {
+     "edges": [],
+     "label": "SetFalloffAsDensity"
+    },
+    {
+     "edges": [],
+     "label": "ConvertClosedSplineToPolygon2D"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_5",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ConvertClosedSplineToPolygon2D": true,
+    "EndFalloffDistance": 10000,
+    "UseFalloff": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    3120,
+    112
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
+   "title": "Project City Flat Zone",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Lerp between the hill-only terrain (InA)\nand the city-flat terrain (InB).\nRatio driven by (1 - CityFlatness).",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FlattenProject_AroundCircle",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Out"
+      ]
+     ],
+     "label": "InB"
+    },
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_1",
+       "Out"
+      ]
+     ],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 0,
+     "prop": "DefaultValue1",
+     "type": null,
+     "value": null
+    },
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    },
+    {
+     "activated": true,
+     "index": 2,
+     "prop": "DefaultValue3",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    3568,
+    0
+   ],
+   "settings": {
+    "DebugSettings": {
+     "MaterialOverride": "None",
+     "PointMesh": "/PCG/DebugObjects/PCG_Cube.PCG_Cube",
+     "PointScale": 10,
+     "ScaleMethod": "Absolute"
+    },
+    "InputSource1": "PCGBegin($Position)PCGEnd",
+    "InputSource2": "PCGBegin($Position)PCGEnd",
+    "Operation": "Lerp",
+    "Seed": -603003822
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_CityFlatness",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3120,
+    336
+   ],
+   "settings": {
+    "PropertyPath": "CityFlatness",
+    "Seed": -1365531043
+   },
+   "title": "City Flatness",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_HillsHeight",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    656,
+    80
+   ],
+   "settings": {
+    "PropertyPath": "HillsHeight",
+    "Seed": -1365531043
+   },
+   "title": "Hills Height",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Invert CityFlatness so that 1.0 = fully flat city\nand 0.0 = full hills. Fed into the Lerp Ratio pin.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "GetParam_CityFlatness",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3264,
+    336
+   ],
+   "settings": {
+    "Operation": "OneMinus",
+    "Seed": -603003822
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Flatten city shape to Z=0 before lifting it\nto the target elevation for projection.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_3",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    2352,
+    416
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Move down",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "GetActorData_TerrainShaping1",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_6",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PerPoints": false,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": -1820.424606
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    656,
+    672
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Offset Circle Down",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": "Controls how flat the terrain is under the city. 0 = fully hilly, 1 = fully flat."
+   },
+   "name": "CityFlatness",
+   "type": "Float",
+   "type_object": "",
+   "value": 0.5
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": "Controls the amplitude of the hills noise."
+   },
+   "name": "HillsHeight",
+   "type": "Float",
+   "type_object": "",
+   "value": 7001
+  }
+ ],
+ "schema": 1
+}

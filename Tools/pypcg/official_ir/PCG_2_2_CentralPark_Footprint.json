@@ -1,0 +1,354 @@
+{
+ "comment_boxes": [],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_2_2_CentralPark_Footprint.PCG_2_2_CentralPark_Footprint",
+ "graph_props": {
+  "Description": "Defines the Central Park boundary as a rectangular spline at 1:4 scale relative to NYC's Central Park. Consumed by downstream graphs as an exclusion zone and visual layout reference."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    496,
+    -320
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_0",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    496,
+    -208
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Width"
+    },
+    {
+     "edges": [],
+     "label": "Length"
+    },
+    {
+     "edges": [],
+     "label": "Ngon"
+    },
+    {
+     "edges": [],
+     "label": "Linear"
+    },
+    {
+     "edges": [],
+     "label": "Position"
+    },
+    {
+     "edges": [],
+     "label": "Rotation"
+    },
+    {
+     "edges": [],
+     "label": "AtWorldOrigin"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Park_Footprint",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AtWorldOrigin": false,
+    "Length": 20000,
+    "Linear": true,
+    "Ngon": 4,
+    "Width": 100000
+   },
+   "pin_defaults": [],
+   "pos": [
+    -160,
+    16
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
+   "title": "Park Footprint 1000x200m (1:4 scale)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Park_Footprint",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteExtents"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsSize"
+    },
+    {
+     "edges": [],
+     "label": "RandomColorPerData"
+    }
+   ],
+   "name": "Debug_Footprint",
+   "outputs": [],
+   "overrides": {
+    "RandomColorPerData": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    240,
+    16
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
+   "title": "Debug Footprint",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Ensure footprint is set to the ground level, regardless of the PCG actor position in Z",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Park_Footprint",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    240,
+    -224
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [],
+ "schema": 1
+}

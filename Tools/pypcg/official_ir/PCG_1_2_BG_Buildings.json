@@ -1,0 +1,886 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.05000000074505806,
+    "G": 0.3799999952316284,
+    "R": 0.6000000238418579
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "BACKGROUND AREA SETUP\r\n(25km outer square minus 3km center exclusion)",
+   "NodeDetails": "",
+   "NodeHeight": 688,
+   "NodePosX": -62,
+   "NodePosY": -60,
+   "NodeWidth": 1200,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.20000000298023224,
+    "G": 0.5,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "SCATTER & CULL\n(sparse random scatter, then random density cull)",
+   "NodeDetails": "",
+   "NodeHeight": 336,
+   "NodePosX": 1264,
+   "NodePosY": -48,
+   "NodeWidth": 848,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_1_2_BG_Buildings.PCG_1_2_BG_Buildings",
+ "graph_props": {
+  "Description": "Generates the distant background city silhouette visible beyond the playable area, excluding a center zone so it never overlaps the real city."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    960,
+    -464
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "SpawnAssets",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2870,
+    118
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Subtract 3km center area from 25km outer area \r\nto leave space for the city building",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_4",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Exclude_Center",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    720,
+    112
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
+   "title": "Exclude Center from Outer Area",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Scatter points extremely sparsely across background area.\r\nThisi is becasue we are covering an extremely large area.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Exclude_Center",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PointsPerSquaredMeter"
+    },
+    {
+     "edges": [],
+     "label": "SamplingPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "Uniformity"
+    },
+    {
+     "edges": [],
+     "label": "SamplingSeed"
+    },
+    {
+     "edges": [],
+     "label": "FinalCount"
+    },
+    {
+     "edges": [],
+     "label": "OutputPointsExtents"
+    },
+    {
+     "edges": [],
+     "label": "SurfaceRotation"
+    },
+    {
+     "edges": [],
+     "label": "PositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RotationRange"
+    },
+    {
+     "edges": [],
+     "label": "ScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "ScatterPoints",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PointsPerSquaredMeter": 1e-06,
+    "RotationRange": {
+     "Pitch": 0,
+     "Roll": 0,
+     "Yaw": 180
+    },
+    "SamplingSeed": 1898920501
+   },
+   "pin_defaults": [],
+   "pos": [
+    1316,
+    106
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly",
+   "title": "Sparse Random Scatter",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Spawn selected static meshes at scattered points",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_6",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "SpawnAssets",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Environment/Background_City/Mesh/SM_bgcitya.SM_bgcitya",
+     "/Game/Environment/Background_City/Mesh/SM_bgcityb.SM_bgcityb",
+     "/Game/Environment/Background_City/Mesh/SM_bgcityb_NotNanite.SM_bgcityb_NotNanite"
+    ],
+    "MaterialOverride": "/CitySamplePCG/Materials/BackGroundCity/MI_BackgroundCity.MI_BackgroundCity",
+    "PositionOffset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 13200
+    },
+    "ScaleOffset": {
+     "X": 100,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2310,
+    102
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn Background Buildings",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Width"
+    },
+    {
+     "edges": [],
+     "label": "Length"
+    },
+    {
+     "edges": [],
+     "label": "Ngon"
+    },
+    {
+     "edges": [],
+     "label": "Linear"
+    },
+    {
+     "edges": [],
+     "label": "Position"
+    },
+    {
+     "edges": [],
+     "label": "Rotation"
+    },
+    {
+     "edges": [],
+     "label": "AtWorldOrigin"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_4",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Length": 2500000,
+    "Width": 2500000
+   },
+   "pin_defaults": [],
+   "pos": [
+    288,
+    112
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
+   "title": "Create Outer Area (25km square)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "CreateConstant_0",
+       "Out"
+      ]
+     ],
+     "label": "Width"
+    },
+    {
+     "edges": [
+      [
+       "CreateConstant_0",
+       "Out"
+      ]
+     ],
+     "label": "Length"
+    },
+    {
+     "edges": [],
+     "label": "Ngon"
+    },
+    {
+     "edges": [],
+     "label": "Linear"
+    },
+    {
+     "edges": [],
+     "label": "Position"
+    },
+    {
+     "edges": [],
+     "label": "Rotation"
+    },
+    {
+     "edges": [],
+     "label": "AtWorldOrigin"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_5",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Length": 300000,
+    "Width": 300000
+   },
+   "pin_defaults": [],
+   "pos": [
+    272,
+    224
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
+   "title": "Create Center Exclusion Area (3km square)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "ScatterPoints",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_6",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "RandomPerDataset": false,
+    "Ratio": 0.641598
+   },
+   "pin_defaults": [],
+   "pos": [
+    1766,
+    106
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Cull (~36% removed)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGCreateAttributeSetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "CreateConstant_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -12,
+    260
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 411769.84375,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "Float",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Seed": 526699840
+   },
+   "title": "Center Exclusion Size (~4.1 km)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [],
+ "schema": 1
+}

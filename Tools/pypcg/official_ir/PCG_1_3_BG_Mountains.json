@@ -1,0 +1,916 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.550000011920929,
+    "G": 0.25,
+    "R": 0.10000000149011612
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "MOUNTAIN DATA SETUP\n(load pre-baked point cloud, stamp onto world anchor)",
+   "NodeDetails": "",
+   "NodeHeight": 352,
+   "NodePosX": -654,
+   "NodePosY": 262,
+   "NodeWidth": 1232,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.05000000074505806,
+    "G": 0.3799999952316284,
+    "R": 0.6000000238418579
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "ORIENTATION & POSITION CORRECTION\n(zero roll, zero pitch, clamp Z)",
+   "NodeDetails": "",
+   "NodeHeight": 352,
+   "NodePosX": 604,
+   "NodePosY": 262,
+   "NodeWidth": 912,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.550000011920929,
+    "G": 0.15000000596046448,
+    "R": 0.20000000298023224
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "SPAWN VISTA CLIFF MESHES",
+   "NodeDetails": "",
+   "NodeHeight": 352,
+   "NodePosX": 1536,
+   "NodePosY": 256,
+   "NodeWidth": 336,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_1_3_BG_Mountains.PCG_1_3_BG_Mountains",
+ "graph_props": {
+  "Description": "Spawns distant mountain and cliff silhouettes around the city from a pre-baked PCG data asset."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -800,
+    0
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2000,
+    400
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGCreatePointsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Transform"
+    },
+    {
+     "edges": [],
+     "label": "Density"
+    },
+    {
+     "edges": [],
+     "label": "BoundsMin"
+    },
+    {
+     "edges": [],
+     "label": "BoundsMax"
+    },
+    {
+     "edges": [],
+     "label": "Color"
+    },
+    {
+     "edges": [],
+     "label": "Steepness"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "MetadataEntry"
+    },
+    {
+     "edges": [],
+     "label": "CoordinateSpace"
+    },
+    {
+     "edges": [],
+     "label": "bCullPointsOutsideVolume"
+    }
+   ],
+   "name": "CreatePoints_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -560,
+    704
+   ],
+   "settings": {
+    "PointsToCreate": [
+     {
+      "BoundsMax": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "BoundsMin": {
+       "X": -1,
+       "Y": -1,
+       "Z": -1
+      },
+      "Color": {
+       "W": 1,
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Density": 1,
+      "MetadataEntry": -1,
+      "Seed": 0,
+      "Steepness": 1,
+      "Transform": {
+       "Rotation": {
+        "W": 1,
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+       },
+       "Scale3D": {
+        "X": 1.75,
+        "Y": 1.75,
+        "Z": 0.5
+       },
+       "Translation": {
+        "X": 0,
+        "Y": 0,
+        "Z": -50000
+       }
+      }
+     }
+    ],
+    "Seed": 619961783
+   },
+   "title": "Create Anchor Point",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGCopyPointsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "PCGLoadDataAsset_0",
+       "Out"
+      ]
+     ],
+     "label": "Source"
+    },
+    {
+     "edges": [
+      [
+       "CreatePoints_0",
+       "Out"
+      ]
+     ],
+     "label": "Target"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "RotationInheritance"
+    },
+    {
+     "edges": [],
+     "label": "bApplyTargetRotationToPositions"
+    },
+    {
+     "edges": [],
+     "label": "ScaleInheritance"
+    },
+    {
+     "edges": [],
+     "label": "bApplyTargetScaleToPositions"
+    },
+    {
+     "edges": [],
+     "label": "ColorInheritance"
+    },
+    {
+     "edges": [],
+     "label": "SeedInheritance"
+    },
+    {
+     "edges": [],
+     "label": "AttributeInheritance"
+    },
+    {
+     "edges": [],
+     "label": "TagInheritance"
+    },
+    {
+     "edges": [],
+     "label": "bCopyEachSourceOnEveryTarget"
+    }
+   ],
+   "name": "CopyPoints_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    192,
+    416
+   ],
+   "settings": {
+    "AttributeInheritance": "SourceOnly",
+    "Seed": -1030087771
+   },
+   "title": "Stamp Mountains onto Anchor Point",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGLoadDataAssetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Asset"
+    },
+    {
+     "edges": [],
+     "label": "CommaSeparatedDefaultAttributeOverrides"
+    }
+   ],
+   "name": "PCGLoadDataAsset_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -600,
+    400
+   ],
+   "settings": {
+    "Asset": "/CitySamplePCG/PCG/DataAssets/VistaCliffs_PCG.VistaCliffs_PCG",
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Normal",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1644020902,
+    "bTagOutputsBasedOnOutputPins": false
+   },
+   "title": "Load Vista Cliffs Data Asset",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGStaticMeshSpawnerSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_2",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TargetActor"
+    },
+    {
+     "edges": [],
+     "label": "bAllowMergeDifferentDataInSameInstancedComponents"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    }
+   ],
+   "name": "StaticMeshSpawner_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1600,
+    416
+   ],
+   "settings": {
+    "MeshSelectorParameters": {
+     "AttributeName": "Mesh",
+     "MaterialOverrideAttributes": [],
+     "TemplateDescriptor": {
+      "AdditionalCommaSeparatedTags": "",
+      "BodyInstance": {
+       "AngularDamping": 0,
+       "COMNudge": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+       },
+       "CollisionEnabled": "NoCollision",
+       "CollisionProfileName": "NoCollision",
+       "CollisionResponses": {
+        "ResponseArray": [
+         {
+          "Channel": "Visibility",
+          "Response": "ECR_Ignore"
+         },
+         {
+          "Channel": "Camera",
+          "Response": "ECR_Ignore"
+         }
+        ]
+       },
+       "CustomDOFPlaneNormal": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+       },
+       "CustomSleepThresholdMultiplier": 1,
+       "DOFMode": "Default",
+       "GravityGroupIndex": 0,
+       "InertiaTensorScale": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+       },
+       "LinearDamping": 0.009999999776482582,
+       "MassInKgOverride": 100,
+       "MassScale": 1,
+       "MaxAngularVelocity": 3600,
+       "MaxDepenetrationVelocity": 0,
+       "ObjectType": "ECC_WorldStatic",
+       "PhysMaterialOverride": "None",
+       "PhysicsBlendWeight": 0,
+       "PositionSolverIterationCount": 8,
+       "ProjectionSolverIterationCount": 1,
+       "SleepFamily": "Normal",
+       "SolverAsyncDeltaTime": 0.01666666753590107,
+       "StabilizationThresholdMultiplier": 1,
+       "VelocitySolverIterationCount": 2,
+       "WalkableSlopeOverride": {
+        "WalkableSlopeAngle": 0,
+        "WalkableSlopeBehavior": "WalkableSlope_Default"
+       },
+       "bAllowPartialIslandSleep": true,
+       "bAutoWeld": true,
+       "bEnableGravity": true,
+       "bGenerateWakeEvents": false,
+       "bGyroscopicTorqueEnabled": false,
+       "bIgnoreAnalyticCollisions": false,
+       "bInertiaConditioning": true,
+       "bInterpolateWhenSubStepping": true,
+       "bLockRotation": true,
+       "bLockTranslation": true,
+       "bLockXRotation": false,
+       "bLockXTranslation": false,
+       "bLockYRotation": false,
+       "bLockYTranslation": false,
+       "bLockZRotation": false,
+       "bLockZTranslation": false,
+       "bNotifyRigidBodyCollision": false,
+       "bOneWayInteraction": false,
+       "bOverrideIterationCounts": false,
+       "bOverrideMass": false,
+       "bOverrideMaxAngularVelocity": false,
+       "bOverrideMaxDepenetrationVelocity": false,
+       "bOverrideSolverAsyncDeltaTime": false,
+       "bOverrideWalkableSlopeOnInstance": false,
+       "bSimulatePhysics": false,
+       "bSmoothEdgeCollisions": false,
+       "bStartAwake": true,
+       "bUpdateKinematicFromSimulation": false,
+       "bUpdateMassWhenScaleChanges": true,
+       "bUseCCD": false,
+       "bUseMACD": false
+      },
+      "ComponentClass": "/Script/CoreUObject.Class'/Script/Engine.InstancedStaticMeshComponent'",
+      "ComponentTags": [],
+      "CustomDepthStencilValue": 0,
+      "CustomDepthStencilWriteMask": "ERSM_Default",
+      "DetailMode": "DM_Low",
+      "HLODBatchingPolicy": "None",
+      "Hash": 0,
+      "InstanceEndCullDistance": 0,
+      "InstanceLODDistanceScale": 1,
+      "InstanceMinDrawDistance": 0,
+      "InstanceStartCullDistance": 0,
+      "LightingChannels": {
+       "bChannel0": true,
+       "bChannel1": false,
+       "bChannel2": false
+      },
+      "LightmapType": "Default",
+      "Mobility": "Static",
+      "NanitePixelProgrammableDistance": 0,
+      "OverlayMaterial": "None",
+      "OverriddenLightMapRes": 64,
+      "OverrideMaterials": [
+       "/CitySamplePCG/Materials/Ground/MI_MeshTerrain_CitySamplePCG.MI_MeshTerrain_CitySamplePCG"
+      ],
+      "RayTracingGroupCullingPriority": "CP_4_DEFAULT",
+      "RayTracingGroupId": -1,
+      "RuntimeVirtualTextures": [],
+      "ShadowCacheInvalidationBehavior": "Auto",
+      "StaticMesh": "None",
+      "TranslucencySortPriority": 0,
+      "VirtualTextureCullMips": 0,
+      "VirtualTextureRenderPassType": "Exclusive",
+      "WorldPositionOffsetDisableDistance": 0,
+      "bAffectDistanceFieldLighting": false,
+      "bAffectDynamicIndirectLighting": false,
+      "bAffectDynamicIndirectLightingWhileHidden": false,
+      "bCanEverAffectNavigation": true,
+      "bCastCinematicShadow": false,
+      "bCastContactShadow": false,
+      "bCastDynamicShadow": false,
+      "bCastFarShadow": false,
+      "bCastHiddenShadow": false,
+      "bCastInsetShadow": false,
+      "bCastShadow": false,
+      "bCastShadowAsTwoSided": false,
+      "bCastStaticShadow": false,
+      "bCastVolumetricTranslucentShadow": false,
+      "bConsiderForActorPlacementWhenHidden": false,
+      "bEmissiveLightSource": false,
+      "bEnableDensityScaling": false,
+      "bEnableDiscardOnLoad": false,
+      "bEvaluateWorldPositionOffset": false,
+      "bFillCollisionUnderneathForNavmesh": false,
+      "bForceNavigationObstacle": false,
+      "bGenerateOverlapEvents": false,
+      "bHasCustomNavigableGeometry": "Yes",
+      "bHasPerInstanceHitProxies": false,
+      "bHiddenInGame": false,
+      "bIncludeInHLOD": false,
+      "bIsEditorOnly": false,
+      "bOverrideLightMapRes": false,
+      "bOverrideNavigationExport": false,
+      "bRasterizeAsFilledConvexVolume": false,
+      "bReceivesDecals": false,
+      "bRenderCustomDepth": false,
+      "bRenderInDepthPass": true,
+      "bRenderInMainPass": true,
+      "bReverseCulling": false,
+      "bSelectable": true,
+      "bSelfShadowOnly": false,
+      "bUseAsOccluder": false,
+      "bUseDefaultCollision": false,
+      "bUseGpuLodSelection": true,
+      "bVisible": true,
+      "bVisibleInRayTracing": false,
+      "bVisibleInReflections": false
+     },
+     "_ClassName": "/Script/PCG.PCGMeshSelectorByAttribute",
+     "bUseAttributeMaterialOverrides": false
+    },
+    "MeshSelectorType": "/Script/CoreUObject.Class'/Script/PCG.PCGMeshSelectorByAttribute'",
+    "Seed": -1025269183
+   },
+   "title": "Spawn Vista Cliff Meshes",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "CopyPoints_0",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    704,
+    400
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Roll)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Roll Rotation",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_0",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    950,
+    400
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Pitch)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Pitch Rotation",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_1",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Min"
+    },
+    {
+     "edges": [],
+     "label": "Max"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": "Double",
+     "value": -100000
+    },
+    {
+     "activated": true,
+     "index": 2,
+     "prop": "DefaultValue3",
+     "type": "Double",
+     "value": 100000
+    }
+   ],
+   "pos": [
+    1200,
+    400
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Clamp",
+    "Seed": -603003822
+   },
+   "title": "Clamp Z Position",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [],
+ "schema": 1
+}

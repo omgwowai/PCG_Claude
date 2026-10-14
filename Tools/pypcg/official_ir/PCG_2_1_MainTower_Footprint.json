@@ -1,0 +1,613 @@
+{
+ "comment_boxes": [],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_2_1_MainTower_Footprint.PCG_2_1_MainTower_Footprint",
+ "graph_props": {
+  "Description": "Defines the hero tower landmark footprint as a parametric hexagonal spline shape. Consumed by downstream graphs as the boundary for the main tower complex."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2737,
+    -1301
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2304,
+    -1232
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1002128835,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GP_Width",
+       "Out"
+      ]
+     ],
+     "label": "Width"
+    },
+    {
+     "edges": [
+      [
+       "GP_Length",
+       "Out"
+      ]
+     ],
+     "label": "Length"
+    },
+    {
+     "edges": [],
+     "label": "Ngon"
+    },
+    {
+     "edges": [],
+     "label": "Linear"
+    },
+    {
+     "edges": [],
+     "label": "Position"
+    },
+    {
+     "edges": [],
+     "label": "Rotation"
+    },
+    {
+     "edges": [],
+     "label": "AtWorldOrigin"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "RectMain",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AtWorldOrigin": false,
+    "Length": 5000,
+    "Linear": true,
+    "Ngon": 6,
+    "Width": 5000
+   },
+   "pin_defaults": [],
+   "pos": [
+    -3072,
+    -1056
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
+   "title": "Create Landmark Hexagon",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GP_Width",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -3328,
+    -1024
+   ],
+   "settings": {
+    "PropertyPath": "RectWidth",
+    "Seed": -1365531043
+   },
+   "title": "Get Width",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GP_Length",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -3328,
+    -912
+   ],
+   "settings": {
+    "PropertyPath": "RectLength",
+    "Seed": -1365531043
+   },
+   "title": "Get Length",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "to visuallize the shape in the viewport",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_1",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteExtents"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsSize"
+    },
+    {
+     "edges": [],
+     "label": "RandomColorPerData"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -2288,
+    -1056
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "shifting up for vizibility above the terrain",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "RectMain",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 10000
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2704,
+    -1056
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "RectMain",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2720,
+    -1200
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Width of the landmark rectangle in centimeters"
+   },
+   "name": "RectWidth",
+   "type": "Float",
+   "type_object": "",
+   "value": 16000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Length of the landmark rectangle in centimeters"
+   },
+   "name": "RectLength",
+   "type": "Float",
+   "type_object": "",
+   "value": 16000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "NewProperty",
+   "type": "Float",
+   "type_object": "",
+   "value": 8000
+  }
+ ],
+ "schema": 1
+}

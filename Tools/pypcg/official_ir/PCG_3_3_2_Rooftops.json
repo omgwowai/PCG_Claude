@@ -1,0 +1,2111 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.4000000059604645,
+    "G": 0.4000000059604645,
+    "R": 0.10000000149011612
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "ROOFTOP SIZE CLASSIFICATION",
+   "NodeDetails": "",
+   "NodeHeight": 1232,
+   "NodePosX": 150,
+   "NodePosY": -1200,
+   "NodeWidth": 800,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.550000011920929,
+    "G": 0.25,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "SKYSCRAPER HEIGHT FILTER",
+   "NodeDetails": "",
+   "NodeHeight": 400,
+   "NodePosX": 992,
+   "NodePosY": -352,
+   "NodeWidth": 1408,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.10000000149011612,
+    "G": 0.4000000059604645,
+    "R": 0.10000000149011612
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "ASSEMBLY PLACEMENT",
+   "NodeDetails": "",
+   "NodeHeight": 1280,
+   "NodePosX": 2428,
+   "NodePosY": -1230,
+   "NodeWidth": 1952,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "PARTITION AND SPAWNING",
+   "NodeDetails": "",
+   "NodeHeight": 544,
+   "NodePosX": 4544,
+   "NodePosY": -880,
+   "NodeWidth": 1072,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_3_3_2_Rooftops.PCG_3_3_2_Rooftops",
+ "graph_props": {
+  "Description": "This PCG graph will spawn the rooftop assemblies on top of the previously generated building from PCG_3_3_1_Buildings"
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -400,
+    -1400
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -200,
+    -1400
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022648621"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -432,
+    -1152
+   ],
+   "settings": {
+    "Seed": -1618237129
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Building Rooftop Polygons",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGAttributeReduceSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    },
+    {
+     "edges": [],
+     "label": "Operation"
+    },
+    {
+     "edges": [],
+     "label": "JoinDelimiter"
+    },
+    {
+     "edges": [],
+     "label": "bMergeOutputAttributes"
+    }
+   ],
+   "name": "AttributeReduce_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1242,
+    -106
+   ],
+   "settings": {
+    "InputSource": "PCGBegin($position.Z)PCGEnd",
+    "OutputAttributeName": "height",
+    "Seed": 51105410
+   },
+   "title": "Reduce Z To Max Height Per Building",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGCopyAttributesSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "Target"
+    },
+    {
+     "edges": [
+      [
+       "AttributeReduce_0",
+       "Out"
+      ]
+     ],
+     "label": "Source"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operation"
+    },
+    {
+     "edges": [],
+     "label": "bCopyAllAttributes"
+    },
+    {
+     "edges": [],
+     "label": "bCopyAllDomains"
+    },
+    {
+     "edges": [],
+     "label": "InputSource"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "CopyAttributes_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1540,
+    -240
+   ],
+   "settings": {
+    "InputSource": "PCGBegin(height)PCGEnd",
+    "OutputTarget": "PCGBegin(@data.height)PCGEnd",
+    "Seed": 113986551
+   },
+   "title": "Copy Max Height To Dataset Attribute",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGFilterByAttributeSettings",
+   "comment": "Buildings whose rooftop Z exceeds 7000 (70m) get skyscraper assemblies.\nInsideFilter → skyscraper filler. OutsideFilter → standard WFC filler.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "CopyAttributes_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "FilterMode"
+    },
+    {
+     "edges": [],
+     "label": "Attribute"
+    },
+    {
+     "edges": [],
+     "label": "MetadataDomain"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreProperties"
+    },
+    {
+     "edges": [],
+     "label": "FilterByValueMode"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "FilterOperator"
+    },
+    {
+     "edges": [],
+     "label": "Threshold/bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "Threshold/ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MinThreshold/bInclusive"
+    },
+    {
+     "edges": [],
+     "label": "MinThreshold/bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "MinThreshold/ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaxThreshold/bInclusive"
+    },
+    {
+     "edges": [],
+     "label": "MaxThreshold/bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "MaxThreshold/ThresholdAttribute"
+    }
+   ],
+   "name": "FilterDataByAttribute_1",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1840,
+    -240
+   ],
+   "settings": {
+    "Attribute": "@data.height",
+    "FilterMode": "FilterByValue",
+    "Seed": 1941863259,
+    "Threshold": {
+     "AttributeTypes": {
+      "BoolValue": false,
+      "DoubleValue": 7000,
+      "FloatValue": 0,
+      "Int32Value": 0,
+      "IntValue": 0,
+      "NameValue": "None",
+      "QuatValue": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "RotatorValue": {
+       "Pitch": 0,
+       "Roll": 0,
+       "Yaw": 0
+      },
+      "SoftClassPathValue": "None",
+      "SoftObjectPathValue": "None",
+      "StringValue": "",
+      "TransformValue": {
+       "Rotation": {
+        "W": 1,
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+       },
+       "Scale3D": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+       },
+       "Translation": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+       }
+      },
+      "Type": "Double",
+      "Vector2Value": {
+       "X": 0,
+       "Y": 0
+      },
+      "Vector4Value": {
+       "W": 0,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "VectorValue": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "bAllowsTypeChange": true
+     },
+     "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+     "bUseConstantThreshold": true
+    }
+   },
+   "title": "Filter: Height > 70m (Skyscrapers)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByTag_3",
+       "InsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_5",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Operator": "Greater",
+    "Size": 500
+   },
+   "pin_defaults": [],
+   "pos": [
+    600,
+    -550
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Filter Large Rooftops By Min Area (500)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByTag_2",
+       "InsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_6",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Operator": "Greater",
+    "Size": 800
+   },
+   "pin_defaults": [],
+   "pos": [
+    600,
+    -850
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Filter Medium Rooftops By Min Area (800)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTagSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operation"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "SelectedTags"
+    }
+   ],
+   "name": "FilterDataByTag_0",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    200,
+    -1150
+   ],
+   "settings": {
+    "Seed": -865145422,
+    "SelectedTags": "SmallRooftops"
+   },
+   "title": "Filter: Small Rooftops",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTagSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operation"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "SelectedTags"
+    }
+   ],
+   "name": "FilterDataByTag_2",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    200,
+    -850
+   ],
+   "settings": {
+    "Seed": -865145422,
+    "SelectedTags": "MediumRooftops"
+   },
+   "title": "Filter: Medium Rooftops",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTagSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operation"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "SelectedTags"
+    }
+   ],
+   "name": "FilterDataByTag_3",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    200,
+    -550
+   ],
+   "settings": {
+    "Seed": -865145422,
+    "SelectedTags": "LargeRooftops"
+   },
+   "title": "Filter: Large Rooftops",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByTag_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_9",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Operator": "Greater",
+    "Size": 300
+   },
+   "pin_defaults": [],
+   "pos": [
+    600,
+    -1150
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Filter Small Rooftops By Min Area (300)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1042,
+    -206
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": "Large Rooftops (Size-Filtered)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Selected"
+      ],
+      [
+       "Subgraph_5",
+       "Unselected"
+      ],
+      [
+       "Subgraph_6",
+       "Selected"
+      ],
+      [
+       "FilterDataByTag_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_8",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": -8
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2504,
+    -448
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lower Assemblies -8 (Flush To Roof Surface)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByAttribute_1",
+       "InsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_10",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": -20
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2512,
+    -128
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lower Skyscraper Assemblies -20 (Flush To Roof Surface)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Removes WFC points that coincide with small-assembly points to avoid overlap.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_7",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_2",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_12",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    3664,
+    -752
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Points_Difference.Compose_Points_Difference",
+   "title": "Subtract Small Assemblies From WFC Points",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_13",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    4976,
+    -816
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn All Rooftop Assemblies",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\r\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\r\n\r\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\r\nThis bug is fixed after UE 5.8.2.\r\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\r\nlocated in /PCGPrimitives/Primitives/Fill/\r\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\r\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_8",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_2",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_X_PCG.Rooftop_Small_X_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_W_PCG.Rooftop_Small_W_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_V_PCG.Rooftop_Small_V_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_U_PCG.Rooftop_Small_U_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_T_PCG.Rooftop_Small_T_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_S_PCG.Rooftop_Small_S_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_R_PCG.Rooftop_Small_R_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_Q_PCG.Rooftop_Small_Q_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_N_PCG.Rooftop_Small_N_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_L_PCG.Rooftop_Small_L_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_K_PCG.Rooftop_Small_K_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_J_PCG.Rooftop_Small_J_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_I_PCG.Rooftop_Small_I_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_H_PCG.Rooftop_Small_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_G_PCG.Rooftop_Small_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_F_PCG.Rooftop_Small_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_E_PCG.Rooftop_Small_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_D_PCG.Rooftop_Small_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_C_PCG.Rooftop_Small_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_B_PCG.Rooftop_Small_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Small_A_PCG.Rooftop_Small_A_PCG"
+    ],
+    "Overlap": 0.5,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3072,
+    -448
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Place Small Rooftop Assemblies",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_10",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_3",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_A_PCG.Rooftop_Skyscraper_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_B_PCG.Rooftop_Skyscraper_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_C_PCG.Rooftop_Skyscraper_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_D_PCG.Rooftop_Skyscraper_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_E_PCG.Rooftop_Skyscraper_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_F_PCG.Rooftop_Skyscraper_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_G_PCG.Rooftop_Skyscraper_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_H_PCG.Rooftop_Skyscraper_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_I_PCG.Rooftop_Skyscraper_I_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_J_PCG.Rooftop_Skyscraper_J_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_Skyscraper_K_PCG.Rooftop_Skyscraper_K_PCG"
+    ],
+    "Overlap": 0.5,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3072,
+    -132
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Place Skyscraper Rooftop Assemblies",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Unselected"
+      ],
+      [
+       "Subgraph_9",
+       "Selected"
+      ],
+      [
+       "FilterDataByAttribute_1",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_7",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_A_PCG.Rooftop_WFC3x3_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_B_PCG.Rooftop_WFC3x3_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_C_PCG.Rooftop_WFC3x3_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_D_PCG.Rooftop_WFC3x3_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_E_PCG.Rooftop_WFC3x3_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_F_PCG.Rooftop_WFC3x3_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x3_G_PCG.Rooftop_WFC3x3_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_A_PCG.Rooftop_WFC3x6_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_B_PCG.Rooftop_WFC3x6_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC3x6_C_PCG.Rooftop_WFC3x6_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_A_PCG.Rooftop_WFC6x6_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_B_PCG.Rooftop_WFC6x6_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_C_PCG.Rooftop_WFC6x6_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Rooftop_WFC6x6_D_PCG.Rooftop_WFC6x6_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_A_PCG.Roof_House_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_B_PCG.Roof_House_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_C_PCG.Roof_House_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_D_PCG.Roof_House_D_PCG"
+    ],
+    "Overlap": 0.7,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3072,
+    -752
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Place WFC Rooftop Assemblies (Medium & Large)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_6",
+       "Unselected"
+      ],
+      [
+       "Subgraph_9",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_11",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_A_PCG.AC_Vent_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_B_PCG.AC_Vent_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_C_PCG.AC_Vent_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_D_PCG.AC_Vent_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_E_PCG.AC_Vent_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/AC_Vent_F_PCG.AC_Vent_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_A_PCG.Roof_House_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_B_PCG.Roof_House_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_C_PCG.Roof_House_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/RoofTops/Roof_House_D_PCG.Roof_House_D_PCG"
+    ],
+    "Overlap": 0.738949,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3072,
+    -1056
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Place AC Vents & Roof Houses (Unfiltered)",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGLoopSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output B"
+      ]
+     ],
+     "label": "Points"
+    },
+    {
+     "edges": [],
+     "label": "optionalInputActors"
+    },
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output B"
+      ]
+     ],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorBaseName"
+    },
+    {
+     "edges": [],
+     "label": "EnableCollision"
+    },
+    {
+     "edges": [],
+     "label": "Override_Material"
+    }
+   ],
+   "name": "Loop_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorBaseName": "Rooftop_ASM_"
+   },
+   "pin_defaults": [],
+   "pos": [
+    4976,
+    -688
+   ],
+   "settings": {
+    "Seed": 895873474
+   },
+   "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_12",
+       "Out"
+      ],
+      [
+       "Subgraph_11",
+       "Out"
+      ],
+      [
+       "Subgraph_3",
+       "Out"
+      ],
+      [
+       "Subgraph_2",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_3",
+       "Partitioned"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_1",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4608,
+    -736
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": "",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "Partitioned",
+   "inputs": [],
+   "name": "GetGraphParameter_3",
+   "outputs": [
+    "Partitioned"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4608,
+    -562
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Partitioned",
+   "title_color": [
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": ""
+   },
+   "name": "Partitioned",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  }
+ ],
+ "schema": 1
+}

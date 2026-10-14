@@ -1,0 +1,2688 @@
+{
+ "classes": {
+  "PCGAddAttributeSettings": {
+   "inputs": [
+    "Attributes",
+    "Execution Dependency",
+    "In",
+    "InputSource",
+    "OutputTarget",
+    "Overrides",
+    "bCopyAllAttributes",
+    "bCopyAllDomains"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGAddTagSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "Prefix",
+    "Suffix",
+    "TagsToAdd",
+    "bIgnoreTagValueParsing"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGAttributeCastSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "InputSource",
+    "OutputTarget",
+    "OutputType",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGAttributeFilteringSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "Filter",
+    "In",
+    "Operator",
+    "Overrides",
+    "TargetAttribute",
+    "ThresholdAttribute",
+    "bUseConstantThreshold",
+    "bUseSpatialQuery"
+   ],
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ]
+  },
+  "PCGAttributeNoiseSettings": {
+   "inputs": [
+    "CustomSeedSource",
+    "Execution Dependency",
+    "In",
+    "InputSource",
+    "Mode",
+    "NoiseMax",
+    "NoiseMin",
+    "OutputTarget",
+    "Overrides",
+    "Seed",
+    "bClampResult",
+    "bHasCustomSeedSource",
+    "bInvertSource"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGAttributeReduceSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "InputSource",
+    "JoinDelimiter",
+    "Operation",
+    "OutputAttributeName",
+    "Overrides",
+    "bMergeOutputAttributes"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGAttributeRemapSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "ExternalCurve",
+    "In",
+    "InRangeMax",
+    "InRangeMin",
+    "InputSource",
+    "Mode",
+    "OutRangeMax",
+    "OutRangeMin",
+    "OutputTarget",
+    "Overrides",
+    "bAllowInverseRange",
+    "bClampToUnitRange",
+    "bIgnoreValuesOutsideInputRange"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGBlurSettings": {
+   "inputs": [
+    "BlurMode",
+    "CustomStandardDeviation",
+    "Execution Dependency",
+    "In",
+    "InputSource",
+    "NumIterations",
+    "OutputTarget",
+    "Overrides",
+    "SearchDistance",
+    "bUseCustomStandardDeviation"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGBranchSettings": {
+   "inputs": [
+    "In",
+    "Overrides",
+    "bOutputToB"
+   ],
+   "outputs": [
+    "Output A",
+    "Output B"
+   ]
+  },
+  "PCGConvexHull2DSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCopyAttributesSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "InputSource",
+    "Operation",
+    "OutputTarget",
+    "Overrides",
+    "Source",
+    "Target",
+    "bCopyAllAttributes",
+    "bCopyAllDomains"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCopyPointsSettings": {
+   "inputs": [
+    "AttributeInheritance",
+    "ColorInheritance",
+    "Execution Dependency",
+    "Overrides",
+    "RotationInheritance",
+    "ScaleInheritance",
+    "SeedInheritance",
+    "Source",
+    "TagInheritance",
+    "Target",
+    "bApplyTargetRotationToPositions",
+    "bApplyTargetScaleToPositions",
+    "bCopyEachSourceOnEveryTarget"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCreateAttributeSetSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "OutputTarget",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCreatePointsSettings": {
+   "inputs": [
+    "BoundsMax",
+    "BoundsMin",
+    "Color",
+    "CoordinateSpace",
+    "Density",
+    "Execution Dependency",
+    "MetadataEntry",
+    "Overrides",
+    "Seed",
+    "Steepness",
+    "Transform",
+    "bCullPointsOutsideVolume"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCreatePolygon2DSettings": {
+   "inputs": [
+    "DefaultPolygonNormal",
+    "DefaultPolygonNormalBehavior",
+    "EndType",
+    "Execution Dependency",
+    "HoleIndexAttribute",
+    "In",
+    "InputType",
+    "JoinType",
+    "OpenPolygonWidth",
+    "Overrides",
+    "PolygonWidthAttribute",
+    "SplineMaxDiscretizationError",
+    "bUseHoleAttribute",
+    "bUsePolygonWidthAttribute"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGCreateSplineSettings": {
+   "inputs": [
+    "ArriveTangentAttribute",
+    "Execution Dependency",
+    "In",
+    "InterpTypeAttribute",
+    "LeaveTangentAttribute",
+    "Mode",
+    "Overrides",
+    "TagsToAddOnComponents",
+    "TargetActor",
+    "bApplyCustomTangents",
+    "bClosedLoop",
+    "bLinear",
+    "bUseInterpTypeAttribute"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGDeleteTagsSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Operation",
+    "Operator",
+    "Overrides",
+    "SelectedTags"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGExtractAttributeSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Index",
+    "InputSource",
+    "OutputAttributeName",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGFilterByAttributeSettings": {
+   "inputs": [
+    "Attribute",
+    "Execution Dependency",
+    "FilterByValueMode",
+    "FilterMode",
+    "FilterOperator",
+    "In",
+    "MaxThreshold/ThresholdAttribute",
+    "MaxThreshold/bInclusive",
+    "MaxThreshold/bUseConstantThreshold",
+    "MetadataDomain",
+    "MinThreshold/ThresholdAttribute",
+    "MinThreshold/bInclusive",
+    "MinThreshold/bUseConstantThreshold",
+    "Operator",
+    "Overrides",
+    "TargetAttribute",
+    "Threshold/ThresholdAttribute",
+    "Threshold/bUseConstantThreshold",
+    "bIgnoreProperties"
+   ],
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ]
+  },
+  "PCGFilterByIndexSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "SelectedIndices",
+    "bInvertFilter"
+   ],
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ]
+  },
+  "PCGFilterByTagSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Operation",
+    "Operator",
+    "Overrides",
+    "SelectedTags"
+   ],
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ]
+  },
+  "PCGFilterByTypeSettings": {
+   "inputs": [
+    "In"
+   ],
+   "outputs": [
+    "InsideFilter"
+   ]
+  },
+  "PCGGatherSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGGenericUserParameterGetSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "OutputAttributeName",
+    "Overrides",
+    "PropertyPath"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGGetSplineControlPointsSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGLoadDataAssetSettings": {
+   "inputs": [
+    "Asset",
+    "CommaSeparatedDefaultAttributeOverrides",
+    "Execution Dependency",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGLoopSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMakeConcreteSettings": {
+   "inputs": [
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMergeSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "MergeTagsMode",
+    "Overrides",
+    "bMergeMetadata"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMetadataBooleanSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "InA",
+    "InB",
+    "InputSource1",
+    "InputSource2",
+    "OutputTarget",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMetadataMakeVectorSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "InputSource1",
+    "InputSource2",
+    "InputSource3",
+    "InputSource4",
+    "OutputTarget",
+    "Overrides",
+    "X",
+    "Y",
+    "Z"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMetadataMathsSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "InA",
+    "InB",
+    "InputSource1",
+    "InputSource2",
+    "InputSource3",
+    "Max",
+    "Min",
+    "OutputTarget",
+    "Overrides",
+    "Ratio"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMetadataRenameSettings": {
+   "inputs": [
+    "AttributeToRename",
+    "Execution Dependency",
+    "In",
+    "NewAttributeName",
+    "Overrides"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGMetadataStringOpSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "InA",
+    "InB",
+    "InputSource1",
+    "InputSource2",
+    "InputSource3",
+    "OutputTarget",
+    "Overrides",
+    "Replace",
+    "Search",
+    "SearchCase"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGNamedRerouteDeclarationSettings": {
+   "inputs": [
+    "In"
+   ],
+   "outputs": [
+    "InvisiblePin",
+    "Out"
+   ]
+  },
+  "PCGNamedRerouteUsageSettings": {
+   "inputs": [
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGProjectionSettings": {
+   "inputs": [
+    "AttributeList",
+    "AttributeMergeOperation",
+    "AttributeMode",
+    "ColorBlendMode",
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "Projection Target",
+    "TagMergeOperation",
+    "bForceCollapseToPoint",
+    "bKeepZeroDensityPoints",
+    "bProjectPositions",
+    "bProjectRotations",
+    "bProjectScales"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGRandomChoiceSettings": {
+   "inputs": [
+    "CustomSeedSource",
+    "Execution Dependency",
+    "FixedNumber",
+    "In",
+    "Overrides",
+    "Ratio",
+    "Seed",
+    "bFixedMode",
+    "bHasCustomSeedSource",
+    "bUseFirstAttributeOnly"
+   ],
+   "outputs": [
+    "Chosen",
+    "Discarded"
+   ]
+  },
+  "PCGRerouteSettings": {
+   "inputs": [
+    "In"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGStaticMeshSpawnerSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "Seed",
+    "TargetActor",
+    "bAllowMergeDifferentDataInSameInstancedComponents"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGSubgraphSettings": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ]
+  },
+  "PCGUserParameterGetSettings": {
+   "inputs": [],
+   "outputs": [
+    "Artery_width",
+    "CollisionGeometry",
+    "ComplexBuildingShapes",
+    "Crosswalks",
+    "Debug",
+    "Debug_Roads",
+    "Debug_Undividable_districts",
+    "None",
+    "PartitionGridSize",
+    "Partitioned",
+    "Ratio_Plaza_vs_Trees",
+    "Road_Profile",
+    "UseMegaPlantsTrees",
+    "UseMegaplantsTrees",
+    "collector_width",
+    "debug",
+    "local_Width",
+    "simpleRoads"
+   ]
+  }
+ },
+ "fresh_seeds": {
+  "PCGAddAttributeSettings": -1494659313,
+  "PCGAddTagSettings": 2078803931,
+  "PCGAttributeCastSettings": 1494067853,
+  "PCGAttributeFilteringSettings": -1825272837,
+  "PCGAttributeNoiseSettings": 112114419,
+  "PCGAttributeReduceSettings": 51105410,
+  "PCGAttributeRemapSettings": 1128692220,
+  "PCGBlurSettings": -1557585997,
+  "PCGBranchSettings": 774982565,
+  "PCGConvexHull2DSettings": -721562245,
+  "PCGCopyAttributesSettings": 113986551,
+  "PCGCopyPointsSettings": -1030087771,
+  "PCGCreateAttributeSetSettings": 526699840,
+  "PCGCreatePointsSettings": 619961783,
+  "PCGCreatePolygon2DSettings": 696821770,
+  "PCGCreateSplineSettings": -680163307,
+  "PCGDeleteTagsSettings": 1096359687,
+  "PCGExtractAttributeSettings": 1956359795,
+  "PCGFilterByAttributeSettings": 1941863259,
+  "PCGFilterByIndexSettings": 436953980,
+  "PCGFilterByTagSettings": -865145422,
+  "PCGFilterByTypeSettings": -756616903,
+  "PCGGatherSettings": -1096471958,
+  "PCGGenericUserParameterGetSettings": -1365531043,
+  "PCGGetSplineControlPointsSettings": -1597445965,
+  "PCGGraphInputOutputSettings": 1002128835,
+  "PCGLoadDataAssetSettings": 1644020902,
+  "PCGLoopSettings": 895873474,
+  "PCGMakeConcreteSettings": 348461948,
+  "PCGMergeSettings": -2087626795,
+  "PCGMetadataBooleanSettings": 688223866,
+  "PCGMetadataMakeVectorSettings": -1536877454,
+  "PCGMetadataMathsSettings": -603003822,
+  "PCGMetadataRenameSettings": -418571639,
+  "PCGMetadataStringOpSettings": -260577290,
+  "PCGNamedRerouteDeclarationSettings": 187164237,
+  "PCGNamedRerouteUsageSettings": 2014642815,
+  "PCGProjectionSettings": -121516437,
+  "PCGRandomChoiceSettings": 1297095283,
+  "PCGRerouteSettings": 1719617987,
+  "PCGStaticMeshSpawnerSettings": -1025269183,
+  "PCGSubgraphSettings": 532343038,
+  "PCGUserParameterGetSettings": 1296285799
+ },
+ "io": {
+  "input_node_inputs": [
+   "In"
+  ],
+  "input_node_outputs": [
+   "In"
+  ],
+  "output_node_inputs": [
+   "Out"
+  ],
+  "output_node_outputs": [
+   "Out"
+  ]
+ },
+ "subgraphs": {
+  "AssignBuildingShape": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Overrides",
+    "SubgraphOverride",
+    "a",
+    "diamond",
+    "h",
+    "hexa",
+    "l",
+    "o",
+    "octa",
+    "pawn",
+    "plus",
+    "rand",
+    "seed",
+    "slash",
+    "square",
+    "t",
+    "u",
+    "x",
+    "y"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "a": "Bool",
+    "diamond": "Bool",
+    "h": "Bool",
+    "hexa": "Bool",
+    "l": "Bool",
+    "o": "Bool",
+    "octa": "Bool",
+    "pawn": "Bool",
+    "plus": "Bool",
+    "rand": "Bool",
+    "seed": "Int32",
+    "slash": "Bool",
+    "square": "Bool",
+    "t": "Bool",
+    "u": "Bool",
+    "x": "Bool",
+    "y": "Bool"
+   },
+   "path": "/CitySamplePCG/PCG/AssignBuildingShape.AssignBuildingShape"
+  },
+  "Assign_Assets": {
+   "inputs": [
+    "Assets",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "ExtentsScale",
+    "IndexAttribute",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MatchScaleToInputBounds",
+    "MeshAttribute",
+    "Overrides",
+    "PositionOffset",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RandomPositionRange",
+    "RandomRotationRange",
+    "RandomScaleRange",
+    "RotationOffset",
+    "ScaleOffset",
+    "Seed",
+    "SubgraphOverride",
+    "UniformScale",
+    "UseIndexattribute",
+    "UseMeshAttribute",
+    "UseMeshBounds"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Assets": "SoftObject",
+    "CoreProcessGraph": "SoftObject",
+    "ExtentsScale": "Struct",
+    "IndexAttribute": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MatchScaleToInputBounds": "Bool",
+    "MeshAttribute": "String",
+    "PositionOffset": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "RandomPositionRange": "Struct",
+    "RandomRotationRange": "Struct",
+    "RandomScaleRange": "Struct",
+    "RotationOffset": "Struct",
+    "ScaleOffset": "Struct",
+    "Seed": "Int32",
+    "UniformScale": "Bool",
+    "UseIndexattribute": "Bool",
+    "UseMeshAttribute": "Bool",
+    "UseMeshBounds": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets"
+  },
+  "Assign_CitySampleBuildings": {
+   "inputs": [
+    "BuildingsFootprints",
+    "BuildingsStyles",
+    "CitySample data",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "Foundation",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MaxHeight",
+    "MinHeight",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "Seed",
+    "SpawnIntoBuildingsActors",
+    "SpawnMeshes",
+    "Staggered",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Actors",
+    "Points",
+    "Rooftops Footprints"
+   ],
+   "params": {
+    "BuildingsStyles": "String",
+    "CoreProcessGraph": "SoftObject",
+    "Foundation": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MaxHeight": "Double",
+    "MinHeight": "Double",
+    "PrepareOutputsGraph": "SoftObject",
+    "Seed": "Int32",
+    "SpawnIntoBuildingsActors": "Bool",
+    "SpawnMeshes": "Bool",
+    "Staggered": "Bool"
+   },
+   "path": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings"
+  },
+  "Assign_Rule": {
+   "inputs": [
+    "CoreProcessGraph",
+    "DebugColor",
+    "Execution Dependency",
+    "FlipForwardAxis",
+    "Grammar",
+    "GuessPivotOffset",
+    "GuessSize",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Mesh",
+    "MeshForwardAxis",
+    "MeshOverride",
+    "OverrideScale",
+    "Overrides",
+    "PivotOffset",
+    "PosOffset",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RandPosRange",
+    "RandRotRange",
+    "RandScaleRange",
+    "Scalable",
+    "Size",
+    "SpawnAssets",
+    "SubgraphOverride",
+    "Symbol"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Grammar": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MeshOverride": "SoftObject",
+    "ModulesInfos": "Struct",
+    "OverrideScale": "Struct",
+    "PosOffset": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "RandPosRange": "Struct",
+    "RandRotRange": "Struct",
+    "RandScaleRange": "Struct",
+    "SpawnAssets": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Assign/Assign_Rule.Assign_Rule"
+  },
+  "Assign_ShapeGrammarDefinition": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "ShapeGrammarDefinition",
+    "Size",
+    "SpawnAssets",
+    "SubgraphOverride",
+    "UseAttributeForSize",
+    "size",
+    "spawnAssets",
+    "useAttributeForSize"
+   ],
+   "outputs": [
+    "Footprints",
+    "Points"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "ShapeGrammarDefinition": "SoftObject",
+    "Size": "Double",
+    "SpawnAssets": "Bool",
+    "UseAttributeForSize": "String"
+   },
+   "path": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition"
+  },
+  "Compose_Areas_Exclusion": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion"
+  },
+  "Compose_Areas_Intersection": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection"
+  },
+  "Compose_Areas_Union": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Union.Compose_Areas_Union"
+  },
+  "Compose_Points_Difference": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Compose/Compose_Points_Difference.Compose_Points_Difference"
+  },
+  "Compose_Spline_Cut": {
+   "inputs": [
+    "CoreProcessGraph",
+    "DifferenceORIntersection",
+    "DifferenceOrIntersection",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "DifferenceOrIntersection": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut"
+  },
+  "CopyToPoints": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "Source",
+    "SubgraphOverride",
+    "Target"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Copy/CopyToPoints.CopyToPoints"
+  },
+  "Create_Mesh_Extrude": {
+   "inputs": [
+    "CoreProcessGraph",
+    "DynamicMesh",
+    "Execution Dependency",
+    "HeightAttribute",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Material",
+    "MaxHeight",
+    "MinHeight",
+    "OutMeshName",
+    "OutMeshPath",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "DynamicMesh": "Bool",
+    "HeightAttribute": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Material": "SoftObject",
+    "MaxHeight": "Double",
+    "MinHeight": "Double",
+    "OutMeshName": "String",
+    "OutMeshPath": "String",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Create/Create_Mesh_Extrude.Create_Mesh_Extrude"
+  },
+  "Create_Mesh_Planar": {
+   "inputs": [
+    "CoreProcessGraph",
+    "DynamicMesh",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Material",
+    "OutMeshName",
+    "OutMeshPath",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride",
+    "dynamicMesh",
+    "material"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "DynamicMesh": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Material": "SoftObject",
+    "OutMeshName": "String",
+    "OutMeshPath": "String",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar"
+  },
+  "Create_Point": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "Extents",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Location",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Rotation",
+    "Scale",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Extents": "Struct",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Location": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "Rotation": "Struct",
+    "Scale": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Create/Create_Point.Create_Point"
+  },
+  "Create_Spline_Shape": {
+   "inputs": [
+    "AtWorldOrigin",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Length",
+    "Linear",
+    "Ngon",
+    "Overrides",
+    "Position",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Rotation",
+    "SubgraphOverride",
+    "Width"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AtWorldOrigin": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Length": "Double",
+    "Linear": "Bool",
+    "Ngon": "Int32",
+    "Position": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "Rotation": "Struct",
+    "Width": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape"
+  },
+  "Create_Spline_line": {
+   "inputs": [
+    "AtWorldOrigin",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Length",
+    "Overrides",
+    "Position",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Rotation",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AtWorldOrigin": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Length": "Double",
+    "Position": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "Rotation": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Create/Create_Spline_line.Create_Spline_line"
+  },
+  "Crosswalks": {
+   "inputs": [
+    "Artery Road Sections",
+    "ArteryRoadWidth",
+    "Collector Road Sections",
+    "CollectorRoadWidth",
+    "Crosswalk_distance_from_intersection",
+    "Execution Dependency",
+    "Grammar_Asset",
+    "Local Road Sections",
+    "LocalRoadWidth",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "OutPoints"
+   ],
+   "params": {
+    "ArteryRoadWidth": "Double",
+    "CollectorRoadWidth": "Double",
+    "Crosswalk_distance_from_intersection": "Double",
+    "Grammar_Asset": "SoftObject",
+    "LocalRoadWidth": "Double"
+   },
+   "path": "/CitySamplePCG/PCG/Crosswalks.Crosswalks"
+  },
+  "Custom_Projector_with_rotation_fix": {
+   "inputs": [
+    "Execution Dependency",
+    "In Points",
+    "Overrides",
+    "ProjecScale",
+    "ProjectAttribute",
+    "ProjectPosition",
+    "ProjectRotation",
+    "RestoreOrigZPos",
+    "SubgraphOverride",
+    "Surface",
+    "Z_offset_for_proj"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "ProjecScale": "Bool",
+    "ProjectAttribute": "String",
+    "ProjectPosition": "Bool",
+    "ProjectRotation": "Bool",
+    "RestoreOrigZPos": "Bool",
+    "Z_offset_for_proj": "Double"
+   },
+   "path": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix"
+  },
+  "Debug_PrimitiveData": {
+   "inputs": [
+    "AbsoluteExtents",
+    "Execution Dependency",
+    "ExtentsSize",
+    "Overrides",
+    "PrimaryInput",
+    "RandomColorPerData",
+    "SubgraphOverride"
+   ],
+   "outputs": [],
+   "params": {
+    "AbsoluteExtents": "Bool",
+    "ExtentsSize": "Double",
+    "RandomColorPerData": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData"
+  },
+  "Extract_Bounds": {
+   "inputs": [
+    "CombineAllInputsIntoSinglePoint",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CombineAllInputsIntoSinglePoint": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Extract/Extract_Bounds.Extract_Bounds"
+  },
+  "Extract_MeshTerrainPoints": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints"
+  },
+  "Extract_Segments": {
+   "inputs": [
+    "CoreProcessGraph",
+    "CutAngleThreshold",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "CutAngleThreshold": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments"
+  },
+  "Fill_Areas_Randomly": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "FinalCount",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "OutputPointsExtents",
+    "Overrides",
+    "PointsPerSquaredMeter",
+    "PositionRange",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RotationRange",
+    "SamplingPointExtents",
+    "SamplingSeed",
+    "ScaleRange",
+    "SubgraphOverride",
+    "SurfaceRotation",
+    "Uniformity"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "FinalCount": "Int32",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "OutputPointsExtents": "Struct",
+    "PointsPerSquaredMeter": "Double",
+    "PositionRange": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "RotationRange": "Struct",
+    "SamplingPointExtents": "Struct",
+    "SamplingSeed": "Int32",
+    "ScaleRange": "Struct",
+    "SurfaceRotation": "Double",
+    "Uniformity": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly"
+  },
+  "Fill_Areas_Uniformly": {
+   "inputs": [
+    "Asset",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PointExtents",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride",
+    "asset"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PointExtents": "Double",
+    "PrepareOutputsGraph": "SoftObject",
+    "asset": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly"
+  },
+  "Fill_Areas_WithFittingAssets_with_Corrective": {
+   "inputs": [
+    "Assets",
+    "BaseFillPointExtents",
+    "BaseFillPointsPerSquareMeters",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "KeepAssembliesRoot",
+    "Overlap",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Random90DegRotation",
+    "Seed",
+    "SpawnAssets",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Assets": "SoftObject",
+    "BaseFillPointExtents": "Double",
+    "BaseFillPointsPerSquareMeters": "Double",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "KeepAssembliesRoot": "Bool",
+    "Overlap": "Double",
+    "PrepareOutputsGraph": "SoftObject",
+    "Random90DegRotation": "Bool",
+    "Seed": "Int32",
+    "SpawnAssets": "Bool"
+   },
+   "path": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective"
+  },
+  "FilterPolygonByEdgeLength": {
+   "inputs": [
+    "Execution Dependency",
+    "Filter_Operator",
+    "In",
+    "Out",
+    "Overrides",
+    "SubgraphOverride",
+    "Threshold"
+   ],
+   "outputs": [
+    "InsideFilter",
+    "Outside Filter"
+   ],
+   "params": {
+    "Filter_Operator": "Enum",
+    "Threshold": "Double"
+   },
+   "path": "/CitySamplePCG/PCG/FilterPolygonByEdgeLength.FilterPolygonByEdgeLength"
+  },
+  "FilterSquareShapes": {
+   "inputs": [
+    "Execution Dependency",
+    "In",
+    "Out",
+    "Overrides",
+    "SubgraphOverride",
+    "ratioLimit"
+   ],
+   "outputs": [
+    "selected",
+    "unselected"
+   ],
+   "params": {
+    "ratioLimit": "Double"
+   },
+   "path": "/CitySamplePCG/PCG/FilterSquareShapes.FilterSquareShapes"
+  },
+  "Filter_Areas_BySize": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Operator",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Size",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Operator": "Enum",
+    "PrepareOutputsGraph": "SoftObject",
+    "Size": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize"
+  },
+  "Filter_Areas_within_Areas": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "IncludePartiallyContainedAreas",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "IncludePartiallyContainedAreas": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Filter/Filter_Areas_within_Areas.Filter_Areas_within_Areas"
+  },
+  "Filter_AttributeValue": {
+   "inputs": [
+    "BoolValue",
+    "CoreProcessGraph",
+    "DoubleValue",
+    "Execution Dependency",
+    "FloatValue",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Int32Value",
+    "IntValue",
+    "NameValue",
+    "Operator",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "QuatValue",
+    "RotatorValue",
+    "SoftClassPathValue",
+    "SoftObjectPathValue",
+    "StringValue",
+    "SubgraphOverride",
+    "TargetAttribute",
+    "TransformValue",
+    "Type",
+    "Vector2Value",
+    "Vector4Value",
+    "VectorValue",
+    "bAllowsTypeChange"
+   ],
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "FilterValue": "Struct",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Operator": "Enum",
+    "PrepareOutputsGraph": "SoftObject",
+    "TargetAttribute": "String"
+   },
+   "path": "/PCGPrimitives/Primitives/Filter/Filter_AttributeValue.Filter_AttributeValue"
+  },
+  "Filter_RandomChoice": {
+   "inputs": [
+    "CoreProcessGraph",
+    "CountToKeep",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RandomPerDataset",
+    "Ratio",
+    "Seed",
+    "SubgraphOverride",
+    "UseCountInsteadOfRatio"
+   ],
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "CountToKeep": "Int32",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "RandomPerDataset": "Bool",
+    "Ratio": "Double",
+    "Seed": "Int32",
+    "UseCountInsteadOfRatio": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice"
+  },
+  "Filter_Tags": {
+   "inputs": [
+    "Execution Dependency",
+    "FilteredInputTags",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "InvertFilter",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "params": {
+    "FilteredInputTags": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "InvertFilter": "Bool",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags"
+  },
+  "Get_ActorData": {
+   "inputs": [
+    "ActorTag",
+    "Execution Dependency",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "ActorTag": "String"
+   },
+   "path": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData"
+  },
+  "Get_ActorDataByRef": {
+   "inputs": [
+    "ActorReferences",
+    "Execution Dependency",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "ActorReferences": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef"
+  },
+  "Get_MeshTerrain": {
+   "inputs": [
+    "Channels",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "MeshPartitionBoundSize",
+    "MeshPartitionQueryInclusive",
+    "MeshPartitionQueryType",
+    "MeshPartitionTarget",
+    "ModifierLayerPriority",
+    "ModifierSubPriority",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Channels": "Name",
+    "CoreProcessGraph": "SoftObject",
+    "MeshPartitionBoundSize": "Struct",
+    "MeshPartitionQueryInclusive": "Bool",
+    "MeshPartitionQueryType": "Enum",
+    "MeshPartitionTarget": "SoftObject",
+    "ModifierLayerPriority": "Name",
+    "ModifierSubPriority": "Double",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain"
+  },
+  "GridPartition": {
+   "inputs": [
+    "Execution Dependency",
+    "Grid_Size",
+    "Overrides",
+    "Points",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Grid_Size": "Int32"
+   },
+   "path": "/CitySamplePCG/PCG/GridPartition.GridPartition"
+  },
+  "Intersection_solving": {
+   "inputs": [
+    "Artery Roads",
+    "ArteryRoadWidth",
+    "Collector Roads",
+    "CollectorRoadWidth",
+    "Crosswalk_distance_from_intersection",
+    "Execution Dependency",
+    "Local Roads",
+    "LocalRoadWidth",
+    "Overrides",
+    "SubgraphOverride",
+    "intersection_expansion_range",
+    "roadSectionLimit"
+   ],
+   "outputs": [
+    "ArterySections",
+    "CollectorSections",
+    "IntersectionsPlanar",
+    "LocalSections",
+    "RoadsFootprints"
+   ],
+   "params": {
+    "ArteryRoadWidth": "Double",
+    "CollectorRoadWidth": "Double",
+    "Crosswalk_distance_from_intersection": "Double",
+    "LocalRoadWidth": "Double",
+    "intersection_expansion_range": "Double",
+    "roadSectionLimit": "Double"
+   },
+   "path": "/CitySamplePCG/PCG/Intersection_solving.Intersection_solving"
+  },
+  "LoadCitySampleData": {
+   "inputs": [
+    "Execution Dependency",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {},
+   "path": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData.LoadCitySampleData"
+  },
+  "LoopCreateExtrudedMeshActorPerData": {
+   "inputs": [
+    "ActorLabel",
+    "AssetPath",
+    "Execution Dependency",
+    "In",
+    "Materials",
+    "Optional Input Actors",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Actors"
+   ],
+   "params": {
+    "ActorLabel": "String",
+    "AssetPath": "String",
+    "Materials": "SoftObject"
+   },
+   "path": "/CitySamplePCG/PCG/LoopCreateExtrudedMeshActorPerData.LoopCreateExtrudedMeshActorPerData"
+  },
+  "LoopCreatePlanarMeshActorPerData": {
+   "inputs": [
+    "ActorLabel",
+    "Execution Dependency",
+    "In",
+    "Materials",
+    "Optional Input Actors",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Actors"
+   ],
+   "params": {
+    "ActorLabel": "String",
+    "Materials": "SoftObject"
+   },
+   "path": "/CitySamplePCG/PCG/LoopCreatePlanarMeshActorPerData.LoopCreatePlanarMeshActorPerData"
+  },
+  "LoopSpawnActorPerData": {
+   "inputs": [
+    "ActorBaseName",
+    "EnableCollision",
+    "Execution Dependency",
+    "Override_Material",
+    "Overrides",
+    "Points",
+    "SubgraphOverride",
+    "optionalInputActors"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "ActorBaseName": "String",
+    "EnableCollision": "Bool",
+    "Override_Material": "Struct"
+   },
+   "path": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData"
+  },
+  "Place_OnSpline": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Count",
+    "Execution Dependency",
+    "Facing",
+    "FitToCurve",
+    "FollowCurve",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MeshForwardAxis",
+    "Offset",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Spacing",
+    "SplineEndOffset",
+    "SplineStartOffset",
+    "SubgraphOverride",
+    "UseExistingControlPoints",
+    "UseFixedCount",
+    "splineEndOffset",
+    "splineStartOffset"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Count": "Int32",
+    "Facing": "Enum",
+    "FitToCurve": "Bool",
+    "FollowCurve": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MeshForwardAxis": "Enum",
+    "Offset": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "Spacing": "Double",
+    "UseExistingControlPoints": "Bool",
+    "UseFixedCount": "Bool",
+    "splineEndOffset": "Double",
+    "splineStartOffset": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline"
+  },
+  "Place_Point_AtCenter": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PointExtents",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PointExtents": "Double",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Place/Place_Point_AtCenter.Place_Point_AtCenter"
+  },
+  "SetComplexBuildings": {
+   "inputs": [
+    "BuildingStyles",
+    "Execution Dependency",
+    "In",
+    "Out",
+    "Overrides",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Footprints",
+    "Points"
+   ],
+   "params": {
+    "BuildingStyles": "String"
+   },
+   "path": "/CitySamplePCG/PCG/SetComplexBuildings.SetComplexBuildings"
+  },
+  "Spawn_Assets": {
+   "inputs": [
+    "Assets",
+    "Collision",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "IndexAttribute",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MatchScaleToInputBounds",
+    "MaterialOverride",
+    "MeshAttribute",
+    "Overrides",
+    "PositionOffset",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RandomPositionRange",
+    "RandomRotationRange",
+    "RandomScaleRange",
+    "RotationOffset",
+    "ScaleOffset",
+    "SubgraphOverride",
+    "UniformScale",
+    "UseAssetIndexAttribute",
+    "UseMeshAttribute",
+    "seed"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Assets": "SoftObject",
+    "Collision": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "IndexAttribute": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MatchScaleToInputBounds": "Bool",
+    "MaterialOverride": "SoftObject",
+    "MeshAttribute": "String",
+    "PositionOffset": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "RandomPositionRange": "Struct",
+    "RandomRotationRange": "Struct",
+    "RandomScaleRange": "Struct",
+    "RotationOffset": "Struct",
+    "ScaleOffset": "Struct",
+    "UniformScale": "Bool",
+    "UseAssetIndexAttribute": "Bool",
+    "UseMeshAttribute": "Bool",
+    "seed": "Int32"
+   },
+   "path": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets"
+  },
+  "Subdivide_Areas_WithRecursiveSplit": {
+   "inputs": [
+    "AllowDisturbance",
+    "AngleJitter",
+    "CoreProcessGraph",
+    "Disturbance",
+    "DisturbanceSubdivisionsDistance",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Iterations",
+    "MaxSplitDistancFromCenter",
+    "MinAreaSize",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Seed",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Areas",
+    "Subdivide Splines"
+   ],
+   "params": {
+    "AllowDisturbance": "Bool",
+    "AngleJitter": "Double",
+    "CoreProcessGraph": "SoftObject",
+    "Disturbance": "Double",
+    "DisturbanceSubdivisionsDistance": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Iterations": "Int32",
+    "MaxSplitDistancFromCenter": "Double",
+    "MinAreaSize": "Double",
+    "PrepareOutputsGraph": "SoftObject",
+    "Seed": "Int32"
+   },
+   "path": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit"
+  },
+  "Subdivide_Areas_withGrid": {
+   "inputs": [
+    "AllowDisturbance",
+    "AngleJitter",
+    "CoreProcessGraph",
+    "Disturbance",
+    "DisturbanceSubdivisionsDistance",
+    "Execution Dependency",
+    "GridLength",
+    "GridWidth",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubdivLength",
+    "SubdivWidth",
+    "SubgraphOverride",
+    "UseSubdivisionInsteadOfSizes",
+    "disturbance"
+   ],
+   "outputs": [
+    "Areas",
+    "Subdividing_splines"
+   ],
+   "params": {
+    "AllowDisturbance": "Bool",
+    "AngleJitter": "Double",
+    "CoreProcessGraph": "SoftObject",
+    "DisturbanceSubdivisionsDistance": "Double",
+    "GridLength": "Double",
+    "GridWidth": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "SubdivLength": "Int32",
+    "SubdivWidth": "Int32",
+    "UseSubdivisionInsteadOfSizes": "Bool",
+    "disturbance": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid"
+  },
+  "Subdivide_Areas_withSpline": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Areas",
+    "Subdividing Splines"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withSpline.Subdivide_Areas_withSpline"
+  },
+  "Trace_Bound_Footprint": {
+   "inputs": [
+    "AsPoint",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PlanarSurface",
+    "PositionOffset",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "ScaleFactor",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AsPoint": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PlanarSurface": "Enum",
+    "PositionOffset": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "ScaleFactor": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Trace/Trace_Bound_Footprint.Trace_Bound_Footprint"
+  },
+  "Transform_Align": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Justify_X_from",
+    "Justify_X_to",
+    "Justify_Y_from",
+    "Justify_Y_to",
+    "Justify_Z_from",
+    "Justify_Z_to",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SecondaryInput",
+    "SubgraphOverride",
+    "UseParentAxis"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Justify_X_from": "Enum",
+    "Justify_X_to": "Enum",
+    "Justify_Y_from": "Enum",
+    "Justify_Y_to": "Enum",
+    "Justify_Z_from": "Enum",
+    "Justify_Z_to": "Enum",
+    "PrepareOutputsGraph": "SoftObject",
+    "UseParentAxis": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align"
+  },
+  "Transform_Areas_Contract": {
+   "inputs": [
+    "Contract",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride",
+    "UnionBeforeOutputting"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Contract": "Double",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "UnionBeforeOutputting": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract"
+  },
+  "Transform_Areas_Expand": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "Expand",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride",
+    "UnionBeforeOutputting"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Expand": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "UnionBeforeOutputting": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand"
+  },
+  "Transform_Jitter": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Jitter",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Seed",
+    "SubgraphOverride",
+    "seed"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Jitter": "Struct",
+    "PrepareOutputsGraph": "SoftObject",
+    "Seed": "Int32"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Jitter.Transform_Jitter"
+  },
+  "Transform_Level": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "LevelOperation",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "LevelOperation": "Enum",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level"
+  },
+  "Transform_Offset": {
+   "inputs": [
+    "AbsoluteOffset",
+    "AttributeMask",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PerPoints",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Scale",
+    "SubgraphOverride",
+    "UseAttributeMask",
+    "offset",
+    "rotationOffset"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AbsoluteOffset": "Bool",
+    "AttributeMask": "String",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PerPoints": "Bool",
+    "PrepareOutputsGraph": "SoftObject",
+    "Scale": "Struct",
+    "UseAttributeMask": "Bool",
+    "offset": "Struct",
+    "rotationOffset": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset"
+  },
+  "Transform_Outline": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride",
+    "Width"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "Width": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Outline.Transform_Outline"
+  },
+  "Transform_Points_SpatialNoise": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Distort",
+    "DistortAmplitude",
+    "DistortIterations",
+    "DistortOffset",
+    "DistortScale",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "NoiseAmplitude",
+    "NoiseBlur",
+    "NoiseBlurDistance",
+    "NoiseBlurIterations",
+    "NoiseIterations",
+    "NoiseOffset",
+    "NoiseScale",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Distort": "Bool",
+    "DistortAmplitude": "Double",
+    "DistortIterations": "Int32",
+    "DistortOffset": "Struct",
+    "DistortScale": "Struct",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "NoiseAmplitude": "Double",
+    "NoiseBlur": "Bool",
+    "NoiseBlurDistance": "Double",
+    "NoiseBlurIterations": "Int32",
+    "NoiseIterations": "Int32",
+    "NoiseOffset": "Struct",
+    "NoiseScale": "Struct",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Points_SpatialNoise.Transform_Points_SpatialNoise"
+  },
+  "Transform_Project": {
+   "inputs": [
+    "ConvertClosedSplineToPolygon2D",
+    "CoreProcessGraph",
+    "EndFalloffDistance",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "ProjectAttribute",
+    "ProjectPositions",
+    "ProjectRotations",
+    "ProjectScales",
+    "SecondaryInput",
+    "SetFalloffAsDensity",
+    "StartFalloffDistance",
+    "SubgraphOverride",
+    "UseFalloff"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "ConvertClosedSplineToPolygon2D": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "EndFalloffDistance": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "ProjectAttribute": "String",
+    "ProjectPositions": "Bool",
+    "ProjectRotations": "Bool",
+    "ProjectScales": "Bool",
+    "SetFalloffAsDensity": "Bool",
+    "StartFalloffDistance": "Double",
+    "UseFalloff": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project"
+  },
+  "Transform_Resample": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Distance",
+    "Execution Dependency",
+    "FitToCurve",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SamplingMode",
+    "Subdivision",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "Distance": "Double",
+    "FitToCurve": "Bool",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "SamplingMode": "Enum",
+    "Subdivision": "Int32"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample"
+  },
+  "Transform_Splines_Reverse": {
+   "inputs": [
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Splines_Reverse.Transform_Splines_Reverse"
+  },
+  "Transform_Truncate": {
+   "inputs": [
+    "CoreProcessGraph",
+    "EndOffset",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "StartOffset",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "EndOffset": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject",
+    "StartOffset": "Double"
+   },
+   "path": "/PCGPrimitives/Primitives/Transform/Transform_Truncate.Transform_Truncate"
+  },
+  "Write_Attribute": {
+   "inputs": [
+    "Attribute",
+    "BoolValue",
+    "CoreProcessGraph",
+    "DoubleValue",
+    "Execution Dependency",
+    "FloatValue",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Int32Value",
+    "IntValue",
+    "NameValue",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "QuatValue",
+    "RotatorValue",
+    "SoftClassPathValue",
+    "SoftObjectPathValue",
+    "StringValue",
+    "SubgraphOverride",
+    "TransformValue",
+    "Type",
+    "Vector2Value",
+    "Vector4Value",
+    "VectorValue",
+    "bAllowsTypeChange"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Attribute": "String",
+    "AttributeType": "Struct",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Write/Write_Attribute.Write_Attribute"
+  },
+  "Write_Attribute_fromTexture": {
+   "inputs": [
+    "Attribute",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Mask",
+    "Normalize",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RemapValueInHigh",
+    "RemapValueInLow",
+    "RemapValueOutHigh",
+    "RemapValueOutLow",
+    "SubgraphOverride",
+    "Texture",
+    "TextureTransform"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "Attribute": "String",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "Mask": "Enum",
+    "Normalize": "Bool",
+    "PrepareOutputsGraph": "SoftObject",
+    "RemapValueInHigh": "Double",
+    "RemapValueInLow": "Double",
+    "RemapValueOutHigh": "Double",
+    "RemapValueOutLow": "Double",
+    "Texture": "SoftObject",
+    "TextureTransform": "Struct"
+   },
+   "path": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture"
+  },
+  "Write_DistanceFrom": {
+   "inputs": [
+    "AttributeOperation",
+    "ComputeIn2D",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MaximumDistance",
+    "Normalized",
+    "OutputAttribute",
+    "OutputDistanceVector",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "RemapClampToUnitRange",
+    "RemapIgnoreValuesOutsideInputRange",
+    "RemapOutputMax",
+    "RemapOutputMin",
+    "SecondaryInput",
+    "SubgraphOverride",
+    "UseRemap"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AttributeOperation": "Enum",
+    "ComputeIn2D": "Bool",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MaximumDistance": "Double",
+    "Normalized": "Bool",
+    "OutputAttribute": "String",
+    "OutputDistanceVector": "Bool",
+    "PrepareOutputsGraph": "SoftObject",
+    "RemapClampToUnitRange": "Bool",
+    "RemapIgnoreValuesOutsideInputRange": "Bool",
+    "RemapOutputMax": "Double",
+    "RemapOutputMin": "Double",
+    "UseRemap": "Bool"
+   },
+   "path": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom"
+  },
+  "Write_MeshTerrain": {
+   "inputs": [
+    "AffectedMeshPartition",
+    "Channels",
+    "CoreProcessGraph",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MeshPartitionBoundSize",
+    "ModifierLayerPriority",
+    "ModifierSubPriority",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AffectedMeshPartition": "SoftObject",
+    "Channels": "Name",
+    "CoreProcessGraph": "SoftObject",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MeshPartitionBoundSize": "Struct",
+    "ModifierLayerPriority": "Name",
+    "ModifierSubPriority": "Double",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives_MeshPartitionInterop/Primitives/Write/Write_MeshTerrain.Write_MeshTerrain"
+  },
+  "Write_Noise": {
+   "inputs": [
+    "AttributeOperation",
+    "CoreProcessGraph",
+    "CustomSeedSource",
+    "Execution Dependency",
+    "HasCustomSeedSource",
+    "InputAttribute",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "NoiseMax",
+    "NoiseMin",
+    "OutputAttribute",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "Seed",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "AttributeOperation": "Enum",
+    "CoreProcessGraph": "SoftObject",
+    "CustomSeedSource": "String",
+    "HasCustomSeedSource": "Bool",
+    "InputAttribute": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "NoiseMax": "Double",
+    "NoiseMin": "Double",
+    "OutputAttribute": "String",
+    "PrepareOutputsGraph": "SoftObject",
+    "Seed": "Int32"
+   },
+   "path": "/PCGPrimitives/Primitives/Write/Write_Noise.Write_Noise"
+  },
+  "Write_Tag": {
+   "inputs": [
+    "CustomTags",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CustomTags": "String",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag"
+  }
+ }
+}
