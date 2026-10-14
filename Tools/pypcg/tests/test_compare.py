@@ -171,13 +171,22 @@ def test_individualisation_pairs_automorphic_branches():
 
 
 def test_colours_do_not_collide_on_hash_negative_one_and_two():
-    # hash(-1) == hash(-2) in CPython; a colour scheme built from raw hash() would merge two
-    # siblings whose only difference is an X=-1 vs X=-2 setting into the same equivalence class.
-    def g(x1, x2):
-        return graph(node("s1", title="A", settings={"X": x1}), node("s2", title="A", settings={"X": x2}),
-                     node("m", "PCGGatherSettings", inputs=[("In", [("s1", "Out"), ("s2", "Out")])]),
-                     out=[("m", "Out")])
-    assert compare.diff(g(-1, -2), g(-1, -2), FRESH) == []
+    # hash(-1) == hash(-2) in CPython (confirmed: hash(("n", -1.0)) == hash(("n", -2.0)) too), so
+    # a colour scheme built from raw hash() assigns two structurally-twin, differently-valued
+    # siblings the SAME initial colour. Both siblings here are untitled dead ends fed by one
+    # common source (no outgoing edges, no node refs), so refinement carries no other signal
+    # (identical "ins", empty "o", empty "refs") -- the comparator can only tell them apart by
+    # their initial, settings-derived colour. Node names are swapped between the two graphs
+    # (A: p has X=-1, q has X=-2; B: q has X=-1, p has X=-2) so a name-based fallback pairs them
+    # wrong: only matching by the real (collision-free) colour gets diff == [].
+    def g(name_x_minus1, name_x_minus2):
+        return graph(node("src", title="Src"),
+                     node(name_x_minus1, title="", settings={"X": -1}, inputs=[("In", [("src", "Out")])]),
+                     node(name_x_minus2, title="", settings={"X": -2}, inputs=[("In", [("src", "Out")])]),
+                     out=[("src", "Out")])
+    a = g("p", "q")   # p: X=-1, q: X=-2
+    b = g("q", "p")   # q: X=-1, p: X=-2 -- same two values, names swapped
+    assert compare.diff(a, b, FRESH) == []
 
 
 def test_view_rejects_duplicate_node_names():
@@ -192,3 +201,19 @@ def test_missing_key_differs_from_explicit_null():
     b["nodes"][2]["overrides"]["Extra"] = None
     d = compare.diff(a, b, FRESH)
     assert [(x["field"], x["a"], x["b"]) for x in d] == [("overrides.Extra", "<missing>", None)]
+
+
+def test_missing_graph_prop_differs_from_explicit_null():
+    a, b = chain(("n0", "n1")), chain(("n0", "n1"))
+    b["graph_props"]["X"] = None
+    d = compare.diff(a, b, FRESH)
+    assert [(x["field"], x["a"], x["b"]) for x in d] == [("graph_props.X", "<missing>", None)]
+
+
+def test_param_missing_value_differs_from_explicit_null():
+    p_a = {"name": "R", "type": "Double", "container": "None", "type_object": "", "category": "Road"}
+    p_b = {"name": "R", "type": "Double", "container": "None", "type_object": "", "value": None, "category": "Road"}
+    a, b = chain(("n0", "n1")), chain(("n0", "n1"))
+    a["params"], b["params"] = [p_a], [p_b]
+    d = compare.diff(a, b, FRESH)
+    assert [(x["field"], x["a"], x["b"]) for x in d] == [("params.R.value", "<missing>", None)]

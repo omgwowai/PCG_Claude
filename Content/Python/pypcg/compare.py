@@ -36,6 +36,16 @@ def canon(v):
     raise TypeError("not JSON: %r" % (v,))
 
 
+def _canon_or_missing(v):
+    """canon(v), but _MISSING compares distinct from any real value, including None."""
+    return ("missing",) if v is _MISSING else canon(v)
+
+
+def _render(v):
+    """Display form for a diff record's "a"/"b": _MISSING reads as the literal string below."""
+    return "<missing>" if v is _MISSING else v
+
+
 def refs(value, out=None):
     """Node names referenced by {"node_ref": name} anywhere inside value."""
     out = [] if out is None else out
@@ -82,7 +92,7 @@ def tooltip_of(param):
 
 def _param(p):
     out = {k: p.get(k, "") for k in ("name", "type", "container", "type_object", "category")}
-    out["value"] = p.get("value")
+    out["value"] = p.get("value", _MISSING)
     out["tooltip"] = tooltip_of(p)
     out["meta"] = {k: v for k, v in (p.get("meta") or {}).items() if k not in IGNORED_META}
     return out
@@ -221,16 +231,18 @@ def diff(a, b, fresh_seeds, check_layout=False):
 
     ga, gb = a.get("graph_props") or {}, b.get("graph_props") or {}
     for k in sorted(set(ga) | set(gb)):
-        if canon(ga.get(k)) != canon(gb.get(k)):
-            add("graph", "graph", "graph_props." + k, ga.get(k), gb.get(k))
+        av = ga[k] if k in ga else _MISSING
+        bv = gb[k] if k in gb else _MISSING
+        if _canon_or_missing(av) != _canon_or_missing(bv):
+            add("graph", "graph", "graph_props." + k, _render(av), _render(bv))
     pa, pb = [_param(p) for p in a.get("params", [])], [_param(p) for p in b.get("params", [])]
     if [p["name"] for p in pa] != [p["name"] for p in pb]:
         add("graph", "graph", "params", [p["name"] for p in pa], [p["name"] for p in pb])
     else:
         for x, y in zip(pa, pb):
             for k in PARAM_FIELDS:
-                if canon(x[k]) != canon(y[k]):
-                    add("graph", "graph", "params.%s.%s" % (x["name"], k), x[k], y[k])
+                if _canon_or_missing(x[k]) != _canon_or_missing(y[k]):
+                    add("graph", "graph", "params.%s.%s" % (x["name"], k), _render(x[k]), _render(y[k]))
 
     mapping, ua, ub = match(va, vb)
     for name in ua:
@@ -245,12 +257,8 @@ def diff(a, b, fresh_seeds, check_layout=False):
                     a_has, b_has = key in fa[k], key in fb[k]
                     av = _rename_refs(fa[k].get(key), mapping) if a_has else _MISSING
                     bv = fb[k].get(key) if b_has else _MISSING
-                    a_cmp = ("missing",) if av is _MISSING else canon(av)
-                    b_cmp = ("missing",) if bv is _MISSING else canon(bv)
-                    if a_cmp != b_cmp:
-                        add("node", va[x]["where"], "%s.%s" % (k, key),
-                            "<missing>" if av is _MISSING else av,
-                            "<missing>" if bv is _MISSING else bv)
+                    if _canon_or_missing(av) != _canon_or_missing(bv):
+                        add("node", va[x]["where"], "%s.%s" % (k, key), _render(av), _render(bv))
             elif canon(fa[k]) != canon(fb[k]):
                 add("node", va[x]["where"], k, fa[k], fb[k])
         ia = {label: [(mapping.get(s, "?" + s), p) for s, p in edges] for label, edges in va[x]["inputs"]}
