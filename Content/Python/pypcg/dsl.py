@@ -151,6 +151,10 @@ class Graph:
 
     def _pins(self, rec, which):
         lib = library()
+        if which == "outputs" and "getter_param" in rec:
+            # M1: a getter node's only valid output pin is its own bound parameter, not the
+            # union of every getter pin in the library.
+            return [rec["getter_param"]]
         if rec["name"] == _ir.IN_NODE:
             return lib["io"]["input_node_" + which]
         if rec["name"] == _ir.OUT_NODE:
@@ -167,7 +171,10 @@ class Graph:
 
     def _check_out(self, rec, pin):
         allowed = self._pins(rec, "outputs")
-        if pin not in allowed:
+        # M1: getter_param names match case-insensitively (ruling T4e), so the output pin -- which
+        # is the getter's bound parameter name -- must too.
+        match = pin.lower() in [a.lower() for a in allowed] if "getter_param" in rec else pin in allowed
+        if not match:
             raise KeyError("%s: %s has no output pin %r; outputs: %s"
                            % (self._caller(), rec["title"] or rec["class"], pin, allowed))
 
@@ -216,11 +223,15 @@ class Graph:
 
     def param(self, name, title="", set=None, **kw):
         # Ruling T4e: accept a name that matches a declared parameter case-insensitively, but
-        # keep the caller's own spelling in getter_param (16 official getters store a name that
-        # is not any declared parameter's exact spelling or GUID).
+        # keep the caller's own spelling in getter_param. Three official getters (in LeftOverLots
+        # and CentralPark_Visuals) store "UseMegaPlantsTrees" where the declared parameter is
+        # "UseMegaplantsTrees" -- a case-only difference. Separately, 16 getters have
+        # getter_bound false (their stored GUIDs are stale); the comparator does not look at
+        # getter_bound.
         declared = [p.name.lower() for p in self._params]
         if name.lower() not in declared:
-            raise KeyError("%s: graph %s has no parameter %r" % (self._caller(), self.name, name))
+            raise KeyError("%s: graph %s has no parameter %r; parameters: %s"
+                           % (self._caller(), self.name, name, [p.name for p in self._params]))
         return self._add("PCGUserParameterGetSettings", title, set, kw, getter=name)
 
     def param_path(self, path, title="", set=None, **kw):

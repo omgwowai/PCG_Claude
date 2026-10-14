@@ -125,6 +125,8 @@ def test_param_getter_and_pin_defaults():
     assert ir["nodes"][2]["getter_param"] == "Ratio"
     with pytest.raises(KeyError, match="no parameter"):
         g.param("Nope")
+    with pytest.raises(KeyError, match="Ratio"):
+        g.param("Nope")
 
 
 def test_param_getter_accepts_case_variant():
@@ -133,6 +135,13 @@ def test_param_getter_accepts_case_variant():
     ir = g.to_ir(PROFILE)
     node = [n for n in ir["nodes"] if n["name"] == got.name][0]
     assert node["getter_param"] == "UseMegaPlantsTrees"
+
+
+def test_param_getter_output_pin_is_its_own_param():
+    g = Graph("G", params=[P("Ratio", "Double", 0.9)])
+    assert g.param("Ratio").Ratio is not None
+    with pytest.raises(KeyError, match="Other"):
+        g.param("Ratio").Other
 
 
 def test_same_structure_compares_equal():
