@@ -323,13 +323,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -384,13 +378,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -434,13 +422,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Districts PCG",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts PCG"
   },
   {
    "bubble_pinned": false,
@@ -552,13 +534,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/CitySamplePCG/PCG/Intersection_solving.Intersection_solving",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -614,19 +590,14 @@
     "Seed": -1617982074,
     "TagsToAdd": "RoadFootprints"
    },
-   "title": "Add Tags",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Tags"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_6",
@@ -641,19 +612,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_7",
@@ -668,19 +634,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_8",
@@ -695,13 +656,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
@@ -807,19 +762,14 @@
     "bExecutionDependencyRequired": true
    },
    "subgraph": "/CitySamplePCG/PCG/Crosswalks.Crosswalks",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Crosswalks",
    "inputs": [],
    "name": "GetGraphParameter_11",
@@ -834,13 +784,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Crosswalks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Crosswalks"
   },
   {
    "bubble_pinned": false,
@@ -931,13 +875,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Local Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Local Roads"
   },
   {
    "bubble_pinned": false,
@@ -1028,13 +966,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Collector Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Collector Roads"
   },
   {
    "bubble_pinned": false,
@@ -1124,19 +1056,14 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Artery Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Artery Roads"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_12",
@@ -1151,19 +1078,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_13",
@@ -1178,19 +1100,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_14",
@@ -1205,13 +1122,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -1256,19 +1167,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Enable Crosswalks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Enable Crosswalks"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Road_Profile",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -1283,13 +1189,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Road_Profile",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Road_Profile"
   },
   {
    "bubble_pinned": false,
@@ -1354,19 +1254,14 @@
     "OutputTarget": "PCGBegin(@data.ArteryWidth)PCGEnd",
     "Seed": -1494659313
    },
-   "title": "Embed Artery Width On Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Embed Artery Width On Footprint"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_9",
@@ -1381,13 +1276,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -1452,13 +1341,7 @@
     "OutputTarget": "PCGBegin(@data.CollectorWidth)PCGEnd",
     "Seed": -1494659313
    },
-   "title": "Embed Collector Width On Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Embed Collector Width On Footprint"
   },
   {
    "bubble_pinned": false,
@@ -1523,19 +1406,14 @@
     "OutputTarget": "PCGBegin(@data.LocalWidth)PCGEnd",
     "Seed": -1494659313
    },
-   "title": "Embed Local Width On Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Embed Local Width On Footprint"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_10",
@@ -1550,19 +1428,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_15",
@@ -1577,19 +1450,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_16",
@@ -1604,19 +1472,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_17",
@@ -1631,19 +1494,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_18",
@@ -1658,13 +1516,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -1771,13 +1623,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Points On Spline — Local",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Points On Spline — Local"
   },
   {
    "bubble_pinned": false,
@@ -1884,13 +1730,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Points On Spline — Collector",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Points On Spline — Collector"
   },
   {
    "bubble_pinned": false,
@@ -1997,13 +1837,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Points On Spline — Artery",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Points On Spline — Artery"
   },
   {
    "bubble_pinned": false,
@@ -2083,19 +1917,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Jitter.Transform_Jitter",
-   "title": "Jitter Decal Points — Artery",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Jitter Decal Points — Artery"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_24",
@@ -2110,13 +1939,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -2209,13 +2032,7 @@
     "OutputType": "Vector",
     "Seed": -1536877454
    },
-   "title": "Make Jitter Vec — Artery",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Make Jitter Vec — Artery"
   },
   {
    "bubble_pinned": false,
@@ -2306,13 +2123,7 @@
     },
     "Seed": 526699840
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2392,13 +2203,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Jitter.Transform_Jitter",
-   "title": "Jitter Decal Points — Collector",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Jitter Decal Points — Collector"
   },
   {
    "bubble_pinned": false,
@@ -2478,13 +2283,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Jitter.Transform_Jitter",
-   "title": "Jitter Decal Points — Local",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Jitter Decal Points — Local"
   },
   {
    "bubble_pinned": false,
@@ -2577,19 +2376,14 @@
     "OutputType": "Vector",
     "Seed": -1536877454
    },
-   "title": "Make Jitter Vec — Collector",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Make Jitter Vec — Collector"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_25",
@@ -2604,19 +2398,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_26",
@@ -2631,13 +2420,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
@@ -2730,13 +2513,7 @@
     "OutputType": "Vector",
     "Seed": -1536877454
    },
-   "title": "Make Jitter Vec — Local",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Make Jitter Vec — Local"
   },
   {
    "bubble_pinned": false,
@@ -2804,13 +2581,7 @@
     "Operation": "Divide",
     "Seed": -603003822
    },
-   "title": "Artery Width / 2 (Jitter Range)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery Width / 2 (Jitter Range)"
   },
   {
    "bubble_pinned": false,
@@ -2878,13 +2649,7 @@
     "Operation": "Divide",
     "Seed": -603003822
    },
-   "title": "Collector Width / 2 (Jitter Range)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Collector Width / 2 (Jitter Range)"
   },
   {
    "bubble_pinned": false,
@@ -2952,13 +2717,7 @@
     "Operation": "Divide",
     "Seed": -603003822
    },
-   "title": "Local Width / 2 (Jitter Range)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Width / 2 (Jitter Range)"
   },
   {
    "bubble_pinned": false,
@@ -3052,13 +2811,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Cull Decal Points (First Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Cull Decal Points (First Pass)"
   },
   {
    "bubble_pinned": false,
@@ -3144,13 +2897,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Cull Decal Points (Final Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Cull Decal Points (Final Pass)"
   },
   {
    "bubble_pinned": false,
@@ -3275,13 +3022,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Spray Paint Decals",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Spray Paint Decals"
   },
   {
    "bubble_pinned": false,
@@ -3325,13 +3066,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Landmark Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Landmark Building"
   },
   {
    "bubble_pinned": false,
@@ -3411,13 +3146,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Mesh Terrain (For Road Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Mesh Terrain (For Road Projection)"
   },
   {
    "bubble_pinned": false,
@@ -3542,13 +3271,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Crosswalk White",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Crosswalk White"
   },
   {
    "bubble_pinned": false,
@@ -3615,13 +3338,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Flatten Terrain At Intersections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Flatten Terrain At Intersections"
   },
   {
    "bubble_pinned": false,
@@ -3732,13 +3449,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Road Sections To Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Road Sections To Terrain"
   },
   {
    "bubble_pinned": false,
@@ -3799,13 +3510,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
-   "title": "Extract Terrain Points (Road Zone)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Terrain Points (Road Zone)"
   },
   {
    "bubble_pinned": false,
@@ -3893,13 +3598,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Write/Write_MeshTerrain.Write_MeshTerrain",
-   "title": "Write Terrain (Road Flatten)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Terrain (Road Flatten)"
   },
   {
    "bubble_pinned": false,
@@ -3964,13 +3663,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_Point_AtCenter.Place_Point_AtCenter",
-   "title": "Place Point At Intersection Center",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Point At Intersection Center"
   },
   {
    "bubble_pinned": false,
@@ -4040,13 +3733,7 @@
     "SearchDistance": 40000,
     "Seed": -1557585997
    },
-   "title": "Blur Terrain (Road Edges)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blur Terrain (Road Edges)"
   },
   {
    "bubble_pinned": false,
@@ -4085,13 +3772,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4160,13 +3841,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4236,13 +3911,7 @@
     "SearchDistance": 4000,
     "Seed": -1557585997
    },
-   "title": "Blur Terrain (Intersection Edges)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blur Terrain (Intersection Edges)"
   },
   {
    "bubble_pinned": false,
@@ -4281,13 +3950,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4393,13 +4056,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Road Sections To Terrain (Pass 2)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Road Sections To Terrain (Pass 2)"
   },
   {
    "bubble_pinned": false,
@@ -4480,13 +4137,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Road Spline Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Road Spline Points"
   },
   {
    "bubble_pinned": false,
@@ -4540,13 +4191,7 @@
     "Seed": -1618025290,
     "SelectedTags": "localRoads"
    },
-   "title": "Filter Road Sections (Pre-Terrain Write)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Road Sections (Pre-Terrain Write)"
   },
   {
    "bubble_pinned": false,
@@ -4600,13 +4245,7 @@
     "Seed": -1618025290,
     "SelectedTags": "CollectorRoads"
    },
-   "title": "Filter Local Sections (Terrain Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Local Sections (Terrain Pass)"
   },
   {
    "bubble_pinned": false,
@@ -4660,13 +4299,7 @@
     "Seed": -1618025290,
     "SelectedTags": "ArteryRoads"
    },
-   "title": "Filter Artery Sections (Terrain Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Artery Sections (Terrain Pass)"
   },
   {
    "bubble_pinned": false,
@@ -4740,13 +4373,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut",
-   "title": "Clip Roads At Landmark Boundary",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Clip Roads At Landmark Boundary"
   },
   {
    "bubble_pinned": false,
@@ -4821,13 +4448,7 @@
     "Seed": -1564234536
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand Footprints by Half width of local road",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand Footprints by Half width of local road"
   },
   {
    "bubble_pinned": false,
@@ -4901,13 +4522,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut",
-   "title": "Clip Collector Roads At Landmark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Clip Collector Roads At Landmark"
   },
   {
    "bubble_pinned": false,
@@ -4981,13 +4596,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut",
-   "title": "Clip Local Roads At Landmark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Clip Local Roads At Landmark"
   },
   {
    "bubble_pinned": false,
@@ -5018,13 +4627,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5149,13 +4752,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Road",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Road"
   },
   {
    "bubble_pinned": false,
@@ -5187,13 +4784,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -5271,13 +4862,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5309,13 +4894,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -5346,13 +4925,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5430,13 +5003,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5468,13 +5035,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -5552,13 +5113,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5590,13 +5145,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -5635,13 +5184,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5719,13 +5262,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5757,13 +5294,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -5816,13 +5347,7 @@
     "Seed": -865145422,
     "SelectedTags": "roadSections"
    },
-   "title": "Filter Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Local Sections"
   },
   {
    "bubble_pinned": false,
@@ -5875,13 +5400,7 @@
     "Seed": -865145422,
     "SelectedTags": "roadSections"
    },
-   "title": "Filter Collector Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Collector Sections"
   },
   {
    "bubble_pinned": false,
@@ -5934,13 +5453,7 @@
     "Seed": -865145422,
     "SelectedTags": "roadSections"
    },
-   "title": "Filter Artery Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Artery Sections"
   },
   {
    "bubble_pinned": false,
@@ -6046,13 +5559,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Intersections To Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Intersections To Terrain"
   },
   {
    "bubble_pinned": false,
@@ -6113,13 +5620,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
-   "title": "Extract Terrain Points (Intersection Zone)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Terrain Points (Intersection Zone)"
   },
   {
    "bubble_pinned": false,
@@ -6229,13 +5730,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Intersection Points To Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Intersection Points To Terrain"
   },
   {
    "bubble_pinned": false,
@@ -6323,13 +5818,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Write/Write_MeshTerrain.Write_MeshTerrain",
-   "title": "Write Terrain (Intersection Flatten)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Terrain (Intersection Flatten)"
   },
   {
    "bubble_pinned": false,
@@ -6384,13 +5873,7 @@
     "Seed": -865145422,
     "SelectedTags": "ntersection"
    },
-   "title": "Filter Artery Sections (Grammar)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Artery Sections (Grammar)"
   },
   {
    "bubble_pinned": false,
@@ -6445,13 +5928,7 @@
     "Seed": -865145422,
     "SelectedTags": "ntersection"
    },
-   "title": "Filter Collector Sections (Grammar)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Collector Sections (Grammar)"
   },
   {
    "bubble_pinned": false,
@@ -6506,13 +5983,7 @@
     "Seed": -865145422,
     "SelectedTags": "ntersection"
    },
-   "title": "Filter Local Sections (Grammar)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Local Sections (Grammar)"
   },
   {
    "bubble_pinned": false,
@@ -6598,13 +6069,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Local Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Local Roads"
   },
   {
    "bubble_pinned": false,
@@ -6690,13 +6155,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Collector Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Collector Roads"
   },
   {
    "bubble_pinned": false,
@@ -6782,19 +6241,14 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Grammar — Artery Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Grammar — Artery Roads"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_21",
@@ -6809,19 +6263,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_22",
@@ -6836,19 +6285,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_23",
@@ -6863,13 +6307,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -6938,13 +6376,7 @@
     "SearchDistance": 3000,
     "Seed": -1557585997
    },
-   "title": "Blur Terrain (Final Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blur Terrain (Final Pass)"
   },
   {
    "bubble_pinned": false,
@@ -6983,13 +6415,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7020,13 +6446,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7103,19 +6523,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_line.Create_Spline_line",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_34",
@@ -7130,13 +6545,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
@@ -7243,13 +6652,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7378,13 +6781,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7491,13 +6888,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7567,13 +6958,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Copy/CopyToPoints.CopyToPoints",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7650,13 +7035,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_line.Create_Spline_line",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7763,13 +7142,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7898,13 +7271,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8011,13 +7378,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8087,13 +7448,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Copy/CopyToPoints.CopyToPoints",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8170,13 +7525,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_line.Create_Spline_line",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8283,13 +7632,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8418,13 +7761,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8531,13 +7868,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8607,19 +7938,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Copy/CopyToPoints.CopyToPoints",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_35",
@@ -8634,19 +7960,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_36",
@@ -8661,19 +7982,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_37",
@@ -8688,13 +8004,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -8739,19 +8049,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Local)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Local)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_38",
@@ -8766,13 +8071,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -8817,19 +8116,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Collector)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Collector)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_39",
@@ -8844,13 +8138,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -8895,19 +8183,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Artery)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Artery)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_43",
@@ -8922,13 +8205,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -8973,19 +8250,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Local)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Local)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_44",
@@ -9000,13 +8272,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -9051,19 +8317,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Collector)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Collector)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_45",
@@ -9078,13 +8339,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -9129,13 +8384,7 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Artery)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Artery)"
   },
   {
    "bubble_pinned": false,
@@ -9174,13 +8423,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "Gather All Road Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Gather All Road Splines"
   },
   {
    "bubble_pinned": false,
@@ -9223,13 +8466,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9273,13 +8510,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Base Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Base Terrain"
   },
   {
    "bubble_pinned": false,
@@ -9310,13 +8541,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9348,13 +8573,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Landmarks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmarks"
   },
   {
    "bubble_pinned": false,
@@ -9386,13 +8605,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Landmarks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmarks"
   },
   {
    "bubble_pinned": false,
@@ -9424,13 +8637,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Landmarks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmarks"
   },
   {
    "bubble_pinned": false,
@@ -9462,13 +8669,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -9500,13 +8701,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -9560,13 +8755,7 @@
     "Seed": -1618025290,
     "SelectedTags": "localRoads"
    },
-   "title": "Filter Local Sections (Stripe Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Local Sections (Stripe Pass)"
   },
   {
    "bubble_pinned": false,
@@ -9620,13 +8809,7 @@
     "Seed": -1618025290,
     "SelectedTags": "CollectorRoads"
    },
-   "title": "Filter Collector Sections (Stripe Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Collector Sections (Stripe Pass)"
   },
   {
    "bubble_pinned": false,
@@ -9680,13 +8863,7 @@
     "Seed": -1618025290,
     "SelectedTags": "ArteryRoads"
    },
-   "title": "Filter Artery Sections (Stripe Pass)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Artery Sections (Stripe Pass)"
   },
   {
    "bubble_pinned": false,
@@ -9760,13 +8937,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Outline.Transform_Outline",
-   "title": "Outline Local Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outline Local Roads"
   },
   {
    "bubble_pinned": false,
@@ -9836,13 +9007,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Outline.Transform_Outline",
-   "title": "Outline Collector Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outline Collector Roads"
   },
   {
    "bubble_pinned": false,
@@ -9912,19 +9077,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Outline.Transform_Outline",
-   "title": "Outline Artery Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outline Artery Roads"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "local_Width",
    "inputs": [],
    "name": "GetGraphParameter_46",
@@ -9939,19 +9099,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "local_Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local_Width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "collector_width",
    "inputs": [],
    "name": "GetGraphParameter_47",
@@ -9966,19 +9121,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "collector_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector_width"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Artery_width",
    "inputs": [],
    "name": "GetGraphParameter_48",
@@ -9993,13 +9143,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Artery_width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery_width"
   },
   {
    "bubble_pinned": false,
@@ -10068,13 +9212,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Union.Compose_Areas_Union",
-   "title": "Union All Road Outlines (Road Footprint)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Union All Road Outlines (Road Footprint)"
   },
   {
    "bubble_pinned": false,
@@ -10106,13 +9244,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -10168,13 +9300,7 @@
     "Seed": -1617982074,
     "TagsToAdd": "ModifiedTerrain"
    },
-   "title": "Add Tags",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Tags"
   },
   {
    "bubble_pinned": false,
@@ -10209,13 +9335,7 @@
    "settings": {
     "Seed": -1597445965
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10254,13 +9374,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10344,13 +9458,7 @@
     "bClosedLoop": true,
     "bLinear": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10382,13 +9490,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Landmarks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmarks"
   },
   {
    "bubble_pinned": false,
@@ -10432,13 +9534,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Central Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Central Park"
   },
   {
    "bubble_pinned": false,
@@ -10505,13 +9601,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments",
-   "title": "Extract Road Segments",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Road Segments"
   },
   {
    "bubble_pinned": false,
@@ -10543,13 +9633,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Collector Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Collector Sections"
   },
   {
    "bubble_pinned": false,
@@ -10581,13 +9665,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Sections"
   },
   {
    "bubble_pinned": false,
@@ -10619,13 +9697,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Artery Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery Sections"
   },
   {
    "bubble_pinned": false,
@@ -10657,13 +9729,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Sections"
   },
   {
    "bubble_pinned": false,
@@ -10695,13 +9761,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Collector Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Collector Sections"
   },
   {
    "bubble_pinned": false,
@@ -10733,13 +9793,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Artery Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery Sections"
   },
   {
    "bubble_pinned": false,
@@ -10771,19 +9825,14 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Sections"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_0",
@@ -10798,13 +9847,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -10849,19 +9892,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Local)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Local)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_2",
@@ -10876,13 +9914,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -10927,19 +9959,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Collector)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Collector)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_3",
@@ -10954,13 +9981,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -11005,13 +10026,7 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Artery)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Artery)"
   },
   {
    "bubble_pinned": false,
@@ -11043,13 +10058,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Sections"
   },
   {
    "bubble_pinned": false,
@@ -11081,13 +10090,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Collector Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Collector Sections"
   },
   {
    "bubble_pinned": false,
@@ -11119,13 +10122,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Artery Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery Sections"
   },
   {
    "bubble_pinned": false,
@@ -11157,13 +10154,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Intersections Planar",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Intersections Planar"
   },
   {
    "bubble_pinned": false,
@@ -11195,19 +10186,14 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Intersections Planar",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Intersections Planar"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_4",
@@ -11222,13 +10208,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -11273,19 +10253,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Local)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Local)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_5",
@@ -11300,13 +10275,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -11351,19 +10320,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Collector)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Collector)"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "simpleRoads",
    "inputs": [],
    "name": "GetGraphParameter_19",
@@ -11378,13 +10342,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "simpleRoads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "simpleRoads"
   },
   {
    "bubble_pinned": false,
@@ -11429,13 +10387,7 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Simple Roads (Artery)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Simple Roads (Artery)"
   },
   {
    "bubble_pinned": false,
@@ -11467,13 +10419,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Local Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Local Sections"
   },
   {
    "bubble_pinned": false,
@@ -11505,13 +10451,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Collector Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Collector Sections"
   },
   {
    "bubble_pinned": false,
@@ -11543,13 +10483,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Artery Sections",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery Sections"
   },
   {
    "bubble_pinned": false,
@@ -11581,13 +10515,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "local roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local roads"
   },
   {
    "bubble_pinned": false,
@@ -11619,13 +10547,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "collector roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector roads"
   },
   {
    "bubble_pinned": false,
@@ -11657,13 +10579,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Artery roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery roads"
   },
   {
    "bubble_pinned": false,
@@ -11695,13 +10611,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "local roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "local roads"
   },
   {
    "bubble_pinned": false,
@@ -11733,13 +10643,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "collector roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "collector roads"
   },
   {
    "bubble_pinned": false,
@@ -11771,13 +10675,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_9.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Artery roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Artery roads"
   },
   {
    "bubble_pinned": false,
@@ -11809,13 +10707,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -11846,19 +10738,14 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "PartitionGridSize",
    "inputs": [],
    "name": "GetGraphParameter_27",
@@ -11873,13 +10760,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "PartitionGridSize",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "PartitionGridSize"
   },
   {
    "bubble_pinned": false,
@@ -11933,13 +10814,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11971,13 +10846,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Crosswalk points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Crosswalk points"
   },
   {
    "bubble_pinned": false,
@@ -12009,13 +10878,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Spray Paints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spray Paints"
   },
   {
    "bubble_pinned": false,
@@ -12047,13 +10910,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Road Mesh",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Road Mesh"
   },
   {
    "bubble_pinned": false,
@@ -12085,13 +10942,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_13.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Spray Paints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spray Paints"
   },
   {
    "bubble_pinned": false,
@@ -12123,13 +10974,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_15.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Road Mesh",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Road Mesh"
   },
   {
    "bubble_pinned": false,
@@ -12161,13 +11006,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_2_Roads.PCG_3_1_2_Roads:NamedRerouteDeclaration_12.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Crosswalk points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Crosswalk points"
   },
   {
    "bubble_pinned": false,
@@ -12210,13 +11049,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -12280,19 +11113,14 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_29",
@@ -12307,13 +11135,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -12358,19 +11180,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_30",
@@ -12385,13 +11202,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -12440,19 +11251,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_32",
@@ -12467,13 +11273,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -12518,13 +11318,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -12583,13 +11377,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -12759,13 +11547,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Spray paint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Spray paint"
   },
   {
    "bubble_pinned": false,
@@ -12860,13 +11642,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "rotate 90",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "rotate 90"
   },
   {
    "bubble_pinned": false,
@@ -12961,13 +11737,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "move above the road slightly ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "move above the road slightly "
   }
  ],
  "params": [

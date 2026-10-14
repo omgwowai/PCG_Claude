@@ -218,13 +218,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -299,13 +293,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -376,13 +364,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withSpline.Subdivide_Areas_withSpline",
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -493,13 +475,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Medium District Blocks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium District Blocks"
   },
   {
    "bubble_pinned": false,
@@ -603,13 +579,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "Sub_districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Sub_districts"
   },
   {
    "bubble_pinned": false,
@@ -687,13 +657,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Dividable districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Dividable districts"
   },
   {
    "bubble_pinned": false,
@@ -735,13 +699,7 @@
     "Seed": -1644386363
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
-   "title": "Get City Shape Spline",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get City Shape Spline"
   },
   {
    "bubble_pinned": false,
@@ -783,13 +741,7 @@
     "Seed": -1644386363
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
-   "title": "Get Arteries",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Arteries"
   },
   {
    "bubble_pinned": false,
@@ -829,13 +781,7 @@
     "PropertyPath": "SubDistrictSeed",
     "Seed": -1618447870
    },
-   "title": "Get Sub District Seed",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Sub District Seed"
   },
   {
    "bubble_pinned": false,
@@ -874,13 +820,7 @@
     "PropertyPath": "Dividable_district_Limit",
     "Seed": -1618447870
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -936,13 +876,7 @@
     "Seed": -1617982074,
     "TagsToAdd": "localRoads"
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -998,13 +932,7 @@
     "Seed": -1617982074,
     "TagsToAdd": "CollectorRoads"
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1064,13 +992,7 @@
     "Seed": -1617982074,
     "TagsToAdd": "ArteryRoads"
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1126,13 +1048,7 @@
     "Seed": -1617982074,
     "TagsToAdd": "UndividableDistricts"
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1189,13 +1105,7 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1250,19 +1160,14 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Debug_Roads",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -1277,13 +1182,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Debug_Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug_Roads"
   },
   {
    "bubble_pinned": false,
@@ -1328,19 +1227,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Debug_Undividable_districts",
    "inputs": [],
    "name": "GetGraphParameter_2",
@@ -1355,13 +1249,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Debug_Undividable_districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug_Undividable_districts"
   },
   {
    "bubble_pinned": false,
@@ -1438,13 +1326,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1540,13 +1422,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift +100m for Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift +100m for Debug"
   },
   {
    "bubble_pinned": false,
@@ -1642,13 +1518,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift + 95m For Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift + 95m For Debug"
   },
   {
    "bubble_pinned": false,
@@ -1723,13 +1593,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter: Small | Medium-or-Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Small | Medium-or-Large"
   },
   {
    "bubble_pinned": false,
@@ -1804,13 +1668,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter: Medium | Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Medium | Large"
   },
   {
    "bubble_pinned": false,
@@ -1918,13 +1776,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Small District Blocks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small District Blocks"
   },
   {
    "bubble_pinned": false,
@@ -2032,13 +1884,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Large District Blocks",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large District Blocks"
   },
   {
    "bubble_pinned": false,
@@ -2094,13 +1940,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "SmallDistricts"
    },
-   "title": "Add Tags",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Tags"
   },
   {
    "bubble_pinned": false,
@@ -2156,13 +1996,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "MediumDistricts"
    },
-   "title": "Add Tags",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Tags"
   },
   {
    "bubble_pinned": false,
@@ -2218,13 +2052,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "LargeDistricts"
    },
-   "title": "Add Tags",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Tags"
   },
   {
    "bubble_pinned": false,
@@ -2264,13 +2092,7 @@
     "PropertyPath": "SmallMediumThreshold",
     "Seed": -1365531043
    },
-   "title": "Small/Medium Threshold",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small/Medium Threshold"
   },
   {
    "bubble_pinned": false,
@@ -2310,13 +2132,7 @@
     "PropertyPath": "MediumLargeThreshold",
     "Seed": -1365531043
    },
-   "title": "Medium/Large Threshold",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium/Large Threshold"
   },
   {
    "bubble_pinned": false,
@@ -2356,13 +2172,7 @@
     "PropertyPath": "SmallGridWidth",
     "Seed": -1365531043
    },
-   "title": "Small Grid Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Grid Width"
   },
   {
    "bubble_pinned": false,
@@ -2402,13 +2212,7 @@
     "PropertyPath": "SmallGridLength",
     "Seed": -1365531043
    },
-   "title": "Small Grid Length",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Grid Length"
   },
   {
    "bubble_pinned": false,
@@ -2448,13 +2252,7 @@
     "PropertyPath": "LargeGridWidth",
     "Seed": -1365531043
    },
-   "title": "Large Grid Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Grid Width"
   },
   {
    "bubble_pinned": false,
@@ -2494,13 +2292,7 @@
     "PropertyPath": "LargeGridLength",
     "Seed": -1365531043
    },
-   "title": "Large Grid Length",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Grid Length"
   },
   {
    "bubble_pinned": false,
@@ -2540,13 +2332,7 @@
     "PropertyPath": "Debug_DistrictCategories",
     "Seed": -1365531043
    },
-   "title": "Debug District Categories",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug District Categories"
   },
   {
    "bubble_pinned": false,
@@ -2591,13 +2377,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2642,13 +2422,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2693,13 +2467,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2778,13 +2546,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Small Debug Mesh (Red)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Debug Mesh (Red)"
   },
   {
    "bubble_pinned": false,
@@ -2863,13 +2625,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Medium Debug Mesh (Green)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Debug Mesh (Green)"
   },
   {
    "bubble_pinned": false,
@@ -2948,13 +2704,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Large Debug Mesh (Blue)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Debug Mesh (Blue)"
   },
   {
    "bubble_pinned": false,
@@ -2994,13 +2744,7 @@
     "PropertyPath": "MediumGridWidth",
     "Seed": -1365531043
    },
-   "title": "Medium Grid Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Grid Width"
   },
   {
    "bubble_pinned": false,
@@ -3040,13 +2784,7 @@
     "PropertyPath": "MediumGridLength",
     "Seed": -1365531043
    },
-   "title": "Medium Grid Length",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Grid Length"
   },
   {
    "bubble_pinned": false,
@@ -3142,13 +2880,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift +95m for Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift +95m for Debug"
   },
   {
    "bubble_pinned": false,
@@ -3244,13 +2976,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift +95m for Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift +95m for Debug"
   },
   {
    "bubble_pinned": false,
@@ -3346,13 +3072,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift +95m for Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift +95m for Debug"
   },
   {
    "bubble_pinned": false,
@@ -3421,13 +3141,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3496,13 +3210,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3534,13 +3242,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "City Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "City Shape"
   },
   {
    "bubble_pinned": false,
@@ -3572,13 +3274,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "City Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "City Shape"
   },
   {
    "bubble_pinned": false,
@@ -3610,13 +3306,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Districts Subdividing Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts Subdividing Splines"
   },
   {
    "bubble_pinned": false,
@@ -3648,13 +3338,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Sub Districts Subdivide Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Sub Districts Subdivide Splines"
   },
   {
    "bubble_pinned": false,
@@ -3686,13 +3370,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Districts Subdividing Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts Subdividing Splines"
   },
   {
    "bubble_pinned": false,
@@ -3724,13 +3402,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Sub Districts Subdivide Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Sub Districts Subdivide Splines"
   },
   {
    "bubble_pinned": false,
@@ -3762,13 +3434,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "UnDividable Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnDividable Districts"
   },
   {
    "bubble_pinned": false,
@@ -3800,13 +3466,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "UnDividable Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnDividable Districts"
   },
   {
    "bubble_pinned": false,
@@ -3838,13 +3498,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -3876,13 +3530,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Small Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -3914,13 +3562,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Small Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -3952,13 +3594,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -3990,13 +3626,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
     "Seed": 2014642815
    },
-   "title": "Medium Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4028,13 +3658,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4066,13 +3690,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
     "Seed": 2014642815
    },
-   "title": "Large Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4104,13 +3722,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
     "Seed": 2014642815
    },
-   "title": "Medium Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4142,13 +3754,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
     "Seed": 2014642815
    },
-   "title": "Large Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4180,13 +3786,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Small Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4218,13 +3818,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
     "Seed": 2014642815
    },
-   "title": "Medium Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4256,13 +3850,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
     "Seed": 2014642815
    },
-   "title": "Large Sub-Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Sub-Districts"
   },
   {
    "bubble_pinned": false,
@@ -4305,13 +3893,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4343,13 +3925,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Blocks Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blocks Roads"
   },
   {
    "bubble_pinned": false,
@@ -4381,13 +3957,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_11'",
     "Seed": 2014642815
    },
-   "title": "Blocks Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blocks Roads"
   },
   {
    "bubble_pinned": false,
@@ -4419,13 +3989,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "City Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "City Shape"
   },
   {
    "bubble_pinned": false,
@@ -4457,13 +4021,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Districts Subdividing Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts Subdividing Splines"
   },
   {
    "bubble_pinned": false,
@@ -4495,13 +4053,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Sub Districts Subdivide Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Sub Districts Subdivide Splines"
   },
   {
    "bubble_pinned": false,
@@ -4533,13 +4085,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_11'",
     "Seed": 2014642815
    },
-   "title": "Blocks Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Blocks Roads"
   },
   {
    "bubble_pinned": false,
@@ -4571,13 +4117,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "UnDividable Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnDividable Districts"
   }
  ],
  "params": [

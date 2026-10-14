@@ -37,7 +37,7 @@ def run(args):
         rows.append({"graph": path, "nodes": n, "edges": e, "params": len(g_ir["params"]),
                      "boxes": len(g_ir["comment_boxes"]),
                      "unbound_getters": [x["name"] for x in g_ir["nodes"]
-                                         if x.get("getter_param", "").startswith("!unbound")]})
+                                         if x.get("getter_bound") is False]})
     full = not args.get("graphs")
     return {"rows": rows, "nodes": nodes, "edges": edges,
             "gate": (nodes == 1509 and edges == 1780) if full else None,

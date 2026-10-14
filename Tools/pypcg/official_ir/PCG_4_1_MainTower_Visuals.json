@@ -218,13 +218,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -270,13 +264,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -347,13 +335,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
-   "title": "Fill Circle With Plaza Tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Circle With Plaza Tiles"
   },
   {
    "bubble_pinned": false,
@@ -489,13 +471,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Plaza Tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Plaza Tiles"
   },
   {
    "bubble_pinned": false,
@@ -566,13 +542,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 10m for Tree Ring",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 10m for Tree Ring"
   },
   {
    "bubble_pinned": false,
@@ -681,13 +651,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Tree Every 10m On Ring",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Tree Every 10m On Ring"
   },
   {
    "bubble_pinned": false,
@@ -833,13 +797,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Tree Megaplants Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Tree Megaplants Assets"
   },
   {
    "bubble_pinned": false,
@@ -981,13 +939,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Trees on Ring",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Trees on Ring"
   },
   {
    "bubble_pinned": false,
@@ -1058,13 +1010,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 15m for Building Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 15m for Building Footprint"
   },
   {
    "bubble_pinned": false,
@@ -1174,13 +1120,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHC Building — 50m Min Height",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHC Building — 50m Min Height"
   },
   {
    "bubble_pinned": false,
@@ -1315,13 +1255,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "All Building Rooftop Geo",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "All Building Rooftop Geo"
   },
   {
    "bubble_pinned": false,
@@ -1425,13 +1359,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Create Hexagonal Spline Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Hexagonal Spline Shape"
   },
   {
    "bubble_pinned": false,
@@ -1541,13 +1469,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHA Building — 25m Height",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHA Building — 25m Height"
   },
   {
    "bubble_pinned": false,
@@ -1638,13 +1560,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Hexagon Side Length (2500)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Hexagon Side Length (2500)"
   },
   {
    "bubble_pinned": false,
@@ -1723,13 +1639,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Hex Building Roof Tile Mesh",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Hex Building Roof Tile Mesh"
   },
   {
    "bubble_pinned": false,
@@ -1800,13 +1710,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 4m (Outer CHJ Ring)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 4m (Outer CHJ Ring)"
   },
   {
    "bubble_pinned": false,
@@ -1916,13 +1820,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -1993,13 +1891,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 4m (Outer CHJ Ring)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 4m (Outer CHJ Ring)"
   },
   {
    "bubble_pinned": false,
@@ -2109,13 +2001,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -2208,13 +2094,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Create Square Shape (7m)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Square Shape (7m)"
   },
   {
    "bubble_pinned": false,
@@ -2275,13 +2155,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Union.Compose_Areas_Union",
-   "title": "Union Hex Shapes For Courtyard",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Union Hex Shapes For Courtyard"
   },
   {
    "bubble_pinned": false,
@@ -2352,13 +2226,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand Courtyard Union (3.5m)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand Courtyard Union (3.5m)"
   },
   {
    "bubble_pinned": false,
@@ -2440,13 +2308,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Sidewalk",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Sidewalk"
   },
   {
    "bubble_pinned": false,
@@ -2528,13 +2390,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Corners",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Corners"
   },
   {
    "bubble_pinned": false,
@@ -2613,13 +2469,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Courtyard Ground Mesh",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Courtyard Ground Mesh"
   },
   {
    "bubble_pinned": false,
@@ -2714,13 +2564,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Courtyard Points +40 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Courtyard Points +40 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -2859,13 +2703,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Tree Base Circles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Tree Base Circles"
   },
   {
    "bubble_pinned": false,
@@ -2932,13 +2770,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments",
-   "title": "Extract Building Outline Segments",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Building Outline Segments"
   },
   {
    "bubble_pinned": false,
@@ -3003,13 +2835,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_Point_AtCenter.Place_Point_AtCenter",
-   "title": "Place Point At Building Outline Center",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Point At Building Outline Center"
   },
   {
    "bubble_pinned": false,
@@ -3079,13 +2905,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude square shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude square shape"
   },
   {
    "bubble_pinned": false,
@@ -3157,13 +2977,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter Rooftop Areas By Min Size (10m²)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Rooftop Areas By Min Size (10m²)"
   },
   {
    "bubble_pinned": false,
@@ -3228,13 +3042,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_Point_AtCenter.Place_Point_AtCenter",
-   "title": "Place Point At Rooftop Center (Antenna)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Point At Rooftop Center (Antenna)"
   },
   {
    "bubble_pinned": false,
@@ -3374,13 +3182,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn_Antenna",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn_Antenna"
   },
   {
    "bubble_pinned": false,
@@ -3459,13 +3261,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Mesh Terrain (Final)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Mesh Terrain (Final)"
   },
   {
    "bubble_pinned": false,
@@ -3496,13 +3292,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Aligned Input Shape (Outer Ring)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Aligned Input Shape (Outer Ring)"
   },
   {
    "bubble_pinned": false,
@@ -3608,13 +3398,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Inner Ring Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Inner Ring Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -3681,13 +3465,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Level Inner Ring (Min Z)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Level Inner Ring (Min Z)"
   },
   {
    "bubble_pinned": false,
@@ -3722,13 +3500,7 @@
    "settings": {
     "Seed": -1597445965
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3767,13 +3539,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3856,13 +3622,7 @@
    "settings": {
     "Seed": 696821770
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3940,13 +3700,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3978,13 +3732,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -4016,13 +3764,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -4104,13 +3846,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4142,13 +3878,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -4230,13 +3960,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4268,13 +3992,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -4399,13 +4117,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Sidewalk",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Sidewalk"
   },
   {
    "bubble_pinned": false,
@@ -4474,13 +4186,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Snap Courtyard Z To Building Height",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Snap Courtyard Z To Building Height"
   },
   {
    "bubble_pinned": false,
@@ -4582,13 +4288,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Subdivide Into 2 ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subdivide Into 2 "
   },
   {
    "bubble_pinned": false,
@@ -4684,13 +4384,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Rotate Arm +120°",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rotate Arm +120°"
   },
   {
    "bubble_pinned": false,
@@ -4786,13 +4480,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Rotate Arm -120°",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rotate Arm -120°"
   },
   {
    "bubble_pinned": false,
@@ -4902,13 +4590,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -5009,13 +4691,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Outer Ring Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Outer Ring Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -5082,13 +4758,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Level Outer Ring (Min Z)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Level Outer Ring (Min Z)"
   },
   {
    "bubble_pinned": false,
@@ -5123,13 +4793,7 @@
    "settings": {
     "Seed": -1597445965
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5168,13 +4832,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5257,13 +4915,7 @@
    "settings": {
     "Seed": 696821770
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5334,13 +4986,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 90m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 90m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -5450,13 +5096,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -5527,13 +5167,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 90m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 90m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -5643,13 +5277,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -5720,13 +5348,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 90m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 90m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -5836,13 +5458,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -5952,13 +5568,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6029,13 +5639,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 80m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 80m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -6145,13 +5749,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6222,13 +5820,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 80m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 80m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -6338,13 +5930,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6415,13 +6001,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 80m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 80m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -6531,13 +6111,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6647,13 +6221,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6724,13 +6292,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 70m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 70m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -6840,13 +6402,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -6917,13 +6473,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 70m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 70m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -7033,13 +6583,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -7110,13 +6654,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 1.5m Between 70m Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 1.5m Between 70m Buildings"
   },
   {
    "bubble_pinned": false,
@@ -7226,13 +6764,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -7303,13 +6835,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 10m (Central Skyscraper Footprint)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 10m (Central Skyscraper Footprint)"
   },
   {
    "bubble_pinned": false,
@@ -7419,13 +6945,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign CHJ Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign CHJ Building"
   },
   {
    "bubble_pinned": false,
@@ -7469,13 +6989,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Hero Tower PCG Volume",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Hero Tower PCG Volume"
   },
   {
    "bubble_pinned": false,
@@ -7546,13 +7060,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 30m (Outer Ring Footprint)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 30m (Outer Ring Footprint)"
   },
   {
    "bubble_pinned": false,
@@ -7623,13 +7131,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract 32.5m (Inner Ring Footprint)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract 32.5m (Inner Ring Footprint)"
   },
   {
    "bubble_pinned": false,
@@ -7660,13 +7162,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Arm Subdivisions",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Arm Subdivisions"
   },
   {
    "bubble_pinned": false,
@@ -7768,13 +7264,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Subdivide Into 3 ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subdivide Into 3 "
   },
   {
    "bubble_pinned": false,
@@ -7823,13 +7313,7 @@
     "Seed": 436953980,
     "SelectedIndices": "1"
    },
-   "title": "Isolate Center",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Isolate Center"
   },
   {
    "bubble_pinned": false,
@@ -7901,13 +7385,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Point.Create_Point",
-   "title": "Create World Origin Point",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create World Origin Point"
   },
   {
    "bubble_pinned": false,
@@ -8012,13 +7490,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align",
-   "title": "Align Input Shape To World Center",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Align Input Shape To World Center"
   },
   {
    "bubble_pinned": false,
@@ -8124,13 +7596,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align",
-   "title": "Align +120° Arm To Input Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Align +120° Arm To Input Shape"
   },
   {
    "bubble_pinned": false,
@@ -8162,13 +7628,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "input_shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "input_shape"
   },
   {
    "bubble_pinned": false,
@@ -8200,13 +7660,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "input_shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "input_shape"
   },
   {
    "bubble_pinned": false,
@@ -8312,13 +7766,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align",
-   "title": "Align Outer Ring To Input Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Align Outer Ring To Input Shape"
   },
   {
    "bubble_pinned": false,
@@ -8350,13 +7798,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "input_shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "input_shape"
   },
   {
    "bubble_pinned": false,
@@ -8462,13 +7904,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align",
-   "title": "Align -120° Arm To Input Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Align -120° Arm To Input Shape"
   },
   {
    "bubble_pinned": false,
@@ -8500,13 +7936,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "input_shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "input_shape"
   },
   {
    "bubble_pinned": false,
@@ -8612,13 +8042,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Align.Transform_Align",
-   "title": "Align Center Arm To Input Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Align Center Arm To Input Shape"
   },
   {
    "bubble_pinned": false,
@@ -8650,13 +8074,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "input_shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "input_shape"
   },
   {
    "bubble_pinned": false,
@@ -8705,13 +8123,7 @@
     "Seed": 436953980,
     "SelectedIndices": "0"
    },
-   "title": "Isolate First Arm Sector (Index 0)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Isolate First Arm Sector (Index 0)"
   },
   {
    "bubble_pinned": false,
@@ -8760,13 +8172,7 @@
     "Seed": 436953980,
     "SelectedIndices": "0"
    },
-   "title": "Isolate Second Arm Sector (Index 0)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Isolate Second Arm Sector (Index 0)"
   },
   {
    "bubble_pinned": false,
@@ -8815,13 +8221,7 @@
     "Seed": 436953980,
     "SelectedIndices": "0"
    },
-   "title": "Isolate Third Arm Sector (Index 0)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Isolate Third Arm Sector (Index 0)"
   },
   {
    "bubble_pinned": false,
@@ -8890,13 +8290,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Normalize Tree Base Scale",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Normalize Tree Base Scale"
   },
   {
    "bubble_pinned": false,
@@ -8965,13 +8359,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll On Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll On Trees"
   },
   {
    "bubble_pinned": false,
@@ -9040,13 +8428,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch On Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch On Trees"
   },
   {
    "bubble_pinned": false,
@@ -9082,13 +8464,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData.LoadCitySampleData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9120,13 +8496,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9158,13 +8528,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9196,13 +8560,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9234,13 +8592,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9272,13 +8624,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9310,13 +8656,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9348,13 +8688,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9386,13 +8720,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9424,13 +8752,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9462,13 +8784,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_4_1_MainTower_Visuals.PCG_4_1_MainTower_Visuals:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out"
   },
   {
    "bubble_pinned": false,
@@ -9499,13 +8815,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Arm Subdivisions (Center Slice)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Arm Subdivisions (Center Slice)"
   },
   {
    "bubble_pinned": false,
@@ -9619,13 +8929,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place  Rooftop Assemblies ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place  Rooftop Assemblies "
   },
   {
    "bubble_pinned": false,
@@ -9739,13 +9043,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place AC Vents on Arm Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place AC Vents on Arm Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -9851,13 +9149,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place AC Vents",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place AC Vents"
   },
   {
    "bubble_pinned": false,
@@ -9902,20 +9194,15 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:UseMegaplantsTrees",
+   "getter_bound": false,
+   "getter_param": "UseMegaplantsTrees",
    "inputs": [],
    "name": "GetGraphParameter_0",
    "outputs": [
@@ -9929,13 +9216,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "UseMegaplantsTrees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UseMegaplantsTrees"
   },
   {
    "bubble_pinned": false,
@@ -10077,13 +9358,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Trees"
   },
   {
    "bubble_pinned": false,
@@ -10179,13 +9454,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Rotate base shape 60 degrees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rotate base shape 60 degrees"
   }
  ],
  "params": [

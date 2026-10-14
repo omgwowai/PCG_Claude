@@ -176,13 +176,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -233,13 +227,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -278,13 +266,7 @@
     "PropertyPath": "Highway_Width",
     "Seed": -1365531043
    },
-   "title": "Highway Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway Width"
   },
   {
    "bubble_pinned": false,
@@ -370,13 +352,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Highway Shape Grammar",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Highway Shape Grammar"
   },
   {
    "bubble_pinned": false,
@@ -432,13 +408,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "Highway"
    },
-   "title": "Tag as Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag as Highway"
   },
   {
    "bubble_pinned": false,
@@ -509,13 +479,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand Footprint 15m",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand Footprint 15m"
   },
   {
    "bubble_pinned": false,
@@ -640,13 +604,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Highway Support Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Highway Support Assets"
   },
   {
    "bubble_pinned": false,
@@ -715,13 +673,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Flatten Spline to Z = 0",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Flatten Spline to Z = 0"
   },
   {
    "bubble_pinned": false,
@@ -765,13 +717,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Roads Graph Output",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Roads Graph Output"
   },
   {
    "bubble_pinned": false,
@@ -839,13 +785,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter: Road-Modified Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Road-Modified Terrain"
   },
   {
    "bubble_pinned": false,
@@ -951,13 +891,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Spline onto Road-Modified Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Spline onto Road-Modified Terrain"
   },
   {
    "bubble_pinned": false,
@@ -1037,13 +971,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Spline (40m intervals)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Spline (40m intervals)"
   },
   {
    "bubble_pinned": false,
@@ -1078,13 +1006,7 @@
    "settings": {
     "Seed": -1597445965
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1123,13 +1045,7 @@
      ]
     }
    },
-   "title": "Keep Polyline Data Only",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Keep Polyline Data Only"
   },
   {
    "bubble_pinned": false,
@@ -1211,13 +1127,7 @@
     "LeaveTangentAttribute": "LeaveTangent",
     "Seed": -680163307
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1297,13 +1207,7 @@
     "Operation": "Clamp",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1371,13 +1275,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter: Road Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Road Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1499,13 +1397,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Pillar Assets Only",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Pillar Assets Only"
   },
   {
    "bubble_pinned": false,
@@ -1559,13 +1451,7 @@
     "OutputType": "String",
     "Seed": 1494067853
    },
-   "title": "Cast Asset Attribute to String",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cast Asset Attribute to String"
   },
   {
    "bubble_pinned": false,
@@ -1607,13 +1493,7 @@
      ]
     }
    },
-   "title": "Keep Points & Attribute Sets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Keep Points & Attribute Sets"
   },
   {
    "bubble_pinned": false,
@@ -1712,13 +1592,7 @@
     "Seed": -121516437,
     "bKeepZeroDensityPoints": true
    },
-   "title": "Project Assets onto Road Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Assets onto Road Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1749,13 +1623,7 @@
    "settings": {
     "Seed": 348461948
    },
-   "title": "Make Road Footprints Concrete",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Make Road Footprints Concrete"
   },
   {
    "bubble_pinned": false,
@@ -1819,13 +1687,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Density = 1 (keep grounded points)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Density = 1 (keep grounded points)"
   },
   {
    "bubble_pinned": false,
@@ -1867,13 +1729,7 @@
      ]
     }
    },
-   "title": "Keep Points & Attribute Sets (post-projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Keep Points & Attribute Sets (post-projection)"
   },
   {
    "bubble_pinned": false,
@@ -1912,13 +1768,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1949,13 +1799,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Outside HighRise Filter (no footprint match)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outside HighRise Filter (no footprint match)"
   },
   {
    "bubble_pinned": false,
@@ -2034,13 +1878,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Final Mesh Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Final Mesh Terrain"
   },
   {
    "bubble_pinned": false,
@@ -2085,13 +1923,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Highway Spline Actors",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Highway Spline Actors"
   },
   {
    "bubble_pinned": false,
@@ -2122,20 +1954,15 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:PartitionGridSize",
+   "getter_bound": false,
+   "getter_param": "PartitionGridSize",
    "inputs": [],
    "name": "GetGraphParameter_0",
    "outputs": [
@@ -2149,13 +1976,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "PartitionGridSize",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "PartitionGridSize"
   },
   {
    "bubble_pinned": false,
@@ -2209,13 +2030,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2279,20 +2094,15 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:Partitioned",
+   "getter_bound": false,
+   "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_1",
    "outputs": [
@@ -2306,13 +2116,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -2361,13 +2165,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2436,13 +2234,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2511,13 +2303,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   }
  ],
  "params": [

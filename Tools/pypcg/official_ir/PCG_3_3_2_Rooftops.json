@@ -134,13 +134,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -186,13 +180,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -236,13 +224,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Building Rooftop Polygons",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Building Rooftop Polygons"
   },
   {
    "bubble_pinned": false,
@@ -303,13 +285,7 @@
     "OutputAttributeName": "height",
     "Seed": 51105410
    },
-   "title": "Reduce Z To Max Height Per Building",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reduce Z To Max Height Per Building"
   },
   {
    "bubble_pinned": false,
@@ -379,13 +355,7 @@
     "OutputTarget": "PCGBegin(@data.height)PCGEnd",
     "Seed": 113986551
    },
-   "title": "Copy Max Height To Dataset Attribute",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Copy Max Height To Dataset Attribute"
   },
   {
    "bubble_pinned": false,
@@ -552,13 +522,7 @@
      "bUseConstantThreshold": true
     }
    },
-   "title": "Filter: Height > 70m (Skyscrapers)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Height > 70m (Skyscrapers)"
   },
   {
    "bubble_pinned": false,
@@ -631,13 +595,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter Large Rooftops By Min Area (500)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Large Rooftops By Min Area (500)"
   },
   {
    "bubble_pinned": false,
@@ -710,13 +668,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter Medium Rooftops By Min Area (800)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Medium Rooftops By Min Area (800)"
   },
   {
    "bubble_pinned": false,
@@ -769,13 +721,7 @@
     "Seed": -865145422,
     "SelectedTags": "SmallRooftops"
    },
-   "title": "Filter: Small Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Small Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -828,13 +774,7 @@
     "Seed": -865145422,
     "SelectedTags": "MediumRooftops"
    },
-   "title": "Filter: Medium Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Medium Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -887,13 +827,7 @@
     "Seed": -865145422,
     "SelectedTags": "LargeRooftops"
    },
-   "title": "Filter: Large Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Large Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -966,13 +900,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter Small Rooftops By Min Area (300)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Small Rooftops By Min Area (300)"
   },
   {
    "bubble_pinned": false,
@@ -1003,13 +931,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Large Rooftops (Size-Filtered)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Rooftops (Size-Filtered)"
   },
   {
    "bubble_pinned": false,
@@ -1116,13 +1038,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lower Assemblies -8 (Flush To Roof Surface)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lower Assemblies -8 (Flush To Roof Surface)"
   },
   {
    "bubble_pinned": false,
@@ -1217,13 +1133,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lower Skyscraper Assemblies -20 (Flush To Roof Surface)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lower Skyscraper Assemblies -20 (Flush To Roof Surface)"
   },
   {
    "bubble_pinned": false,
@@ -1293,13 +1203,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Points_Difference.Compose_Points_Difference",
-   "title": "Subtract Small Assemblies From WFC Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subtract Small Assemblies From WFC Points"
   },
   {
    "bubble_pinned": false,
@@ -1424,13 +1328,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn All Rooftop Assemblies",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn All Rooftop Assemblies"
   },
   {
    "bubble_pinned": false,
@@ -1549,13 +1447,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place Small Rooftop Assemblies",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Small Rooftop Assemblies"
   },
   {
    "bubble_pinned": false,
@@ -1664,13 +1556,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place Skyscraper Rooftop Assemblies",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Skyscraper Rooftop Assemblies"
   },
   {
    "bubble_pinned": false,
@@ -1794,13 +1680,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place WFC Rooftop Assemblies (Medium & Large)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place WFC Rooftop Assemblies (Medium & Large)"
   },
   {
    "bubble_pinned": false,
@@ -1912,13 +1792,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Place AC Vents & Roof Houses (Unfiltered)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place AC Vents & Roof Houses (Unfiltered)"
   },
   {
    "bubble_pinned": false,
@@ -1986,13 +1860,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2049,19 +1917,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_3",
@@ -2076,13 +1939,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   }
  ],
  "params": [

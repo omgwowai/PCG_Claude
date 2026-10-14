@@ -575,13 +575,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -672,13 +666,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -748,13 +736,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots"
   },
   {
    "bubble_pinned": false,
@@ -849,13 +831,7 @@
     "Seed": 1619748469
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Exclude Some Lots For Plaza Use",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Some Lots For Plaza Use"
   },
   {
    "bubble_pinned": false,
@@ -899,13 +875,7 @@
     "Seed": -1608734201
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Districts"
   },
   {
    "bubble_pinned": false,
@@ -972,13 +942,7 @@
     "Seed": -1577538559
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "TagUnbuildable Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "TagUnbuildable Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1041,13 +1005,7 @@
     "Seed": -1577538559
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Unbuildable Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Unbuildable Lots"
   },
   {
    "bubble_pinned": false,
@@ -1110,13 +1068,7 @@
     "Seed": -1577538559
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -1179,13 +1131,7 @@
     "Seed": -1577538559
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Lots"
   },
   {
    "bubble_pinned": false,
@@ -1254,13 +1200,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "UndividableDistricts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UndividableDistricts"
   },
   {
    "bubble_pinned": false,
@@ -1330,13 +1270,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Districts too small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Districts too small"
   },
   {
    "bubble_pinned": false,
@@ -1376,13 +1310,7 @@
     "PropertyPath": "PlazaReservationRatio",
     "Seed": -1618447870
    },
-   "title": "Get Plaza Reservation Ratio",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Plaza Reservation Ratio"
   },
   {
    "bubble_pinned": false,
@@ -1424,13 +1352,7 @@
     "Seed": -1644386363
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
-   "title": "Get City Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get City Shape"
   },
   {
    "bubble_pinned": false,
@@ -1485,13 +1407,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1544,19 +1460,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Debug Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Debug Building Footprints"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "debug",
    "inputs": [],
    "name": "GetGraphParameter_0",
@@ -1571,13 +1482,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "debug"
   },
   {
    "bubble_pinned": false,
@@ -1622,19 +1527,14 @@
    "settings": {
     "Seed": -1618154696
    },
-   "title": "Branch — Debug Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch — Debug Reserved Lots"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "debug",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -1649,13 +1549,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "debug"
   },
   {
    "bubble_pinned": false,
@@ -1734,13 +1628,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1784,13 +1672,7 @@
     "Seed": -1608734201
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Roads"
   },
   {
    "bubble_pinned": false,
@@ -1834,13 +1716,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Landmark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Landmark"
   },
   {
    "bubble_pinned": false,
@@ -1914,13 +1790,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Landmark and Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Landmark and Highway"
   },
   {
    "bubble_pinned": false,
@@ -2015,13 +1885,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Building Footprints +50m (Debug)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Building Footprints +50m (Debug)"
   },
   {
    "bubble_pinned": false,
@@ -2116,13 +1980,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Reserved Lots +50m (Debug)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Reserved Lots +50m (Debug)"
   },
   {
    "bubble_pinned": false,
@@ -2190,13 +2048,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter Small Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Small Districts"
   },
   {
    "bubble_pinned": false,
@@ -2264,13 +2116,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter Medium Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Medium Districts"
   },
   {
    "bubble_pinned": false,
@@ -2338,13 +2184,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter Large Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Large Districts"
   },
   {
    "bubble_pinned": false,
@@ -2407,13 +2247,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Small Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Small Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -2476,13 +2310,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Medium Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Medium Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -2549,13 +2377,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Large Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Large Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -2595,13 +2417,7 @@
     "PropertyPath": "Debug_DistrictCategories",
     "Seed": -1365531043
    },
-   "title": "Debug District Categories",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug District Categories"
   },
   {
    "bubble_pinned": false,
@@ -2646,13 +2462,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2697,13 +2507,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2748,13 +2552,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch"
   },
   {
    "bubble_pinned": false,
@@ -2850,13 +2648,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift + 95m For Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift + 95m For Debug"
   },
   {
    "bubble_pinned": false,
@@ -2952,13 +2744,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift + 95m For Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift + 95m For Debug"
   },
   {
    "bubble_pinned": false,
@@ -3054,13 +2840,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift + 95m For Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift + 95m For Debug"
   },
   {
    "bubble_pinned": false,
@@ -3139,13 +2919,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Small Debug Mesh (Red)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Debug Mesh (Red)"
   },
   {
    "bubble_pinned": false,
@@ -3224,13 +2998,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Medium Debug Mesh (Green)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Debug Mesh (Green)"
   },
   {
    "bubble_pinned": false,
@@ -3309,13 +3077,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Large Debug Mesh (Blue)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Debug Mesh (Blue)"
   },
   {
    "bubble_pinned": false,
@@ -3355,13 +3117,7 @@
     "PropertyPath": "PlazaReservationSeed",
     "Seed": -1365531043
    },
-   "title": "Get Plaza Reservation Seed",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Plaza Reservation Seed"
   },
   {
    "bubble_pinned": false,
@@ -3393,13 +3149,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Lots_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots_1"
   },
   {
    "bubble_pinned": false,
@@ -3431,13 +3181,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Lots_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots_1"
   },
   {
    "bubble_pinned": false,
@@ -3507,13 +3251,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Lots in Small Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots in Small Districts"
   },
   {
    "bubble_pinned": false,
@@ -3583,13 +3321,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Lots in Medium Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots in Medium Districts"
   },
   {
    "bubble_pinned": false,
@@ -3659,13 +3391,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Lots in Large Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots in Large Districts"
   },
   {
    "bubble_pinned": false,
@@ -3705,13 +3431,7 @@
     "PropertyPath": "BuildableLotMinSizeSmallDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Min Size - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Min Size - Small"
   },
   {
    "bubble_pinned": false,
@@ -3751,13 +3471,7 @@
     "PropertyPath": "BuildableLotMaxSizeSmallDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Max Size - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Max Size - Small"
   },
   {
    "bubble_pinned": false,
@@ -3797,13 +3511,7 @@
     "PropertyPath": "BuildableFootprintMinSizeSmallDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Footprint Min Size - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Footprint Min Size - Small"
   },
   {
    "bubble_pinned": false,
@@ -3880,13 +3588,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Min Size - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Min Size - Small"
   },
   {
    "bubble_pinned": false,
@@ -3964,13 +3666,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Max Size - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Max Size - Small"
   },
   {
    "bubble_pinned": false,
@@ -4067,13 +3763,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "Building Footprints - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Building Footprints - Small"
   },
   {
    "bubble_pinned": false,
@@ -4150,13 +3840,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Footprints - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Footprints - Small"
   },
   {
    "bubble_pinned": false,
@@ -4196,13 +3880,7 @@
     "PropertyPath": "BuildableLotMinSizeMediumDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Min Size - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Min Size - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4242,13 +3920,7 @@
     "PropertyPath": "BuildableLotMaxSizeMediumDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Max Size - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Max Size - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4288,13 +3960,7 @@
     "PropertyPath": "BuildableFootprintMinSizeMediumDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Footprint Min Size - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Footprint Min Size - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4371,13 +4037,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Min Size - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Min Size - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4455,13 +4115,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Max Size - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Max Size - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4559,13 +4213,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "Building Footprints - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Building Footprints - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4642,13 +4290,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Footprints - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Footprints - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4688,13 +4330,7 @@
     "PropertyPath": "BuildableLotMinSizeLargeDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Min Size - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Min Size - Large"
   },
   {
    "bubble_pinned": false,
@@ -4734,13 +4370,7 @@
     "PropertyPath": "BuildableLotMaxSizeLargeDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Lot Max Size - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Lot Max Size - Large"
   },
   {
    "bubble_pinned": false,
@@ -4780,13 +4410,7 @@
     "PropertyPath": "BuildableFootprintMinSizeLargeDistrict",
     "Seed": -1365531043
    },
-   "title": "Get Buildable Footprint Min Size - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Buildable Footprint Min Size - Large"
   },
   {
    "bubble_pinned": false,
@@ -4863,13 +4487,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Min Size - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Min Size - Large"
   },
   {
    "bubble_pinned": false,
@@ -4947,13 +4565,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Lots Max Size - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Lots Max Size - Large"
   },
   {
    "bubble_pinned": false,
@@ -5051,13 +4663,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "Building Footprints - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Building Footprints - Large"
   },
   {
    "bubble_pinned": false,
@@ -5134,13 +4740,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Buildable Footprints - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Buildable Footprints - Large"
   },
   {
    "bubble_pinned": false,
@@ -5172,13 +4772,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -5210,13 +4804,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -5248,13 +4836,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -5286,13 +4868,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_6'",
     "Seed": 2014642815
    },
-   "title": "Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Districts"
   },
   {
    "bubble_pinned": false,
@@ -5393,13 +4969,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Subdivide Large Lots Into Grid",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subdivide Large Lots Into Grid"
   },
   {
    "bubble_pinned": false,
@@ -5481,13 +5051,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_ShapeGrammarDefinition.Assign_ShapeGrammarDefinition",
-   "title": "Assign Road Grammar To Grid Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Road Grammar To Grid Splines"
   },
   {
    "bubble_pinned": false,
@@ -5557,13 +5121,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Carve Grammar Roads From Large Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Carve Grammar Roads From Large Lots"
   },
   {
    "bubble_pinned": false,
@@ -5631,13 +5189,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter Road Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Road Footprints"
   },
   {
    "bubble_pinned": false,
@@ -5705,13 +5257,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Filter Modified Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Modified Terrain"
   },
   {
    "bubble_pinned": false,
@@ -5743,13 +5289,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "ModifiedTerrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "ModifiedTerrain"
   },
   {
    "bubble_pinned": false,
@@ -5781,13 +5321,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_7'",
     "Seed": 2014642815
    },
-   "title": "ModifiedTerrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "ModifiedTerrain"
   },
   {
    "bubble_pinned": false,
@@ -5865,13 +5399,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5996,13 +5524,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Road Grammar Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Road Grammar Assets"
   },
   {
    "bubble_pinned": false,
@@ -6073,13 +5595,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Small Lots (Courtyard Inner Boundary)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Small Lots (Courtyard Inner Boundary)"
   },
   {
    "bubble_pinned": false,
@@ -6149,13 +5665,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Carve Small Courtyard From Lot",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Carve Small Courtyard From Lot"
   },
   {
    "bubble_pinned": false,
@@ -6226,13 +5736,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Medium Lots (Courtyard Inner Boundary)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Medium Lots (Courtyard Inner Boundary)"
   },
   {
    "bubble_pinned": false,
@@ -6302,13 +5806,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Carve Medium Courtyard From Lot",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Carve Medium Courtyard From Lot"
   },
   {
    "bubble_pinned": false,
@@ -6381,13 +5879,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "Filter Large Footprints By Min Size (2500)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Large Footprints By Min Size (2500)"
   },
   {
    "bubble_pinned": false,
@@ -6458,13 +5950,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Large Footprints (Inner Building Pad)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Large Footprints (Inner Building Pad)"
   },
   {
    "bubble_pinned": false,
@@ -6519,13 +6005,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "Gather All Unbuildable Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Gather All Unbuildable Lots"
   },
   {
    "bubble_pinned": false,
@@ -6557,13 +6037,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "UnbuildableLots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnbuildableLots"
   },
   {
    "bubble_pinned": false,
@@ -6595,13 +6069,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_8'",
     "Seed": 2014642815
    },
-   "title": "UnbuildableLots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnbuildableLots"
   },
   {
    "bubble_pinned": false,
@@ -6644,13 +6112,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "Gather All Unbuildable Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Gather All Unbuildable Footprints"
   },
   {
    "bubble_pinned": false,
@@ -6682,13 +6144,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "UnbuildableFootprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnbuildableFootprints"
   },
   {
    "bubble_pinned": false,
@@ -6720,13 +6176,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_9'",
     "Seed": 2014642815
    },
-   "title": "UnbuildableFootprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnbuildableFootprints"
   },
   {
    "bubble_pinned": false,
@@ -6770,13 +6220,7 @@
     "Seed": -1608734201
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Highway"
   },
   {
    "bubble_pinned": false,
@@ -6808,13 +6252,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Highway Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway Footprint"
   },
   {
    "bubble_pinned": false,
@@ -6884,13 +6322,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Highway From Small Lot Subdivisions",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Highway From Small Lot Subdivisions"
   },
   {
    "bubble_pinned": false,
@@ -6960,13 +6392,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Highway From Medium Lot Subdivisions",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Highway From Medium Lot Subdivisions"
   },
   {
    "bubble_pinned": false,
@@ -7036,13 +6462,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Highway From Large Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Highway From Large Lots"
   },
   {
    "bubble_pinned": false,
@@ -7074,13 +6494,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_10'",
     "Seed": 2014642815
    },
-   "title": "Highway Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway Footprint"
   },
   {
    "bubble_pinned": false,
@@ -7164,13 +6578,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Cull Medium Building Footprints (90%)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Cull Medium Building Footprints (90%)"
   },
   {
    "bubble_pinned": false,
@@ -7265,13 +6673,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Grammar Points For Projection",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Grammar Points For Projection"
   },
   {
    "bubble_pinned": false,
@@ -7303,13 +6705,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7341,13 +6737,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium Courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7403,13 +6793,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "Medium Courtyards"
    },
-   "title": "Tag Medium Courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Medium Courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7465,13 +6849,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "Small Courtyards"
    },
-   "title": "Tag Small Courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Small Courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7503,13 +6881,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Medium Courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7541,13 +6913,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Small courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small courtyards"
   },
   {
    "bubble_pinned": false,
@@ -7579,13 +6945,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "unbuild_medium_building_footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "unbuild_medium_building_footprint"
   },
   {
    "bubble_pinned": false,
@@ -7617,13 +6977,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_9.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "unbuild_medium_building_footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "unbuild_medium_building_footprint"
   },
   {
    "bubble_pinned": false,
@@ -7667,13 +7021,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Central_Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Central_Park"
   },
   {
    "bubble_pinned": false,
@@ -7743,13 +7091,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Large Lots Under Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Lots Under Highway"
   },
   {
    "bubble_pinned": false,
@@ -7819,13 +7161,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Medium Lots Under Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Lots Under Highway"
   },
   {
    "bubble_pinned": false,
@@ -7895,13 +7231,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Small Lots Under Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Lots Under Highway"
   },
   {
    "bubble_pinned": false,
@@ -7965,13 +7295,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "UnderHighway"
    },
-   "title": "Tag Under Highway Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Under Highway Lots"
   },
   {
    "bubble_pinned": false,
@@ -8003,13 +7327,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "UnderHighway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnderHighway"
   },
   {
    "bubble_pinned": false,
@@ -8041,13 +7359,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "UnderHighway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UnderHighway"
   },
   {
    "bubble_pinned": false,
@@ -8091,13 +7403,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Landmark Small Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmark Small Park"
   },
   {
    "bubble_pinned": false,
@@ -8129,13 +7435,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Landmark Park Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmark Park Out"
   },
   {
    "bubble_pinned": false,
@@ -8205,13 +7505,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Small Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Small Park"
   },
   {
    "bubble_pinned": false,
@@ -8242,13 +7536,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8280,13 +7568,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -8317,13 +7599,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8354,13 +7630,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8392,13 +7662,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Prepared Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Prepared Lots"
   },
   {
    "bubble_pinned": false,
@@ -8430,13 +7694,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_12.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Prepared Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Prepared Lots"
   },
   {
    "bubble_pinned": false,
@@ -8468,13 +7726,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_12.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Prepared Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Prepared Lots"
   },
   {
    "bubble_pinned": false,
@@ -8506,13 +7758,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_12.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Prepared Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Prepared Lots"
   },
   {
    "bubble_pinned": false,
@@ -8544,13 +7790,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "small districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "small districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -8582,13 +7822,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "medium districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "medium districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -8620,13 +7854,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "small districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "small districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8658,13 +7886,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_15.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "small districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "small districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8696,13 +7918,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_13.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "small districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "small districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -8734,13 +7950,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "medium districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "medium districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8772,13 +7982,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8810,13 +8014,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -8848,13 +8046,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_16.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "medium districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "medium districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8886,13 +8078,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_14.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "medium districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "medium districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -8924,13 +8110,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_17.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Large districts lots | unbuildable 1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large districts lots | unbuildable 1"
   },
   {
    "bubble_pinned": false,
@@ -8962,13 +8142,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_18.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Large districts lots | unbuildable 2",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large districts lots | unbuildable 2"
   },
   {
    "bubble_pinned": false,
@@ -9000,13 +8174,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_10'",
     "Seed": 2014642815
    },
-   "title": "Highway Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway Footprint"
   },
   {
    "bubble_pinned": false,
@@ -9038,13 +8206,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_10'",
     "Seed": 2014642815
    },
-   "title": "Highway Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway Footprint"
   },
   {
    "bubble_pinned": false,
@@ -9076,13 +8238,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9114,13 +8270,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9152,13 +8302,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9190,13 +8334,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_19.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Small Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9228,13 +8366,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_20.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Medium Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9266,13 +8398,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_21.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Large Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9304,13 +8430,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_19.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Small Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9342,13 +8462,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_20.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Medium Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9380,13 +8494,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_21.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Large Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -9418,13 +8526,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9456,13 +8558,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9494,13 +8590,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9532,13 +8622,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_23.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Large | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9570,13 +8654,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_24.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Medium | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9608,13 +8686,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_25.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Small | Unbuildable footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small | Unbuildable footprints"
   },
   {
    "bubble_pinned": false,
@@ -9646,13 +8718,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "under Highway Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Large"
   },
   {
    "bubble_pinned": false,
@@ -9684,13 +8750,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "under Highway Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Medium"
   },
   {
    "bubble_pinned": false,
@@ -9722,13 +8782,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "under Highway Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Small"
   },
   {
    "bubble_pinned": false,
@@ -9760,13 +8814,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_22.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "under Highway Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Large"
   },
   {
    "bubble_pinned": false,
@@ -9798,13 +8846,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_26.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "under Highway Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Medium"
   },
   {
    "bubble_pinned": false,
@@ -9836,13 +8878,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_27.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "under Highway Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "under Highway Small"
   },
   {
    "bubble_pinned": false,
@@ -9874,13 +8910,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small building footprints"
   },
   {
    "bubble_pinned": false,
@@ -9912,13 +8942,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium building footprints"
   },
   {
    "bubble_pinned": false,
@@ -9950,13 +8974,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large building footprints"
   },
   {
    "bubble_pinned": false,
@@ -9988,13 +9006,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_28.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Small building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small building footprints"
   },
   {
    "bubble_pinned": false,
@@ -10026,13 +9038,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_29.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Medium building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium building footprints"
   },
   {
    "bubble_pinned": false,
@@ -10064,20 +9070,15 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_30.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Large building footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large building footprints"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:Partitioned",
+   "getter_bound": false,
+   "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_2",
    "outputs": [
@@ -10091,13 +9092,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -10142,20 +9137,15 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:PartitionGridSize",
+   "getter_bound": false,
+   "getter_param": "PartitionGridSize",
    "inputs": [],
    "name": "GetGraphParameter_3",
    "outputs": [
@@ -10169,13 +9159,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "PartitionGridSize",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "PartitionGridSize"
   },
   {
    "bubble_pinned": false,
@@ -10229,13 +9213,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10299,13 +9277,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10402,13 +9374,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10469,13 +9435,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/FilterPolygonByEdgeLength.FilterPolygonByEdgeLength",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10514,13 +9474,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10617,13 +9571,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10684,13 +9632,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/FilterPolygonByEdgeLength.FilterPolygonByEdgeLength",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10729,13 +9671,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10796,13 +9732,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/FilterPolygonByEdgeLength.FilterPolygonByEdgeLength",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10841,13 +9771,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10917,13 +9841,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10955,13 +9873,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Larger Building Skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Larger Building Skirt"
   },
   {
    "bubble_pinned": false,
@@ -11059,13 +9971,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11128,13 +10034,7 @@
     "Seed": -1577538559
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Tag.Write_Tag",
-   "title": "Tag Large building Skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Large building Skirt"
   },
   {
    "bubble_pinned": false,
@@ -11166,13 +10066,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_4_Lots.PCG_3_1_4_Lots:NamedRerouteDeclaration_31.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Larger Building Skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Larger Building Skirt"
   }
  ],
  "params": [

@@ -302,13 +302,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -354,13 +348,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -431,13 +419,7 @@
     "Seed": -1777819822
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Shape To Create Outer Parking Space",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Shape To Create Outer Parking Space"
   },
   {
    "bubble_pinned": false,
@@ -508,13 +490,7 @@
     "Seed": -1777819822
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract To Create Space for Aisle",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract To Create Space for Aisle"
   },
   {
    "bubble_pinned": false,
@@ -615,13 +591,7 @@
     "Seed": -1769431078
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Subdivide Inner Parking Space",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subdivide Inner Parking Space"
   },
   {
    "bubble_pinned": false,
@@ -692,13 +662,7 @@
     "Seed": -1777819822
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract To Create Inner Parking Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract To Create Inner Parking Shape"
   },
   {
    "bubble_pinned": false,
@@ -800,13 +764,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Create Central Spline On Inner Parking Shapes",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Central Spline On Inner Parking Shapes"
   },
   {
    "bubble_pinned": false,
@@ -873,13 +831,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments",
-   "title": "Extract Segments From Outer Parking Shape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Segments From Outer Parking Shape"
   },
   {
    "bubble_pinned": false,
@@ -952,13 +904,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments",
-   "title": "Gather All Stall Centre Segments",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Gather All Stall Centre Segments"
   },
   {
    "bubble_pinned": false,
@@ -1023,13 +969,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_Point_AtCenter.Place_Point_AtCenter",
-   "title": "Place Point At Each Stall Centre",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Point At Each Stall Centre"
   },
   {
    "bubble_pinned": false,
@@ -1101,13 +1041,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Truncate.Transform_Truncate",
-   "title": "Shorten Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Shorten Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -1188,13 +1122,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -1275,13 +1203,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Inner Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Inner Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -1376,13 +1298,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Offset Inner Lines +Y (Row A)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Offset Inner Lines +Y (Row A)"
   },
   {
    "bubble_pinned": false,
@@ -1477,13 +1393,7 @@
     "Seed": -1726635377
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Offset Inner Lines -Y (Row B)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Offset Inner Lines -Y (Row B)"
   },
   {
    "bubble_pinned": false,
@@ -1569,13 +1479,7 @@
     "Seed": -1732664786
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Parking Occupancy",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Parking Occupancy"
   },
   {
    "bubble_pinned": false,
@@ -1661,13 +1565,7 @@
     "Seed": -1732664786
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Select half to be reversed parked cars",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Select half to be reversed parked cars"
   },
   {
    "bubble_pinned": false,
@@ -1784,13 +1682,7 @@
     "Seed": -1722309931
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Points On Stall Centrelines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Points On Stall Centrelines"
   },
   {
    "bubble_pinned": false,
@@ -2058,13 +1950,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Rule.Assign_Rule",
-   "title": "Assign Concrete Barrier Grammar",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Concrete Barrier Grammar"
   },
   {
    "bubble_pinned": false,
@@ -2333,13 +2219,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Rule.Assign_Rule",
-   "title": "Assign Chain-Link Fence Grammar",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Chain-Link Fence Grammar"
   },
   {
    "bubble_pinned": false,
@@ -2441,13 +2321,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
-   "title": "Extract Central Median Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Central Median Splines"
   },
   {
    "bubble_pinned": false,
@@ -2518,13 +2392,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand Footprint For Clean Cut",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand Footprint For Clean Cut"
   },
   {
    "bubble_pinned": false,
@@ -2591,13 +2459,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Outline.Transform_Outline",
-   "title": "Outline Median Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outline Median Lines"
   },
   {
    "bubble_pinned": false,
@@ -2677,13 +2539,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Boundary For Precision Cut",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Boundary For Precision Cut"
   },
   {
    "bubble_pinned": false,
@@ -2750,13 +2606,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Segments.Extract_Segments",
-   "title": "Extract Boundary Segments (Entrance Cut)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Boundary Segments (Entrance Cut)"
   },
   {
    "bubble_pinned": false,
@@ -2830,13 +2680,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut",
-   "title": "Cut Entrances From Perimeter",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cut Entrances From Perimeter"
   },
   {
    "bubble_pinned": false,
@@ -2910,13 +2754,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Spline_Cut.Compose_Spline_Cut",
-   "title": "Cut Entrances From Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cut Entrances From Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -2997,13 +2835,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Resample.Transform_Resample",
-   "title": "Resample Outer Lines After Entrance Cut",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Resample Outer Lines After Entrance Cut"
   },
   {
    "bubble_pinned": false,
@@ -3075,13 +2907,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Truncate.Transform_Truncate",
-   "title": "Shorten Median Splines (Setback 600)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Shorten Median Splines (Setback 600)"
   },
   {
    "bubble_pinned": false,
@@ -3192,13 +3018,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Place/Place_OnSpline.Place_OnSpline",
-   "title": "Place Arrow Points At Median Ends",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Arrow Points At Median Ends"
   },
   {
    "bubble_pinned": false,
@@ -3293,13 +3113,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Offset Median Endpoint +Y (Side A)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Offset Median Endpoint +Y (Side A)"
   },
   {
    "bubble_pinned": false,
@@ -3394,13 +3208,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Offset Median Endpoint -Y (Side B)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Offset Median Endpoint -Y (Side B)"
   },
   {
    "bubble_pinned": false,
@@ -3461,13 +3269,7 @@
     "Seed": -1524584613
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Splines_Reverse.Transform_Splines_Reverse",
-   "title": "Reverse Side B Median Spline",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reverse Side B Median Spline"
   },
   {
    "bubble_pinned": false,
@@ -3523,13 +3325,7 @@
     "bEnabled": false
    },
    "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
-   "title": "Debug: Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug: Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -3573,13 +3369,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Parking Lot Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Parking Lot Footprint"
   },
   {
    "bubble_pinned": false,
@@ -3659,13 +3449,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Mesh Terrain (Final)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Mesh Terrain (Final)"
   },
   {
    "bubble_pinned": false,
@@ -3697,13 +3481,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -3805,13 +3583,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "Project All Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project All Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -3843,13 +3615,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -3994,13 +3760,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Forward-Facing Cars (Yaw +90°)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Forward-Facing Cars (Yaw +90°)"
   },
   {
    "bubble_pinned": false,
@@ -4150,13 +3910,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Reverse-Facing Cars (Yaw -90°)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Reverse-Facing Cars (Yaw -90°)"
   },
   {
    "bubble_pinned": false,
@@ -4307,13 +4061,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Parking Line Decal",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Parking Line Decal"
   },
   {
    "bubble_pinned": false,
@@ -4447,13 +4195,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Direction Arrow Decal",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Direction Arrow Decal"
   },
   {
    "bubble_pinned": false,
@@ -4548,13 +4290,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift All Points +22 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift All Points +22 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -4625,13 +4361,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
-   "title": "Fill Lot With Ground Tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Lot With Ground Tiles"
   },
   {
    "bubble_pinned": false,
@@ -4663,13 +4393,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Ground_tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Ground_tiles"
   },
   {
    "bubble_pinned": false,
@@ -4764,13 +4488,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lower Ground Tiles -19 (Flush Under Decals)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lower Ground Tiles -19 (Flush Under Decals)"
   },
   {
    "bubble_pinned": false,
@@ -4802,13 +4520,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Ground_tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Ground_tiles"
   },
   {
    "bubble_pinned": false,
@@ -4840,13 +4552,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Parking lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Parking lots"
   },
   {
    "bubble_pinned": false,
@@ -4878,13 +4584,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Parking lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Parking lots"
   },
   {
    "bubble_pinned": false,
@@ -4916,13 +4616,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Parking lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Parking lots"
   },
   {
    "bubble_pinned": false,
@@ -4954,13 +4648,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Parking lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Parking lots"
   },
   {
    "bubble_pinned": false,
@@ -4992,13 +4680,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Median Arrows",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Median Arrows"
   },
   {
    "bubble_pinned": false,
@@ -5030,13 +4712,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Median Arrows",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Median Arrows"
   },
   {
    "bubble_pinned": false,
@@ -5068,13 +4744,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Forward- Facing Cars",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Forward- Facing Cars"
   },
   {
    "bubble_pinned": false,
@@ -5106,13 +4776,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Reverse- Facing Cars",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reverse- Facing Cars"
   },
   {
    "bubble_pinned": false,
@@ -5144,13 +4808,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_3'",
     "Seed": 2014642815
    },
-   "title": "Forward- Facing Cars",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Forward- Facing Cars"
   },
   {
    "bubble_pinned": false,
@@ -5182,13 +4840,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_4'",
     "Seed": 2014642815
    },
-   "title": "Reverse- Facing Cars",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reverse- Facing Cars"
   },
   {
    "bubble_pinned": false,
@@ -5220,13 +4872,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Central Spline on Inner Parking ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Spline on Inner Parking "
   },
   {
    "bubble_pinned": false,
@@ -5258,13 +4904,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Central Spline on Inner Parking ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Spline on Inner Parking "
   },
   {
    "bubble_pinned": false,
@@ -5296,13 +4936,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_5'",
     "Seed": 2014642815
    },
-   "title": "Central Spline on Inner Parking ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Spline on Inner Parking "
   },
   {
    "bubble_pinned": false,
@@ -5334,13 +4968,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -5372,13 +5000,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_6'",
     "Seed": 2014642815
    },
-   "title": "Outer Parking Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Outer Parking Lines"
   },
   {
    "bubble_pinned": false,
@@ -5410,13 +5032,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Border without entrances",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Border without entrances"
   },
   {
    "bubble_pinned": false,
@@ -5448,13 +5064,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Central Median Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Median Splines"
   },
   {
    "bubble_pinned": false,
@@ -5486,13 +5096,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_9.PCGNamedRerouteDeclarationSettings_8'",
     "Seed": 2014642815
    },
-   "title": "Central Median Splines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Median Splines"
   },
   {
    "bubble_pinned": false,
@@ -5524,13 +5128,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_7'",
     "Seed": 2014642815
    },
-   "title": "Border without entrances",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Border without entrances"
   },
   {
    "bubble_pinned": false,
@@ -5562,13 +5160,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Median Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Median Lines"
   },
   {
    "bubble_pinned": false,
@@ -5600,13 +5192,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_3_Parkings.PCG_3_2_3_Parkings:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_9'",
     "Seed": 2014642815
    },
-   "title": "Median Lines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Median Lines"
   },
   {
    "bubble_pinned": false,
@@ -5660,13 +5246,7 @@
     "OutputType": "String",
     "Seed": 1494067853
    },
-   "title": "Cast Asset to String",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cast Asset to String"
   },
   {
    "bubble_pinned": false,
@@ -5834,13 +5414,7 @@
      "bUseConstantThreshold": true
     }
    },
-   "title": "Filter: vehicles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: vehicles"
   },
   {
    "bubble_pinned": false,
@@ -5879,13 +5453,7 @@
      ]
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5969,13 +5537,7 @@
     "Operation": "Replace",
     "Seed": -260577290
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6059,13 +5621,7 @@
     "Operation": "Replace",
     "Seed": -260577290
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6190,13 +5746,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn All Parking Lot Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn All Parking Lot Assets"
   },
   {
    "bubble_pinned": false,
@@ -6249,13 +5799,7 @@
     "OutputType": "SoftObjectPath",
     "Seed": 1494067853
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6298,20 +5842,15 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:PartitionGridSize",
+   "getter_bound": false,
+   "getter_param": "PartitionGridSize",
    "inputs": [],
    "name": "GetGraphParameter_1",
    "outputs": [
@@ -6325,13 +5864,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "PartitionGridSize",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "PartitionGridSize"
   },
   {
    "bubble_pinned": false,
@@ -6385,13 +5918,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6455,20 +5982,15 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:Partitioned",
+   "getter_bound": false,
+   "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_2",
    "outputs": [
@@ -6482,13 +6004,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -6533,13 +6049,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6609,13 +6119,7 @@
     "OutputTarget": "PCGBegin(Asset)PCGEnd",
     "Seed": 113986551
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   }
  ],
  "params": [

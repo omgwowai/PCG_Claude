@@ -113,13 +113,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -165,13 +159,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -283,13 +271,7 @@
     ],
     "Seed": 619961783
    },
-   "title": "Create Anchor Point",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Anchor Point"
   },
   {
    "bubble_pinned": false,
@@ -374,13 +356,7 @@
     "AttributeInheritance": "SourceOnly",
     "Seed": -1030087771
    },
-   "title": "Stamp Mountains onto Anchor Point",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Stamp Mountains onto Anchor Point"
   },
   {
    "bubble_pinned": false,
@@ -439,13 +415,7 @@
     "Seed": 1644020902,
     "bTagOutputsBasedOnOutputPins": false
    },
-   "title": "Load Vista Cliffs Data Asset",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load Vista Cliffs Data Asset"
   },
   {
    "bubble_pinned": false,
@@ -666,13 +636,7 @@
     "MeshSelectorType": "/Script/CoreUObject.Class'/Script/PCG.PCGMeshSelectorByAttribute'",
     "Seed": -1025269183
    },
-   "title": "Spawn Vista Cliff Meshes",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Vista Cliff Meshes"
   },
   {
    "bubble_pinned": false,
@@ -741,13 +705,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll Rotation",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll Rotation"
   },
   {
    "bubble_pinned": false,
@@ -816,13 +774,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch Rotation",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch Rotation"
   },
   {
    "bubble_pinned": false,
@@ -902,13 +854,7 @@
     "Operation": "Clamp",
     "Seed": -603003822
    },
-   "title": "Clamp Z Position",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Clamp Z Position"
   }
  ],
  "params": [],

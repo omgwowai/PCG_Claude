@@ -49,13 +49,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -106,13 +100,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -202,13 +190,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Park Footprint 1000x200m (1:4 scale)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Park Footprint 1000x200m (1:4 scale)"
   },
   {
    "bubble_pinned": false,
@@ -265,13 +247,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
-   "title": "Debug Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug Footprint"
   },
   {
    "bubble_pinned": false,
@@ -340,13 +316,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   }
  ],
  "params": [],

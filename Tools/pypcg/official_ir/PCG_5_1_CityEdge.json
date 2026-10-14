@@ -135,13 +135,7 @@
     "bEnabled": false,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -188,13 +182,7 @@
     "bEnabled": false,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -273,13 +261,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Mesh Terrain (Final)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Mesh Terrain (Final)"
   },
   {
    "bubble_pinned": false,
@@ -406,13 +388,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Above Sea Level (Z > -72.6)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Above Sea Level (Z > -72.6)"
   },
   {
    "bubble_pinned": false,
@@ -454,13 +430,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Terrain Extract)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Terrain Extract)"
   },
   {
    "bubble_pinned": false,
@@ -521,13 +491,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
-   "title": "Extract Terrain Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Terrain Points"
   },
   {
    "bubble_pinned": false,
@@ -568,13 +532,7 @@
     },
     "Seed": -721562245
    },
-   "title": "Build Convex Hull Of Terrain Boundary",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Build Convex Hull Of Terrain Boundary"
   },
   {
    "bubble_pinned": false,
@@ -613,13 +571,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Pre Convex Hull)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Pre Convex Hull)"
   },
   {
    "bubble_pinned": false,
@@ -703,13 +655,7 @@
     "bClosedLoop": true,
     "bLinear": true
    },
-   "title": "Create City Edge Spline (Closed Linear)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create City Edge Spline (Closed Linear)"
   },
   {
    "bubble_pinned": false,
@@ -779,13 +725,7 @@
     "Seed": -1017473487,
     "bFixedMode": false
    },
-   "title": "Random Selection Of Dock Spawn Points (~51%)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Selection Of Dock Spawn Points (~51%)"
   },
   {
    "bubble_pinned": false,
@@ -820,13 +760,7 @@
    "settings": {
     "Seed": -1597445965
    },
-   "title": "Get Edge Spline Control Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Edge Spline Control Points"
   },
   {
    "bubble_pinned": false,
@@ -895,13 +829,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll On Dock Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll On Dock Points"
   },
   {
    "bubble_pinned": false,
@@ -970,13 +898,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch On Dock Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch On Dock Points"
   },
   {
    "bubble_pinned": false,
@@ -1101,20 +1023,15 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Pier & Warehouse Assemblies",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Pier & Warehouse Assemblies"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:PartitionGridSize",
+   "getter_bound": false,
+   "getter_param": "PartitionGridSize",
    "inputs": [],
    "name": "GetGraphParameter_0",
    "outputs": [
@@ -1128,13 +1045,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "PartitionGridSize",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "PartitionGridSize"
   },
   {
    "bubble_pinned": false,
@@ -1188,13 +1099,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1257,20 +1162,15 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:Partitioned",
+   "getter_bound": false,
+   "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_1",
    "outputs": [
@@ -1284,13 +1184,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -1335,13 +1229,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1484,13 +1372,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Pier & Warehouse Assemblies",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Pier & Warehouse Assemblies"
   }
  ],
  "params": [

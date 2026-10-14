@@ -92,13 +92,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -149,13 +143,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -225,13 +213,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Center from Outer Area",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Center from Outer Area"
   },
   {
    "bubble_pinned": false,
@@ -340,13 +322,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly",
-   "title": "Sparse Random Scatter",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Sparse Random Scatter"
   },
   {
    "bubble_pinned": false,
@@ -488,13 +464,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Background Buildings",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Background Buildings"
   },
   {
    "bubble_pinned": false,
@@ -581,13 +551,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Create Outer Area (25km square)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Outer Area (25km square)"
   },
   {
    "bubble_pinned": false,
@@ -684,13 +648,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Create Center Exclusion Area (3km square)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Center Exclusion Area (3km square)"
   },
   {
    "bubble_pinned": false,
@@ -775,13 +733,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Cull (~36% removed)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Cull (~36% removed)"
   },
   {
    "bubble_pinned": false,
@@ -872,13 +824,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Center Exclusion Size (~4.1 km)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Center Exclusion Size (~4.1 km)"
   }
  ],
  "params": [],

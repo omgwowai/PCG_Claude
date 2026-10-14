@@ -49,13 +49,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -106,13 +100,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -212,13 +200,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Spline_Shape.Create_Spline_Shape",
-   "title": "Create Landmark Hexagon",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Create Landmark Hexagon"
   },
   {
    "bubble_pinned": false,
@@ -257,13 +239,7 @@
     "PropertyPath": "RectWidth",
     "Seed": -1365531043
    },
-   "title": "Get Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Width"
   },
   {
    "bubble_pinned": false,
@@ -302,13 +278,7 @@
     "PropertyPath": "RectLength",
     "Seed": -1365531043
    },
-   "title": "Get Length",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Length"
   },
   {
    "bubble_pinned": false,
@@ -363,13 +333,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -464,13 +428,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -501,13 +459,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   }
  ],
  "params": [

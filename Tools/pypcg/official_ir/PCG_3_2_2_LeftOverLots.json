@@ -407,13 +407,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -464,13 +458,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -577,13 +565,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly",
-   "title": "Scatter Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Scatter Trees"
   },
   {
    "bubble_pinned": false,
@@ -627,13 +609,7 @@
     "Seed": -1612011054
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Lots"
   },
   {
    "bubble_pinned": false,
@@ -701,13 +677,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Only reserved lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Only reserved lots"
   },
   {
    "bubble_pinned": false,
@@ -775,13 +745,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Only unbuildable lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Only unbuildable lots"
   },
   {
    "bubble_pinned": false,
@@ -825,13 +789,7 @@
     "Seed": -1612011054
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Districts"
   },
   {
    "bubble_pinned": false,
@@ -899,13 +857,7 @@
     "Seed": -1484934690
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Only Undividable districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Only Undividable districts"
   },
   {
    "bubble_pinned": false,
@@ -975,13 +927,7 @@
     "Seed": -1484934690
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Roads From Undividable Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Roads From Undividable Districts"
   },
   {
    "bubble_pinned": false,
@@ -1053,13 +999,7 @@
     "Seed": -1514098683
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Reserved Lots (Plaza Setback ~323)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Reserved Lots (Plaza Setback ~323)"
   },
   {
    "bubble_pinned": false,
@@ -1150,19 +1090,14 @@
     "Seed": -1618237129
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Split: Plaza Fraction vs Tree Fraction",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Split: Plaza Fraction vs Tree Fraction"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Ratio_Plaza_vs_Trees",
    "inputs": [],
    "name": "GetGraphParameter_0",
@@ -1177,13 +1112,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Ratio_Plaza_vs_Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Ratio_Plaza_vs_Trees"
   },
   {
    "bubble_pinned": false,
@@ -1227,13 +1156,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Roads"
   },
   {
    "bubble_pinned": false,
@@ -1328,13 +1251,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Reserved Lot Points +30 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Reserved Lot Points +30 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -1456,13 +1373,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Birch Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Birch Trees"
   },
   {
    "bubble_pinned": false,
@@ -1516,13 +1427,7 @@
     "OutputType": "String",
     "Seed": 1494067853
    },
-   "title": "Cast Asset To String",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cast Asset To String"
   },
   {
    "bubble_pinned": false,
@@ -1566,13 +1471,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Landmark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Landmark"
   },
   {
    "bubble_pinned": false,
@@ -1646,13 +1545,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Landmarks From Undividable Districts",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Landmarks From Undividable Districts"
   },
   {
    "bubble_pinned": false,
@@ -1732,13 +1625,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1770,13 +1657,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -1854,13 +1735,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "Project Tree Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Tree Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -1892,13 +1767,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -1992,13 +1861,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "Project Plaza Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Plaza Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -2040,13 +1903,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Asset Cast)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Asset Cast)"
   },
   {
    "bubble_pinned": false,
@@ -2078,13 +1935,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -2128,13 +1979,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Highway"
   },
   {
    "bubble_pinned": false,
@@ -2212,13 +2057,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Combine Tree areas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Combine Tree areas"
   },
   {
    "bubble_pinned": false,
@@ -2287,13 +2126,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll On Plaza Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll On Plaza Props"
   },
   {
    "bubble_pinned": false,
@@ -2362,13 +2195,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch On Plaza Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch On Plaza Props"
   },
   {
    "bubble_pinned": false,
@@ -2399,13 +2226,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -2473,13 +2294,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Medium_courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium_courtyards"
   },
   {
    "bubble_pinned": false,
@@ -2551,13 +2366,7 @@
     "Seed": -1514098683
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Medium Courtyards (Plaza Setback ~323)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Medium Courtyards (Plaza Setback ~323)"
   },
   {
    "bubble_pinned": false,
@@ -2652,13 +2461,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Medium Courtyard Points +30 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Medium Courtyard Points +30 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -2726,13 +2529,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Small Courtyards",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Courtyards"
   },
   {
    "bubble_pinned": false,
@@ -2804,13 +2601,7 @@
     "Seed": -1514098683
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Small Courtyards (Plaza Setback ~323)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Small Courtyards (Plaza Setback ~323)"
   },
   {
    "bubble_pinned": false,
@@ -2905,13 +2696,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Small Courtyard Points +30 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Small Courtyard Points +30 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -3041,13 +2826,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Tree Scale From Noise Texture",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Tree Scale From Noise Texture"
   },
   {
    "bubble_pinned": false,
@@ -3177,13 +2956,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Tree Species Index From Noise Texture",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Tree Species Index From Noise Texture"
   },
   {
    "bubble_pinned": false,
@@ -3227,13 +3000,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Central Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Central Park"
   },
   {
    "bubble_pinned": false,
@@ -3302,13 +3069,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll On Plaza Props (Pass 2)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll On Plaza Props (Pass 2)"
   },
   {
    "bubble_pinned": false,
@@ -3377,13 +3138,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch On Plaza Props (Pass 2)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch On Plaza Props (Pass 2)"
   },
   {
    "bubble_pinned": false,
@@ -3505,13 +3260,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Plane Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Plane Props"
   },
   {
    "bubble_pinned": false,
@@ -3553,13 +3302,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Plane Filter)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Plane Filter)"
   },
   {
    "bubble_pinned": false,
@@ -3681,13 +3424,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Sidewalk Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Sidewalk Props"
   },
   {
    "bubble_pinned": false,
@@ -3729,13 +3466,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Sidewalk Filter)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Sidewalk Filter)"
   },
   {
    "bubble_pinned": false,
@@ -3857,13 +3588,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Border Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Border Props"
   },
   {
    "bubble_pinned": false,
@@ -3905,13 +3630,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Border Filter)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Border Filter)"
   },
   {
    "bubble_pinned": false,
@@ -4033,13 +3752,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Filter: Cone Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter: Cone Props"
   },
   {
    "bubble_pinned": false,
@@ -4081,13 +3794,7 @@
      ]
     }
    },
-   "title": "Filter Point Data (Post Cone Filter)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Point Data (Post Cone Filter)"
   },
   {
    "bubble_pinned": false,
@@ -4171,13 +3878,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Cull Plaza Lots (Debug Split)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Cull Plaza Lots (Debug Split)"
   },
   {
    "bubble_pinned": false,
@@ -4248,13 +3949,7 @@
     "Seed": 1387288479
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
-   "title": "Place Ground Tiles On Remaining Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Place Ground Tiles On Remaining Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -4349,13 +4044,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Ground Tile Points +15 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Ground Tile Points +15 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -4433,13 +4122,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "Project Ground Tile Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Ground Tile Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -4471,13 +4154,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -4545,13 +4222,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Under Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Under Highway"
   },
   {
    "bubble_pinned": false,
@@ -4623,13 +4294,7 @@
     "Seed": -1514098683
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
-   "title": "Contract Under-Highway Lots (Plaza Setback ~323)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Contract Under-Highway Lots (Plaza Setback ~323)"
   },
   {
    "bubble_pinned": false,
@@ -4724,13 +4389,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Under-Highway Points +30 (Pre-Projection)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Under-Highway Points +30 (Pre-Projection)"
   },
   {
    "bubble_pinned": false,
@@ -4762,13 +4421,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "underHighway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "underHighway"
   },
   {
    "bubble_pinned": false,
@@ -4839,13 +4492,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
-   "title": "Fill Highway Area With Ground Tile Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Highway Area With Ground Tile Points"
   },
   {
    "bubble_pinned": false,
@@ -4915,13 +4562,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Points_Difference.Compose_Points_Difference",
-   "title": "Subtract Plaza Points From Highway Ground Tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Subtract Plaza Points From Highway Ground Tiles"
   },
   {
    "bubble_pinned": false,
@@ -4999,13 +4640,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
-   "title": "Project Highway Fill Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Highway Fill Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -5037,13 +4672,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh_Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh_Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -5075,13 +4704,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway"
   },
   {
    "bubble_pinned": false,
@@ -5113,13 +4736,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway"
   },
   {
    "bubble_pinned": false,
@@ -5163,13 +4780,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Landmark Small Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Landmark Small Park"
   },
   {
    "bubble_pinned": false,
@@ -5239,13 +4850,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
-   "title": "Intersect Small Park With Lots (Park Tree Zone)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Intersect Small Park With Lots (Park Tree Zone)"
   },
   {
    "bubble_pinned": false,
@@ -5314,13 +4919,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Snap Tree Z To Terrain Height",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Snap Tree Z To Terrain Height"
   },
   {
    "bubble_pinned": false,
@@ -5389,13 +4988,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Roll On Outer Forest Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Roll On Outer Forest Props"
   },
   {
    "bubble_pinned": false,
@@ -5464,13 +5057,7 @@
     "Operation": "Set",
     "Seed": -603003822
    },
-   "title": "Zero Pitch On Outer Forest Props",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Zero Pitch On Outer Forest Props"
   },
   {
    "bubble_pinned": false,
@@ -5502,13 +5089,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots"
   },
   {
    "bubble_pinned": false,
@@ -5540,13 +5121,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_10'",
     "Seed": 2014642815
    },
-   "title": "Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots"
   },
   {
    "bubble_pinned": false,
@@ -5578,13 +5153,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_10'",
     "Seed": 2014642815
    },
-   "title": "Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lots"
   },
   {
    "bubble_pinned": false,
@@ -5616,13 +5185,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -5654,13 +5217,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Unbuildable Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Unbuildable Lots"
   },
   {
    "bubble_pinned": false,
@@ -5692,13 +5249,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_12'",
     "Seed": 2014642815
    },
-   "title": "Unbuildable Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Unbuildable Lots"
   },
   {
    "bubble_pinned": false,
@@ -5730,13 +5281,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_11'",
     "Seed": 2014642815
    },
-   "title": "Reserved Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Reserved Lots"
   },
   {
    "bubble_pinned": false,
@@ -5767,13 +5312,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5804,13 +5343,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5841,13 +5374,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5879,13 +5406,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Highway",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Highway"
   },
   {
    "bubble_pinned": false,
@@ -5917,13 +5438,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Undividable districts cleaned up",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Undividable districts cleaned up"
   },
   {
    "bubble_pinned": false,
@@ -5955,13 +5470,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_13'",
     "Seed": 2014642815
    },
-   "title": "Undividable districts cleaned up",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Undividable districts cleaned up"
   },
   {
    "bubble_pinned": false,
@@ -5993,13 +5502,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "SmallPark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "SmallPark"
   },
   {
    "bubble_pinned": false,
@@ -6031,13 +5534,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_14'",
     "Seed": 2014642815
    },
-   "title": "SmallPark",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "SmallPark"
   },
   {
    "bubble_pinned": false,
@@ -6068,13 +5565,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -6181,13 +5672,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Fill Reserved Lots with Medium Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Reserved Lots with Medium Plazas"
   },
   {
    "bubble_pinned": false,
@@ -6294,13 +5779,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Fill Medium Courtyards with Large Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Medium Courtyards with Large Plazas"
   },
   {
    "bubble_pinned": false,
@@ -6413,13 +5892,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Fill Small Courtyards with Small Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Small Courtyards with Small Plazas"
   },
   {
    "bubble_pinned": false,
@@ -6523,13 +5996,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Fill Under- Highway Lots with Storage Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Under- Highway Lots with Storage Plazas"
   },
   {
    "bubble_pinned": false,
@@ -6614,13 +6081,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 1/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 1/7"
   },
   {
    "bubble_pinned": false,
@@ -6705,13 +6166,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 2/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 2/7"
   },
   {
    "bubble_pinned": false,
@@ -6796,13 +6251,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 3/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 3/7"
   },
   {
    "bubble_pinned": false,
@@ -6887,13 +6336,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 4/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 4/7"
   },
   {
    "bubble_pinned": false,
@@ -6978,13 +6421,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 5/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 5/7"
   },
   {
    "bubble_pinned": false,
@@ -7069,13 +6506,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 6/7",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 6/7"
   },
   {
    "bubble_pinned": false,
@@ -7209,13 +6640,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles A (Debug)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles A (Debug)"
   },
   {
    "bubble_pinned": false,
@@ -7349,13 +6774,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles B",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles B"
   },
   {
    "bubble_pinned": false,
@@ -7489,13 +6908,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles C",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles C"
   },
   {
    "bubble_pinned": false,
@@ -7629,13 +7042,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles D",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles D"
   },
   {
    "bubble_pinned": false,
@@ -7769,13 +7176,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles E",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles E"
   },
   {
    "bubble_pinned": false,
@@ -7909,13 +7310,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles F",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles F"
   },
   {
    "bubble_pinned": false,
@@ -8049,13 +7444,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Ground Tiles G",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Ground Tiles G"
   },
   {
    "bubble_pinned": false,
@@ -8114,13 +7503,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8152,13 +7535,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Tiles Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tiles Assets"
   },
   {
    "bubble_pinned": false,
@@ -8283,13 +7660,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn ground tiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn ground tiles"
   },
   {
    "bubble_pinned": false,
@@ -8334,13 +7705,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8482,13 +7847,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Trees"
   },
   {
    "bubble_pinned": false,
@@ -8535,13 +7894,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8594,13 +7947,7 @@
     "OutputType": "SoftObjectPath",
     "Seed": 1494067853
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8643,13 +7990,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8681,13 +8022,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Plazas"
   },
   {
    "bubble_pinned": false,
@@ -8812,13 +8147,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Plaza",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Plaza"
   },
   {
    "bubble_pinned": false,
@@ -8863,13 +8192,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8901,13 +8224,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "OuterTreeForest",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "OuterTreeForest"
   },
   {
    "bubble_pinned": false,
@@ -9032,13 +8349,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Outer Forest Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Outer Forest Trees"
   },
   {
    "bubble_pinned": false,
@@ -9087,13 +8398,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9142,13 +8447,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9212,13 +8511,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9261,13 +8554,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9299,13 +8586,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_9.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Plazas"
   },
   {
    "bubble_pinned": false,
@@ -9337,13 +8618,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "OuterTreeForest",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "OuterTreeForest"
   },
   {
    "bubble_pinned": false,
@@ -9375,13 +8650,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Tiles Assets",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tiles Assets"
   },
   {
    "bubble_pinned": false,
@@ -9518,13 +8787,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Megaplant Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Megaplant Trees"
   },
   {
    "bubble_pinned": false,
@@ -9569,19 +8832,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "UseMegaplantsTrees",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -9596,13 +8854,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "UseMegaplantsTrees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UseMegaplantsTrees"
   },
   {
    "bubble_pinned": false,
@@ -9750,13 +9002,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Outer Forest Megaplants Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Outer Forest Megaplants Trees"
   },
   {
    "bubble_pinned": false,
@@ -9801,20 +9047,15 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
-   "getter_param": "!unbound:UseMegaPlantsTrees",
+   "getter_bound": false,
+   "getter_param": "UseMegaPlantsTrees",
    "inputs": [],
    "name": "GetGraphParameter_2",
    "outputs": [
@@ -9828,13 +9069,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "UseMegaPlantsTrees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UseMegaPlantsTrees"
   },
   {
    "bubble_pinned": false,
@@ -9987,19 +9222,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Outer Forest Black Alder Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Outer Forest Black Alder Trees"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_3",
@@ -10014,19 +9244,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_4",
@@ -10041,19 +9266,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_5",
@@ -10068,13 +9288,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -10142,13 +9356,7 @@
     "Seed": -1599296864
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Only unbuildable lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Only unbuildable lots"
   },
   {
    "bubble_pinned": false,
@@ -10180,13 +9388,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large Building Skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Building Skirt"
   },
   {
    "bubble_pinned": false,
@@ -10218,13 +9420,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_11.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Large Building Skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Building Skirt"
   },
   {
    "bubble_pinned": false,
@@ -10319,13 +9515,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
-   "title": "Lift Small Buidling skirt",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Lift Small Buidling skirt"
   },
   {
    "bubble_pinned": false,
@@ -10438,13 +9628,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
-   "title": "Fill Building skirt With Small Plazas",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Fill Building skirt With Small Plazas"
   }
  ],
  "params": [

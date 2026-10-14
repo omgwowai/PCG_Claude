@@ -281,13 +281,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -346,13 +340,7 @@
     "Seed": 1533108465,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -396,13 +384,7 @@
     "Seed": -1612011054
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Lots",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Lots"
   },
   {
    "bubble_pinned": false,
@@ -515,19 +497,14 @@
     "Seed": -1618237129
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign City Sample Buildings - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign City Sample Buildings - Small"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Debug",
    "inputs": [],
    "name": "GetGraphParameter_0",
@@ -542,13 +519,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug"
   },
   {
    "bubble_pinned": false,
@@ -590,13 +561,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
-   "title": "HighRise Zone",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "HighRise Zone"
   },
   {
    "bubble_pinned": false,
@@ -671,13 +636,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_within_Areas.Filter_Areas_within_Areas",
-   "title": "Filter Within HighRise Zone - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Within HighRise Zone - Small"
   },
   {
    "bubble_pinned": false,
@@ -797,13 +756,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom",
-   "title": "Write Distance From HighRise - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Distance From HighRise - Small"
   },
   {
    "bubble_pinned": false,
@@ -884,13 +837,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Multiply Height by HighRise Factor - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Multiply Height by HighRise Factor - Small"
   },
   {
    "bubble_pinned": false,
@@ -950,13 +897,7 @@
     "InputSource": "PCGBegin(Distance)PCGEnd",
     "Seed": 51105410
    },
-   "title": "Max HighRise Distance - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max HighRise Distance - Small"
   },
   {
    "bubble_pinned": false,
@@ -987,13 +928,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1024,13 +959,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -1110,13 +1039,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get Final Mesh Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Final Mesh Terrain"
   },
   {
    "bubble_pinned": false,
@@ -1148,13 +1071,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "MEsh Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "MEsh Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -1186,13 +1103,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "MEsh Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "MEsh Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -1260,13 +1171,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Extract Small Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Small Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1334,13 +1239,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Extract Medium Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Medium Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1408,13 +1307,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
-   "title": "Extract Large Districts Building Footprints",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Large Districts Building Footprints"
   },
   {
    "bubble_pinned": false,
@@ -1544,13 +1437,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Building Height from Texture - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Building Height from Texture - Small"
   },
   {
    "bubble_pinned": false,
@@ -1680,13 +1567,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Building Height from Texture - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Building Height from Texture - Medium"
   },
   {
    "bubble_pinned": false,
@@ -1816,13 +1697,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Building Height from Texture - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Building Height from Texture - Large"
   },
   {
    "bubble_pinned": false,
@@ -1874,13 +1749,7 @@
     "Seed": 1096359687,
     "SelectedTags": "Selected, Unselected"
    },
-   "title": "Delete Tags - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Delete Tags - Small"
   },
   {
    "bubble_pinned": false,
@@ -1932,13 +1801,7 @@
     "Seed": 1096359687,
     "SelectedTags": "Selected, Unselected"
    },
-   "title": "Delete Tags - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Delete Tags - Medium"
   },
   {
    "bubble_pinned": false,
@@ -1990,13 +1853,7 @@
     "Seed": 1096359687,
     "SelectedTags": "Selected, Unselected"
    },
-   "title": "Delete Tags - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Delete Tags - Large"
   },
   {
    "bubble_pinned": false,
@@ -2035,13 +1892,7 @@
     "PropertyPath": "MinHeightSmallDistrict",
     "Seed": -1365531043
    },
-   "title": "Min Height - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Min Height - Small"
   },
   {
    "bubble_pinned": false,
@@ -2080,13 +1931,7 @@
     "PropertyPath": "MaxHeightSmallDistrict",
     "Seed": -1365531043
    },
-   "title": "Max Height - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max Height - Small"
   },
   {
    "bubble_pinned": false,
@@ -2125,13 +1970,7 @@
     "PropertyPath": "MinHeightMediumDistrict",
     "Seed": -1365531043
    },
-   "title": "Min Height - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Min Height - Medium"
   },
   {
    "bubble_pinned": false,
@@ -2170,13 +2009,7 @@
     "PropertyPath": "MaxHeightMediumDistrict",
     "Seed": -1365531043
    },
-   "title": "Max Height - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max Height - Medium"
   },
   {
    "bubble_pinned": false,
@@ -2215,13 +2048,7 @@
     "PropertyPath": "MinHeightLargeDistrict",
     "Seed": -1365531043
    },
-   "title": "Min Height - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Min Height - Large"
   },
   {
    "bubble_pinned": false,
@@ -2260,13 +2087,7 @@
     "PropertyPath": "MaxHeightLargeDistrict",
     "Seed": -1365531043
    },
-   "title": "Max Height - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max Height - Large"
   },
   {
    "bubble_pinned": false,
@@ -2372,13 +2193,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Transform Project - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Project - Small"
   },
   {
    "bubble_pinned": false,
@@ -2484,13 +2299,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Transform Project - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Project - Medium"
   },
   {
    "bubble_pinned": false,
@@ -2596,13 +2405,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Transform Project - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Project - Large"
   },
   {
    "bubble_pinned": false,
@@ -2669,13 +2472,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Transform Level - Small",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Level - Small"
   },
   {
    "bubble_pinned": false,
@@ -2742,13 +2539,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Transform Level - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Level - Medium"
   },
   {
    "bubble_pinned": false,
@@ -2815,13 +2606,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level",
-   "title": "Transform Level - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Transform Level - Large"
   },
   {
    "bubble_pinned": false,
@@ -2866,13 +2651,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch - Small Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch - Small Debug"
   },
   {
    "bubble_pinned": false,
@@ -2929,13 +2708,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch - Medium Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch - Medium Debug"
   },
   {
    "bubble_pinned": false,
@@ -2992,13 +2765,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "Branch - Large Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Branch - Large Debug"
   },
   {
    "bubble_pinned": false,
@@ -3088,13 +2855,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Extrude.Create_Mesh_Extrude",
-   "title": "Debug Extrude - Small (Red)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug Extrude - Small (Red)"
   },
   {
    "bubble_pinned": false,
@@ -3184,13 +2945,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Extrude.Create_Mesh_Extrude",
-   "title": "Debug Extrude - Medium (Green)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug Extrude - Medium (Green)"
   },
   {
    "bubble_pinned": false,
@@ -3280,13 +3035,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Extrude.Create_Mesh_Extrude",
-   "title": "Debug Extrude - Large (Blue)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug Extrude - Large (Blue)"
   },
   {
    "bubble_pinned": false,
@@ -3400,13 +3149,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign City Sample Buildings - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign City Sample Buildings - Medium"
   },
   {
    "bubble_pinned": false,
@@ -3519,13 +3262,7 @@
     "Seed": -1618237129
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Assign_CitySampleBuildings.Assign_CitySampleBuildings",
-   "title": "Assign City Sample Buildings - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign City Sample Buildings - Large"
   },
   {
    "bubble_pinned": false,
@@ -3581,13 +3318,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "SmallRooftops"
    },
-   "title": "Tag Small Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Small Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -3643,13 +3374,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "MediumRooftops"
    },
-   "title": "Tag Medium Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Medium Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -3705,13 +3430,7 @@
     "Seed": 2078803931,
     "TagsToAdd": "LargeRooftops"
    },
-   "title": "Tag Large Rooftops",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tag Large Rooftops"
   },
   {
    "bubble_pinned": false,
@@ -3750,13 +3469,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -3831,13 +3544,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_within_Areas.Filter_Areas_within_Areas",
-   "title": "Filter Within HighRise Zone - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Within HighRise Zone - Medium"
   },
   {
    "bubble_pinned": false,
@@ -3957,13 +3664,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom",
-   "title": "Write Distance From HighRise - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Distance From HighRise - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4044,13 +3745,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Multiply Height by HighRise Factor - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Multiply Height by HighRise Factor - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4110,13 +3805,7 @@
     "InputSource": "PCGBegin(Distance)PCGEnd",
     "Seed": 51105410
    },
-   "title": "Max HighRise Distance - Medium",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max HighRise Distance - Medium"
   },
   {
    "bubble_pinned": false,
@@ -4147,13 +3836,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4184,13 +3867,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4229,13 +3906,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4310,13 +3981,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_within_Areas.Filter_Areas_within_Areas",
-   "title": "Filter Within HighRise Zone - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Within HighRise Zone - Large"
   },
   {
    "bubble_pinned": false,
@@ -4436,13 +4101,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom",
-   "title": "Write Distance From HighRise - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Distance From HighRise - Large"
   },
   {
    "bubble_pinned": false,
@@ -4523,13 +4182,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Multiply Height by HighRise Factor - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Multiply Height by HighRise Factor - Large"
   },
   {
    "bubble_pinned": false,
@@ -4589,13 +4242,7 @@
     "InputSource": "PCGBegin(Distance)PCGEnd",
     "Seed": 51105410
    },
-   "title": "Max HighRise Distance - Large",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max HighRise Distance - Large"
   },
   {
    "bubble_pinned": false,
@@ -4626,13 +4273,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4663,13 +4304,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4708,13 +4343,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4750,13 +4379,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/Primitives/Buildings/Subgraphs/LoadCitySampleData.LoadCitySampleData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4788,13 +4411,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Load City Sample Data Out_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out_1"
   },
   {
    "bubble_pinned": false,
@@ -4826,13 +4443,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out_1"
   },
   {
    "bubble_pinned": false,
@@ -4864,13 +4475,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "High Rise Zone ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "High Rise Zone "
   },
   {
    "bubble_pinned": false,
@@ -4902,13 +4507,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "High Rise Zone ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "High Rise Zone "
   },
   {
    "bubble_pinned": false,
@@ -4940,13 +4539,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "High Rise Zone ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "High Rise Zone "
   },
   {
    "bubble_pinned": false,
@@ -4978,13 +4571,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "High Rise Zone ",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "High Rise Zone "
   },
   {
    "bubble_pinned": false,
@@ -5016,13 +4603,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "MEsh Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "MEsh Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -5054,13 +4635,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "MEsh Terrain_Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "MEsh Terrain_Final"
   },
   {
    "bubble_pinned": false,
@@ -5092,13 +4667,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out_1"
   },
   {
    "bubble_pinned": false,
@@ -5130,19 +4699,14 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Load City Sample Data Out_1",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Load City Sample Data Out_1"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -5157,13 +4721,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -5243,13 +4801,7 @@
     "Seed": -1653233867
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "rooftop mesh",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "rooftop mesh"
   },
   {
    "bubble_pinned": false,
@@ -5334,13 +4886,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 1/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 1/13"
   },
   {
    "bubble_pinned": false,
@@ -5425,13 +4971,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 2/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 2/13"
   },
   {
    "bubble_pinned": false,
@@ -5516,13 +5056,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 3/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 3/13"
   },
   {
    "bubble_pinned": false,
@@ -5607,13 +5141,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 4/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 4/13"
   },
   {
    "bubble_pinned": false,
@@ -5698,13 +5226,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 5/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 5/13"
   },
   {
    "bubble_pinned": false,
@@ -5789,13 +5311,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 6/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 6/13"
   },
   {
    "bubble_pinned": false,
@@ -5880,13 +5396,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 7/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 7/13"
   },
   {
    "bubble_pinned": false,
@@ -5971,13 +5481,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 8/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 8/13"
   },
   {
    "bubble_pinned": false,
@@ -6062,13 +5566,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 9/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 9/13"
   },
   {
    "bubble_pinned": false,
@@ -6153,13 +5651,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 10/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 10/13"
   },
   {
    "bubble_pinned": false,
@@ -6244,13 +5736,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 11/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 11/13"
   },
   {
    "bubble_pinned": false,
@@ -6335,13 +5821,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
-   "title": "Random Choice 12/13",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Random Choice 12/13"
   },
   {
    "bubble_pinned": false,
@@ -6420,13 +5900,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - BitumenRoofing_QBAA",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - BitumenRoofing_QBAA"
   },
   {
    "bubble_pinned": false,
@@ -6505,13 +5979,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - BitumenRoofing_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - BitumenRoofing_WFC"
   },
   {
    "bubble_pinned": false,
@@ -6590,13 +6058,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - DirtyConcreteTiles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - DirtyConcreteTiles"
   },
   {
    "bubble_pinned": false,
@@ -6675,13 +6137,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - DirtyConcreteTiles_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - DirtyConcreteTiles_WFC"
   },
   {
    "bubble_pinned": false,
@@ -6760,13 +6216,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - PebbleDash",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - PebbleDash"
   },
   {
    "bubble_pinned": false,
@@ -6845,13 +6295,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - PebbleDash_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - PebbleDash_WFC"
   },
   {
    "bubble_pinned": false,
@@ -6930,13 +6374,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - PebbleDashLines",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - PebbleDashLines"
   },
   {
    "bubble_pinned": false,
@@ -7015,13 +6453,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - PebbleDashLines_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - PebbleDashLines_WFC"
   },
   {
    "bubble_pinned": false,
@@ -7100,13 +6532,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - RoofTile",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - RoofTile"
   },
   {
    "bubble_pinned": false,
@@ -7185,13 +6611,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - RoofTile_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - RoofTile_WFC"
   },
   {
    "bubble_pinned": false,
@@ -7270,13 +6690,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - TarPebbles",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - TarPebbles"
   },
   {
    "bubble_pinned": false,
@@ -7355,13 +6769,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
-   "title": "Rooftop Mesh - TarPebbles_WFC",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Rooftop Mesh - TarPebbles_WFC"
   },
   {
    "bubble_pinned": false,
@@ -7445,13 +6853,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreatePlanarMeshActorPerData.LoopCreatePlanarMeshActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7519,13 +6921,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -7570,19 +6966,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_4",
@@ -7597,13 +6988,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -7655,19 +7040,14 @@
     "Operation": "Not",
     "Seed": 688223866
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_5",
@@ -7682,13 +7062,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -7740,19 +7114,14 @@
     "Operation": "Not",
     "Seed": 688223866
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_6",
@@ -7767,13 +7136,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -7825,19 +7188,14 @@
     "Operation": "Not",
     "Seed": 688223866
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_7",
@@ -7852,13 +7210,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -7942,13 +7294,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreatePlanarMeshActorPerData.LoopCreatePlanarMeshActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8016,13 +7362,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8067,19 +7407,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_8",
@@ -8094,13 +7429,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -8184,13 +7513,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreatePlanarMeshActorPerData.LoopCreatePlanarMeshActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8258,13 +7581,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8309,13 +7626,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8347,13 +7658,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8385,13 +7690,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8423,13 +7722,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8461,13 +7754,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Small Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8499,13 +7786,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Large Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8537,13 +7818,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Medium Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8575,13 +7850,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Small Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8613,13 +7882,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_2'",
     "Seed": 2014642815
    },
-   "title": "Large Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8651,13 +7914,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Medium Rooftops Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Rooftops Out"
   },
   {
    "bubble_pinned": false,
@@ -8700,13 +7957,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8751,19 +8002,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_9",
@@ -8778,13 +8024,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -8815,13 +8055,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8852,13 +8086,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8889,13 +8117,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8940,13 +8162,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -8991,13 +8207,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9042,13 +8252,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9179,13 +8383,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/AssignBuildingShape.AssignBuildingShape",
-   "title": "AssignBuildingShape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "AssignBuildingShape"
   },
   {
    "bubble_pinned": false,
@@ -9241,13 +8439,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/FilterSquareShapes.FilterSquareShapes",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9303,13 +8495,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/SetComplexBuildings.SetComplexBuildings",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9476,13 +8662,7 @@
      "bUseConstantThreshold": true
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9555,13 +8735,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9630,13 +8804,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9766,13 +8934,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/AssignBuildingShape.AssignBuildingShape",
-   "title": "AssignBuildingShape",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "AssignBuildingShape"
   },
   {
    "bubble_pinned": false,
@@ -9828,13 +8990,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/FilterSquareShapes.FilterSquareShapes",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -9890,13 +9046,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/SetComplexBuildings.SetComplexBuildings",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10063,13 +9213,7 @@
      "bUseConstantThreshold": true
     }
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10142,13 +9286,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10217,13 +9355,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10322,13 +9454,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Noise.Write_Noise",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10373,19 +9499,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "ComplexBuildingShapes",
    "inputs": [],
    "name": "GetGraphParameter_2",
@@ -10400,13 +9521,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "ComplexBuildingShapes",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "ComplexBuildingShapes"
   },
   {
    "bubble_pinned": false,
@@ -10451,19 +9566,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "ComplexBuildingShapes",
    "inputs": [],
    "name": "GetGraphParameter_3",
@@ -10478,19 +9588,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "ComplexBuildingShapes",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "ComplexBuildingShapes"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Debug",
    "inputs": [],
    "name": "GetGraphParameter_10",
@@ -10505,19 +9610,14 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Debug",
    "inputs": [],
    "name": "GetGraphParameter_11",
@@ -10532,13 +9632,7 @@
    "settings": {
     "Seed": -1618446397
    },
-   "title": "Debug",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Debug"
   },
   {
    "bubble_pinned": false,
@@ -10583,13 +9677,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10621,13 +9709,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Large Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Footprint Out"
   },
   {
    "bubble_pinned": false,
@@ -10691,13 +9773,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreateExtrudedMeshActorPerData.LoopCreateExtrudedMeshActorPerData",
-   "title": "Loop Create Extruded Mesh Actor Per Data - L",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Loop Create Extruded Mesh Actor Per Data - L"
   },
   {
    "bubble_pinned": false,
@@ -10729,13 +9805,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Medium Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Footprint Out"
   },
   {
    "bubble_pinned": false,
@@ -10767,13 +9837,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Small Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Footprint Out"
   },
   {
    "bubble_pinned": false,
@@ -10818,13 +9882,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -10888,13 +9946,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreateExtrudedMeshActorPerData.LoopCreateExtrudedMeshActorPerData",
-   "title": "Loop Create Extruded Mesh Actor Per Data - M",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Loop Create Extruded Mesh Actor Per Data - M"
   },
   {
    "bubble_pinned": false,
@@ -10939,13 +9991,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11009,13 +10055,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopCreateExtrudedMeshActorPerData.LoopCreateExtrudedMeshActorPerData",
-   "title": "Loop Create Extruded Mesh Actor Per Data - S",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Loop Create Extruded Mesh Actor Per Data - S"
   },
   {
    "bubble_pinned": false,
@@ -11047,13 +10087,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Medium Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Medium Footprint Out"
   },
   {
    "bubble_pinned": false,
@@ -11085,13 +10119,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Small Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Small Footprint Out"
   },
   {
    "bubble_pinned": false,
@@ -11123,19 +10151,14 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_3_1_Buildings.PCG_3_3_1_Buildings:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_0'",
     "Seed": 2014642815
    },
-   "title": "Large Footprint Out",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Large Footprint Out"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_12",
@@ -11150,19 +10173,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_13",
@@ -11177,19 +10195,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_14",
@@ -11204,13 +10217,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   },
   {
    "bubble_pinned": false,
@@ -11255,13 +10262,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11306,13 +10307,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11357,19 +10352,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "CollisionGeometry",
    "inputs": [],
    "name": "GetGraphParameter_18",
@@ -11384,19 +10374,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "CollisionGeometry",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "CollisionGeometry"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "CollisionGeometry",
    "inputs": [],
    "name": "GetGraphParameter_19",
@@ -11411,19 +10396,14 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "CollisionGeometry",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "CollisionGeometry"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "CollisionGeometry",
    "inputs": [],
    "name": "GetGraphParameter_20",
@@ -11438,13 +10418,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "CollisionGeometry",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "CollisionGeometry"
   },
   {
    "bubble_pinned": false,
@@ -11483,13 +10457,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11528,13 +10496,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11573,13 +10535,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -11618,13 +10574,7 @@
    "settings": {
     "Seed": -1096471958
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   }
  ],
  "params": [

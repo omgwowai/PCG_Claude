@@ -218,13 +218,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -270,13 +264,7 @@
     "Seed": 1002128835,
     "bHasAddedDefaultPin": true
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -356,13 +344,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
-   "title": "Get MeshTerrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get MeshTerrain Final"
   },
   {
    "bubble_pinned": false,
@@ -432,13 +414,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude City From Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude City From Terrain"
   },
   {
    "bubble_pinned": false,
@@ -546,13 +522,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly",
-   "title": "Scatter Forest Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Scatter Forest Points"
   },
   {
    "bubble_pinned": false,
@@ -677,13 +647,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
-   "title": "Spawn Outer Forest Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Spawn Outer Forest Trees"
   },
   {
    "bubble_pinned": false,
@@ -725,13 +689,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
-   "title": "Get City Boundary",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get City Boundary"
   },
   {
    "bubble_pinned": false,
@@ -792,13 +750,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
-   "title": "Extract Terrain Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Terrain Points"
   },
   {
    "bubble_pinned": false,
@@ -863,13 +815,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Extract/Extract_Bounds.Extract_Bounds",
-   "title": "Extract Terrain Bounds",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Terrain Bounds"
   },
   {
    "bubble_pinned": false,
@@ -946,13 +892,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Trace/Trace_Bound_Footprint.Trace_Bound_Footprint",
-   "title": "Trace Terrain Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Trace Terrain Footprint"
   },
   {
    "bubble_pinned": false,
@@ -1064,13 +1004,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Project.Transform_Project",
-   "title": "Project Points Onto Terrain",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Project Points Onto Terrain"
   },
   {
    "bubble_pinned": false,
@@ -1102,13 +1036,7 @@
    "settings": {
     "Seed": 187164237
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -1140,13 +1068,7 @@
     "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_5_2_OuterForest.PCG_5_2_OuterForest:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
     "Seed": 2014642815
    },
-   "title": "Mesh Terrain Final",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Mesh Terrain Final"
   },
   {
    "bubble_pinned": false,
@@ -1188,13 +1110,7 @@
      ]
     }
    },
-   "title": "Filter Projected Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Projected Points"
   },
   {
    "bubble_pinned": false,
@@ -1258,13 +1174,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Split Above / Below Water",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Split Above / Below Water"
   },
   {
    "bubble_pinned": false,
@@ -1303,13 +1213,7 @@
     "PropertyPath": "TreeDensity",
     "Seed": -1365531043
    },
-   "title": "Tree Density",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tree Density"
   },
   {
    "bubble_pinned": false,
@@ -1449,13 +1353,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Write Tree Scale from Noise Texture",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Tree Scale from Noise Texture"
   },
   {
    "bubble_pinned": false,
@@ -1499,13 +1397,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get City Layout Volume",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get City Layout Volume"
   },
   {
    "bubble_pinned": false,
@@ -1549,13 +1441,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Highway Volume",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Highway Volume"
   },
   {
    "bubble_pinned": false,
@@ -1629,13 +1515,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
-   "title": "Exclude Highway and Park",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Exclude Highway and Park"
   },
   {
    "bubble_pinned": false,
@@ -1711,13 +1591,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand City Exclusion Zone",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand City Exclusion Zone"
   },
   {
    "bubble_pinned": false,
@@ -1761,13 +1635,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Roads",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Roads"
   },
   {
    "bubble_pinned": false,
@@ -1819,13 +1687,7 @@
     "InputSource": "PCGBegin(@data.ArteryWidth)PCGEnd",
     "Seed": 1956359795
    },
-   "title": "Extract Artery Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Extract Artery Width"
   },
   {
    "bubble_pinned": false,
@@ -1893,13 +1755,7 @@
     "Operation": "Divide",
     "Seed": -603003822
    },
-   "title": "Halve Artery Width",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Halve Artery Width"
   },
   {
    "bubble_pinned": false,
@@ -1953,13 +1809,7 @@
     "Seed": -865145422,
     "SelectedTags": "Polygon"
    },
-   "title": "Filter Road Polygons",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Road Polygons"
   },
   {
    "bubble_pinned": false,
@@ -2094,13 +1944,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
-   "title": "Tree Species From Texture",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Tree Species From Texture"
   },
   {
    "bubble_pinned": false,
@@ -2222,13 +2066,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom",
-   "title": "Write Shore Distance",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Shore Distance"
   },
   {
    "bubble_pinned": false,
@@ -2304,13 +2142,7 @@
     "OutputTarget": "PCGBegin($density)PCGEnd",
     "Seed": 113986551
    },
-   "title": "Shore Distance To Density",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Shore Distance To Density"
   },
   {
    "bubble_pinned": false,
@@ -2408,13 +2240,7 @@
     "NoiseMin": -0.10000000149011612,
     "Seed": 112114419
    },
-   "title": "Add Density Noise (Shore)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Density Noise (Shore)"
   },
   {
    "bubble_pinned": false,
@@ -2534,13 +2360,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Keep Points Near Shore",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Keep Points Near Shore"
   },
   {
    "bubble_pinned": false,
@@ -2582,13 +2402,7 @@
      ]
     }
    },
-   "title": "Filter For Shore Density Threshold",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter For Shore Density Threshold"
   },
   {
    "bubble_pinned": false,
@@ -2679,13 +2493,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Shore Noise Amplitude (0.3)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Shore Noise Amplitude (0.3)"
   },
   {
    "bubble_pinned": false,
@@ -2753,13 +2561,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Negate Shore Noise Min",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Negate Shore Noise Min"
   },
   {
    "bubble_pinned": false,
@@ -2880,13 +2682,7 @@
     "bUseConstantThreshold": true,
     "bUseSpatialQuery": false
    },
-   "title": "Cut Points Below Water (Z > -450)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Cut Points Below Water (Z > -450)"
   },
   {
    "bubble_pinned": false,
@@ -2928,13 +2724,7 @@
      ]
     }
    },
-   "title": "Filter Before Water Cut",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Before Water Cut"
   },
   {
    "bubble_pinned": false,
@@ -3020,13 +2810,7 @@
     "Seed": 1128692220,
     "bAllowInverseRange": true
    },
-   "title": "Remap Density To Scale Floor",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Remap Density To Scale Floor"
   },
   {
    "bubble_pinned": false,
@@ -3101,13 +2885,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Scale x Density",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Scale x Density"
   },
   {
    "bubble_pinned": false,
@@ -3229,13 +3007,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Write/Write_DistanceFrom.Write_DistanceFrom",
-   "title": "Write Deep Forest Distance",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Write Deep Forest Distance"
   },
   {
    "bubble_pinned": false,
@@ -3311,13 +3083,7 @@
     "OutputTarget": "PCGBegin($density)PCGEnd",
     "Seed": 113986551
    },
-   "title": "Distance To Density (Deep Forest)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Distance To Density (Deep Forest)"
   },
   {
    "bubble_pinned": false,
@@ -3415,13 +3181,7 @@
     "NoiseMin": -0.10000000149011612,
     "Seed": 112114419
    },
-   "title": "Add Density Noise (Deep Forest)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Add Density Noise (Deep Forest)"
   },
   {
    "bubble_pinned": false,
@@ -3512,13 +3272,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Deep Forest Noise Amplitude (0.1)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Deep Forest Noise Amplitude (0.1)"
   },
   {
    "bubble_pinned": false,
@@ -3586,13 +3340,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Negate Deep Forest Noise Min",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Negate Deep Forest Noise Min"
   },
   {
    "bubble_pinned": false,
@@ -3623,13 +3371,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "Below Water Points",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Below Water Points"
   },
   {
    "bubble_pinned": false,
@@ -3721,13 +3463,7 @@
     "NoiseMin": 0.30000001192092896,
     "Seed": 112114419
    },
-   "title": "Jitter Species Index",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Jitter Species Index"
   },
   {
    "bubble_pinned": false,
@@ -3818,13 +3554,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Species Jitter Max (0.5)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Species Jitter Max (0.5)"
   },
   {
    "bubble_pinned": false,
@@ -3892,13 +3622,7 @@
     "Operation": "Multiply",
     "Seed": -603003822
    },
-   "title": "Species Jitter Min",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Species Jitter Min"
   },
   {
    "bubble_pinned": false,
@@ -4006,13 +3730,7 @@
     "Seed": 1128692220,
     "bAllowInverseRange": true
    },
-   "title": "Normalize Species Index",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Normalize Species Index"
   },
   {
    "bubble_pinned": false,
@@ -4103,13 +3821,7 @@
     },
     "Seed": 526699840
    },
-   "title": "Num Tree Species (9)",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Num Tree Species (9)"
   },
   {
    "bubble_pinned": false,
@@ -4170,13 +3882,7 @@
     "Operation": "Min",
     "Seed": 51105410
    },
-   "title": "Min Species Index",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Min Species Index"
   },
   {
    "bubble_pinned": false,
@@ -4237,13 +3943,7 @@
     "Operation": "Max",
     "Seed": 51105410
    },
-   "title": "Max Species Index",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Max Species Index"
   },
   {
    "bubble_pinned": false,
@@ -4290,13 +3990,7 @@
    "settings": {
     "Seed": -2087626795
    },
-   "title": "Merge For Index Stats",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Merge For Index Stats"
   },
   {
    "bubble_pinned": false,
@@ -4335,13 +4029,7 @@
      ]
     }
    },
-   "title": "Filter Points For Index Range",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Filter Points For Index Range"
   },
   {
    "bubble_pinned": false,
@@ -4408,13 +4096,7 @@
    "settings": {
     "Seed": -603003822
    },
-   "title": "Compute Index Out Max",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Compute Index Out Max"
   },
   {
    "bubble_pinned": false,
@@ -4458,13 +4140,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
-   "title": "Get Central Park Footprint",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Get Central Park Footprint"
   },
   {
    "bubble_pinned": false,
@@ -4540,13 +4216,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Expand.Transform_Areas_Expand",
-   "title": "Expand Park Exclusion Zone",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Expand Park Exclusion Zone"
   },
   {
    "bubble_pinned": false,
@@ -4585,13 +4255,7 @@
     "PropertyPath": "ScaleMin",
     "Seed": -1365531043
    },
-   "title": "Scale Min",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Scale Min"
   },
   {
    "bubble_pinned": false,
@@ -4630,13 +4294,7 @@
     "PropertyPath": "ScaleMax",
     "Seed": -1365531043
    },
-   "title": "Scale Max",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Scale Max"
   },
   {
    "bubble_pinned": false,
@@ -4675,13 +4333,7 @@
     "PropertyPath": "CityEdgeBuffer",
     "Seed": -1365531043
    },
-   "title": "City Edge Buffer",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "City Edge Buffer"
   },
   {
    "bubble_pinned": false,
@@ -4745,13 +4397,7 @@
    "settings": {
     "Seed": -603003822
    },
-   "title": "Road Half-Width + City Buffer",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Road Half-Width + City Buffer"
   },
   {
    "bubble_pinned": false,
@@ -4790,13 +4436,7 @@
     "PropertyPath": "ParkBuffer",
     "Seed": -1365531043
    },
-   "title": "Park Buffer",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Park Buffer"
   },
   {
    "bubble_pinned": false,
@@ -4827,13 +4467,7 @@
    "settings": {
     "Seed": 1719617987
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4882,13 +4516,7 @@
     "Seed": 532343038
    },
    "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -4951,13 +4579,7 @@
     "Seed": 895873474
    },
    "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5006,13 +4628,7 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
@@ -5160,13 +4776,7 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Outer Forest Megaplants Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Outer Forest Megaplants Trees"
   },
   {
    "bubble_pinned": false,
@@ -5211,19 +4821,14 @@
    "settings": {
     "Seed": 774982565
    },
-   "title": "",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": ""
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "UseMegaPlantsTrees",
    "inputs": [],
    "name": "GetGraphParameter_0",
@@ -5238,13 +4843,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "UseMegaPlantsTrees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "UseMegaPlantsTrees"
   },
   {
    "bubble_pinned": false,
@@ -5397,19 +4996,14 @@
     "Seed": 532343038
    },
    "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
-   "title": "Assign Outer Forest Black Alder Trees",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Assign Outer Forest Black Alder Trees"
   },
   {
    "bubble_pinned": false,
    "bubble_visible": false,
    "class": "PCGUserParameterGetSettings",
    "comment": "",
+   "getter_bound": true,
    "getter_param": "Partitioned",
    "inputs": [],
    "name": "GetGraphParameter_1",
@@ -5424,13 +5018,7 @@
    "settings": {
     "Seed": 1296285799
    },
-   "title": "Partitioned",
-   "title_color": [
-    1,
-    1,
-    1,
-    1
-   ]
+   "title": "Partitioned"
   }
  ],
  "params": [
