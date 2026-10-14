@@ -75,8 +75,16 @@ bool FPyPCGToolsUserParameters::RunTest(const FString& Parameters)
 	TestEqual(TEXT("Bind"), UPyPCGToolsLibrary::BindUserParameterGetter(Settings, TEXT("Seed")), FString());
 	const TSharedPtr<FJsonObject> NodeJson = NodeIR(Graph, Node);
 	TestEqual(TEXT("getter_param"), NodeJson->GetStringField(TEXT("getter_param")), FString(TEXT("Seed")));
+	TestTrue(TEXT("getter_bound"), NodeJson->GetBoolField(TEXT("getter_bound")));
 	TestEqual(TEXT("getter output pin"), NodeJson->GetArrayField(TEXT("outputs"))[0]->AsString(), FString(TEXT("Seed")));
 	TestNotEqual(TEXT("unknown param refused"), UPyPCGToolsLibrary::BindUserParameterGetter(Settings, TEXT("Nope")), FString());
+
+	UPCGSettings* LowerSettings = nullptr;
+	UPCGNode* LowerNode = Graph->AddNodeOfType(UPCGUserParameterGetSettings::StaticClass(), LowerSettings);
+	TestEqual(TEXT("Bind lowercase"), UPyPCGToolsLibrary::BindUserParameterGetter(LowerSettings, TEXT("seed")), FString());
+	const TSharedPtr<FJsonObject> LowerNodeJson = NodeIR(Graph, LowerNode);
+	TestEqual(TEXT("lowercase getter_param"), LowerNodeJson->GetStringField(TEXT("getter_param")), FString(TEXT("seed")));
+	TestTrue(TEXT("lowercase getter_bound"), LowerNodeJson->GetBoolField(TEXT("getter_bound")));
 	return true;
 }
 

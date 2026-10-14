@@ -380,11 +380,15 @@ namespace PyPCGTools::Private
 		return Out;
 	}
 
-	FString ResolveGetter(const UPCGGraph* Graph, const UPCGUserParameterGetSettings* Getter)
+	// getter_param is always the stored PropertyName verbatim (case kept); UE resolves the node at
+	// run time by that name, case-insensitively (PCGUserParameterGet.cpp). getter_bound reports
+	// whether PropertyGuid still resolves to a desc whose name matches PropertyName (case-insensitive).
+	void ResolveGetter(const UPCGGraph* Graph, const UPCGUserParameterGetSettings* Getter, FString& OutParam, bool& OutBound)
 	{
+		OutParam = Getter->PropertyName.ToString();
 		const FInstancedPropertyBag* Bag = Graph->GetUserParametersStruct();
 		const FPropertyBagPropertyDesc* Desc = Bag ? Bag->FindPropertyDescByID(Getter->PropertyGuid) : nullptr;
-		return Desc ? Desc->Name.ToString() : TEXT("!unbound:") + Getter->PropertyName.ToString();
+		OutBound = Desc && Desc->Name.IsEqual(Getter->PropertyName, ENameCase::IgnoreCase);
 	}
 
 	TSharedRef<FJsonObject> ExportNode(UPCGGraph* Graph, UPCGNode* Node)
@@ -407,14 +411,20 @@ namespace PyPCGTools::Private
 #endif
 		TSet<FString> Strip = {TEXT("SubgraphInstance"), TEXT("SubgraphOverride"), TEXT("CachedOverridableParams"), TEXT("DefaultValues")};
 		FString GetterParam;
-		if (const UPCGUserParameterGetSettings* Getter = Cast<UPCGUserParameterGetSettings>(Settings))
+		bool bGetterBound = false;
+		const UPCGUserParameterGetSettings* Getter = Cast<UPCGUserParameterGetSettings>(Settings);
+		if (Getter)
 		{
 			Strip.Add(TEXT("PropertyGuid"));
 			Strip.Add(TEXT("PropertyName"));
-			GetterParam = ResolveGetter(Graph, Getter);
+			ResolveGetter(Graph, Getter, GetterParam, bGetterBound);
 		}
 		Out->SetObjectField(TEXT("settings"), Settings ? NonDefault(Settings, Strip) : MakeShared<FJsonObject>());
 		Out->SetStringField(TEXT("getter_param"), GetterParam);
+		if (Getter)
+		{
+			Out->SetBoolField(TEXT("getter_bound"), bGetterBound);
+		}
 		if (UPCGSubgraphSettings* Subgraph = Cast<UPCGSubgraphSettings>(Settings))
 		{
 			UPCGGraphInstance* Instance = Subgraph->SubgraphInstance;
@@ -767,7 +777,7 @@ FString UPyPCGToolsLibrary::SetGraphUserParameters(UPCGGraph* Graph, const FStri
 	return FString();
 }
 
-FString UPyPCGToolsLibrary::BindUserParameterGetter(UPCGSettings* Getter, FName ParamName)
+FString UPyPCGToolsLibrary::BindUserParameterGetter(UPCGSettings* Getter, const FString& ParamName)
 {
 	UPCGUserParameterGetSettings* GetterSettings = Cast<UPCGUserParameterGetSettings>(Getter);
 	if (!GetterSettings)
@@ -781,14 +791,18 @@ FString UPyPCGToolsLibrary::BindUserParameterGetter(UPCGSettings* Getter, FName 
 	}
 	const UPCGGraph* Graph = GetterSettings->GetTypedOuter<UPCGGraph>();
 	const FInstancedPropertyBag* Bag = Graph ? Graph->GetUserParametersStruct() : nullptr;
-	const FPropertyBagPropertyDesc* Desc = Bag ? Bag->FindPropertyDescByName(ParamName) : nullptr;
+	// FName lookup is case-insensitive, so this finds the parameter regardless of the caller's casing.
+	const FPropertyBagPropertyDesc* Desc = Bag ? Bag->FindPropertyDescByName(FName(*ParamName)) : nullptr;
 	if (!Desc)
 	{
-		return FString::Printf(TEXT("graph has no parameter %s"), *ParamName.ToString());
+		return FString::Printf(TEXT("graph has no parameter %s"), *ParamName);
 	}
 	GetterSettings->Modify();
 	GetterSettings->PropertyGuid = Desc->ID;
-	GetterSettings->PropertyName = Desc->Name;
+	// Keep the caller's spelling, not Desc->Name: official graphs store getters whose case differs
+	// from the parameter (e.g. UseMegaPlantsTrees vs UseMegaplantsTrees); UE resolves by name
+	// case-insensitively at run time, so the stored spelling must round-trip exactly.
+	GetterSettings->PropertyName = FName(*ParamName);
 	RefreshNode(GetterSettings);
 	return FString();
 }

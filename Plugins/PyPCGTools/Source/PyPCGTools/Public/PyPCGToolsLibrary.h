@@ -44,9 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PyPCG")
 	static FString SetGraphUserParameters(UPCGGraph* Graph, const FString& Json);
 
-	/** Binds a Get Graph Parameter node to the graph parameter ParamName and refreshes its pins. */
+	/** Binds a Get Graph Parameter node to the graph parameter ParamName (case-insensitive lookup; the caller's spelling is kept) and refreshes its pins. */
 	UFUNCTION(BlueprintCallable, Category = "PyPCG")
-	static FString BindUserParameterGetter(UPCGSettings* Getter, FName ParamName);
+	static FString BindUserParameterGetter(UPCGSettings* Getter, const FString& ParamName);
 
 	UFUNCTION(BlueprintCallable, Category = "PyPCG")
 	static FString SetNodeComment(UPCGNode* Node, const FString& Comment, bool bBubbleVisible, bool bBubblePinned);
