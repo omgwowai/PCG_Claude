@@ -1740,7 +1740,7 @@ class Terrain:
     def height(self, x, y):
         """Surface z under (x, y), or None where the ray misses."""
         transform = unreal.Transform(unreal.Vector(x, y, 0.0), unreal.Rotator(), unreal.Vector(1.0, 1.0, 1.0))
-        box = unreal.Box(min=unreal.Vector(-1.0, -1.0, -1.0), max=unreal.Vector(1.0, 1.0, 1.0), is_valid=True)
+        box = unreal.Box(unreal.Vector(-1.0, -1.0, -1.0), unreal.Vector(1.0, 1.0, 1.0))     # native MakeBox(Min, Max)
         res = self._data.k2_sample_point(transform, box, None)
         # A bool UFUNCTION with an out parameter comes back as (ok, point) or, in some bindings, as the
         # point alone; accept both (Task 6 records which one this engine uses).
@@ -1776,7 +1776,8 @@ def _polygons(pl):
     out = []
     for i in range(PL.get_polygon_count(pl)):
         outer, _always_false = PL.get_polygon_vertices(pl, i, -1)      # 5.8 never sets the valid flag (spike)
-        holes = [[(v.x, v.y) for v in PL.get_polygon_vertices(pl, i, h)[0]] for h in range(PL.get_polygon_hole_count(pl, i))]
+        hole_count, _valid = PL.get_polygon_hole_count(pl, i)               # int return + bool out-param -> tuple
+        holes = [[(v.x, v.y) for v in PL.get_polygon_vertices(pl, i, h)[0]] for h in range(hole_count)]
         out.append(Polygon([(v.x, v.y) for v in outer], holes))
     return out
 
@@ -1924,7 +1925,7 @@ def entry_values(md, key):
     """{attribute: value} of one metadata entry, every supported type (getter chosen by the real
     type, traps.md 36)."""
     p = unreal.PCGPoint()
-    p.set_editor_property("metadata_entry", key)
+    p.import_text("(MetadataEntry=%d)" % key)          # MetadataEntry is VisibleAnywhere: not settable (traps.md 35)
     return {name: _plain(tname, getattr(p, "get_%s_attribute" % suffix)(md, name))
             for name, (tname, suffix) in _attributes(md)}
 
@@ -2063,8 +2064,7 @@ def _point_data(pts):
 def _param_data(ps):
     d = unreal.PCGParamData()
     md = d.mutable_metadata()
-    p = unreal.PCGPoint()
-    p.set_editor_property("metadata_entry", md.add_entry())
+    p = unreal.PCGPoint()                              # the first setter below creates the entry
     for name, value in ps.values.items():
         tname = ps.types.get(name) or _infer(value)
         _create(md, name, tname)
