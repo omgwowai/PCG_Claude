@@ -12,6 +12,11 @@ if _PY not in sys.path:
 for _m in [m for m in sys.modules if m == "pypcg" or m.startswith("pypcg.")]:
     del sys.modules[_m]
 _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
+_DRAFTS = os.path.join(_REPO, "Tools", "pypcg")
+if _DRAFTS not in sys.path:
+    sys.path.insert(0, _DRAFTS)
+for _m in [m for m in sys.modules if m == "reference_drafts" or m.startswith("reference_drafts.")]:
+    del sys.modules[_m]
 
 # pypcg_build.py -- build stage graphs from their Python form and check them (L2, spec 3.6).
 # Args: {"stages": [n, ...] | "all", "profile": "official" | "town", "save": true}
@@ -30,7 +35,7 @@ def run(args):
     rows = []
     for n in wanted:
         name = stages.name(n)
-        g = stages.graph(n)
+        g = __import__("reference_drafts").graph(n)
         ir_off = g.to_ir(official)
         official_ir = extract.export_path(stages.official_path(n))
         mapping, _, _ = compare.match(compare.view(ir_off, fresh), compare.view(official_ir, fresh))

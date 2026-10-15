@@ -1,4 +1,7 @@
-"""The 18 stages in the Feishu doc's order (ruling R1). Each module defines build() -> Graph."""
+"""The 18 stages in the Feishu doc's order (ruling R1), and stage 0, the host probe.
+
+Stage modules (sNN_*.py) follow pypcg.stage_api; the slim graph that runs each one is described in
+pypcg/graphs/sNN_*.py."""
 import importlib
 
 OFFICIAL_DIR = "/CitySamplePCG/Levels/PCG/"
@@ -23,9 +26,16 @@ STAGES = [
     (17, "PCG_5_1_CityEdge", "s17_city_edge", "滨水设施"),
     (18, "PCG_5_2_OuterForest", "s18_outer_forest", "外围林地"),
 ]
+PROBE = (0, "PCG_PyProbe", "s00_probe", "探针")
+
+# Which stages read a stage's output through Get_ActorDataByRef (official graphs, 2026-10-15 scan).
+DOWNSTREAM = {1: [7, 10, 18], 4: [7, 9, 10, 13, 15], 5: [7, 9, 10, 13, 16, 18], 6: [7, 9, 10, 13],
+              7: [8, 9, 10, 13, 16, 18], 8: [9, 13, 18], 9: [10, 11, 13], 11: [12], 13: [14], 14: [16]}
 
 
 def entry(n):
+    if n == PROBE[0]:
+        return PROBE
     for s in STAGES:
         if s[0] == n:
             return s
@@ -33,7 +43,11 @@ def entry(n):
 
 
 def name(n):
+    """The graph name, which is also the label of the stage's volume in the demo and town levels."""
     return entry(n)[1]
+
+
+LABEL = name
 
 
 def names():
@@ -44,6 +58,6 @@ def official_path(n):
     return OFFICIAL_DIR + name(n)
 
 
-def graph(n):
-    """The stage's Graph object (pypcg.dsl.Graph)."""
-    return importlib.import_module("pypcg.stages." + entry(n)[2]).build()
+def spec(n):
+    """The stage's Python module (pypcg.stages.sNN_*). Imported, so an edited stage file takes effect."""
+    return importlib.import_module("pypcg.stages." + entry(n)[2])

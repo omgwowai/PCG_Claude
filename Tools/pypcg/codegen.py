@@ -270,7 +270,7 @@ def main(argv):
     wanted = [s[0] for s in stages.STAGES] if a.stage == "all" else [int(a.stage)]
     for n in wanted:
         _, graph_name, module, title = stages.entry(n)
-        out = os.path.join(REPO, "Content", "Python", "pypcg", "stages", module + ".py")
+        out = os.path.join(REPO, "Tools", "pypcg", "reference_drafts", module + ".py")
         if os.path.exists(out) and not a.force:
             print("skip (exists)", out)
             continue
