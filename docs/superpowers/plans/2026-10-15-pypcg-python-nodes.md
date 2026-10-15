@@ -1935,10 +1935,18 @@ def _create(md, name, tname):
 
 # ---- read -----------------------------------------------------------------------------------------
 def read_params(data_in, pin):
+    """{parameter: value} from the getters wired into this pin. Each getter node arrives as its own
+    PCGParamData holding one entry with one attribute; when the volume overrides a parameter the
+    graph instance arrives as additional entries of the same attribute (the override first), so the
+    first non-None value for a name wins (measured 2026-10-15 on the demo level's components)."""
     datas, _ = data_in.get_typed_inputs_by_pin_label(pin, unreal.PCGParamData)
     out = {}
     for d in datas:
-        out.update(entry_values(d.const_metadata(), 0))
+        md = d.const_metadata()
+        for name, _ in _attributes(md):
+            value = entry_values(md, 0)[name]
+            if value is not None and name not in out:
+                out[name] = value
     return out
 
 
