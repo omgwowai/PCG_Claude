@@ -8,8 +8,8 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 def build():
     g = Graph('PCG_3_2_2_LeftOverLots',
               params=[P('Ratio_Plaza_vs_Trees', 'Double', 0.5),
-                      P('Partitioned', 'Bool', False),
-                      P('PartitionGridSize', 'Float', 25600),
+                      P('Partitioned', 'Bool', False, meta={'ToolTip': ''}),
+                      P('PartitionGridSize', 'Float', 25600, meta={'ToolTip': ''}),
                       P('UseMegaplantsTrees', 'Bool', False)],
               graph_props={'Description': 'his PCG graph will populate the leftover space that regular building placement skips. Placing plazas or vegetation.'}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):

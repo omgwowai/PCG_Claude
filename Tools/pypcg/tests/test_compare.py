@@ -121,18 +121,38 @@ def test_missing_node_is_reported():
     assert kinds == ["missing_node"]
 
 
-def test_params_tooltip_and_ignored_meta():
+def test_params_tooltip_and_advanced_from_hierarchy_meta_verbatim():
+    # Ruling T7a: meta compares verbatim (Category included); tooltip/advanced come from the
+    # Python fields on one side and the exported hierarchy's Common entry on the other.
     p_py = {"name": "R", "type": "Double", "container": "None", "type_object": "", "value": 0.9,
-            "category": "Road", "tooltip": "tip", "meta": {}}
+            "category": "Road", "tooltip": "tip", "advanced": True, "meta": {"Category": "Road"}}
     p_ue = {"name": "R", "type": "Double", "container": "None", "type_object": "", "value": 0.9,
             "category": "Road", "meta": {"Category": "Road"},
             "hier_meta": {"Values": [{"_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
-                                      "Tooltip": "tip", "bAdvanced": False}]}}
+                                      "Tooltip": "tip", "bAdvanced": True}]}}
     a, b = chain(("n0", "n1")), chain(("x", "y"))
     a["params"], b["params"] = [p_py], [p_ue]
     assert compare.diff(a, b, FRESH) == []
     p_py["value"] = 0.5
     assert [x["field"] for x in compare.diff(a, b, FRESH)] == ["params.R.value"]
+    p_py["value"] = 0.9
+    p_py["advanced"] = False
+    assert [x["field"] for x in compare.diff(a, b, FRESH)] == ["params.R.advanced"]
+    p_py["advanced"] = True
+    p_py["meta"] = {}
+    assert [x["field"] for x in compare.diff(a, b, FRESH)] == ["params.R.meta"]
+
+
+def test_param_meta_tooltip_key_is_compared():
+    # Ruling T7a: a ToolTip descriptor key is no longer ignored, so dropping it is a diff.
+    base = {"name": "R", "type": "Double", "container": "None", "type_object": "", "value": 0.9,
+            "category": "", "tooltip": ""}
+    a, b = chain(("n0", "n1")), chain(("x", "y"))
+    a["params"] = [dict(base, meta={"ToolTip": "x"})]
+    b["params"] = [dict(base, meta={})]
+    assert [x["field"] for x in compare.diff(a, b, FRESH)] == ["params.R.meta"]
+    b["params"] = [dict(base, meta={"Tooltip": "x"})]
+    assert [x["field"] for x in compare.diff(a, b, FRESH)] == ["params.R.meta"]
 
 
 def test_undeclared_changes_respects_sites():

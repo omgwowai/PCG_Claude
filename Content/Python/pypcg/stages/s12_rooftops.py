@@ -7,7 +7,7 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_3_3_2_Rooftops',
-              params=[P('Partitioned', 'Bool', False)],
+              params=[P('Partitioned', 'Bool', False, meta={'ToolTip': ''})],
               graph_props={'Description': 'This PCG graph will spawn the rooftop assemblies on top of the previously generated building from PCG_3_3_1_Buildings'}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):
         get_building_rooftop_polygons = g.ref('Buildings', 'Get Building Rooftop Polygons', settings={'Seed': -1618237129})

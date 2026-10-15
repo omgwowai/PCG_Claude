@@ -7,13 +7,13 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_5_2_OuterForest',
-              params=[P('TreeDensity', 'Double', 0.005),
-                      P('ScaleMin', 'Float', 0.6000000238418579),
-                      P('ScaleMax', 'Float', 2),
-                      P('CityEdgeBuffer', 'Float', 100),
-                      P('ParkBuffer', 'Float', 1900),
-                      P('Partitioned', 'Bool', False),
-                      P('PartitionGridSize', 'Float', 25600),
+              params=[P('TreeDensity', 'Double', 0.005, meta={'ToolTip': 'Number of trees per square meter.'}),
+                      P('ScaleMin', 'Float', 0.6000000238418579, meta={'ToolTip': 'Minimum tree scale multiplier.'}),
+                      P('ScaleMax', 'Float', 2, meta={'ToolTip': 'Maximum tree scale multiplier.'}),
+                      P('CityEdgeBuffer', 'Float', 100, meta={'ToolTip': 'Expansion distance (cm) around the city boundary to clear of trees.'}),
+                      P('ParkBuffer', 'Float', 1900, meta={'ToolTip': 'Expansion distance (cm) around the central park footprint to clear of trees.'}),
+                      P('Partitioned', 'Bool', False, meta={'ToolTip': ''}),
+                      P('PartitionGridSize', 'Float', 25600, meta={'ToolTip': ''}),
                       P('UseMegaPlantsTrees', 'Bool', False)],
               graph_props={'Description': 'Scatter a dense and lushy forest around the city that fades in size and density as it comes close to the water level. '}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):

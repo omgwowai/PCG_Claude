@@ -7,8 +7,8 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_5_1_CityEdge',
-              params=[P('Partitioned', 'Bool', False),
-                      P('PartitionGridSize', 'Float', 25600)],
+              params=[P('Partitioned', 'Bool', False, meta={'ToolTip': ''}),
+                      P('PartitionGridSize', 'Float', 25600, meta={'ToolTip': ''})],
               graph_props={'Description': "Generates pier and warehouse structures along the city's waterfront edge.\r\n"}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bEnabled': False, 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bEnabled': False, 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):
         get_mesh_terrain_final = g.sub('Get_MeshTerrain', 'Get Mesh Terrain (Final)', set={'MeshPartitionBoundSize': {'X': 300000, 'Y': 300000, 'Z': 100000}, 'MeshPartitionQueryType': 'Final'})

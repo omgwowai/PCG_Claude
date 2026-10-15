@@ -226,10 +226,12 @@ def generate(official_ir, roles_by_path, fresh_seeds, stage_title=""):
         for key, default in (("container", "None"), ("type_object", ""), ("category", "")):
             if p.get(key, default) != default:
                 extra.append("%s=%r" % (key, p[key]))
-        tip = compare.tooltip_of(p)
+        tip = compare.tooltip_of(p)              # the panel (hierarchy) tooltip, ruling T7a
         if tip:
             extra.append("tooltip=%r" % tip)
-        meta = {k: v for k, v in (p.get("meta") or {}).items() if k not in compare.IGNORED_META}
+        if compare.advanced_of(p):
+            extra.append("advanced=True")
+        meta = dict(p.get("meta") or {})          # descriptor metadata, verbatim (ruling T7a)
         if meta:
             extra.append("meta=%r" % meta)
         params.append("P(%s)" % ", ".join([repr(p["name"]), repr(p["type"]), lit(p["value"], names)] + extra))

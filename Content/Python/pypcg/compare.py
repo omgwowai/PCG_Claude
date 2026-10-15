@@ -12,8 +12,11 @@ NODE_FIELDS = ("class", "title", "title_color", "comment", "bubble_visible", "bu
 _DEFAULTS = {"title": "", "title_color": None, "comment": "", "bubble_visible": False,
              "bubble_pinned": False, "settings": {}, "subgraph": "", "overrides": {},
              "pin_defaults": [], "getter_param": ""}
-PARAM_FIELDS = ("name", "type", "container", "type_object", "value", "category", "tooltip", "meta")
-IGNORED_META = ("Category", "ToolTip")      # carried by the hierarchy instead (ruling R5)
+PARAM_FIELDS = ("name", "type", "container", "type_object", "value", "category", "tooltip", "advanced", "meta")
+# Ruling T7a (supersedes R5): descriptor metadata compares verbatim, every key included; the
+# panel's tooltip and advanced flag are separate fields read from the hierarchy. Kept for imports.
+IGNORED_META = ()
+_COMMON = "PropertyBagPropertyMetadata_Common"
 _WHITE = (1.0, 1.0, 1.0, 1.0)
 _MISSING = object()                         # sentinel: key absent, distinct from an explicit None
 _INDIVIDUALISED = [0]                       # bumped each time match() breaks a symmetric tie
@@ -81,20 +84,34 @@ def _rename_refs(value, mapping):
     return value
 
 
+def _common(param):
+    """The hierarchy's PropertyBagPropertyMetadata_Common entry of an exported param, or {}."""
+    for v in (param.get("hier_meta") or {}).get("Values", []):
+        if str(v.get("_structType", "")).endswith(_COMMON):
+            return v
+    return {}
+
+
 def tooltip_of(param):
+    """The panel tooltip: a Python param's "tooltip", else the exported hierarchy's Tooltip."""
     if "tooltip" in param:
         return param["tooltip"] or ""
-    for v in (param.get("hier_meta") or {}).get("Values", []):
-        if str(v.get("_structType", "")).endswith("PropertyBagPropertyMetadata_Common"):
-            return v.get("Tooltip") or ""
-    return ""
+    return _common(param).get("Tooltip") or ""
+
+
+def advanced_of(param):
+    """The panel's advanced flag: a Python param's "advanced", else the hierarchy's bAdvanced."""
+    if "advanced" in param:
+        return bool(param["advanced"])
+    return bool(_common(param).get("bAdvanced"))
 
 
 def _param(p):
     out = {k: p.get(k, "") for k in ("name", "type", "container", "type_object", "category")}
     out["value"] = p.get("value", _MISSING)
     out["tooltip"] = tooltip_of(p)
-    out["meta"] = {k: v for k, v in (p.get("meta") or {}).items() if k not in IGNORED_META}
+    out["advanced"] = advanced_of(p)
+    out["meta"] = dict(p.get("meta") or {})
     return out
 
 

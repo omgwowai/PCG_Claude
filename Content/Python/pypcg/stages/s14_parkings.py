@@ -7,8 +7,8 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_3_2_3_Parkings',
-              params=[P('Partitioned', 'Bool', False),
-                      P('PartitionGridSize', 'Float', 25600)],
+              params=[P('Partitioned', 'Bool', False, meta={'ToolTip': ''}),
+                      P('PartitionGridSize', 'Float', 25600, meta={'ToolTip': ''})],
               graph_props={'Description': 'This PCG graph will create parking lots from its input footprints.'}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'Seed': 1533108465, 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):
         get_parking_lot_footprint = g.ref('ParkingFootprint', 'Get Parking Lot Footprint')

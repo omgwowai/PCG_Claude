@@ -7,9 +7,11 @@
 #include "PCGGraph.h"
 #include "PCGNode.h"
 #include "PCGSubgraph.h"
+#include "Policies/CondensedJsonPrintPolicy.h"
 #include "PyPCGToolsLibrary.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
 
 namespace PyPCGToolsTests
 {
@@ -41,6 +43,47 @@ namespace PyPCGToolsTests
 		return nullptr;
 	}
 
+	// A field of an exported param's hierarchy Common entry, as text ("" when absent).
+	FString CommonField(const TSharedPtr<FJsonObject>& Param, const TCHAR* Field)
+	{
+		const TSharedPtr<FJsonObject>* Hier = nullptr;
+		const TArray<TSharedPtr<FJsonValue>>* Values = nullptr;
+		if (!Param->TryGetObjectField(TEXT("hier_meta"), Hier) || !(*Hier)->TryGetArrayField(TEXT("Values"), Values))
+		{
+			return FString();
+		}
+		for (const TSharedPtr<FJsonValue>& Value : *Values)
+		{
+			const TSharedPtr<FJsonObject> Entry = Value->AsObject();
+			FString Type;
+			if (Entry->TryGetStringField(TEXT("_structType"), Type) && Type.EndsWith(TEXT("PropertyBagPropertyMetadata_Common")))
+			{
+				// Check the JSON type first: TryGetBoolField also converts any string to a bool.
+				const TSharedPtr<FJsonValue> Field_ = Entry->TryGetField(Field);
+				if (!Field_.IsValid())
+				{
+					return FString();
+				}
+				if (Field_->Type == EJson::Boolean)
+				{
+					return Field_->AsBool() ? TEXT("true") : TEXT("false");
+				}
+				return Field_->AsString();
+			}
+		}
+		return FString();
+	}
+
+	// An exported param's meta object, condensed JSON with keys in stored order.
+	FString MetaJson(const TSharedPtr<FJsonObject>& Param)
+	{
+		FString Out;
+		const TSharedRef<TJsonWriter<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>> Writer =
+			TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Out);
+		FJsonSerializer::Serialize(Param->GetObjectField(TEXT("meta")).ToSharedRef(), Writer);
+		return Out;
+	}
+
 	UPCGSubgraphSettings* AddSubgraph(UPCGGraph* Graph, const TCHAR* Path, UPCGNode*& OutNode)
 	{
 		UPCGSettings* Settings = nullptr;
@@ -69,6 +112,30 @@ bool FPyPCGToolsUserParameters::RunTest(const FString& Parameters)
 	TestEqual(TEXT("Ratio value"), Params[0]->AsObject()->GetNumberField(TEXT("value")), 0.9);
 	TestEqual(TEXT("Ratio category"), Params[0]->AsObject()->GetStringField(TEXT("category")), FString(TEXT("Road Parameters")));
 	TestEqual(TEXT("Seed value"), Params[1]->AsObject()->GetNumberField(TEXT("value")), 7.0);
+	TestEqual(TEXT("Ratio panel tooltip"), CommonField(Params[0]->AsObject(), TEXT("Tooltip")), FString(TEXT("a tip")));
+
+	// Ruling T7a: descriptor metadata round-trips verbatim (key spelling included); the panel's
+	// tooltip and advanced flag are set in the hierarchy from their own fields.
+	UPCGGraph* MetaGraph = NewGraph();
+	TestEqual(TEXT("SetGraphUserParameters meta"), UPyPCGToolsLibrary::SetGraphUserParameters(MetaGraph, TEXT(R"({"params":[
+		{"name":"Lower","type":"Float","container":"None","type_object":"","meta":{"Tooltip":"lower-t tip"},"value":1,"category":"Cat"},
+		{"name":"Upper","type":"Float","container":"None","type_object":"","meta":{"ToolTip":"upper-T tip"},"value":2,"category":"","tooltip":"panel tip","advanced":true}]})")), FString());
+	const TSharedPtr<FJsonObject> MetaIR = Parse(UPyPCGToolsLibrary::ExportGraphIR(MetaGraph));
+	const TArray<TSharedPtr<FJsonValue>> MetaParams = MetaIR->GetArrayField(TEXT("params"));
+	if (!TestEqual(TEXT("meta param count"), MetaParams.Num(), 2))
+	{
+		return false;
+	}
+	const TSharedPtr<FJsonObject> Lower = MetaParams[0]->AsObject();
+	const TSharedPtr<FJsonObject> Upper = MetaParams[1]->AsObject();
+	// Exactly the input: the Category key used to build the hierarchy is not left in the meta.
+	TestEqual(TEXT("lower meta verbatim"), MetaJson(Lower), FString(TEXT(R"({"Tooltip":"lower-t tip"})")));
+	TestEqual(TEXT("upper meta verbatim"), MetaJson(Upper), FString(TEXT(R"({"ToolTip":"upper-T tip"})")));
+	TestEqual(TEXT("lower category"), Lower->GetStringField(TEXT("category")), FString(TEXT("Cat")));
+	TestEqual(TEXT("lower panel tooltip"), CommonField(Lower, TEXT("Tooltip")), FString());
+	TestEqual(TEXT("upper panel tooltip"), CommonField(Upper, TEXT("Tooltip")), FString(TEXT("panel tip")));
+	TestEqual(TEXT("upper advanced"), CommonField(Upper, TEXT("bAdvanced")), FString(TEXT("true")));
+	TestEqual(TEXT("lower not advanced"), CommonField(Lower, TEXT("bAdvanced")), FString(TEXT("false")));
 
 	UPCGSettings* Settings = nullptr;
 	UPCGNode* Node = Graph->AddNodeOfType(UPCGUserParameterGetSettings::StaticClass(), Settings);

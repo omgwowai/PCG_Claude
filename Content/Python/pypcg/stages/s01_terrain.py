@@ -7,8 +7,8 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_1_1_Terrain',
-              params=[P('CityFlatness', 'Float', 0.5),
-                      P('HillsHeight', 'Float', 7001)],
+              params=[P('CityFlatness', 'Float', 0.5, meta={'ToolTip': 'Controls how flat the terrain is under the city. 0 = fully hilly, 1 = fully flat.'}),
+                      P('HillsHeight', 'Float', 7001, meta={'ToolTip': 'Controls the amplitude of the hills noise.'})],
               graph_props={'Description': 'This PCG is Shaping procedurally the mesh terrain to create the island base on which the city will exist.'}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):
         get_mesh_terrain = g.sub('Get_MeshTerrain', 'Get Mesh Terrain', set={'MeshPartitionBoundSize': {'X': 300000, 'Y': 300000, 'Z': 30000}, 'ModifierSubPriority': 1})

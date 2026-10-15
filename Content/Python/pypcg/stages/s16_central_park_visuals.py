@@ -7,8 +7,8 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_4_2_CentralPark_Visuals',
-              params=[P('Partitioned', 'Bool', False),
-                      P('PartitionGridSize', 'Float', 25600),
+              params=[P('Partitioned', 'Bool', False, meta={'ToolTip': ''}),
+                      P('PartitionGridSize', 'Float', 25600, meta={'ToolTip': ''}),
                       P('UseMegaplantsTrees', 'Bool', False)],
               graph_props={'Description': 'Generates the Central Park visuals at 1:4 scale. Populates the park footprint with transverse roads, user-drawn walkpaths, a lake with terrain deformation, noise-driven tree and grass scatter, and a CHA building representing the Met museum on the eastern edge.'}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True})
     with g.step(0, "未整理"):

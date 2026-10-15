@@ -21,6 +21,7 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
+#include "StructUtils/InstancedStruct.h"
 #include "StructUtils/PropertyBag.h"
 #include "UObject/UnrealType.h"
 
@@ -299,6 +300,75 @@ namespace PyPCGTools::Private
 				CollectHierarchy(Inner->GetObjectPropertyValue(Helper.GetRawPtr(Index)), Here, Out);
 			}
 		}
+	}
+
+	// The hierarchy elements whose PropertyMetadata belongs to a parameter, by the parameter's desc ID.
+	// Same generic walk as CollectHierarchy: these StructUtilsEditor classes are not exported.
+	void CollectHierarchyProperties(UObject* Element, TMap<FGuid, UObject*>& Out)
+	{
+		if (!Element)
+		{
+			return;
+		}
+		UClass* Class = Element->GetClass();
+		if (FindFProperty<FStructProperty>(Class, TEXT("PropertyMetadata")))
+		{
+			const FStructProperty* Identity = FindFProperty<FStructProperty>(Class, TEXT("Identity"));
+			const FArrayProperty* Guids = Identity ? FindFProperty<FArrayProperty>(Identity->Struct, TEXT("Guids")) : nullptr;
+			if (Guids)
+			{
+				FScriptArrayHelper Helper(Guids, Guids->ContainerPtrToValuePtr<void>(Identity->ContainerPtrToValuePtr<void>(Element)));
+				if (Helper.Num() > 0)
+				{
+					Out.Add(*reinterpret_cast<const FGuid*>(Helper.GetRawPtr(0)), Element);
+				}
+			}
+		}
+		if (const FArrayProperty* Children = FindFProperty<FArrayProperty>(Class, TEXT("Children")))
+		{
+			const FObjectPropertyBase* Inner = CastField<FObjectPropertyBase>(Children->Inner);
+			FScriptArrayHelper Helper(Children, Children->ContainerPtrToValuePtr<void>(Element));
+			for (int32 Index = 0; Inner && Index < Helper.Num(); ++Index)
+			{
+				CollectHierarchyProperties(Inner->GetObjectPropertyValue(Helper.GetRawPtr(Index)), Out);
+			}
+		}
+	}
+
+	// Write the panel tooltip and advanced flag into a hierarchy property's
+	// PropertyBagPropertyMetadata_Common entry (PropertyMetadata.Values[i], an FInstancedStruct).
+	// Returns false when the element has no Common entry.
+	bool SetHierarchyCommon(UObject* Element, const FString& Tooltip, bool bAdvanced)
+	{
+		const FStructProperty* Metadata = FindFProperty<FStructProperty>(Element->GetClass(), TEXT("PropertyMetadata"));
+		const FArrayProperty* Values = Metadata ? FindFProperty<FArrayProperty>(Metadata->Struct, TEXT("Values")) : nullptr;
+		const FStructProperty* Inner = Values ? CastField<FStructProperty>(Values->Inner) : nullptr;
+		if (!Inner || Inner->Struct != FInstancedStruct::StaticStruct())
+		{
+			return false;
+		}
+		FScriptArrayHelper Helper(Values, Values->ContainerPtrToValuePtr<void>(Metadata->ContainerPtrToValuePtr<void>(Element)));
+		for (int32 Index = 0; Index < Helper.Num(); ++Index)
+		{
+			FInstancedStruct& Entry = *reinterpret_cast<FInstancedStruct*>(Helper.GetRawPtr(Index));
+			const UScriptStruct* Struct = Entry.GetScriptStruct();
+			if (!Struct || Struct->GetPathName() != TEXT("/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common"))
+			{
+				continue;
+			}
+			const FTextProperty* TooltipProp = FindFProperty<FTextProperty>(Struct, TEXT("Tooltip"));
+			const FBoolProperty* AdvancedProp = FindFProperty<FBoolProperty>(Struct, TEXT("bAdvanced"));
+			if (!TooltipProp || !AdvancedProp)
+			{
+				return false;
+			}
+			Element->Modify();
+			uint8* Memory = Entry.GetMutableMemory();
+			TooltipProp->SetPropertyValue_InContainer(Memory, FText::FromString(Tooltip));
+			AdvancedProp->SetPropertyValue_InContainer(Memory, bAdvanced);
+			return true;
+		}
+		return false;
 	}
 
 	void ClearChildren(UObject* Element)
@@ -691,6 +761,7 @@ FString UPyPCGToolsLibrary::SetGraphUserParameters(UPCGGraph* Graph, const FStri
 		return TEXT("missing 'params'");
 	}
 	TArray<FPropertyBagPropertyDesc> Descs;
+	TSet<FName> AddedCategory;
 	for (const TSharedPtr<FJsonValue>& Value : *Params)
 	{
 		const TSharedPtr<FJsonObject> Param = Value->AsObject();
@@ -709,26 +780,26 @@ FString UPyPCGToolsLibrary::SetGraphUserParameters(UPCGGraph* Graph, const FStri
 		}
 		FPropertyBagPropertyDesc Desc(FName(*Name), static_cast<EPropertyBagContainerType>(Container), static_cast<EPropertyBagPropertyType>(Type), TypeObject);
 #if WITH_EDITOR
+		// Ruling T7a: descriptor metadata is stored verbatim, every key, spelling as given.
+		bool bHasCategoryKey = false;
 		const TSharedPtr<FJsonObject>* Meta = nullptr;
 		if (Param->TryGetObjectField(TEXT("meta"), Meta))
 		{
 			for (const auto& Entry : (*Meta)->Values)
 			{
-				if (Entry.Key != TEXT("Category") && Entry.Key != TEXT("ToolTip"))
-				{
-					Desc.SetMetaData(FName(*Entry.Key), Entry.Value->AsString());
-				}
+				// Entry.Key is a shared string here; FString(*Key) keeps the caller's exact spelling.
+				const FString Key(*Entry.Key);
+				Desc.SetMetaData(FName(*Key), Entry.Value->AsString());
+				bHasCategoryKey |= Key.Equals(TEXT("Category"), ESearchCase::IgnoreCase);
 			}
 		}
-		const FString Category = Param->GetStringField(TEXT("category"));
-		const FString Tooltip = Param->GetStringField(TEXT("tooltip"));
-		if (!Category.IsEmpty())
+		// The hierarchy transfer below builds categories from the Category key only; such an added
+		// key is removed again once the hierarchy exists (see the end of this function).
+		FString Category;
+		if (Param->TryGetStringField(TEXT("category"), Category) && !Category.IsEmpty() && !bHasCategoryKey)
 		{
 			Desc.SetMetaData(TEXT("Category"), Category);
-		}
-		if (!Tooltip.IsEmpty())
-		{
-			Desc.SetMetaData(TEXT("ToolTip"), Tooltip);
+			AddedCategory.Add(Desc.Name);
 		}
 #endif
 		Descs.Add(MoveTemp(Desc));
@@ -773,7 +844,53 @@ FString UPyPCGToolsLibrary::SetGraphUserParameters(UPCGGraph* Graph, const FStri
 		{
 			Editor->TransferPropertyBagMetadataIntoHierarchy(Graph);
 		}
+		// The panel's tooltip and advanced flag live in the hierarchy only (ruling T7a): overwrite
+		// whatever the transfer derived from the descriptor metadata with the explicit fields.
+		TMap<FGuid, UObject*> Properties;
+		CollectHierarchyProperties(HierarchyRoot, Properties);
+		const FInstancedPropertyBag* Bag = Graph->GetUserParametersStruct();
+		for (const TSharedPtr<FJsonValue>& Value : *Params)
+		{
+			const TSharedPtr<FJsonObject> Param = Value->AsObject();
+			const FString Name = Param->GetStringField(TEXT("name"));
+			FString Tooltip;
+			bool bAdvanced = false;
+			Param->TryGetStringField(TEXT("tooltip"), Tooltip);
+			Param->TryGetBoolField(TEXT("advanced"), bAdvanced);
+			const FPropertyBagPropertyDesc* Desc = Bag ? Bag->FindPropertyDescByName(FName(*Name)) : nullptr;
+			UObject* const* Element = Desc ? Properties.Find(Desc->ID) : nullptr;
+			if (!(Element && SetHierarchyCommon(*Element, Tooltip, bAdvanced)) && (!Tooltip.IsEmpty() || bAdvanced))
+			{
+				return FString::Printf(TEXT("param %s: no hierarchy Common metadata to hold tooltip/advanced"), *Name);
+			}
+		}
 	}
+#if WITH_EDITOR
+	// The Category keys added only to feed the transfer are not part of the verbatim metadata (the
+	// official graphs keep categories in the hierarchy alone). Drop them again; AddProperties with
+	// overwrite keeps each desc's ID, so the hierarchy built above still points at the same params.
+	if (AddedCategory.Num() > 0)
+	{
+		const UPropertyBag* BagStruct = Graph->GetUserParametersStruct() ? Graph->GetUserParametersStruct()->GetPropertyBagStruct() : nullptr;
+		if (BagStruct)
+		{
+			TArray<FPropertyBagPropertyDesc> Verbatim(BagStruct->GetPropertyDescs());
+			for (FPropertyBagPropertyDesc& Desc : Verbatim)
+			{
+				if (AddedCategory.Contains(Desc.Name))
+				{
+					Desc.RemoveMetadata(TEXT("Category"));
+				}
+			}
+			EPropertyBagAlterationResult Result = EPropertyBagAlterationResult::Success;
+			Graph->UpdateUserParametersStruct([&](FInstancedPropertyBag& Bag) { Result = Bag.AddProperties(Verbatim, /*bOverwrite=*/true); });
+			if (Result != EPropertyBagAlterationResult::Success)
+			{
+				return FString::Printf(TEXT("restoring verbatim metadata failed (%d)"), static_cast<int32>(Result));
+			}
+		}
+	}
+#endif
 	return FString();
 }
 

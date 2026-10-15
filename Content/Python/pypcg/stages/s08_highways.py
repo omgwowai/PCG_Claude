@@ -7,7 +7,7 @@ from pypcg import D, Graph, NodeRef, P, sel  # noqa: F401
 
 def build():
     g = Graph('PCG_3_1_3_Highways',
-              params=[P('Highway_Width', 'Double', 2000),
+              params=[P('Highway_Width', 'Double', 2000, meta={'ToolTip': 'Width of the generated highway in centimeters. Drives the Size parameter of the Assign_ShapeGrammarDefinition subgraph that runs SGD_ElevatedHighway.'}),
                       P('Partitioned', 'Bool', False),
                       P('PartitionGridSize', 'Double', 25600)],
               graph_props={'Description': 'Generates the elevated highway running through the city. '}, input_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoSpatial'"}]}, 'Label': 'In', 'PinStatus': 'Advanced', 'Tooltip': 'Default input pin.', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True}, output_settings={'Pins': [{'AllowedTypes': {'CustomSubtype': -1, 'Ids': [{'Struct': "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}, 'Label': 'Out', 'PinStatus': 'Advanced', 'Tooltip': '', 'Usage': 'Normal', 'bAllowMultipleConnections': True, 'bAllowMultipleData': True, 'bInvisiblePin': False}], 'bHasAddedDefaultPin': True})

@@ -58,11 +58,14 @@ class NodeRef:
 class P:
     """One graph user parameter."""
 
-    def __init__(self, name, type, value, container="None", type_object="", category="", tooltip="", meta=None):
+    def __init__(self, name, type, value, container="None", type_object="", category="", tooltip="",
+                 advanced=False, meta=None):
+        # Ruling T7a: `meta` is the descriptor metadata, kept verbatim (key spelling included);
+        # `tooltip` and `advanced` are what the parameter panel shows, set through the hierarchy.
         self.name = name
         self.ir = {"name": name, "type": type, "value": value, "container": container,
                    "type_object": type_object, "category": category, "tooltip": tooltip,
-                   "meta": dict(meta or {})}
+                   "advanced": bool(advanced), "meta": dict(meta or {})}
 
 
 class D:
