@@ -1,11 +1,14 @@
 #if WITH_DEV_AUTOMATION_TESTS
 
+#include "Data/PCGPolygon2DData.h"
+#include "Data/PCGSplineData.h"
 #include "Dom/JsonObject.h"
 #include "Elements/Metadata/PCGMetadataMathsOpElement.h"
 #include "Elements/PCGUserParameterGet.h"
 #include "Misc/AutomationTest.h"
 #include "PCGGraph.h"
 #include "PCGNode.h"
+#include "PCGPin.h"
 #include "PCGSubgraph.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
 #include "PyPCGToolsLibrary.h"
@@ -295,6 +298,122 @@ bool FPyPCGToolsProtectedMounts::RunTest(const FString& Parameters)
 	TestEqual(TEXT("boxes untouched"), Primitive->GetCommentNodes().Num(), Before);
 	TestNotEqual(TEXT("properties refused"), UPyPCGToolsLibrary::SetPropertiesJson(Primitive, TEXT("{}")), FString());
 	TestNotEqual(TEXT("params refused"), UPyPCGToolsLibrary::SetGraphUserParameters(Primitive, TEXT(R"({"params":[]})")), FString());
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FPyPCGToolsPolygon2D, "PyPCGTools.Polygon2D",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
+bool FPyPCGToolsPolygon2D::RunTest(const FString& Parameters)
+{
+	using namespace PyPCGToolsTests;
+	// A 10 m square at z 100 with a 2 m square hole. The outer ring is given clockwise; it must
+	// come back counter-clockwise, in a frame centred on the ring like CreatePolygon2D's.
+	UPCGPolygon2DData* Data = UPyPCGToolsLibrary::MakePolygon2DData(TEXT(R"({"outer":[[0,0,100],[0,1000,100],[1000,1000,100],[1000,0,100]],
+		"holes":[[[400,400,100],[600,400,100],[600,600,100],[400,600,100]]]})"));
+	if (!TestNotNull(TEXT("polygon made"), Data))
+	{
+		return false;
+	}
+	TestTrue(TEXT("frame origin at the centroid"), Data->GetTransform().GetLocation().Equals(FVector(500, 500, 100), 1e-6));
+	TestFalse(TEXT("outer counter-clockwise"), Data->GetPolygon().OuterIsClockwise());
+	TestEqual(TEXT("hole count"), Data->GetPolygon().GetHoles().Num(), 1);
+	TestEqual(TEXT("area"), Data->GetPolygon().Area(), 1000.0 * 1000.0 - 200.0 * 200.0, 1e-6);
+
+	const TSharedPtr<FJsonObject> Back = Parse(UPyPCGToolsLibrary::Polygon2DToJson(Data));
+	const TArray<TSharedPtr<FJsonValue>> Outer = Back->GetArrayField(TEXT("outer"));
+	TestEqual(TEXT("outer vertex count"), Outer.Num(), 4);
+	for (const FVector Corner : {FVector(0, 0, 100), FVector(1000, 0, 100), FVector(1000, 1000, 100), FVector(0, 1000, 100)})
+	{
+		bool bFound = false;
+		for (const TSharedPtr<FJsonValue>& Value : Outer)
+		{
+			const TArray<TSharedPtr<FJsonValue>> Xyz = Value->AsArray();
+			bFound |= FVector(Xyz[0]->AsNumber(), Xyz[1]->AsNumber(), Xyz[2]->AsNumber()).Equals(Corner, 1e-6);
+		}
+		TestTrue(*FString::Printf(TEXT("corner %s round-trips"), *Corner.ToString()), bFound);
+	}
+	TestEqual(TEXT("hole round-trips"), Back->GetArrayField(TEXT("holes")).Num(), 1);
+	TestNull(TEXT("two vertices refused"), UPyPCGToolsLibrary::MakePolygon2DData(TEXT(R"({"outer":[[0,0,0],[1,0,0]]})")));
+	TestNull(TEXT("bad JSON refused"), UPyPCGToolsLibrary::MakePolygon2DData(TEXT("{")));
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FPyPCGToolsSplineJson, "PyPCGTools.SplineJson",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
+bool FPyPCGToolsSplineJson::RunTest(const FString& Parameters)
+{
+	using namespace PyPCGToolsTests;
+	UPCGSplineData* Spline = NewObject<UPCGSplineData>(GetTransientPackage());
+	TArray<FSplinePoint> Points;
+	const FVector Corners[] = {FVector(0, 0, 0), FVector(1000, 0, 0), FVector(1000, 500, 0), FVector(0, 500, 0)};
+	for (int32 Index = 0; Index < 4; ++Index)
+	{
+		FSplinePoint& Point = Points.AddDefaulted_GetRef();
+		Point.InputKey = static_cast<float>(Index);
+		Point.Position = Corners[Index];
+		Point.Type = ESplinePointType::Linear;
+	}
+	Spline->K2_Initialize(Points, /*bInClosedLoop=*/true, FTransform(FVector(100, 0, 0)), {});
+	const TSharedPtr<FJsonObject> Json = Parse(UPyPCGToolsLibrary::SplineDataToJson(Spline, 1.0f));
+	TestTrue(TEXT("closed"), Json->GetBoolField(TEXT("closed")));
+	const TArray<TSharedPtr<FJsonValue>> Control = Json->GetArrayField(TEXT("control"));
+	if (!TestEqual(TEXT("control points"), Control.Num(), 4))
+	{
+		return false;
+	}
+	const TArray<TSharedPtr<FJsonValue>> P0 = Control[0]->AsObject()->GetArrayField(TEXT("p"));
+	TestTrue(TEXT("control point in world space"), FVector(P0[0]->AsNumber(), P0[1]->AsNumber(), P0[2]->AsNumber()).Equals(FVector(100, 0, 0), 1e-6));
+	TestEqual(TEXT("linear type"), static_cast<int32>(Control[0]->AsObject()->GetNumberField(TEXT("type"))), 0);
+	const TArray<TSharedPtr<FJsonValue>> Polyline = Json->GetArrayField(TEXT("polyline"));
+	for (const FVector& Corner : Corners)
+	{
+		bool bFound = false;
+		for (const TSharedPtr<FJsonValue>& Value : Polyline)
+		{
+			const TArray<TSharedPtr<FJsonValue>> Xyz = Value->AsArray();
+			bFound |= FVector(Xyz[0]->AsNumber(), Xyz[1]->AsNumber(), Xyz[2]->AsNumber()).Equals(Corner + FVector(100, 0, 0), 1e-3);
+		}
+		TestTrue(*FString::Printf(TEXT("polyline has corner %s"), *Corner.ToString()), bFound);
+	}
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FPyPCGToolsDynamicPins, "PyPCGTools.DynamicPins",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
+bool FPyPCGToolsDynamicPins::RunTest(const FString& Parameters)
+{
+	using namespace PyPCGToolsTests;
+	UClass* PythonNode = FindObject<UClass>(nullptr, TEXT("/Script/PCGPythonInteropEditor.PCGPythonDataProcessorSettings"));
+	if (!TestNotNull(TEXT("PCGPythonInterop is loaded"), PythonNode))
+	{
+		return false;
+	}
+	UPCGGraph* Graph = NewGraph();
+	UPCGSettings* Settings = nullptr;
+	UPCGNode* Node = Graph->AddNodeOfType(PythonNode, Settings);
+	TestEqual(TEXT("set pins"), UPyPCGToolsLibrary::SetDynamicPinLabels(Settings,
+		TArray<FString>({TEXT("Params"), TEXT("City")}), TArray<FString>({TEXT("Areas"), TEXT("Roads")})), FString());
+	TArray<FString> In, Out;
+	for (const TObjectPtr<UPCGPin>& Pin : Node->GetInputPins())
+	{
+		In.Add(Pin->Properties.Label.ToString());
+	}
+	for (const TObjectPtr<UPCGPin>& Pin : Node->GetOutputPins())
+	{
+		Out.Add(Pin->Properties.Label.ToString());
+	}
+	TestTrue(TEXT("Params pin"), In.Contains(TEXT("Params")));
+	TestTrue(TEXT("City pin"), In.Contains(TEXT("City")));
+	TestFalse(TEXT("default Input pin gone"), In.Contains(TEXT("Input")));
+	TestTrue(TEXT("Areas pin"), Out.Contains(TEXT("Areas")));
+	TestTrue(TEXT("Roads pin"), Out.Contains(TEXT("Roads")));
+	TestFalse(TEXT("default Output pin gone"), Out.Contains(TEXT("Output")));
+	TestNotEqual(TEXT("duplicate labels refused"), UPyPCGToolsLibrary::SetDynamicPinLabels(Settings,
+		TArray<FString>({TEXT("A"), TEXT("A")}), TArray<FString>()), FString());
+	UPCGSettings* Maths = nullptr;
+	Graph->AddNodeOfType(UPCGMetadataMathsSettings::StaticClass(), Maths);
+	TestNotEqual(TEXT("node without dynamic pins refused"), UPyPCGToolsLibrary::SetDynamicPinLabels(Maths,
+		TArray<FString>({TEXT("A")}), TArray<FString>()), FString());
 	return true;
 }
 

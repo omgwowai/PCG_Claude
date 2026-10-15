@@ -18,6 +18,7 @@ public class PyPCGTools : ModuleRules
 			"PCG",
 			"Json",
 			"JsonUtilities",
+			"GeometryCore",
 		});
 	}
 }

@@ -1,5 +1,5 @@
 // PyPCGToolsLibrary.h -- Python access to the PCG graph fields its reflection layer cannot reach.
-// Every write returns an empty string on success, otherwise an error message; nothing asserts.
+// Every write returns an empty string on success, otherwise an error message; MakePolygon2DData returns null on bad input; nothing asserts.
 // Writes refuse assets under /CitySamplePCG/, /PCGPrimitives* and /Engine/ (/Engine/Transient is
 // allowed); objects that live in a world (level actors and their components) are allowed even when
 // their package sits under a protected mount.
@@ -12,7 +12,9 @@
 class UPCGGraph;
 class UPCGGraphInstance;
 class UPCGNode;
+class UPCGPolygon2DData;
 class UPCGSettings;
+class UPCGSplineData;
 
 UCLASS()
 class PYPCGTOOLS_API UPyPCGToolsLibrary : public UBlueprintFunctionLibrary
@@ -54,4 +56,24 @@ public:
 	/** Replaces the graph's comment boxes with {"boxes": [...]} (IR form; fresh GUIDs). */
 	UFUNCTION(BlueprintCallable, Category = "PyPCG")
 	static FString SetGraphCommentBoxes(UPCGGraph* Graph, const FString& Json);
+
+	/** A Polygon2D data built the way CreatePolygon2D builds one, from {"outer": [[x,y,z],...],
+	 *  "holes": [[[x,y,z],...],...]} in world cm: frame on the best-fit plane of the outer ring with its
+	 *  centroid as origin, outer counter-clockwise, holes clockwise. Null (and a warning) on bad input. */
+	UFUNCTION(BlueprintCallable, Category = "PyPCG")
+	static UPCGPolygon2DData* MakePolygon2DData(const FString& Json);
+
+	/** {"outer": [[x,y,z],...], "holes": [[[x,y,z],...],...]} in world cm. */
+	UFUNCTION(BlueprintCallable, Category = "PyPCG")
+	static FString Polygon2DToJson(const UPCGPolygon2DData* Data);
+
+	/** {"closed": b, "polyline": [[x,y,z],...], "control": [{"p","arrive","leave","type"}, ...]} in world cm.
+	 *  The polyline is the spline's own ConvertSplineToPolyLine(World, MaxSquareDistance). */
+	UFUNCTION(BlueprintCallable, Category = "PyPCG")
+	static FString SplineDataToJson(const UPCGSplineData* Data, float MaxSquareDistance);
+
+	/** Replaces the dynamic input and output pins of a node whose settings provide dynamic pins (the
+	 *  Python Data Processor) with Any-typed, multi-connection, multi-data pins with these labels, in order. */
+	UFUNCTION(BlueprintCallable, Category = "PyPCG")
+	static FString SetDynamicPinLabels(UPCGSettings* Settings, const TArray<FString>& InputLabels, const TArray<FString>& OutputLabels);
 };

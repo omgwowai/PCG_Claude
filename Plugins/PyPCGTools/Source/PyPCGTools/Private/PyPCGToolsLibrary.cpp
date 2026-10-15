@@ -1,5 +1,10 @@
 #include "PyPCGToolsLibrary.h"
 
+#include "CompGeom/PolygonTriangulation.h"
+#include "Components/SplineComponent.h"
+#include "Curve/GeneralPolygon2.h"
+#include "Data/PCGPolygon2DData.h"
+#include "Data/PCGSplineData.h"
 #include "Dom/JsonObject.h"
 #include "Dom/JsonValue.h"
 #include "Editor/IPCGEditorModule.h"
@@ -11,6 +16,7 @@
 #include "JsonObjectConverter.h"
 #include "Metadata/PCGDefaultValueInterface.h"
 #include "Metadata/PCGMetadataCommon.h"
+#include "PCGDynamicPins.h"
 #include "PCGEdge.h"
 #include "PCGGraph.h"
 #include "PCGNode.h"
@@ -18,6 +24,7 @@
 #include "PCGSettings.h"
 #include "PCGSubgraph.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
+#include "Polygon2.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
@@ -986,5 +993,227 @@ FString UPyPCGToolsLibrary::SetGraphCommentBoxes(UPCGGraph* Graph, const FString
 	Graph->Modify();
 	Graph->SetCommentNodes(MoveTemp(Out));
 #endif
+	return FString();
+}
+
+namespace PyPCGTools::Private
+{
+	TSharedPtr<FJsonValue> VectorJson(const FVector& V)
+	{
+		return NumberArray({V.X, V.Y, V.Z});
+	}
+
+	bool ReadVectors(const TArray<TSharedPtr<FJsonValue>>& In, TArray<FVector>& Out)
+	{
+		for (const TSharedPtr<FJsonValue>& Value : In)
+		{
+			const TArray<TSharedPtr<FJsonValue>>* Xyz = nullptr;
+			if (!Value.IsValid() || !Value->TryGetArray(Xyz) || Xyz->Num() < 2)
+			{
+				return false;
+			}
+			Out.Emplace((*Xyz)[0]->AsNumber(), (*Xyz)[1]->AsNumber(), Xyz->Num() > 2 ? (*Xyz)[2]->AsNumber() : 0.0);
+		}
+		return true;
+	}
+
+	UPCGPolygon2DData* RefusePolygon(const FString& Why)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MakePolygon2DData: %s"), *Why);
+		return nullptr;
+	}
+}
+
+UPCGPolygon2DData* UPyPCGToolsLibrary::MakePolygon2DData(const FString& Json)
+{
+	FString Error;
+	const TSharedPtr<FJsonObject> Parsed = ParseObject(Json, Error);
+	if (!Parsed)
+	{
+		return RefusePolygon(Error);
+	}
+	const TArray<TSharedPtr<FJsonValue>>* OuterJson = nullptr;
+	TArray<FVector> Outer;
+	if (!Parsed->TryGetArrayField(TEXT("outer"), OuterJson) || !ReadVectors(*OuterJson, Outer) || Outer.Num() < 3)
+	{
+		return RefusePolygon(TEXT("'outer' needs at least 3 [x,y,z] vertices"));
+	}
+	TArray<TArray<FVector>> Holes;
+	const TArray<TSharedPtr<FJsonValue>>* HolesJson = nullptr;
+	if (Parsed->TryGetArrayField(TEXT("holes"), HolesJson))
+	{
+		for (const TSharedPtr<FJsonValue>& HoleValue : *HolesJson)
+		{
+			const TArray<TSharedPtr<FJsonValue>>* HoleJson = nullptr;
+			TArray<FVector>& Hole = Holes.AddDefaulted_GetRef();
+			if (!HoleValue.IsValid() || !HoleValue->TryGetArray(HoleJson) || !ReadVectors(*HoleJson, Hole) || Hole.Num() < 3)
+			{
+				return RefusePolygon(TEXT("every hole needs at least 3 [x,y,z] vertices"));
+			}
+		}
+	}
+
+	// The frame UPCGCreatePolygon2DElement uses: best-fit plane through the outer ring, origin at its
+	// centroid, normal facing up (spline data's normal), rotation MakeFromZ(normal). A degenerate ring
+	// keeps the up normal, as the engine does.
+	FVector Normal = FVector::UpVector;
+	FVector Centroid = FVector::ZeroVector;
+	const double Area = PolygonTriangulation::ComputePolygonPlane<double>(Outer, Normal, Centroid);
+	const FBox Bounds(Outer);
+	if (Area <= UE_SMALL_NUMBER * FMath::Square(Bounds.GetSize().GetMax()))
+	{
+		Normal = FVector::UpVector;
+	}
+	if ((Normal | FVector::UpVector) < 0)
+	{
+		Normal = -Normal;
+	}
+	FTransform Plane;
+	Plane.SetRotation(FRotationMatrix::MakeFromZ(Normal).ToQuat());
+	Plane.SetLocation(Centroid);
+
+	auto ToPlane = [&Plane](const TArray<FVector>& Points)
+	{
+		TArray<FVector2D> Local;
+		Local.Reserve(Points.Num());
+		for (const FVector& Point : Points)
+		{
+			const FVector L = Plane.InverseTransformPosition(Point);
+			Local.Emplace(L.X, L.Y);
+		}
+		return UE::Geometry::FPolygon2d(Local);
+	};
+
+	UE::Geometry::FGeneralPolygon2d Polygon;
+	Polygon.SetOuter(ToPlane(Outer));
+	if (Polygon.OuterIsClockwise())
+	{
+		Polygon.Reverse();
+	}
+	for (const TArray<FVector>& Hole : Holes)
+	{
+		UE::Geometry::FPolygon2d Local = ToPlane(Hole);
+		if (!Local.IsClockwise())
+		{
+			Local.Reverse();
+		}
+		Polygon.AddHole(MoveTemp(Local), /*bCheckContainment=*/false, /*bCheckOrientation=*/false);
+	}
+
+	UPCGPolygon2DData* Data = NewObject<UPCGPolygon2DData>(GetTransientPackage());
+	Data->SetPolygon(MoveTemp(Polygon));
+	Data->SetTransform(Plane);
+	return Data;
+}
+
+FString UPyPCGToolsLibrary::Polygon2DToJson(const UPCGPolygon2DData* Data)
+{
+	const TSharedRef<FJsonObject> Root = MakeShared<FJsonObject>();
+	if (!Data)
+	{
+		Root->SetStringField(TEXT("error"), TEXT("null data"));
+		return Write(Root);
+	}
+	const FTransform Transform = Data->GetTransform();
+	auto World = [&Transform](const UE::Geometry::FPolygon2d& Ring)
+	{
+		TArray<TSharedPtr<FJsonValue>> Out;
+		for (const FVector2d& V : Ring.GetVertices())
+		{
+			Out.Add(VectorJson(Transform.TransformPosition(FVector(V.X, V.Y, 0.0))));
+		}
+		return Out;
+	};
+	const UE::Geometry::FGeneralPolygon2d& Polygon = Data->GetPolygon();
+	Root->SetArrayField(TEXT("outer"), World(Polygon.GetOuter()));
+	TArray<TSharedPtr<FJsonValue>> Holes;
+	for (const UE::Geometry::FPolygon2d& Hole : Polygon.GetHoles())
+	{
+		Holes.Add(MakeShared<FJsonValueArray>(World(Hole)));
+	}
+	Root->SetArrayField(TEXT("holes"), Holes);
+	return Write(Root);
+}
+
+FString UPyPCGToolsLibrary::SplineDataToJson(const UPCGSplineData* Data, float MaxSquareDistance)
+{
+	const TSharedRef<FJsonObject> Root = MakeShared<FJsonObject>();
+	if (!Data)
+	{
+		Root->SetStringField(TEXT("error"), TEXT("null data"));
+		return Write(Root);
+	}
+	TArray<FVector> Polyline;
+	Data->SplineStruct.ConvertSplineToPolyLine(ESplineCoordinateSpace::World, MaxSquareDistance, Polyline);
+	TArray<TSharedPtr<FJsonValue>> PolylineJson;
+	for (const FVector& Point : Polyline)
+	{
+		PolylineJson.Add(VectorJson(Point));
+	}
+	const FTransform Transform = Data->GetTransform();
+	TArray<TSharedPtr<FJsonValue>> Control;
+	for (const FSplinePoint& Point : Data->GetSplinePoints())
+	{
+		const TSharedRef<FJsonObject> PointJson = MakeShared<FJsonObject>();
+		PointJson->SetField(TEXT("p"), VectorJson(Transform.TransformPosition(Point.Position)));
+		PointJson->SetField(TEXT("arrive"), VectorJson(Transform.TransformVector(Point.ArriveTangent)));
+		PointJson->SetField(TEXT("leave"), VectorJson(Transform.TransformVector(Point.LeaveTangent)));
+		PointJson->SetNumberField(TEXT("type"), static_cast<int32>(Point.Type.GetValue()));
+		Control.Add(MakeShared<FJsonValueObject>(PointJson));
+	}
+	Root->SetBoolField(TEXT("closed"), Data->IsClosed());
+	Root->SetArrayField(TEXT("polyline"), PolylineJson);
+	Root->SetArrayField(TEXT("control"), Control);
+	return Write(Root);
+}
+
+FString UPyPCGToolsLibrary::SetDynamicPinLabels(UPCGSettings* Settings, const TArray<FString>& InputLabels, const TArray<FString>& OutputLabels)
+{
+	if (!Settings)
+	{
+		return TEXT("null settings");
+	}
+	FString Error;
+	if (IsProtected(Settings, Error))
+	{
+		return Error;
+	}
+	IPCGDynamicPinsProvider* Provider = Cast<IPCGDynamicPinsProvider>(Settings);
+	if (!Provider)
+	{
+		return FString::Printf(TEXT("%s has no dynamic pins"), *Settings->GetClass()->GetName());
+	}
+	for (const TArray<FString>* Labels : {&InputLabels, &OutputLabels})
+	{
+		TSet<FString> Seen;
+		for (const FString& Label : *Labels)
+		{
+			if (Label.IsEmpty() || Seen.Contains(Label))
+			{
+				return FString::Printf(TEXT("empty or duplicate pin label '%s'"), *Label);
+			}
+			Seen.Add(Label);
+		}
+	}
+	Settings->Modify();
+	auto Replace = [Provider](EPCGPinDirection Direction, const TArray<FString>& Labels)
+	{
+		FPCGDynamicPinContainer* Container = Provider->GetMutableDynamicPinContainer(Direction);
+		if (!Container)
+		{
+			return false;
+		}
+		Container->PinProperties.Reset();
+		for (const FString& Label : Labels)
+		{
+			Container->PinProperties.Emplace(FName(*Label), EPCGDataType::Any, /*bAllowMultipleConnections=*/true, /*bAllowMultipleData=*/true);
+		}
+		return true;
+	};
+	if (!Replace(EPCGPinDirection::Input, InputLabels) || !Replace(EPCGPinDirection::Output, OutputLabels))
+	{
+		return TEXT("settings lack an input or an output dynamic pin container");
+	}
+	RefreshNode(Settings);
 	return FString();
 }

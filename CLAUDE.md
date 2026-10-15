@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Engine: **`E:\UnrealEngine`** — a **source build** of UE 5.8.2. `EngineAssociation` in
   `PCG_Claude.uproject` is that build's registry GUID `{4B303DEF-4E44-1DE5-A177-09B23BCA8A5A}`.
 - Game module: `PCG_Claude` (Runtime). Plugins enabled: ModelingToolsEditorMode, StateTree,
-GameplayStateTree, PythonScriptPlugin, PCG, PCGPrimitives, UnrealMcpBridge.
+GameplayStateTree, PythonScriptPlugin, PCG, PCGPrimitives, UnrealMcpBridge, PCGPythonInterop.
 - Git remote: `https://github.com/omgwowai/PCG_Claude.git` (branch `main`).
 - The **PCG (Procedural Content Generation) framework is enabled** (`PCG` + `PCGPrimitives`, added
   2026-09-23 so the `city-sample-pcg-city-builder` skill can build procedural cities here), but
@@ -118,7 +118,7 @@ a `.py` file from `Content/Python/` in the editor embedded Python interpreter.
 ## Tests
 
 **C++ automation tests live in the `PyPCGTools` plugin** (`Plugins/PyPCGTools/Source/PyPCGTools/Private/Tests/`).
-Run them headlessly with `-ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); six tests,
+Run them headlessly with `-ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); nine tests,
 all must report `Result={Success}`. The game module `PCG_Claude` still registers none, so a
 `PCG_Claude` filter matches nothing and exits **255**.
 
@@ -143,7 +143,7 @@ Verified against an engine self-test (`System.Core.Algo.Unique` to `Result={Succ
 & "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests System.Core.Algo; Quit" -unattended -nopause -nosplash -nullrhi -log
 ```
 
-The `PyPCGTools` plugin's six tests run the same way:
+The `PyPCGTools` plugin's nine tests run the same way:
 
 ```powershell
 & "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests PyPCGTools; Quit" -unattended -nopause -nosplash -nullrhi -log
