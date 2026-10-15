@@ -1,6 +1,10 @@
 # 18 张 City Sample PCG 图的 Python 化，与按 18 步搭建的小城镇 — 设计
 
-> 日期：2026-10-13。状态：待用户审阅。
+> **已被取代（2026-10-15）**：用户澄清，目标是把每张图的计算节点换成一个 Python 脚本，只保留参数节点，
+> 而不是逐节点重建官方图。新设计见 `docs/superpowers/specs/2026-10-15-pypcg-python-nodes-design.md`。
+> 本文只作存档；§5 的小镇部分大多被新 spec 沿用。
+
+> 日期：2026-10-13。状态：已被取代。
 > 依据：飞书《18个核心PCG拆解》（https://omgwowai.feishu.cn/wiki/DSSwwgvfuicQblkBLGYcvpE0nab，
 > 本地副本 `Saved/feishu/pcg_doc.md`，不入库）；技能 `city-sample-pcg-city-builder`；
 > 前作 `docs/superpowers/specs/2026-09-24-pcg-small-area-18-stage-design.md`。
