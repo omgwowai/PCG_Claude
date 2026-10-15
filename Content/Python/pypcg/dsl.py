@@ -16,11 +16,20 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _LIBRARY = {}
 
 
+EXTRA_CLASSES = {
+    _ir.PYTHON_NODE: {"inputs": [], "outputs": []},             # pins are per node (dynamic_pins)
+    _ir.SELF_NODE: {"inputs": [], "outputs": ["Out"]},
+}
+
+
 def library():
-    """library.json: the real pins and parameters of every subgraph and node class (Task 4)."""
+    """library.json: the real pins and parameters of every subgraph and node class (Task 4), plus
+    EXTRA_CLASSES."""
     if not _LIBRARY:
         with open(os.path.join(_HERE, "library.json"), encoding="utf-8") as fh:
             _LIBRARY.update(json.load(fh))
+    for cls, pins in EXTRA_CLASSES.items():
+        _LIBRARY.setdefault("classes", {}).setdefault(cls, pins)
     return _LIBRARY
 
 
@@ -153,6 +162,8 @@ class Graph:
         return subs[alias]
 
     def _pins(self, rec, which):
+        if "dynamic_pins" in rec:
+            return rec["dynamic_pins"][which]
         lib = library()
         if which == "outputs" and "getter_param" in rec:
             # M1: a getter node's only valid output pin is its own bound parameter, not the
@@ -183,7 +194,7 @@ class Graph:
 
     # ---- nodes
     def _add(self, cls, title, settings, kw, subgraph=None, overrides=None, defaults=None, getter=None,
-             node_type=Node):
+             node_type=Node, dynamic=None):
         comment = kw.pop("comment", None) or ""
         rec = {"name": "n%d" % len(self._nodes), "class": cls, "title": title or "",
                "settings": dict(settings or {}), "comment": comment,
@@ -202,6 +213,8 @@ class Graph:
             rec["getter_param"] = getter
         pins = dict(kw.pop("pins", None) or {})
         pins.update(kw)
+        if dynamic is not None:
+            rec["dynamic_pins"] = {"inputs": list(dynamic[0]), "outputs": list(dynamic[1])}
         self._nodes.append(rec)
         for label, src in pins.items():
             self._connect(rec, label, src)
@@ -252,6 +265,17 @@ class Graph:
         overrides = {"ActorReferences": Role(*roles)}
         overrides.update(set or {})
         return self.sub("Get_ActorDataByRef", title, set=overrides, **kw)
+
+    def python(self, module_name, inputs, outputs, title=""):
+        """A Python Data Processor running pypcg.stages.<module_name> through the host (ruling N4)."""
+        from .host import inline_script
+        settings = {"InlineScript": inline_script(module_name), "bMuteEditorToast": True,
+                    "InputDynamicPins": list(inputs), "OutputDynamicPins": list(outputs)}
+        return self._add(_ir.PYTHON_NODE, title, settings, {}, dynamic=(inputs, outputs))
+
+    def self_point(self, title="Get Self (Volume Transform)", **kw):
+        """The volume's own transform as one point (what Create_Spline_Shape reads when not at the origin)."""
+        return self._add(_ir.SELF_NODE, title, {"Mode": "GetSinglePoint"}, kw)
 
     def reroute(self, src, title="", set=None, **kw):
         kw["In"] = src
@@ -327,3 +351,109 @@ class Graph:
                 "graph_props": resolve(self._props, "graph_props"),
                 "params": [resolve(p.ir, "params.%s" % p.name) for p in self._params],
                 "comment_boxes": [], "nodes": nodes, "sites": sites}
+
+
+_REPO = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+_OFFICIAL = {}
+
+
+def _official_ir(stage):
+    from . import stages
+    if stage not in _OFFICIAL:
+        path = os.path.join(_REPO, "Tools", "pypcg", "official_ir", stages.name(stage) + ".json")
+        _OFFICIAL[stage] = _ir.load(path)
+    return _OFFICIAL[stage]
+
+
+def _role_by_path():
+    from .profiles import official
+    return {p: r for r, p in official.ROLES.items()}
+
+
+def roles_of(paths):
+    paths = paths if isinstance(paths, list) else [paths]
+    table = _role_by_path()
+    unknown = [p for p in paths if p not in table]
+    if unknown:
+        raise KeyError("actor references without a role: %s" % unknown)
+    return [table[p] for p in paths]
+
+
+def official_node(stage, name):
+    for n in _official_ir(stage)["nodes"]:
+        if n["name"] == name:
+            return n
+    near = sorted(n["name"] for n in _official_ir(stage)["nodes"] if n["name"][:5] == name[:5])
+    raise KeyError("official stage %s has no node %r; similar: %s" % (stage, name, near))
+
+
+def official_param(stage, name):
+    from . import compare
+    for p in _official_ir(stage)["params"]:
+        if p["name"] == name:
+            return P(p["name"], p["type"], p["value"], p.get("container", "None"), p.get("type_object", ""),
+                     p.get("category", ""), compare.tooltip_of(p), compare.advanced_of(p), p.get("meta"))
+    raise KeyError("official stage %s has no parameter %r" % (stage, name))
+
+
+class SlimGraph(Graph):
+    """A stage's slim graph (spec 2.1). One user parameter per stage parameter (Seed first), each
+    with one getter into its Python node's Params pin; the Python node(s); and whatever scene reads
+    (keep, actor_by_tag, ref, self_point) and engine generation nodes (keep) the description adds.
+    extra_params are official parameters only kept nodes read; more_modules add Python nodes for
+    stage parts that sit after an engine generation node."""
+
+    def __init__(self, stage_module, extra_params=(), more_modules=()):
+        from . import stage_api, stages
+        self.stage = stage_module
+        specs = {}
+        for m in (stage_module,) + tuple(more_modules):
+            for spec in stage_api.param_specs(m):
+                if spec[0] in specs and specs[spec[0]][1] != spec[1]:
+                    raise TypeError("parameter %s is %s in one module and %s in another" % (spec[0], specs[spec[0]][1], spec[1]))
+                specs.setdefault(spec[0], spec)
+        params = [P(n, t, v, type_object=to, category=cat, tooltip=tip) for n, t, v, tip, to, cat in specs.values()]
+        super().__init__(stages.name(stage_module.STAGE), params=params + list(extra_params),
+                         description=stage_module.DOC.strip())
+        self._getters = {}
+        self.pynodes = {}
+        for m in (stage_module,) + tuple(more_modules):
+            name = m.__name__.rsplit(".", 1)[-1]
+            node = self.python(name, [stage_api.PARAMS_PIN] + list(m.INPUTS), list(m.OUTPUTS), title="Python: " + name)
+            for spec in stage_api.param_specs(m):
+                self.connect(self.p(spec[0]), node, stage_api.PARAMS_PIN)
+            self.pynodes[name] = node
+        self.py = self.pynodes[stage_module.__name__.rsplit(".", 1)[-1]]
+
+    def to_ir(self, profile=None):
+        # An unwired dynamic pin is required by execution (UPCGPythonDataProcessorSettings::
+        # IsInputPinRequiredByExecution) and makes the graph compiler cull the node, silently.
+        for name, node in self.pynodes.items():
+            wired = {p["label"] for p in node._rec["inputs"] if p["edges"]}
+            missing = [pin for pin in node._rec["dynamic_pins"]["inputs"] if pin not in wired]
+            if missing:
+                raise ValueError("%s: Python node %s has unwired input pins %s; wire every stage input "
+                                 "(an unwired dynamic pin culls the node)" % (self.name, name, missing))
+        return super().to_ir(profile)
+    def p(self, name):
+        """The output of this parameter's getter (one getter per parameter, shared: spec E6)."""
+        if name not in self._getters:
+            self._getters[name] = self.param(name, name)
+        return self._getters[name][name]
+
+    def keep(self, official_name, title=None, **pins):
+        """Copy official node `official_name` of this stage: class, subgraph, overrides, settings
+        without Seed, pin defaults and title. Actor references become roles, so a profile can point
+        them at another level."""
+        off = official_node(self.stage.STAGE, official_name)
+        overrides = dict(off.get("overrides") or {})
+        if "ActorReferences" in overrides:
+            overrides["ActorReferences"] = Role(*roles_of(overrides["ActorReferences"]))
+        settings = {k: v for k, v in (off.get("settings") or {}).items() if k != "Seed"}
+        defaults = [D(d["index"], d.get("type"), d.get("value"), d.get("activated", True))
+                    for d in off.get("pin_defaults") or []]
+        title = off.get("title", "") if title is None else title
+        if off.get("subgraph"):
+            return self._add(off["class"], title, settings, pins, subgraph=off["subgraph"], overrides=overrides,
+                             defaults=defaults)
+        return self._add(off["class"], title, settings, pins, defaults=defaults)

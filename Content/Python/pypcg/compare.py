@@ -338,3 +338,28 @@ def format_diffs(diffs, limit=40):
     if len(diffs) > limit:
         lines.append("  ... %d more" % (len(diffs) - limit))
     return "\n".join(lines)
+
+
+def slim_normalize(ir):
+    """A slim graph's IR in comparable form (spec 3, structural check): node seeds, positions, the
+    input/output nodes' settings and comment boxes are not part of a slim graph's description, and
+    the Python node's dynamic pins compare by label."""
+    out = dict(ir)
+    out["comment_boxes"] = []
+    nodes = []
+    for n in ir["nodes"]:
+        st = {k: v for k, v in (n.get("settings") or {}).items() if k != "Seed"}
+        if n["name"] in _ir.IO_NODES:
+            st = {}
+        if n.get("class") == _ir.PYTHON_NODE:
+            for key in ("InputDynamicPins", "OutputDynamicPins"):
+                v = st.get(key)
+                if isinstance(v, dict):
+                    st[key] = [str(p.get("Label")) for p in v.get("PinProperties", [])]
+        nodes.append(dict(n, settings=st, pos=None))
+    out["nodes"] = nodes
+    return out
+
+
+def slim_diff(built, described):
+    return diff(slim_normalize(built), slim_normalize(described), {}, check_layout=False)

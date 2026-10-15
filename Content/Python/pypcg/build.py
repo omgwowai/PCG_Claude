@@ -126,8 +126,17 @@ def _layout(g, ir, made, layout_from, fresh_seeds):
     return len(boxes)
 
 
-def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layout=False, save=True):
-    fresh_seeds = fresh_seeds or {}
+CLASS_PATHS = {_ir.PYTHON_NODE: "/Script/PCGPythonInteropEditor.PCGPythonDataProcessorSettings"}
+SLIM_DX, SLIM_DY = 480, 200
+
+
+def _class(name):
+    return unreal.load_class(None, CLASS_PATHS.get(name, "/Script/PCG." + name))
+
+
+def _write(ir, path, fresh_seeds):
+    """Clear the asset at path and write ir into it: parameters, nodes, settings, overrides, pin
+    defaults, getter bindings, dynamic pins, titles, comments and edges. Returns (graph, nodes by IR name)."""
     g = asset(path)
     unreal.get_editor_subsystem(unreal.AssetEditorSubsystem).close_all_editors_for_asset(g)
     _clear(g)
@@ -148,9 +157,9 @@ def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layo
     for n in ir["nodes"]:
         if n["name"] in made:
             continue
-        cls = unreal.load_class(None, "/Script/PCG." + n["class"])
+        cls = _class(n["class"])
         if cls is None:
-            raise RuntimeError("%s: no node class %s" % (n.get("src") or n["name"], n["class"]))
+            raise RuntimeError("%s: no node class %s (is its plugin enabled?)" % (n.get("src") or n["name"], n["class"]))
         node, st = g.add_node_of_type(cls)
         if n.get("subgraph"):
             sg = unreal.EditorAssetLibrary.load_asset(n["subgraph"].split(".")[0])
@@ -168,11 +177,12 @@ def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layo
         st = node.get_settings()
         settings = _resolve_refs(n.get("settings") or {}, made)
         if n["name"] in _ir.IO_NODES and "Seed" not in settings and n["class"] in fresh_seeds:
-            # An absent Seed means the fresh seed (compare.view drops it). Every other node is
-            # added new and already has it; the input/output nodes survive a rebuild in place.
             settings["Seed"] = fresh_seeds[n["class"]]
+        dyn_in, dyn_out = settings.pop("InputDynamicPins", None), settings.pop("OutputDynamicPins", None)
         if settings:
             _ok(L.set_properties_json(st, json.dumps(settings)), "%s settings" % where)
+        if dyn_in is not None or dyn_out is not None:
+            _ok(L.set_dynamic_pin_labels(st, list(dyn_in or []), list(dyn_out or [])), "%s dynamic pins" % where)
         if n.get("subgraph"):
             inst = st.get_editor_property("subgraph_instance")
             for k, v in (n.get("overrides") or {}).items():
@@ -203,11 +213,15 @@ def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layo
                     raise RuntimeError("edge %s.%s -> %s.%s not created (traps.md 14); source outputs %s, target inputs %s"
                                        % (src_name, src_pin, n.get("src") or n["name"], p["label"],
                                           _labels(made[src_name], "output_pins"), _labels(dst, "input_pins")))
+    return g, made
 
+
+def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layout=False, save=True):
+    fresh_seeds = fresh_seeds or {}
+    g, made = _write(ir, path, fresh_seeds)
     kept_boxes = _layout(g, ir, made, layout_from, fresh_seeds)
     # extract.export, not the raw exporter: the reference IR comes from extract.export, which makes
-    # a Seed equal to the class CDO's seed explicit (ruling T3a). The raw export omits it, so a node
-    # whose official seed is the CDO default would read as a missing Seed on this side only.
+    # a Seed equal to the class CDO's seed explicit (ruling T3a).
     built = extract.export(g)
     diffs = compare.diff(built, reference_ir, fresh_seeds, check_layout=check_layout)
     if not diffs and save:
@@ -218,4 +232,38 @@ def build(ir, path, reference_ir, layout_from=None, fresh_seeds=None, check_layo
     if layout_from and kept_boxes != len(layout_from[1].get("comment_boxes", [])):
         diffs.append({"kind": "layout", "where": "graph", "field": "comment_boxes.kept",
                       "a": kept_boxes, "b": len(layout_from[1].get("comment_boxes", []))})
+    return diffs
+
+
+def _slim_layout(g, ir, made):
+    """Columns by longest path from the sources; rows in description order."""
+    nodes = {n["name"]: n for n in ir["nodes"]}
+    depth = {}
+
+    def d(name, stack=()):
+        if name not in depth:
+            srcs = [e[0] for p in nodes[name].get("inputs", []) for e in p["edges"] if e[0] in nodes and e[0] not in stack]
+            depth[name] = 1 + max((d(s, stack + (name,)) for s in srcs), default=-1)
+        return depth[name]
+
+    rows = {}
+    for n in ir["nodes"]:
+        k = d(n["name"])
+        i = rows.get(k, 0)
+        rows[k] = i + 1
+        made[n["name"]].set_node_position(int(k * SLIM_DX), int(i * SLIM_DY))
+    _ok(L.set_graph_comment_boxes(g, json.dumps({"boxes": []})), "comment boxes")
+
+
+def build_slim(ir, path, save=True):
+    """Write a slim graph and check it against its own description (spec 3, structural check);
+    save only when they agree."""
+    g, made = _write(ir, path, {})
+    _slim_layout(g, ir, made)
+    diffs = compare.slim_diff(extract.export(g), ir)
+    if not diffs and save:
+        if not unreal.EditorAssetLibrary.save_asset(path, only_if_is_dirty=False):
+            raise RuntimeError("save_asset failed for " + path)
+    for d in diffs:
+        d.setdefault("asset", path)
     return diffs

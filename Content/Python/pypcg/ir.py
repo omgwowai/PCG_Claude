@@ -8,6 +8,9 @@ IN_NODE = "DefaultInputNode"
 OUT_NODE = "DefaultOutputNode"
 IO_NODES = (IN_NODE, OUT_NODE)
 
+PYTHON_NODE = "PCGPythonDataProcessorSettings"     # PCGPythonInterop's Python Data Processor
+SELF_NODE = "PCGDataFromActorSettings"             # Get Actor Data; Mode GetSinglePoint reads the volume itself
+
 _QUOTED_PATH = re.compile(r"'([^']+)'$")
 
 
