@@ -446,6 +446,14 @@ class SlimGraph(Graph):
         without Seed, pin defaults and title. Actor references become roles, so a profile can point
         them at another level."""
         off = official_node(self.stage.STAGE, official_name)
+        from . import compare
+        combined = {"settings": off.get("settings") or {}, "overrides": off.get("overrides") or {},
+                    "pin_defaults": off.get("pin_defaults") or []}
+        mapped = _ir.node_refs_to_names(combined, _official_ir(self.stage.STAGE)["graph"])
+        if mapped != combined:
+            raise ValueError("%s: official node %s references other nodes of its graph (%s); a slim graph "
+                             "cannot keep it -- describe that part in Python instead"
+                             % (self.name, official_name, compare.refs(mapped)))
         overrides = dict(off.get("overrides") or {})
         if "ActorReferences" in overrides:
             overrides["ActorReferences"] = Role(*roles_of(overrides["ActorReferences"]))

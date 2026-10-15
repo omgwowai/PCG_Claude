@@ -18,7 +18,10 @@ OFFICIAL = {"graph": "/X/PCG_3_1_1_Districts.PCG_3_1_1_Districts", "params": [
                "overrides": {"ActorReferences": ["/Game/L.L:PersistentLevel.Roads"]}, "settings": {"Seed": 1}},
               {"name": "Spawn", "class": "PCGSubgraphSettings", "title": "Spawn Things",
                "subgraph": "/P/Filter_Tags.Filter_Tags", "overrides": {"FilteredInputTags": "A"},
-               "settings": {"Seed": 2}, "pin_defaults": [{"index": 0, "type": "Double", "value": 1.0, "activated": True}]}]}
+               "settings": {"Seed": 2}, "pin_defaults": [{"index": 0, "type": "Double", "value": 1.0, "activated": True}]},
+              {"name": "Usage_0", "class": "PCGNamedRerouteUsageSettings", "title": "Lots",
+               "settings": {"Declaration": "/X/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_0."
+                                           "PCGNamedRerouteDeclarationSettings_1"}}]}
 
 
 @pytest.fixture(autouse=True)
@@ -97,6 +100,12 @@ def test_keep_copies_the_official_node_and_turns_actor_paths_into_roles():
         g.keep("NoSuchNode")
 
 
+def test_keep_refuses_a_node_that_references_another_node_of_the_official_graph():
+    g = dsl.SlimGraph(STUB)
+    with pytest.raises(ValueError, match="NamedRerouteDeclaration_0"):
+        g.keep("Usage_0")
+
+
 def test_official_param_copies_the_descriptor():
     p = dsl.official_param(7, "Road_Profile")
     assert p.ir["type"] == "SoftObject" and p.ir["type_object"] == "/P/BP.BP_C" and p.ir["category"] == "Road Parameters"
@@ -123,3 +132,13 @@ def test_slim_normalize_maps_exported_pins_to_labels_and_drops_seeds():
     py = [n for n in exported["nodes"] if n["class"] == pir.PYTHON_NODE][0]
     py["settings"]["InlineScript"] = "changed"
     assert [d["field"] for d in compare.slim_diff(exported, described)] == ["settings.InlineScript"]
+
+
+def test_slim_normalize_fills_the_class_default_output_pin_when_the_exporter_omits_it():
+    described = {"graph": "G", "params": [], "nodes": [
+        {"name": "n0", "class": pir.PYTHON_NODE, "title": "Python: s", "inputs": [],
+         "settings": {"InlineScript": "x", "InputDynamicPins": ["Params"], "OutputDynamicPins": ["Output"]}}]}
+    exported = {"graph": "G", "params": [], "nodes": [
+        {"name": "n0", "class": pir.PYTHON_NODE, "title": "Python: s", "inputs": [],
+         "settings": {"InlineScript": "x", "InputDynamicPins": {"PinProperties": [{"Label": "Params", "AllowedTypes": {}}]}}}]}
+    assert compare.slim_diff(exported, described) == []

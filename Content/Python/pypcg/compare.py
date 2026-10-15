@@ -352,10 +352,14 @@ def slim_normalize(ir):
         if n["name"] in _ir.IO_NODES:
             st = {}
         if n.get("class") == _ir.PYTHON_NODE:
-            for key in ("InputDynamicPins", "OutputDynamicPins"):
+            for key, default in (("InputDynamicPins", ["Input"]), ("OutputDynamicPins", ["Output"])):
                 v = st.get(key)
                 if isinstance(v, dict):
                     st[key] = [str(p.get("Label")) for p in v.get("PinProperties", [])]
+                elif key not in st:
+                    # UPCGPythonDataProcessorSettings's constructor default; the exporter omits a
+                    # setting equal to the CDO's.
+                    st[key] = default
         nodes.append(dict(n, settings=st, pos=None))
     out["nodes"] = nodes
     return out
