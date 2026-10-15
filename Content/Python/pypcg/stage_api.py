@@ -106,6 +106,7 @@ def _check_outputs(module, outputs):
             raise StageError("%s: unknown output pin %r; outputs %s" % (module.__name__, pin, list(module.OUTPUTS)))
         for item in items:
             ok = (isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], VALUE_TYPES)
+                  and isinstance(item[1], (list, tuple))
                   and all(isinstance(t, str) for t in item[1]))
             if not ok:
                 raise StageError("%s: output %s holds %r; expected (Polygon | Spline | Points | ParamSet, [tags])"

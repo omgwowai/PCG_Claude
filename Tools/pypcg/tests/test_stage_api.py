@@ -40,7 +40,7 @@ def test_execute_reports_param_mismatch():
     params["Renamed"] = 2.0
     with pytest.raises(StageError) as e:
         stage_api.execute(stub(), {"In": []}, params, None)
-    assert "A" in str(e.value) and "Renamed" in str(e.value)
+    assert "missing ['A']" in str(e.value) and "Renamed" in str(e.value)
 
 
 def test_execute_requires_every_input_pin():
@@ -56,6 +56,12 @@ def test_execute_checks_outputs():
     bad_value = stub(run=lambda i, p, c: {"Out": [("not a value", ["Out"])]})
     with pytest.raises(StageError):
         stage_api.execute(bad_value, {"In": []}, stage_api.defaults(bad_value), None)
+
+
+def test_execute_rejects_a_string_as_the_tag_list():
+    m = stub(run=lambda i, p, c: {"Out": [(Polygon([(0, 0), (1, 0), (0, 1)]), "Out")]})
+    with pytest.raises(StageError):
+        stage_api.execute(m, {"In": []}, stage_api.defaults(m), None)
 
 
 def test_execute_passes_params_without_seed_and_a_seeded_rng():

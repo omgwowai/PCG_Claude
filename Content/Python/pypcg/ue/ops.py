@@ -18,7 +18,8 @@ def _polygons(pl):
     out = []
     for i in range(PL.get_polygon_count(pl)):
         outer, _always_false = PL.get_polygon_vertices(pl, i, -1)      # 5.8 never sets the valid flag (spike)
-        holes = [[(v.x, v.y) for v in PL.get_polygon_vertices(pl, i, h)[0]] for h in range(PL.get_polygon_hole_count(pl, i))]
+        hole_count, _valid = PL.get_polygon_hole_count(pl, i)           # int return plus a bool out-param (the valid flag is not trusted)
+        holes = [[(v.x, v.y) for v in PL.get_polygon_vertices(pl, i, h)[0]] for h in range(hole_count)]
         out.append(Polygon([(v.x, v.y) for v in outer], holes))
     return out
 

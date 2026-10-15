@@ -12,10 +12,10 @@ class Terrain:
     def height(self, x, y):
         """Surface z under (x, y), or None where the ray misses."""
         transform = unreal.Transform(unreal.Vector(x, y, 0.0), unreal.Rotator(), unreal.Vector(1.0, 1.0, 1.0))
-        box = unreal.Box(min=unreal.Vector(-1.0, -1.0, -1.0), max=unreal.Vector(1.0, 1.0, 1.0), is_valid=True)
+        box = unreal.Box(unreal.Vector(-1.0, -1.0, -1.0), unreal.Vector(1.0, 1.0, 1.0))
         res = self._data.k2_sample_point(transform, box, None)
-        # A bool UFUNCTION with an out parameter comes back as (ok, point) or, in some bindings, as the
-        # point alone; accept both (Task 6 records which one this engine uses).
+        # A bool UFUNCTION with an out parameter comes back as the bare point when the cast hits and as
+        # None when it misses; the tuple and bare-bool branches stay as harmless guards for other bindings.
         if isinstance(res, tuple):
             ok, point = bool(res[0]), res[1]
         elif isinstance(res, unreal.PCGPoint):

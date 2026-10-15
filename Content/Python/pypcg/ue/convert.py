@@ -101,7 +101,7 @@ def entry_values(md, key):
     """{attribute: value} of one metadata entry, every supported type (getter chosen by the real
     type, traps.md 36)."""
     p = unreal.PCGPoint()
-    p.set_editor_property("metadata_entry", key)
+    p.import_text("(MetadataEntry=%d)" % key)
     return {name: _plain(tname, getattr(p, "get_%s_attribute" % suffix)(md, name))
             for name, (tname, suffix) in _attributes(md)}
 
@@ -241,7 +241,6 @@ def _param_data(ps):
     d = unreal.PCGParamData()
     md = d.mutable_metadata()
     p = unreal.PCGPoint()
-    p.set_editor_property("metadata_entry", md.add_entry())
     for name, value in ps.values.items():
         tname = ps.types.get(name) or _infer(value)
         _create(md, name, tname)
