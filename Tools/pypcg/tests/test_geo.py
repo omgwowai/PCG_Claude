@@ -140,3 +140,22 @@ def test_json_round_trip_and_truncation():
 def test_items_helpers():
     items = [("a", {"Small"}), ("b", {"Large", "Lots"}), ("c", {"Lots"})]
     assert geo.values(items) == ["a", "b", "c"] and geo.with_tag(items, "Lots") == ["b", "c"]
+
+
+def test_enclosing_polygon_wraps_the_padded_box_around_the_path():
+    # GetEnclosingPolygonFromPath closes an open artery-cut path by walking around the box
+    # (padded 1 % of its largest side) rather than cutting through it.
+    path = [(5000.0, 0.0), (5000.0, 10000.0)]
+    bb = ((0.0, 0.0), (10000.0, 5000.0))
+    result = geo.enclosing_polygon(path, bb)
+    assert result[0] == path[0] and result[1] == path[1]
+    corners = [(-100.0, -100.0), (10100.0, -100.0), (10100.0, 5100.0), (-100.0, 5100.0)]
+    assert all(result.count(c) == 1 for c in corners)
+    assert abs(geo.signed_area(result)) >= 10100.0 * 5100.0
+    assert geo.inside(path[0], result)
+    assert geo.enclosing_polygon(path, bb) == result        # no shared mutable state across calls
+
+
+def test_enclosing_polygon_floors_the_padding_at_1_cm_on_a_degenerate_box():
+    result = geo.enclosing_polygon([(5000.0, 0.0), (5000.0, 10000.0)], ((0.0, 0.0), (0.0, 0.0)))
+    assert abs(geo.signed_area(result)) >= 4.0
