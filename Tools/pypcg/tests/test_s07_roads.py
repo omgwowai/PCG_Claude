@@ -23,6 +23,7 @@ import pytest
 from fakes import RibbonOps
 from pypcg import geo, stage_api
 from pypcg.geo import Polygon, Spline
+from pypcg.geo import sections as SEC
 from pypcg.stages import s07_roads as S
 
 REPO = stage_api.REPO
@@ -58,11 +59,17 @@ def test_contract_parameters_and_outputs_match_the_official_graph():
                          encoding="utf-8"))
     defaults = {p["name"]: p["value"] for p in off["params"]}
     assert set(S.PARAMS) == {"simpleRoads", "local_Width", "collector_width", "Artery_width",
-                             "Road_Profile", "Crosswalks"}                 # the six kept
+                             "Road_Profile", "Crosswalks", "Partitioned"}
     assert set(S.PARAMS) <= set(defaults)
     for name in ("simpleRoads", "local_Width", "collector_width", "Artery_width"):
         assert S.PARAMS[name].default == defaults[name]
-    assert set(S.OUTPUTS) == {"RoadFootprints"}          # the terrain half is commit 2
+    # `Partitioned` is the one parameter this port declares that the contract drops: three kept
+    # branches (`Branch_15/16/18`) test it. It must exist for the graph to build, and it must not
+    # carry the graph's own default (false, the value every volume this port runs uses).
+    assert S.PARAMS["Partitioned"].default == defaults["Partitioned"] == False
+    assert set(S.OUTPUTS) == {"RoadFootprints", "LocalSections", "CollectorSections",
+                              "ArterySections", "IntersectionsPlanar", "Landmarks",
+                              "LocalRoads", "CollectorRoads", "ArteryRoads"}
     # the demo level's overrides for the two it changes
     assert S.PARAMS["Road_Profile"].type == "SoftObject"
     assert S.PARAMS["Road_Profile"].default == defaults["Road_Profile"]
@@ -82,8 +89,25 @@ def test_contract_the_slim_graph_wires_every_pin_and_output():
     wired = {p["label"] for p in py[0]["inputs"] if p["edges"]}
     assert set(S.INPUTS) | {stage_api.PARAMS_PIN} <= wired
     used = {(src, pin) for x in doc["nodes"] for p in x.get("inputs", []) for src, pin in p["edges"]}
+    # Every output is wired except `Landmarks`, which is published for the Python module's own use
+    # (the three landmark clips and `Subgraph_3`) and has no native consumer in the slim graph: the
+    # official graph's carrier for it `NamedRerouteDeclaration_2` is a node reference, which `keep()`
+    # refuses, so its readers are fed inside the module instead. It still must be EMITTED, or the
+    # module's own call would KeyError -- `test_every_output_pin_is_published` covers that.
     for pin in S.OUTPUTS:
+        if pin == "Landmarks":
+            continue
         assert (py[0]["name"], pin) in used, "output %s is wired to nothing" % pin
+
+
+def test_every_output_pin_is_published():
+    """`run()` must emit all nine pins on every input, empty included, because the slim graph wires
+    eight of them into kept native nodes: a missing pin would leave a node with no input rather than
+    with an empty one."""
+    for inp in ({pin: [] for pin in S.INPUTS}, {"Districts": []},
+                inputs([("localRoads", [(0.0, 0.0), (10000.0, 0.0)])])):
+        out = S.run(inp, PARAMS, _ctx())
+        assert set(out) == set(S.OUTPUTS)
 
 
 # ---- 2. empty inputs -------------------------------------------------------------------------
@@ -202,3 +226,110 @@ def test_this_stage_draws_no_random_numbers():
 
 def _ctx():
     return stage_api.Ctx(S.STAGE, 42, OPS)
+
+
+# ---- 5. the sections half (`Intersection_solving`) -------------------------------------------
+def test_sections_contract_constants_match_the_official_graph():
+    """`roadSectionLimit` and `intersection_expansion_range`: the first is the graph's own default,
+    the second is overridden to 50 in the demo level against a graph default of 100."""
+    assert S.SECTION_LIMIT == 200.0
+    assert S.EXPANSION_RANGE == 50.0
+    assert SEC.SECTION_LIMIT == S.SECTION_LIMIT
+    assert S.LANDMARK_CUT_ANGLE == 3.0
+
+
+def test_solve_publishes_every_class_and_the_three_composite_labels():
+    """`Gather_0/1/2` label the pieces `roadSections`, `intersections` and `intersectionsShort`; the
+    long/short split is `Filter_Splines_byLength` at `roadSectionLimit`."""
+    solved = SEC.solve(S.class_paths(inputs(ROADS), OPS, PARAMS), PARAMS, OPS)
+    assert set(solved) == {"sections", "planar", "cutter", "footprints"}
+    assert set(solved["sections"]) == set(SEC.CLASSES)
+    for tag in SEC.CLASSES:
+        labels = {label for _p, label in solved["sections"][tag]}
+        assert labels, "class %s produced no labelled piece" % tag
+        assert labels <= {"roadSections", "intersections", "intersectionsShort"}
+
+
+def test_the_module_length_filter_is_the_only_thing_that_splits_long_from_short():
+    """A straight local line through one crossing: the pieces outside the cutter longer than 200 cm
+    are `roadSections`, the shorter ones `intersectionsShort`."""
+    solved = SEC.solve(S.class_paths(inputs(ROADS), OPS, PARAMS), PARAMS, OPS)
+    for tag in SEC.CLASSES:
+        for path, label in solved["sections"][tag]:
+            L = SEC.path_length(path)
+            if label == "roadSections":
+                assert L > S.SECTION_LIMIT, "a roadSection of %.2f cm is under the limit" % L
+            if label == "intersectionsShort":
+                assert L <= S.SECTION_LIMIT, "an intersectionsShort of %.2f cm is over the limit" % L
+
+
+def test_cut_paths_keeps_inside_for_intersection_and_removes_for_difference():
+    """The one primitive both directions of this stage use. Intersection keeps what a ring holds;
+    Difference removes it. The two must not be swapped: the landmark clips and the intersection cuts
+    are Difference, the +/-Y dance and `Subgraph_133/135/138` are Intersection."""
+    path = [(0.0, 0.0), (1000.0, 0.0)]
+    ring = [(-100.0, -100.0), (100.0, -100.0), (100.0, 100.0), (-100.0, 100.0)]
+    inside = SEC.cut_paths([path], [ring], OPS, True)
+    outside = SEC.cut_paths([path], [ring], OPS, False)
+    assert inside, "the intersection direction dropped a piece the ring holds"
+    assert outside, "the difference direction dropped everything"
+    assert sum(SEC.path_length(p) for p in inside) < sum(SEC.path_length(p) for p in outside)
+
+
+def test_cut_paths_against_many_rings_does_not_count_a_stretch_twice():
+    """`ClipPaths(Intersection)` clips against the UNION of its cutters. The intersection planes
+    overlap heavily (334 planes over 78 ribbons), so a per-ring concatenation would hand the grammar
+    nodes more road than exists; the arclength merge is what prevents it."""
+    path = [(0.0, 0.0), (1000.0, 0.0)]
+    a = [(-100.0, -100.0), (500.0, -100.0), (500.0, 100.0), (-100.0, 100.0)]
+    b = [(300.0, -100.0), (800.0, -100.0), (800.0, 100.0), (300.0, 100.0)]
+    both = SEC.cut_paths([path], [a, b], OPS, True)
+    total = sum(SEC.path_length(p) for p in both)
+    assert total <= 1000.0 + 1e-6, "the overlapping cutters counted the same stretch twice"
+    assert total >= 500.0, "the union of the two overlapping spans must be at least the longer one"
+
+
+def test_a_class_with_no_input_contributes_nothing_and_does_not_raise():
+    solved = SEC.solve({SEC.LOCAL: [], SEC.COLLECTOR: [], SEC.ARTERY: []}, PARAMS, OPS)
+    assert all(not solved["sections"][t] for t in SEC.CLASSES)
+    assert solved["planar"] == []
+
+
+def test_the_sections_are_landmark_clipped_and_the_decals_are_not():
+    """The decal chain (`FilterDataByTag_6/10/11` -> `Branch_6/7/8`) reads the Districts' own lines
+    ahead of the three landmark clips, while the grammar reads the solved, clipped sections. So
+    `LocalRoads` must be at least as long as the clipped class."""
+    out = S.run(inputs(ROADS), PARAMS, _ctx())
+    for pin in ("LocalRoads", "CollectorRoads", "ArteryRoads"):
+        assert out[pin], "%s is empty but the input has lines of that class" % pin
+    got = sum(SEC.path_length([(p[0], p[1]) for p in s.points]) for s, _t in out["LocalRoads"])
+    assert got > 0.0
+
+
+def test_the_planar_set_is_built_from_the_short_and_the_inside_pieces():
+    """`Subgraph_148/145/149` outline the SHORT and the INSIDE data. A class whose pieces are all
+    long and outside contributes no planar polygon."""
+    paths = {SEC.LOCAL: [[(0.0, 0.0), (100000.0, 0.0)]], SEC.COLLECTOR: [], SEC.ARTERY: []}
+    solved = SEC.solve(paths, PARAMS, OPS)
+    assert solved["sections"][SEC.LOCAL], "a single long road must still produce a section"
+    assert all(label == "roadSections" for _p, label in solved["sections"][SEC.LOCAL])
+
+
+# ---- 6. the V1 checks on the sections half ---------------------------------------------------
+def test_v1_checks_pass_on_a_real_run_and_catch_a_collapsed_class():
+    from pypcg.checks import s07 as C
+    out = S.run(inputs(ROADS), PARAMS, _ctx())
+    assert C.check(inputs(ROADS), PARAMS, out, OPS) == []
+    # a class whose sections vanished while its decal lines are still there
+    lost = dict(out, LocalSections=[])
+    assert any("LocalSections is empty" in x for x in C.check(inputs(ROADS), PARAMS, lost, OPS))
+    # a degenerate section
+    zero = dict(out, ArterySections=[(Spline([(0.0, 0.0, 0.0)]), frozenset({"roadSections"}))])
+    assert any("ArterySections holds a" in x for x in C.check(inputs(ROADS), PARAMS, zero, OPS))
+
+
+def test_v1_checks_do_not_judge_a_run_with_no_roads():
+    """Empty input is not a failure: there is no class to publish sections for."""
+    from pypcg.checks import s07 as C
+    out = S.run({pin: [] for pin in S.INPUTS}, PARAMS, _ctx())
+    assert C.check({pin: [] for pin in S.INPUTS}, PARAMS, out, OPS) == []

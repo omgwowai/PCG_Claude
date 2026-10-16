@@ -79,6 +79,60 @@ def check(inputs, params, outputs, ops, official=None):
                     break
     if inputs and official and official.get("RoadFootprints"):
         f += _oracle(mine, official["RoadFootprints"])
+    f += _sections(outputs)
+    return f
+
+
+SEC_TOL = 0.02
+
+
+def _sections(outputs):
+    """The sections half's invariants, on the pins the six grammar nodes and the decal chain read.
+
+    Three things must hold on every run, and none of them is a comparison against the official
+    value (that is V2's, and it is the one failing line -- see `docs/pypcg/stages/s07.md` 9.2):
+
+      - each of the three classes publishes sections when the input carries lines of that class;
+      - no published section is degenerate (under two points, or zero length): a zero-length section
+        would put a grammar point on top of another one;
+      - the three decal classes (`LocalRoads`/`CollectorRoads`/`ArteryRoads`) publish lines, because
+        `Branch_6/7/8` place the spray-paint decals along them.
+
+    The per-class length ratio is checked only for shape: the port's local total is -11.7 % from the
+    oracle's today (9.2) and the artery's is +0.03 %, so a bound tight enough to be useful would
+    encode a known-bad number. The check asserts the sections are a real fraction of the decal lines
+    instead -- a dropped or collapsed class fails, the known residual does not."""
+    f = []
+    for pin, decal in (("LocalSections", "LocalRoads"),
+                       ("CollectorSections", "CollectorRoads"),
+                       ("ArterySections", "ArteryRoads")):
+        items = outputs.get(pin, [])
+        if outputs.get(decal) and not items:
+            f.append("%s is empty while %s has %d line(s)" % (pin, decal, len(outputs[decal])))
+            continue
+        for value, _tags in items:
+            pts = getattr(value, "polyline", None) or getattr(value, "points", None) or []
+            if len(pts) < 2:
+                f.append("%s holds a %d-point section" % (pin, len(pts)))
+                break
+            if geo.path_length([(p[0], p[1]) for p in pts]) <= 0.0:
+                f.append("%s holds a zero-length section" % pin)
+                break
+        if items and outputs.get(decal):
+            sec_m = sum(geo.path_length([(p[0], p[1]) for p in
+                                         (getattr(v, "polyline", None) or getattr(v, "points", None) or [])])
+                        for v, _t in items)
+            dec_m = sum(geo.path_length([(p[0], p[1]) for p in
+                                         (getattr(v, "polyline", None) or getattr(v, "points", None) or [])])
+                        for v, _t in outputs[decal])
+            if dec_m > 0.0 and not (SEC_TOL <= sec_m / dec_m <= 3.0):
+                f.append("%s is %.1f m against %.1f m of %s lines" % (pin, sec_m / 100.0,
+                                                                      dec_m / 100.0, decal))
+    if outputs.get("IntersectionsPlanar"):
+        for value, _tags in outputs["IntersectionsPlanar"]:
+            if geo.area_m2(value) <= 0.0:
+                f.append("an IntersectionsPlanar polygon has zero area")
+                break
     return f
 
 

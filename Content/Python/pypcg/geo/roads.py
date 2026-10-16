@@ -4,12 +4,10 @@ Every function here stands in for a PCGPrimitives computation subgraph the stage
 docstring on each names the subgraph and the nodes inside it. Pure geometry only: the booleans that
 need Clipper2 arrive through the `ops` argument, exactly as `pypcg.geo.subdivide` takes them.
 
-Only the FOOTPRINT half of stage 7 is ported (`docs/pypcg/stages/s07.md`), so this module holds only
-what that half uses: `path_of`, `extend`, `bands_of`, `outline`, `union`, `difference` and `expand` --
-the ribbon and the boolean that `Subgraph_86/87/88` and `Subgraph_89` perform. The section clipping
-(`Compose_Spline_Cut`), the length filter (`Filter_Splines_byLength`) and the placement
-(`Place_OnSpline`) belong to `Intersection_solving` and the terrain half; they are NOT here yet,
-because a helper with no caller reads as a finished step when it is not one. Add them with commit 2.
+This module is stage 7's FOOTPRINT half: `Subgraph_86/87/88 Transform_Outline` (the three classes'
+ribbons) and `Subgraph_89 Compose_Areas_Union` (their union, the published `RoadFootprints`). The
+SECTIONS half -- `Intersection_solving` and everything the six grammar nodes and the decal chain
+read -- is `pypcg.geo.sections`.
 """
 from .plane import drop_closing, unit
 from .types import Polygon
@@ -20,6 +18,7 @@ from .types import Polygon
 # settings both that call and `OffsetPolygon2D` leave at their defaults.
 OUTLINE_JOIN = "square"
 OUTLINE_MITER = 2.0
+
 
 
 def path_of(spline):
@@ -111,3 +110,28 @@ def expand(parts, distance, ops):
             q.holes = q.holes + [list(h) for h in p.holes]
             out.append(q)
     return out
+
+
+def outline_ring(ring, width, ops):
+    """`Transform_Outline`'s `ForceClosed` branch: the band between `ring` grown by `width/2` and
+    shrunk by it, i.e. `Polygon2DOperation(Difference)` of the two offsets.
+
+    Read out of `Transform_Outline_CoreProcess` (the primitive's own dump):
+
+      CreatePolygon2D_2       `ForceClosed` over the closed input -> the ring
+      OffsetPolygon2D_0 / _1  `+-width/2`
+      Polygon2DOperation_0    Difference: grown MINUS shrunk
+
+    For an open path that branch is empty (the `ForceClosed` ring of an open path is degenerate), so
+    `outline` above serves the open case and this one the closed case. The primitive wires both to
+    its output, so a caller picks the branch its input warrants -- stage 7's rings (the City outline
+    and the Landmarks ribbon) take this one."""
+    grown = ops.offset([list(ring)], 0.5 * float(width), OUTLINE_JOIN, OUTLINE_MITER)
+    shrunk = ops.offset([list(ring)], -0.5 * float(width), OUTLINE_JOIN, OUTLINE_MITER)
+    if not grown:
+        return []
+    if not shrunk:
+        return grown
+    return ops.difference([p.outer for p in grown], [p.outer for p in shrunk])
+
+

@@ -93,14 +93,26 @@ def enclosing_polygon(path, bb):
 
 
 # ---- ClipPaths(Intersection): the parts of an open path inside a ring ----------------------
-def _at(path, cum, s):
+def _at(path, cum, s, z=None):
+    """The point at arclength `s` on `path`, interpolated. `z` is carried only when given, so a 2D
+    path yields 2D points and a 3D one keeps its Z."""
     i = min(max(bisect.bisect_right(cum, s) - 1, 0), len(path) - 2)
     span = cum[i + 1] - cum[i]
     t = 0.0 if span == 0 else (s - cum[i]) / span
-    return (path[i][0] + t * (path[i + 1][0] - path[i][0]), path[i][1] + t * (path[i + 1][1] - path[i][1]))
+    x = path[i][0] + t * (path[i + 1][0] - path[i][0])
+    y = path[i][1] + t * (path[i + 1][1] - path[i][1])
+    return (x, y) if z is None else (x, y, z)
 
 
-def clip_path(path, ring):
+def clip_path(path, ring, keep_inside=True):
+    """`ClipPaths(Intersection)` when `keep_inside`, `ClipPaths(Difference)` when not: the parts of
+    an open path that lie inside (respectively outside) a ring.
+
+    Both operations are the same walk -- cut the path at every crossing, then decide each span by
+    testing its midpoint -- so one implementation serves them; PCG's `Compose_Spline_Cut` wires both
+    (`ClipPaths_0` and `ClipPaths_1`) off the same `Branch_0`, and stage 7 uses each: the landmark
+    clips and the intersection cutter remove (`Difference`), the "intersections" tag keeps
+    (`DifferenceOrIntersection = true`)."""
     n = len(ring)
     edges = []
     for i in range(n):
@@ -127,13 +139,26 @@ def clip_path(path, ring):
                 cuts.append(cum[i] + t * (cum[i + 1] - cum[i]))
     marks, spans = [0.0] + sorted(cuts) + [cum[-1]], []
     for s0, s1 in zip(marks, marks[1:]):
-        if s1 - s0 > 1e-6 and inside(_at(path, cum, 0.5 * (s0 + s1)), ring):
+        if s1 - s0 > 1e-6 and inside(_at(path, cum, 0.5 * (s0 + s1)), ring) == keep_inside:
             if spans and abs(spans[-1][1] - s0) < 1e-6:
                 spans[-1][1] = s1
             else:
                 spans.append([s0, s1])
-    return [[_at(path, cum, s0)] + [tuple(path[k][:2]) for k in range(bisect.bisect_right(cum, s0), bisect.bisect_left(cum, s1))]
-            + [_at(path, cum, s1)] for s0, s1 in spans]
+    # The Z of each surviving vertex is carried through, but ONLY when the input carried one:
+    # ClipPaths preserves the input's Z, and the road graph's own `Transform_Splines_Extend` and
+    # `Transform_Offset` read it again afterwards. A 2D caller keeps 2D points -- stage 6 does, and
+    # so does every caller that only ever wanted the cut piece's XY.
+    pts = [tuple(p[:3]) for p in path] if len(path[0]) > 2 else [tuple(p[:2]) for p in path]
+    return [[_at(path, cum, s0) if len(path[0]) <= 2 else _at(path, cum, s0, _z(path))]
+            + [pts[k] for k in range(bisect.bisect_right(cum, s0), bisect.bisect_left(cum, s1))]
+            + [_at(path, cum, s1) if len(path[0]) <= 2 else _at(path, cum, s1, _z(path))]
+            for s0, s1 in spans]
+
+
+def _z(path):
+    """A path's third coordinate: its first point's, or 0 when the points are 2D."""
+    return path[0][2] if len(path[0]) > 2 else 0.0
+
 
 
 # ---- CleanSpline (5 deg collinear, open curve spline, auto tangents) ----------------------
@@ -160,6 +185,60 @@ def clean_points(pts, angle_deg=5.0):
             del cp[k - 1]
         k -= 1
     return [q[0] for q in cp]
+
+
+# ---- Extract_Segments (SplitSplines ByPredicateOnControlPoints) -----------------------------
+def extract_segments(ring, angle_deg):
+    """`Extract_Segments`: split a closed spline at every control point whose turn is over
+    `angle_deg`, into the straight runs between those points.
+
+    The CoreProcess (`Extract_Segments_CoreProcess`, 20 nodes) is:
+
+      Splines_CalculateAngleToNextPoint   per control point, the angle to the next (subgraph)
+      MetadataMaths(Divide)               that angle / CutAngleThreshold
+      AttributeCast(Integer32)            truncated to an int
+      SplitSplines(ByPredicateOnControlPoints, Attribute "predicate")
+                                          split where the predicate holds
+
+    The predicate's attribute is `$Index`, so a control point splits when its own index exceeds
+    `angle/threshold` -- and since the points arrive in index order, "index > angle/threshold" is
+    true from the first point on with a larger angle than the threshold. The set of split points is
+    therefore exactly the control points whose angle to the next exceeds `angle_deg`, and the output
+    is the runs between them. `CutAngleThreshold = 3` in stage 7's `Subgraph_3 Extract Road
+    Segments`, whose input is the Landmarks ring.
+
+    A segment is open and linear: `SplitSplines` slices the spline's control points, and the
+    primitive rebuilds each run as a linear open spline."""
+    pts = list(ring)
+    if len(pts) > 1 and pts[0] == pts[-1]:
+        pts = pts[:-1]
+    n = len(pts)
+    if n < 3:
+        return [pts + [pts[0]]] if n == 2 else ([[pts[0]]] if n == 1 else [])
+    cuts = []
+    for i in range(n):
+        a, b, c = pts[(i - 1) % n], pts[i], pts[(i + 1) % n]
+        u = unit(b[0] - a[0], b[1] - a[1])
+        v = unit(c[0] - b[0], c[1] - b[1])
+        ang = math.degrees(math.acos(max(-1.0, min(1.0, u[0] * v[0] + u[1] * v[1]))))
+        if ang > float(angle_deg):
+            cuts.append(i)
+    if not cuts:
+        return [pts + [pts[0]]]
+    out = []
+    for k, start in enumerate(cuts):
+        end = cuts[(k + 1) % len(cuts)]
+        run = []
+        i = start
+        while True:
+            run.append(pts[i])
+            i = (i + 1) % n
+            if i == end:
+                break
+        run.append(pts[end])
+        if len(run) >= 2:
+            out.append(run)
+    return out
 
 
 # ---- the longest-edge frame + CombinePoints bounds ----------------------------------------

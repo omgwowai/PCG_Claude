@@ -89,6 +89,24 @@ class RibbonOps:
                                     (x1 + distance, y1 + distance), (x0 - distance, y1 + distance)]))
         return out
 
+    def intersection(self, rings_a, rings_b):
+        """Box-and-boxes: one box per pair that overlaps, as disjoint boxes. Same stand-in rule as
+        `difference` -- real overlap geometry is Clipper2's, this only pins the algorithm's shape."""
+        out = []
+        for a in rings_a:
+            box = geo.bbox(a)
+            for b in rings_b:
+                bb = geo.bbox(b)
+                if not _boxes_overlap(box, bb):
+                    continue
+                (ax0, ay0), (ax1, ay1) = box
+                (bx0, by0), (bx1, by1) = bb
+                x0, y0 = max(ax0, bx0), max(ay0, by0)
+                x1, y1 = min(ax1, bx1), min(ay1, by1)
+                if x1 - x0 > 1e-9 and y1 - y0 > 1e-9:
+                    out.append(geo.Polygon(_box_ring(((x0, y0), (x1, y1)))))
+        return out
+
     def difference(self, rings_a, rings_b):
         """Box minus boxes, as disjoint boxes (a proper sweep, not one bounding box)."""
         out = []

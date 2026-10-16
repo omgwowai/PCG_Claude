@@ -9,7 +9,7 @@ SP = unreal.GeometryScript_SimplePolygon
 
 
 def _list(rings):
-    simple = [SP.conv_array_of_vector2d_to_geometry_script_simple_polygon([unreal.Vector2D(x, y) for x, y in r])
+    simple = [SP.conv_array_of_vector2d_to_geometry_script_simple_polygon([_v2(p) for p in r])
               for r in rings]
     return PL.create_polygon_list_from_simple_polygons(simple)
 
@@ -26,6 +26,12 @@ def _polygons(pl):
 
 def _closed(path):
     return len(path) > 1 and abs(path[0][0] - path[-1][0]) < 1e-9 and abs(path[0][1] - path[-1][1]) < 1e-9
+
+
+def _v2(p):
+    """A path point as Vector2D. Points may carry a third coordinate from `geo.plane.clip_path`; the
+    booleans are 2D, so Z is dropped here and nowhere else."""
+    return unreal.Vector2D(float(p[0]), float(p[1]))
 
 
 class Ops:
@@ -65,8 +71,7 @@ class Ops:
         opts.set_editor_property("end_type", getattr(unreal.GeometryScriptPathOffsetEndType, end.upper(),
                                                      unreal.GeometryScriptPathOffsetEndType.BUTT))
         opts.set_editor_property("miter_limit", float(miter_limit))
-        ring = [unreal.Vector2D(x, y) for x, y in path[:-1]] if _closed(path) else \
-            [unreal.Vector2D(x, y) for x, y in path]
+        ring = [_v2(p) for p in (path[:-1] if _closed(path) else path)]
         out, _ok = PL.create_polygons_from_path_offset(ring, opts, float(distance), True)
         return _polygons(out)
 

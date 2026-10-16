@@ -17,7 +17,13 @@ def test_graph_description(n):
     assert py, "no Python node"
     used = {(src, pin) for x in out["nodes"] for p in x.get("inputs", []) for src, pin in p["edges"]}
     for node in py:
+        # A stage may declare an output that no kept native node reads, because every reader of it is
+        # itself ported (stage 7's `Landmarks`). Those pins are listed in the module's `INTERNAL` and
+        # are exempt here; everything else must be wired, or the node leaves a native input starved.
+        internal = set(getattr(stages.spec(n), "INTERNAL", ()))
         for pin in node["settings"]["OutputDynamicPins"]:
+            if pin in internal:
+                continue
             assert (node["name"], pin) in used, "Python output %s of %s is wired to nothing" % (pin, node["title"])
     assert out["params"][0]["name"] == stage_api.SEED
     getters = {x["getter_param"] for x in out["nodes"] if x.get("getter_param")}
