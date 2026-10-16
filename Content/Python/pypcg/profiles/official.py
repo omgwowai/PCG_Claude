@@ -22,7 +22,14 @@ ROLES = {
     "HighwaySpline3": DEMO + "Spline_UAID_387C76498394C5DE02_1470179601",
 }
 
-# Filled in Task 8 Step 2 from pypcg_behaviour.py {"phase": "roles"}: role -> actor label.
-ROLE_LABELS = {}
+# Measured 2026-10-15 (pyg_probe_plan_api2.py): role -> actor label in L_CitySamplePCG_Demo. The town
+# (a template copy) carries the same labels. Note ParkingFootprint is the LeftOverLots volume: Parkings
+# reads the lot LeftOverLots set aside.
+ROLE_LABELS = {"Terrain": "PCG_1_1_Terrain", "MainTower": "PCG_2_1_MainTower_Footprint",
+               "CentralParkFootprint": "PCG_2_2_CentralPark_Footprint", "Districts": "PCG_3_1_1_Districts",
+               "Roads": "PCG_3_1_2_Roads", "Highways": "PCG_3_1_3_Highways", "Lots": "PCG_3_1_4_Lots",
+               "Buildings": "PCG_3_3_1_Buildings", "Parkings": "PCG_3_2_3_Parkings",
+               "ParkingFootprint": "PCG_3_2_2_LeftOverLots", "LandmarkPark": "MainTowerPark",
+               "HighwaySpline2": "HighWay_2", "HighwaySpline3": "HighWay_3"}
 
 KNOBS = {}
