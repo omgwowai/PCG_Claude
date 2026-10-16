@@ -28,6 +28,10 @@ def _mid(spline):
 
 
 def _length(spline):
+    """The spline's length as the engine measures it. A curved spline is longer than its control-point
+    polyline -- the City outline is 6213.2 m as a curve and 5945.4 m through its 9 control points -- so
+    measure the dense polyline when the value carries one (every recorded input does), and the control
+    points otherwise."""
     pts = list(spline.polyline or spline.points)
     return geo.path_length(pts + pts[:1] if spline.closed else pts)
 
@@ -56,7 +60,9 @@ def check(inputs, params, outputs, ops, official=None):
     if inputs:
         city = sum(abs(geo.signed_area(geo.ccw(S.ring_of(v)))) for v, _ in inputs["City"] if v.closed)
         total = sum(abs(geo.signed_area(r)) for _, r in rings)
-        if city and abs(total - city) > 1e-4 * city:
+        if city and not rings:
+            f.append("the City has %.6g m2 and the outputs hold no area piece at all" % (city / 1e4,))
+        elif city and abs(total - city) > 1e-4 * city:
             f.append("areas add up to %.6g m2, the City is %.6g m2" % (total / 1e4, city / 1e4))
     for i in range(len(rings)):
         for j in range(i + 1, len(rings)):

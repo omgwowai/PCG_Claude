@@ -44,8 +44,12 @@ def ring_of(spline):
 
 
 def flat(spline):
+    """The spline with every point at Z 0 (the official graph sets $Position.Z). The dense polyline
+    comes along: the outline keeps its curve, and a curve's control-point polyline is not its length
+    (the City outline is 6213.2 m as a curve and 5945.4 m through its 9 control points)."""
     tangents = [((a[0], a[1], 0.0), (b[0], b[1], 0.0)) for a, b in spline.tangents] if spline.tangents else None
-    return Spline([(p[0], p[1], 0.0) for p in spline.points], spline.closed, spline.linear, tangents)
+    polyline = [(p[0], p[1], 0.0) for p in spline.polyline] if spline.polyline else None
+    return Spline([(p[0], p[1], 0.0) for p in spline.points], spline.closed, spline.linear, tangents, polyline)
 
 
 def _line(seg):

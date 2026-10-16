@@ -98,6 +98,16 @@ def test_split_ratios_stay_in_the_official_range():
     assert 0.3 <= min(vals) and max(vals) <= 0.7 and min(vals) < 0.31 and max(vals) > 0.69
 
 
+def test_v1_conservation_refuses_a_city_with_no_area_pieces():
+    """A run whose City has area but whose outputs hold no area at all conserves nothing: it used to
+    pass because both sides were zero (the City was never compared when no piece existed)."""
+    from pypcg.checks import s06 as C
+    empty = {p: [] for p in S.OUTPUTS}
+    failures = C.check(inputs(), PARAMS, empty, FakeOps())
+    assert any("no area piece at all" in x for x in failures)
+    assert C.check(inputs(city=None), PARAMS, empty, FakeOps()) == []      # no City: nothing to conserve
+
+
 def test_v1_checks_pass_on_a_real_run_and_catch_a_wrong_class():
     from pypcg.checks import s06 as C
     out = S.districts(inputs(), PARAMS, FakeOps(), half)
@@ -116,3 +126,16 @@ def test_oracle_recovers_the_split_ratios():
     assert C.check(inputs(), PARAMS, mine, FakeOps(), off) == []          # the oracle replays with 0.37
     off["CollectorRoads"] = off["CollectorRoads"][:1]
     assert any(x.startswith("oracle") for x in C.check(inputs(), PARAMS, mine, FakeOps(), off))
+
+
+def test_flat_keeps_the_outline_measurable_as_a_curve():
+    """The outline is a curve: its control-point polyline is 4.3 % shorter than the curve the engine
+    measures (5945.4 m against 6213.2 m on the demo city), so flat() must keep the dense polyline."""
+    dense = [(float(i), 0.0, 5.0) for i in range(11)]
+    curved = Spline([(0.0, 0.0, 5.0), (10.0, 0.0, 5.0)], closed=False, linear=False,
+                    tangents=[((0.0, 4.0, 0.0), (0.0, 4.0, 0.0))] * 2, polyline=dense)
+    f = S.flat(curved)
+    assert f.linear is False and f.tangents == curved.tangents and all(p[2] == 0.0 for p in f.polyline)
+    assert len(f.polyline) == len(dense)
+    from pypcg.checks import s06 as C
+    assert C._length(f) == pytest.approx(geo.path_length(dense))
