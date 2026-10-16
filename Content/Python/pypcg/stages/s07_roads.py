@@ -3,9 +3,11 @@
 The official graph is 210 nodes, 136 of them computation; most of that computation hides inside the
 three big subgraphs it calls (`Intersection_solving` 170 nodes, `Crosswalks` 75, plus the
 PCGPrimitives outline/boolean/placement primitives). This module is the part of it that produces the
-stage's two published outputs: the road footprints (`RoadFootprints`, one unioned Polygon2D carrying
-the three class widths) and, on the second node, the flattened terrain zones. `Crosswalks` and the
-two `Write_MeshTerrain` nodes are kept as engine nodes by the contract.
+stage's first published output: the road footprint (`RoadFootprints`, one unioned Polygon2D carrying
+the three class widths). The second output, `ModifiedTerrain`, is not ported yet -- it needs
+`Intersection_solving`; `docs/pypcg/stages/s07.md` section 8 has the chain. `Crosswalks` and the two
+`Write_MeshTerrain` nodes are kept as engine nodes by the contract, and this module's one Python node
+is the whole of the footprint branch.
 
 Reading the graph top to bottom:
 
@@ -14,7 +16,11 @@ Reading the graph top to bottom:
     -> Subgraph_89 (Compose_Areas_Union) -> AddTags_1 "RoadFootprints"
     -> AddAttribute_2/1/0 (embed LocalWidth / CollectorWidth / ArteryWidth) -> output
 
-so the footprint is the union of the three classes' ribbons taken from the DISTRICTS output, not from
+with `Subgraph_86` taking the "Landmarks" spline on a second `PrimaryInput` (that spline is
+`Subgraph_24 Transform_Areas_Expand(800)` over MainTower and CentralParkFootprint, and it is the only
+extra input any of the three outline nodes has).
+
+So the footprint is the union of the three classes' ribbons taken from the DISTRICTS output, not from
 the solved sections. The naive check agrees: the three classes' lengths times their widths give
 855 711 m2 against the official 842 714 m2, a 1.5 % overlap -- exactly the loss a union of a connected
 road network implies. The `Stripe Pass` filters confirm it: they read `NamedRerouteUsage_2`, which is
@@ -26,11 +32,10 @@ from pypcg.geo import Polygon, Spline
 from pypcg.stage_api import Param
 
 STAGE = 7
-DOC = """Roads (道路): the road footprint of the three road classes and the terrain-flatten zones. The
-three class ribbons (widths local_Width, collector_width, Artery_width) are outlined around the
-Districts' own road lines, the landmark cut is applied, and the union is published tagged
-RoadFootprints with the three widths embedded. The terrain zones feed the kept Write_MeshTerrain
-nodes. Areas and lengths are in m2 / m, widths in cm."""
+DOC = """Roads (道路): the road footprint of the three road classes. The three class ribbons (widths
+local_Width, collector_width, Artery_width) are outlined around the Districts' own road lines, the
+Landmarks ribbon joins the local class, and the union is published tagged RoadFootprints with the
+three widths embedded. Areas and lengths are in m2 / m, widths in cm."""
 RANDOM = False
 _CAT = "Road Parameters"
 PARAMS = {
@@ -54,9 +59,12 @@ CLASS_WIDTH = (("localRoads", "local_Width", "LocalWidth"),
                ("ArteryRoads", "Artery_width", "ArteryWidth"))
 
 # `Subgraph_24 Expand Footprints by Half width of local roads`: Expand = 800 (the graph's override).
+# This is the Landmarks branch -- `Subgraph_24` -> `FilterDataByType_5` -> `GetSplineControlPoints_0`
+# -> `CreateSpline_0` -> `NamedRerouteDeclaration_2 "Landmarks"`, whose only outline consumer is
+# `Subgraph_86` (the local class). Nothing here goes through `Subgraph_3 Extract Road Segments`: that
+# node reads the same Landmarks declaration but feeds `Gather_0` -> `Subgraph_2 Intersection_solving`,
+# i.e. the SECTIONS, which is commit 2's branch and not the footprint's.
 LANDMARK_EXPAND = 800.0
-# `Subgraph_3 Extract Road Segments`: CutAngleThreshold = 3.
-LANDMARK_CUT_ANGLE = 3.0
 
 
 def _paths(items, tag, width_cm):

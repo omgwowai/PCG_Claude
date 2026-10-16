@@ -7,8 +7,13 @@
   - `simpleRoads = True` produces one class only;
   - empty inputs -> empty outputs, and a City with no roads at all produces no footprint.
 
-The ribbon geometry itself is verified in the editor, not here: `FakeOps` is a rectangle-level stand
--in and the real numbers come from `pyg_probe_t10_variants.py` (see `docs/pypcg/stages/s07.md`).
+**Two of those five are not covered here, deliberately.** The grammar-point proportionality invariant
+needs `Intersection_solving`'s sections, which are commit 2: the grammar nodes (`Subgraph_8/9/10`,
+`Subgraph_41/43/51`) consume those sections, not the footprint's lines, so there are no grammar points
+in this half to be proportional to. It is deferred with the terrain half (see
+`docs/pypcg/stages/s07.md` section 8), not silently skipped. The area bound is covered but weakly: the
+offline stand-in for the Clipper2 booleans is rectangle-level, so it pins the *shape* of the
+invariant and the real numbers come from the in-editor probes.
 """
 import json
 import os
