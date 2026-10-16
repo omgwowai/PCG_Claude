@@ -90,3 +90,23 @@ def test_thresholds_merge_stage_overrides(tmp_path, monkeypatch):
 
 def test_same_compares_rounded_summaries():
     assert v2.same(districts(), districts()) and not v2.same(districts(), districts(1.01))
+
+
+def test_contract_tags_ignore_bookkeeping_tags():
+    off = rec([item(["SmallDistricts", "X", "City"], area=100.0) for _ in range(6)])
+    run = rec([item(["SmallDistricts"], area=100.0) for _ in range(6)])
+    assert v2.verdict(off, [run], False, TH, tags={"SmallDistricts"})["pass"]
+    assert not v2.verdict(off, [run], False, TH)["pass"]        # tags=None still sees X and City
+    s = v2.summarize(off["items"], tags={"SmallDistricts"})
+    assert set(s) == {"SmallDistricts"} and s["SmallDistricts"]["n"] == 6
+    assert v2.summarize(off["items"], tags={"Nothing"}) == {}
+
+
+def test_empty_contract_tags_group_everything_as_all():
+    off = rec([item(["SomeTag"], area=100.0) for _ in range(6)], total=10)
+    run = rec([item(["AnotherTag"], area=100.0) for _ in range(6)], total=10)
+    assert set(v2.summarize(off["items"], tags=set())) == {"(all)"}
+    assert v2.verdict(off, [run], False, TH, tags=set())["pass"]
+    assert not v2.verdict(off, [rec([item(["AnotherTag"], area=300.0) for _ in range(6)], total=10)],
+                          False, TH, tags=set())["pass"]
+    assert v2.same(off, run, set())

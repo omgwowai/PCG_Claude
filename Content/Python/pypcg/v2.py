@@ -36,13 +36,24 @@ def describe(value, tags, cls=""):
     return out
 
 
-def summarize(items):
-    """{tag: {"n", "area_m2", "length_m", "points", "kinds", "bbox"}}; tags with ':' are PCGPrimitives
-    bookkeeping and are ignored (ruling N3)."""
+def summarize(items, tags=None):
+    """{tag: {"n", "area_m2", "length_m", "points", "kinds", "bbox"}}.
+
+    tags selects what an item is grouped under (ruling T7c):
+      None (the default) -- every non-':' tag of the item, i.e. PCGPrimitives bookkeeping (tags with
+          ':') is ignored (ruling N3) and an item that carries no remaining tag is skipped entirely;
+      a set   -- each of the item's tags that is in the set (an item with none of them is ignored);
+      an empty set -- every item counts under the single group "(all)".
+    """
     out = {}
     for it in items:
-        tags = [t for t in it["tags"] if ":" not in t] or ["(untagged)"]
-        for t in tags:
+        if tags is None:
+            names = [t for t in it["tags"] if ":" not in t]
+        elif tags:
+            names = [t for t in it["tags"] if t in tags]
+        else:
+            names = ["(all)"]
+        for t in names:
             s = out.setdefault(t, {"n": 0, "area_m2": 0.0, "length_m": 0.0, "points": 0, "kinds": [], "bbox": None})
             s["n"] += 1
             s["area_m2"] += it["area_m2"]
@@ -71,8 +82,8 @@ def _within(inner, outer, margin):
             and inner[1][0] <= outer[1][0] + margin and inner[1][1] <= outer[1][1] + margin)
 
 
-def verdict(official, runs, deterministic, th):
-    so, sr = summarize(official["items"]), [summarize(r["items"]) for r in runs]
+def verdict(official, runs, deterministic, th, tags=None):
+    so, sr = summarize(official["items"], tags), [summarize(r["items"], tags) for r in runs]
     failures, rows = [], []
     for tag, o in sorted(so.items()):
         for i, s in enumerate(sr):
@@ -143,9 +154,9 @@ def downstream(pairs):
     return out
 
 
-def same(a, b):
+def same(a, b, tags=None):
     """True when two records summarise identically (counts exact, sizes to 1e-6 relative)."""
-    sa, sb = summarize(a["items"]), summarize(b["items"])
+    sa, sb = summarize(a["items"], tags), summarize(b["items"], tags)
     if set(sa) != set(sb) or a["instances"]["per_mesh"] != b["instances"]["per_mesh"]:
         return False
     for t in sa:

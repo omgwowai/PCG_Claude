@@ -12,6 +12,9 @@ if _PY not in sys.path:
 for _m in [m for m in sys.modules if m == "pypcg" or m.startswith("pypcg.")]:
     del sys.modules[_m]
 _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
+_TOOLS = os.path.join(_REPO, "Tools", "pypcg")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
 
 # pypcg_compare_stage.py -- V2 in the demo level (spec 3). ONE generation per call; read it in the next.
 # NEVER save the level: every change here is in memory and `restore` undoes the graph swaps.
@@ -76,6 +79,8 @@ def phase_gen(args):
     else:
         pc.set_graph(unreal.EditorAssetLibrary.load_asset(state[label]["graph"].split(".")[0]))
         applied = census.apply_overrides(pc, state[label]["overrides"])
+        pc.set_editor_property("seed", int(state[label]["seed"]))   # set_graph leaves the component seed alone
+        os.environ.pop(stage_api.RECORD_ENV, None)                 # official runs must not record
     pc.activate(True)
     pc.generate_local(True)
     return {"stage": n, "variant": variant, "graph": pc.get_graph().get_path_name(), "overrides": applied}
@@ -99,6 +104,15 @@ def phase_read(args):
             "instances": rec["instances"]["total"]}
 
 
+def _contract_tags(n):
+    """The tags stage n owes its readers, read from its official IR snapshot (ruling T7c). A snapshot
+    whose output carries no tag at all yields the empty set, which v2 reads as one "(all)" group."""
+    for m in [m for m in sys.modules if m == "port_brief"]:
+        del sys.modules[m]
+    import port_brief
+    return {t for _, _, ts in port_brief.output_tags(port_brief.load(n)) for t in ts if not t.startswith("(")}
+
+
 def phase_verdict(args):
     from pypcg import stages, v2
     n = int(args["stage"])
@@ -109,7 +123,8 @@ def phase_verdict(args):
     runs = [_load(os.path.join(d, "slim_%d.json" % s)) for s in seeds]
     if official is None or any(r is None for r in runs):
         return {"abort": "missing official.json or slim_<seed>.json for seeds %s" % (seeds,)}
-    v = v2.verdict(official, runs, not module.RANDOM, v2.thresholds(n))
+    tags = _contract_tags(n)
+    v = v2.verdict(official, runs, not module.RANDOM, v2.thresholds(n), tags)
     pairs = {}
     for k in stages.DOWNSTREAM.get(n, []):
         o, r = _load(os.path.join(d, "down_%d_official.json" % k)), _load(os.path.join(d, "down_%d_slim.json" % k))
@@ -119,7 +134,7 @@ def phase_verdict(args):
     down = v2.downstream(pairs)
     after = _load(os.path.join(d, "official_after.json"))
     notes = []
-    if after is not None and not v2.same(official, after):
+    if after is not None and not v2.same(official, after, tags):
         down.append("the official graph did not reproduce its own output after restore (determinism)")
     for s in seeds:
         run = _load(os.path.join(d, "slim_%d.run.json" % s), {})
@@ -142,7 +157,7 @@ def phase_fingerprint(args):
     for n, label, *_ in stages.STAGES:
         coll = census.component(n).get_generated_graph_output()
         prints[label] = [td.get_editor_property("data").get_editor_property("data").get_path_name()
-                         for td in coll.get_editor_property("tagged_data")][:50]
+                         for td in coll.get_editor_property("tagged_data")]
     if "save" in args:
         _save(os.path.join(OUT, "_fp_%s.json" % args["save"]), prints)
         return {"saved": args["save"], "volumes": len(prints)}
@@ -151,7 +166,7 @@ def phase_fingerprint(args):
 
 
 def phase_restore(args):
-    from pypcg import census, stages
+    from pypcg import census, stage_api, stages
     state = _load(STATE)
     if state is None:
         return {"abort": "nothing to restore"}
@@ -163,7 +178,9 @@ def phase_restore(args):
             pc.set_graph(unreal.EditorAssetLibrary.load_asset(s["graph"].split(".")[0]))
         res = census.apply_overrides(pc, s["overrides"])
         pc.set_editor_property("regenerate_in_editor", s["regen"])
+        pc.set_editor_property("seed", int(s["seed"]))
         out[label] = {"graph": pc.get_graph().get_path_name(), "skipped": res["skipped"]}
+    os.environ.pop(stage_api.RECORD_ENV, None)
     os.remove(STATE)
     return {"restored": len(out), "problems": {k: v for k, v in out.items() if v["skipped"]}}
 
