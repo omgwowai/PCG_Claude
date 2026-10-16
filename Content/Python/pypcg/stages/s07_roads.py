@@ -191,9 +191,8 @@ def class_paths(inputs, ops, params):
     cutters = [r.outer for r in rings]
     out = {}
     for tag in geo.sections.CLASSES:
-        width = float(params[geo.sections.WIDTH_PARAM[tag]])
         out[tag] = []
-        for path in _class_lines(inputs, tag, width):
+        for path in _class_lines(inputs, tag):
             out[tag] += geo.sections.cut_paths([path], cutters, ops, inside=False)
     # `Gather_0`'s second input: the landmark ring's own segments, added to the LOCAL class only.
     # `Subgraph_3 Extract Road Segments` reads the Landmarks ring and splits it at bends over 3
@@ -207,13 +206,16 @@ def class_paths(inputs, ops, params):
 LANDMARK_CUT_ANGLE = 3.0
 
 
-def _class_lines(inputs, tag, width_cm):
+def _class_lines(inputs, tag):
     """One class's lines from the Districts data, closed rings included and not extended.
 
     `Intersection_solving` extends its classes itself (`Subgraph_1/2/3`), on input that the landmark
     clip has already shortened, so this returns the lines as the clip receives them -- extended by
     nothing. A closed ring is carried as a ring rather than an extended line, which is the same rule
-    `_paths` uses for the footprint."""
+    `_paths` uses for the footprint.
+
+    No width parameter: the decal chain reads these lines RAW (`FilterDataByTag_6/10/11` sit ahead of
+    `Subgraph_1/2/3` on the same `Reroute_4` carrier), so nothing here depends on the class width."""
     out = []
     for value, tags in inputs.get("Districts", []):
         if isinstance(value, Spline) and tag in tags:
@@ -230,6 +232,13 @@ def sections(inputs, params, ops):
     return geo.sections.solve(class_paths(inputs, ops, params),
                               dict(params, roadSectionLimit=SECTION_LIMIT,
                                    intersection_expansion_range=EXPANSION_RANGE), ops)
+
+
+def _xyz(path):
+    """A path as `Spline` points, 3D. `Spline` always wants an XYZ tuple, while the geometry layer
+    now preserves the input's arity (2D in, 2D out), so the Z is supplied HERE -- at the one boundary
+    that needs it -- rather than inside the geometry, where forcing it broke stage 6."""
+    return [(p[0], p[1], p[2] if len(p) > 2 else 0.0) for p in path]
 
 
 def run(inputs, params, ctx):
@@ -265,7 +274,7 @@ def run(inputs, params, ctx):
     for tag, pin in ((geo.sections.LOCAL, "LocalSections"),
                      (geo.sections.COLLECTOR, "CollectorSections"),
                      (geo.sections.ARTERY, "ArterySections")):
-        out[pin] = [(Spline([(p[0], p[1], p[2] if len(p) > 2 else 0.0) for p in path], linear=True), [label])
+        out[pin] = [(Spline(_xyz(path), linear=True), [label])
                     for path, label in solved["sections"][tag] if len(path) >= 2]
     out["IntersectionsPlanar"] = [(p, ["IntersectionsPlanar"]) for p in solved["planar"]]
     out["Landmarks"] = [(Polygon(list(r.outer)), ["Landmarks"]) for r in landmarks(inputs, params, ctx.ops)]
@@ -275,8 +284,7 @@ def run(inputs, params, ctx):
     # line while the grammar gets the solved, landmark-clipped sections.
     for tag, pin in ((geo.sections.LOCAL, "LocalRoads"), (geo.sections.COLLECTOR, "CollectorRoads"),
                      (geo.sections.ARTERY, "ArteryRoads")):
-        out[pin] = [(Spline([(p[0], p[1], p[2] if len(p) > 2 else 0.0) for p in path],
-                            closed=_is_ring(path), linear=True), [tag])
-                    for path in _class_lines(inputs, tag, float(params[geo.sections.WIDTH_PARAM[tag]]))
+        out[pin] = [(Spline(_xyz(path), closed=_is_ring(path), linear=True), [tag])
+                    for path in _class_lines(inputs, tag)
                     if len(path) >= 2]
     return out

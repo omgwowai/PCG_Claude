@@ -333,3 +333,73 @@ def test_v1_checks_do_not_judge_a_run_with_no_roads():
     from pypcg.checks import s07 as C
     out = S.run({pin: [] for pin in S.INPUTS}, PARAMS, _ctx())
     assert C.check({pin: [] for pin in S.INPUTS}, PARAMS, out, OPS) == []
+
+
+# ---- 7. the two fix-round regressions --------------------------------------------------------
+def test_a_span_is_measured_by_projection_not_by_the_nearest_vertex():
+    """`_along` maps a clip's end back to an arclength position on the path. It must PROJECT onto the
+    segments: a clip's ends lie on the path but are not usually its vertices, so vertex-snapping
+    collapses every span on a 2-point road to zero length and the piece vanishes.
+
+    Regression guard for the bug this commit's headline fix removed (71 zero-length pieces, a
+    -0.65 % footprint, and a -6.2 % V2 instance median). A revert to nearest-vertex would still pass
+    every other test in this file, so the guard has to be here, at the helper's own level."""
+    path = [(0.0, 0.0), (1000.0, 0.0)]                       # a 2-point road: no interior vertex
+    ring = [(-100.0, -100.0), (100.0, -100.0), (100.0, 100.0), (-100.0, 100.0)]
+    cum = [0.0, 1000.0]
+    # the clip's two ends, at 0 and 100 -- neither is the path's own vertex 0 or 1000
+    assert SEC._along((0.0, 0.0), path, cum) == pytest.approx(0.0)
+    assert SEC._along((100.0, 0.0), path, cum) == pytest.approx(100.0)
+    assert SEC._along((500.0, 0.0), path, cum) == pytest.approx(500.0)
+    # and the span those ends define is 100 cm long, not zero
+    inside = SEC.cut_paths([path], [ring], OPS, True)
+    assert len(inside) == 1
+    assert SEC.path_length(inside[0]) == pytest.approx(100.0, rel=1e-6)
+    # the same walk through `_union_spans`, which is what consumes `_along` in the Intersection case
+    spans = SEC._union_spans(path, [ring])
+    assert len(spans) == 1 and SEC.path_length(spans[0]) == pytest.approx(100.0, rel=1e-6)
+
+
+def test_the_three_width_attributes_reach_the_output_node():
+    """The published polygon must carry `LocalWidth`/`CollectorWidth`/`ArteryWidth`. The official
+    graph sources the output node from `AddAttribute_0` -- the tail of `AddTags_1 -> AddAttribute_2
+    -> AddAttribute_1 -> AddAttribute_0` -- and stage 10 reads `@data.ArteryWidth` off that polygon to
+    size its sidewalk expansion (stage 18 reads it too). Sourcing the output from `AddTags_1` instead
+    -- what this graph did before the 10b fix round -- publishes a polygon with no widths, and nothing
+    else in the suite sees it: `checks/s07.py` asserts the tag, and the contract test only asks that
+    the pin is wired somewhere.
+
+    The built IR renames nodes (`n11`, `n12`, ...), so this identifies them by their official titles,
+    which `keep()` carries over."""
+    from pypcg import graphs
+    from pypcg.profiles import official
+    doc = graphs.graph(7).to_ir(official)
+    by = {x["name"]: x for x in doc["nodes"]}
+    # only the `In` pin: each attribute node also takes its width on `Attributes`, from a parameter
+    # getter, and that is not part of the chain.
+    feeds_in = {n["name"]: {src for p in n.get("inputs", []) if p["label"] == "In"
+                            for src, _pin in p["edges"]} for n in doc["nodes"]}
+
+    outs = [x for x in doc["nodes"] if x["class"] == "PCGGraphInputOutputSettings"
+            and any(p["label"] == "Out" for p in x.get("inputs", []))]
+    assert len(outs) == 1, "expected exactly one output node, got %d" % len(outs)
+    srcs = {src for p in outs[0]["inputs"] if p["label"] == "Out" for src, _pin in p["edges"]}
+
+    def node_with_title(title):
+        hits = [n for n in doc["nodes"] if n.get("title") == title]
+        assert len(hits) == 1, "expected one node titled %r, got %d" % (title, len(hits))
+        return hits[0]
+
+    artery = node_with_title("Embed Artery Width On Footprint")
+    assert by[artery["name"]]["class"] == "PCGAddAttributeSettings"
+    assert artery["name"] in srcs, (
+        "the output node is not sourced from the artery-width attribute node, so the published "
+        "polygon carries no LocalWidth/CollectorWidth/ArteryWidth; sources are %s"
+        % [by[s].get("title") or s for s in sorted(srcs)])
+
+    # and the three nodes form one chain into it: artery <- collector <- local <- AddTags_1
+    collector = node_with_title("Embed Collector Width On Footprint")
+    local = node_with_title("Embed Local Width On Footprint")
+    assert feeds_in[artery["name"]] == {collector["name"]}, "the artery node must take the collector's output"
+    assert feeds_in[collector["name"]] == {local["name"]}, "the collector node must take the local one's output"
+    assert feeds_in[local["name"]], "the local-width node has no input: the chain does not start at AddTags_1"

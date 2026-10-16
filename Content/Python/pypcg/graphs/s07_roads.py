@@ -141,9 +141,15 @@ def build():
     g.connect(_n['Subgraph_12'], g.py, 'MainTower')
     g.connect(_n['Subgraph_1'], g.py, 'CentralParkFootprint')
 
-    # The two contract outputs: the footprint from this node, `ModifiedTerrain` from the two
-    # native `Write_MeshTerrain` nodes through `AddTags_0`, exactly as the official graph does.
-    g.out(g.py['RoadFootprints'], _n['AddTags_0']['Out'])
+    # The two contract outputs, sourced the way the official graph sources them: the output node
+    # takes the FOOTPRINT from `AddAttribute_0` -- the tail of `AddTags_1 -> AddAttribute_2 ->
+    # AddAttribute_1 -> AddAttribute_0`, which is what puts `LocalWidth`, `CollectorWidth` and
+    # `ArteryWidth` on the published polygon -- and `ModifiedTerrain` from `AddTags_0` over the two
+    # native `Write_MeshTerrain` nodes. Stage 10 reads `@data.ArteryWidth` off this polygon to size
+    # its sidewalk expansion and stage 18 reads it too, so terminating at `AddTags_1` would publish
+    # a polygon those stages cannot size. `g.py['RoadFootprints']` feeds `AddTags_1` (below), not
+    # the output node, which is what makes the difference.
+    g.out(_n['AddAttribute_0']['Out'], _n['AddTags_0']['Out'])
 
     # ---- the wiring ----
     g.connect(_n['AddAttribute_1']['Out'], _n['AddAttribute_0'], 'In')
