@@ -317,7 +317,7 @@ bool FPyPCGToolsPolygon2D::RunTest(const FString& Parameters)
 	TestTrue(TEXT("frame origin at the centroid"), Data->GetTransform().GetLocation().Equals(FVector(500, 500, 100), 1e-6));
 	TestFalse(TEXT("outer counter-clockwise"), Data->GetPolygon().OuterIsClockwise());
 	TestEqual(TEXT("hole count"), Data->GetPolygon().GetHoles().Num(), 1);
-	TestEqual(TEXT("area"), Data->GetPolygon().Area(), 1000.0 * 1000.0 - 200.0 * 200.0, 1e-6);
+	TestEqual(TEXT("area"), Data->GetPolygon().SignedArea(), 1000.0 * 1000.0 - 200.0 * 200.0, 1e-6);
 
 	const TSharedPtr<FJsonObject> Back = Parse(UPyPCGToolsLibrary::Polygon2DToJson(Data));
 	const TArray<TSharedPtr<FJsonValue>> Outer = Back->GetArrayField(TEXT("outer"));
