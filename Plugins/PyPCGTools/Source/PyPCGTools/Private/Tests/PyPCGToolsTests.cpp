@@ -335,6 +335,18 @@ bool FPyPCGToolsPolygon2D::RunTest(const FString& Parameters)
 	TestEqual(TEXT("hole round-trips"), Back->GetArrayField(TEXT("holes")).Num(), 1);
 	TestNull(TEXT("two vertices refused"), UPyPCGToolsLibrary::MakePolygon2DData(TEXT(R"({"outer":[[0,0,0],[1,0,0]]})")));
 	TestNull(TEXT("bad JSON refused"), UPyPCGToolsLibrary::MakePolygon2DData(TEXT("{")));
+
+	// A hole entirely outside the outer ring must refuse the whole polygon, not silently drop it.
+	TestNull(TEXT("hole outside outer refused"), UPyPCGToolsLibrary::MakePolygon2DData(TEXT(R"({"outer":[[0,0,100],[0,1000,100],[1000,1000,100],[1000,0,100]],
+		"holes":[[[2000,2000,100],[2200,2000,100],[2200,2200,100],[2000,2200,100]]]})")));
+
+	// A repeated closing vertex on the outer ring is popped, same as CreatePolygon2D; the outer
+	// still comes back with 4 vertices.
+	UPCGPolygon2DData* Closed = UPyPCGToolsLibrary::MakePolygon2DData(TEXT(R"({"outer":[[0,0,100],[0,1000,100],[1000,1000,100],[1000,0,100],[0,0,100]]})"));
+	if (TestNotNull(TEXT("closed-ring polygon made"), Closed))
+	{
+		TestEqual(TEXT("closing vertex popped"), Closed->GetPolygon().GetOuter().VertexCount(), 4);
+	}
 	return true;
 }
 
@@ -411,9 +423,26 @@ bool FPyPCGToolsDynamicPins::RunTest(const FString& Parameters)
 	TestNotEqual(TEXT("duplicate labels refused"), UPyPCGToolsLibrary::SetDynamicPinLabels(Settings,
 		TArray<FString>({TEXT("A"), TEXT("A")}), TArray<FString>()), FString());
 	UPCGSettings* Maths = nullptr;
-	Graph->AddNodeOfType(UPCGMetadataMathsSettings::StaticClass(), Maths);
+	UPCGNode* MathsNode = Graph->AddNodeOfType(UPCGMetadataMathsSettings::StaticClass(), Maths);
 	TestNotEqual(TEXT("node without dynamic pins refused"), UPyPCGToolsLibrary::SetDynamicPinLabels(Maths,
 		TArray<FString>({TEXT("A")}), TArray<FString>()), FString());
+
+	// Once a pin is connected, SetDynamicPinLabels must refuse rather than silently move the edge
+	// to another label (this call is for freshly added nodes only).
+	Graph->AddEdge(MathsNode, PCGPinConstants::DefaultOutputLabel, Node, TEXT("Params"));
+	TestNotEqual(TEXT("connected pin refused"), UPyPCGToolsLibrary::SetDynamicPinLabels(Settings,
+		TArray<FString>({TEXT("Params"), TEXT("City")}), TArray<FString>({TEXT("Areas"), TEXT("Roads")})), FString());
+	TArray<FString> InAfter, OutAfter;
+	for (const TObjectPtr<UPCGPin>& Pin : Node->GetInputPins())
+	{
+		InAfter.Add(Pin->Properties.Label.ToString());
+	}
+	for (const TObjectPtr<UPCGPin>& Pin : Node->GetOutputPins())
+	{
+		OutAfter.Add(Pin->Properties.Label.ToString());
+	}
+	TestEqual(TEXT("input pins unchanged"), InAfter, In);
+	TestEqual(TEXT("output pins unchanged"), OutAfter, Out);
 	return true;
 }
 

@@ -1022,6 +1022,15 @@ namespace PyPCGTools::Private
 		UE_LOG(LogTemp, Warning, TEXT("MakePolygon2DData: %s"), *Why);
 		return nullptr;
 	}
+
+	// Mirrors UPCGCreatePolygon2DElement's pop of a ring's repeated closing vertex.
+	void PopClosingVertex(TArray<FVector>& Ring)
+	{
+		if (Ring.Num() > 3 && Ring.Last().Equals(Ring[0], UE_KINDA_SMALL_NUMBER))
+		{
+			Ring.Pop();
+		}
+	}
 }
 
 UPCGPolygon2DData* UPyPCGToolsLibrary::MakePolygon2DData(const FString& Json)
@@ -1034,7 +1043,12 @@ UPCGPolygon2DData* UPyPCGToolsLibrary::MakePolygon2DData(const FString& Json)
 	}
 	const TArray<TSharedPtr<FJsonValue>>* OuterJson = nullptr;
 	TArray<FVector> Outer;
-	if (!Parsed->TryGetArrayField(TEXT("outer"), OuterJson) || !ReadVectors(*OuterJson, Outer) || Outer.Num() < 3)
+	if (!Parsed->TryGetArrayField(TEXT("outer"), OuterJson) || !ReadVectors(*OuterJson, Outer))
+	{
+		return RefusePolygon(TEXT("'outer' needs at least 3 [x,y,z] vertices"));
+	}
+	PopClosingVertex(Outer);
+	if (Outer.Num() < 3)
 	{
 		return RefusePolygon(TEXT("'outer' needs at least 3 [x,y,z] vertices"));
 	}
@@ -1046,7 +1060,12 @@ UPCGPolygon2DData* UPyPCGToolsLibrary::MakePolygon2DData(const FString& Json)
 		{
 			const TArray<TSharedPtr<FJsonValue>>* HoleJson = nullptr;
 			TArray<FVector>& Hole = Holes.AddDefaulted_GetRef();
-			if (!HoleValue.IsValid() || !HoleValue->TryGetArray(HoleJson) || !ReadVectors(*HoleJson, Hole) || Hole.Num() < 3)
+			if (!HoleValue.IsValid() || !HoleValue->TryGetArray(HoleJson) || !ReadVectors(*HoleJson, Hole))
+			{
+				return RefusePolygon(TEXT("every hole needs at least 3 [x,y,z] vertices"));
+			}
+			PopClosingVertex(Hole);
+			if (Hole.Num() < 3)
 			{
 				return RefusePolygon(TEXT("every hole needs at least 3 [x,y,z] vertices"));
 			}
@@ -1090,14 +1109,17 @@ UPCGPolygon2DData* UPyPCGToolsLibrary::MakePolygon2DData(const FString& Json)
 	{
 		Polygon.Reverse();
 	}
-	for (const TArray<FVector>& Hole : Holes)
+	for (int32 Index = 0; Index < Holes.Num(); ++Index)
 	{
-		UE::Geometry::FPolygon2d Local = ToPlane(Hole);
+		UE::Geometry::FPolygon2d Local = ToPlane(Holes[Index]);
 		if (!Local.IsClockwise())
 		{
 			Local.Reverse();
 		}
-		Polygon.AddHole(MoveTemp(Local), /*bCheckContainment=*/false, /*bCheckOrientation=*/false);
+		if (!Polygon.AddHole(MoveTemp(Local), /*bCheckContainment=*/true, /*bCheckOrientation=*/true))
+		{
+			return RefusePolygon(FString::Printf(TEXT("hole %d is outside the outer ring or overlaps another hole"), Index));
+		}
 	}
 
 	UPCGPolygon2DData* Data = NewObject<UPCGPolygon2DData>(GetTransientPackage());
@@ -1144,7 +1166,7 @@ FString UPyPCGToolsLibrary::SplineDataToJson(const UPCGSplineData* Data, float M
 		return Write(Root);
 	}
 	TArray<FVector> Polyline;
-	Data->SplineStruct.ConvertSplineToPolyLine(ESplineCoordinateSpace::World, MaxSquareDistance, Polyline);
+	Data->SplineStruct.ConvertSplineToPolyLine(ESplineCoordinateSpace::World, FMath::Max(MaxSquareDistance, 0.001f), Polyline);
 	TArray<TSharedPtr<FJsonValue>> PolylineJson;
 	for (const FVector& Point : Polyline)
 	{
@@ -1193,6 +1215,26 @@ FString UPyPCGToolsLibrary::SetDynamicPinLabels(UPCGSettings* Settings, const TA
 				return FString::Printf(TEXT("empty or duplicate pin label '%s'"), *Label);
 			}
 			Seen.Add(Label);
+		}
+	}
+	// Relabeling a connected pin can silently move its edge to another label when exactly one pin is
+	// renamed (UPCGNode::ApplyDeprecationBeforeUpdatePins et al.); this call is for freshly added
+	// nodes only, so refuse outright rather than risk that.
+	if (UPCGNode* Node = Cast<UPCGNode>(Settings->GetOuter()))
+	{
+		for (const TObjectPtr<UPCGPin>& Pin : Node->GetInputPins())
+		{
+			if (Pin && Pin->IsConnected())
+			{
+				return FString::Printf(TEXT("SetDynamicPinLabels is for fresh nodes: pin '%s' is already connected"), *Pin->Properties.Label.ToString());
+			}
+		}
+		for (const TObjectPtr<UPCGPin>& Pin : Node->GetOutputPins())
+		{
+			if (Pin && Pin->IsConnected())
+			{
+				return FString::Printf(TEXT("SetDynamicPinLabels is for fresh nodes: pin '%s' is already connected"), *Pin->Properties.Label.ToString());
+			}
 		}
 	}
 	Settings->Modify();

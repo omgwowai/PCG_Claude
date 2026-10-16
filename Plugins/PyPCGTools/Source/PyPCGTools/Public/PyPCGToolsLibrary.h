@@ -73,7 +73,8 @@ public:
 	static FString SplineDataToJson(const UPCGSplineData* Data, float MaxSquareDistance);
 
 	/** Replaces the dynamic input and output pins of a node whose settings provide dynamic pins (the
-	 *  Python Data Processor) with Any-typed, multi-connection, multi-data pins with these labels, in order. */
+	 *  Python Data Processor) with Any-typed, multi-connection, multi-data pins with these labels, in
+	 *  order. For freshly added nodes only: refuses if any existing pin is already connected. */
 	UFUNCTION(BlueprintCallable, Category = "PyPCG")
 	static FString SetDynamicPinLabels(UPCGSettings* Settings, const TArray<FString>& InputLabels, const TArray<FString>& OutputLabels);
 };
