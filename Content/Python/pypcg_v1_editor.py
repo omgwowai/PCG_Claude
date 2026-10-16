@@ -14,41 +14,96 @@ for _m in [m for m in sys.modules if m == "pypcg" or m.startswith("pypcg.")]:
 _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 
 # pypcg_v1_editor.py -- V1 checks with the editor's real booleans, on the runs V2 recorded (spec 3, V1).
-# Args: {"stage": n} or {"stage": n, "assign": true}.
+# Args: {"stage": n}                                   -> stage mode (below)
+#       {"assign": {"stage": n}}                       -> assign mode (Task 12)
+# The two are told apart by the presence of the "assign" key, whose value must be a DICT carrying
+# "stage"; `{"stage": n, "assign": true}` is not a form this file accepts.
 # Stage mode: for every Saved/Reports/v2/sNN/slim_<seed>.run.json:
 #   - replay: when the inputs were recordable, run the stage again with the same params and seed and
 #     require identical outputs (determinism);
 #   - pypcg.checks.sNN.check(inputs or None, params, outputs, ops, official) when that module exists;
 #     official is the volume's current output when it holds its official graph (after V2's restore).
 # Assign mode (Task 12): every Assign_Assets call the official graph holds is rebuilt in Python from
-# its OWN recorded settings, with one target point, and compared with the primitive's own output --
-# the phase `{"assign": {"stage": n}}` of the plan. See `assign_probe_result` for the equality rule.
+# its OWN recorded settings, with one target point, and the Python expansion is reported -- the phase
+# `{"assign": {"stage": n}}` of the plan. See `assign_phase` for what it does and does not compare.
 
 ASSIGN_SUBGRAPH = "/PCGPrimitives/Primitives/Assign/Assign_Assets"
 
-# The primitive parameters `geo.assets.expand` consumes, by their Assign_Assets names.
-ASSIGN_PARAMS = ("PositionOffset", "RotationOffset", "ScaleOffset", "ExtentsScale", "UniformScale",
-                 "MatchScaleToInputBounds", "UseMeshBounds", "UseMeshAttribute", "MeshAttribute",
-                 "UseIndexattribute", "IndexAttribute", "RandomPositionRange", "RandomRotationRange",
-                 "RandomScaleRange")
+# The Assign_Assets pin names mapped onto the keys `pypcg.geo.assets.expand` reads. The dictionary is
+# the seam between the graph and the helper, and it is the reason this table is explicit: without it
+# every parameter recorded from the graph would arrive at `expand` under a name it does not read and
+# be silently replaced by its default. Task 12's review found exactly that.
+#
+# Three pins are deliberately mapped to None, which `assign_calls` reads as "collected but not
+# honoured by `expand`":
+#   MatchScaleToInputBounds  the ratio is reported as `$Scale` either way; whether the primitive
+#                            also writes it into the input points' `$Scale` is unmeasured
+#   UseIndexattribute / IndexAttribute
+#                            the index-attribute pick (`Branch_1_Index`) is not implemented; `choose`
+#                            always draws
+# The four graph-override pins are not parameters of the computation at all and are not listed.
+ASSIGN_PARAM_KEYS = {
+    "PositionOffset": "position_offset",
+    "RotationOffset": "rotation_offset",
+    "ScaleOffset": "scale_offset",
+    "ExtentsScale": "extents_scale",
+    "UniformScale": "uniform_scale",
+    "UseMeshBounds": "use_mesh_bounds",
+    "UseMeshAttribute": "use_mesh_attribute",
+    "MeshAttribute": "mesh_attribute",
+    "RandomPositionRange": "random_position_range",
+    "RandomRotationRange": "random_rotation_range",
+    "RandomScaleRange": "random_scale_range",
+    "MatchScaleToInputBounds": None,
+    "UseIndexattribute": None,
+    "IndexAttribute": None,
+}
+# The three `TransformPoints_2` pins, whose values only mean anything together with an `rng`.
+ASSIGN_RANDOM_PINS = ("RandomPositionRange", "RandomRotationRange", "RandomScaleRange")
 
 
 def assign_calls(ir):
     """Every Assign_Assets node of a graph IR, with its settings and its `Assets` override.
 
     The overrides come from the IR the exporter writes (a subgraph node's `overrides` is its instance
-    override bag), so nothing here has to reach into the property bag by hand."""
+    override bag), so nothing here has to reach into the property bag by hand.
+
+    `params` is keyed the way `pypcg.geo.assets.expand` reads its `params` dict (see
+    `ASSIGN_PARAM_KEYS`), and `unhonoured` lists the pins the graph sets that `expand` does not read,
+    so a caller can see the gap rather than silently lose it. `random` is True when this call has a
+    non-zero random range: a caller that does not supply an `rng` then cannot reproduce the
+    primitive's draw."""
     out = []
     for node in ir.get("nodes", []):
         sub = node.get("subgraph") or ""
         if ASSIGN_SUBGRAPH not in sub:
             continue
         ov = dict(node.get("overrides") or {})
+        params, unhonoured = {}, []
+        for pin, key in ASSIGN_PARAM_KEYS.items():
+            if pin not in ov:
+                continue
+            if key is None:
+                unhonoured.append(pin)
+            else:
+                params[key] = ov[pin]
+        random = any(_non_zero(ov.get(p)) for p in ASSIGN_RANDOM_PINS)
         out.append({"node": node["name"], "title": node.get("title", ""),
                     "assets": list(ov.get("Assets") or []),
-                    "params": {k: ov[k] for k in ASSIGN_PARAMS if k in ov},
+                    "params": params, "unhonoured": unhonoured, "random": random,
                     "seed": (ov.get("Seed", (node.get("settings") or {}).get("Seed")))})
     return out
+
+
+def _non_zero(v):
+    """A Vector/Rotator override that is not all-zero, as a truth test for `assign_calls`' `random`."""
+    if v is None:
+        return False
+    if isinstance(v, dict):
+        return any(abs(float(x)) > 0.0 for x in v.values())
+    if isinstance(v, (int, float)):
+        return abs(float(v)) > 0.0
+    return any(abs(float(x)) > 0.0 for x in v)
 
 
 def assign_probe_result(call, target, table):
@@ -74,12 +129,17 @@ def assign_probe_result(call, target, table):
 
 
 def _assign_failures(n, calls, tabled, fixtures):
-    """Compare every Assign_Assets call of stage `n` with the Python expansion of ONE fixture target.
+    """Expand every Assign_Assets call of stage `n` with ONE fixture target and report what came back.
 
-    `fixtures` is the list of recorded run records; the target comes from the first run's first output
-    point (so it is a real point of this stage) when one exists, and from a fixed box otherwise. A
-    stage with no recorded run yet reports `no_runs` rather than failing: the comparison cannot be
-    run without an input, and pretending otherwise would be worse than saying so."""
+    `fixtures` is the list of recorded run records. `_assign_target` uses the first run's first output
+    point when one exists (a real point of this stage) and a fixed box otherwise, so this runs whether
+    or not the stage has recorded runs; the caller reports how many it had. A call fails when it
+    records no `Assets`, when one of its assets does not load, or when the expansion yields no points.
+
+    Each `checked` row also carries `unhonoured` (pins the graph sets that `expand` does not read) and
+    `random` (the call has a non-zero random range, so its real output cannot be reproduced without
+    the primitive's own random stream). Those are reported, not failed: they are gaps in the helper's
+    coverage, not wrong behaviour."""
     failures, checked = [], []
     target = _assign_target(fixtures)
     for call in calls:
@@ -98,7 +158,9 @@ def _assign_failures(n, calls, tabled, fixtures):
             continue
         checked.append({"node": call["node"], "assets": len(call["assets"]), "points": ours["n"],
                         "asset0": (ours["asset"] or [None])[0],
-                        "loc0": ours["loc"][0] if ours["loc"] else None})
+                        "loc0": ours["loc"][0] if ours["loc"] else None,
+                        "unhonoured": list(call.get("unhonoured") or []),
+                        "random": bool(call.get("random"))})
     return failures, checked
 
 
@@ -150,9 +212,16 @@ def assign_phase(n):
             except ValueError:
                 continue
     failures, checked = _assign_failures(n, calls, tabled, fixtures)
+    # `random_calls` counts the calls whose real output cannot be reproduced here: a non-zero random
+    # range draws from `TransformPoints_2`'s own seeded stream, and this phase supplies no `rng`. A
+    # clean `failures` list is therefore not a claim that those calls agree with the primitive.
+    random_calls = [c["node"] for c in checked if c.get("random")]
+    unhonoured = sorted({p for c in checked for p in (c.get("unhonoured") or [])})
     return {"stage": n, "calls": len(calls), "runs": len(fixtures),
             "target": {k: list(v) if isinstance(v, tuple) else v for k, v in _assign_target(fixtures).items()},
-            "expanded": checked, "failures": failures[:20]}
+            "expanded": checked, "random_calls": random_calls,
+            "random": bool(random_calls), "unhonoured_pins": unhonoured,
+            "failures": failures[:20]}
 
 
 def _official_outputs(n):

@@ -2,10 +2,13 @@
 
 The primitive is /PCGPrimitives/Primitives/Assign/Assign_Assets; its computation is the subgraph
 Assign_Assets_CoreProcess (dump of 2026-10-16 in Saved/graph_dumps/), and its copy step is the
-engine's own CopyPoints. The transform rule asserted here was MEASURED in the editor on 2026-10-16
-against the real primitive (pyg_probe_t12_pair.py, recorded in task-12-report.md): the mesh's own
-points, the primitive's output for one input point with yaw 90, and the primitive's output for the
-same input with yaw 0 / offset 0 / scale 1 are all three used below as fixtures.
+engine's own CopyPoints. The transform rule, the seed mix and the bounds rule asserted here were
+MEASURED in the editor on 2026-10-16 against the real primitive (pyg_probe_t12_case.py and
+pyg_probe_t12_one.py, recorded in task-12-report.md).
+
+`test_assign_calls_maps_the_graph_pin_names_onto_expands_keys` closes the seam between the recorded
+graph and `expand`: it loads `pypcg_v1_editor.py` with a stub `unreal` and drives `assign_calls` on a
+synthetic IR node, so a pin name the graph writes arrives at `expand` under a key it reads.
 """
 import inspect
 import math
@@ -157,7 +160,7 @@ def test_expand_reproduces_the_primitive_identity_case():
 
 def test_expand_rotates_the_mesh_into_the_input_frame():
     """The primitive's own output for the same input with yaw 90: the mesh's local point
-    (-500, -400, -303.79) lands at (10400, 19500, -303.79), i.e. (+400, -1000) from the input point
+    (-500, -400, -303.79) lands at (10400, 19500, -303.79), i.e. (+400, -500) from the input point
     (the measured `yaw90` case of pyg_probe_t12_one.py)."""
     table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
     t = targets([((10000.0, 20000.0, 0.0), (0.0, 90.0, 0.0), (1.0, 1.0, 1.0), 42)])
@@ -390,3 +393,127 @@ def test_points_extend_declares_missing_attributes():
     assert len(a) == 2
     assert a.types["Material"] == "SoftObjectPath"
     assert a.attrs["Material"] == [None, "/G/M.M"]
+
+
+# ---- the seam between the recorded graph and expand (Task 12 review, finding 1) -------------------
+def _v1_editor():
+    """`pypcg_v1_editor.py` loaded offline, with a stub `unreal` module.
+
+    The file is an editor bridge script: it imports `unreal` at module level. `assign_calls` — the
+    function under test here — touches no engine API, so a stub is enough, and the stub is inserted
+    and removed around the load so no other test ever sees it."""
+    import importlib.util
+    import types
+    root = Path(__file__).resolve().parents[3]
+    path = root / "Content" / "Python" / "pypcg_v1_editor.py"
+    stub = types.ModuleType("unreal")
+
+    class _Paths(object):
+        """The two module-level calls the file makes at import time."""
+
+        @staticmethod
+        def project_content_dir():
+            return str(root / "Content") + "/"
+
+        @staticmethod
+        def project_dir():
+            return str(root) + "/"
+
+        @staticmethod
+        def convert_relative_path_to_full(p):
+            return p
+
+    stub.Paths = _Paths
+    # The file purges and re-imports every `pypcg*` module on load, which would give the rest of the
+    # suite a second copy of `pypcg.stage_api` (and so two distinct `Param` classes). Snapshot the
+    # whole table and put it back: this test wants `assign_calls`, nothing else.
+    saved_modules = dict(sys.modules)
+    saved_path = list(sys.path)
+    sys.modules["unreal"] = stub
+    try:
+        spec = importlib.util.spec_from_file_location("_pypcg_v1_editor_under_test", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    finally:
+        sys.modules.clear()
+        sys.modules.update(saved_modules)
+        sys.path[:] = saved_path
+    return mod
+
+
+def _assign_ir(overrides):
+    """A one-node graph IR holding an Assign_Assets subgraph node with the given overrides."""
+    return {"nodes": [{"name": "Subgraph_1", "title": "Assign", "class": "PCGSubgraphSettings",
+                       "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+                       "settings": {}, "overrides": dict(overrides)}]}
+
+
+def test_assign_calls_maps_the_graph_pin_names_onto_expands_keys():
+    """The seam. `assign_calls` receives the graph's own spellings (`ScaleOffset`) and must hand
+    `expand` the keys `expand` reads (`scale_offset`); without the mapping every parameter recorded
+    from the graph is silently replaced by its default."""
+    mod = _v1_editor()
+    calls = mod.assign_calls(_assign_ir({
+        "Assets": ["/G/SM_A.SM_A"],
+        "ScaleOffset": {"X": 2.0, "Y": 1.0, "Z": 0.5},
+        "PositionOffset": {"X": 0.0, "Y": -492.541261, "Z": 22.0},
+        "UniformScale": True,
+        "UseMeshBounds": True,
+        "MeshAttribute": "Mesh",
+        "MatchScaleToInputBounds": True,
+        "UseIndexattribute": False,
+        "IndexAttribute": "ind",
+        "Seed": 12345,
+    }))
+    assert len(calls) == 1
+    params = calls[0]["params"]
+    assert params["scale_offset"] == {"X": 2.0, "Y": 1.0, "Z": 0.5}
+    assert params["position_offset"]["Y"] == -492.541261
+    assert params["uniform_scale"] is True
+    assert params["use_mesh_bounds"] is True
+    assert params["mesh_attribute"] == "Mesh"
+    # the pins expand does not read are reported, not silently dropped
+    assert set(calls[0]["unhonoured"]) == {"MatchScaleToInputBounds", "UseIndexattribute",
+                                           "IndexAttribute"}
+    # ... and no graph spelling survives into `params`
+    assert not (set(params) & set(mod.ASSIGN_PARAM_KEYS))
+
+
+def test_assign_calls_reports_random_calls_only_when_a_range_is_non_zero():
+    """A call whose random range is all zero draws nothing, so its output is reproducible without an
+    rng; a non-zero range is not, and the phase must say so rather than report a clean pass."""
+    mod = _v1_editor()
+    zero = mod.assign_calls(_assign_ir({
+        "Assets": ["/G/A.A"],
+        "RandomPositionRange": {"X": 0.0, "Y": 0.0, "Z": 0.0},
+        "RandomScaleRange": {"X": 0.0, "Y": 0.0, "Z": 0.0},
+    }))[0]
+    assert zero["random"] is False
+    live = mod.assign_calls(_assign_ir({
+        "Assets": ["/G/A.A"],
+        "RandomScaleRange": {"X": 0.2, "Y": 0.0, "Z": 0.0},
+    }))[0]
+    assert live["random"] is True
+    assert live["params"]["random_scale_range"]["X"] == 0.2
+
+
+def test_assign_calls_skips_nodes_that_are_not_the_primitive():
+    mod = _v1_editor()
+    ir = {"nodes": [{"name": "Other", "class": "PCGSubgraphSettings",
+                     "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+                     "settings": {}, "overrides": {"Ratio": 0.5}}]}
+    assert mod.assign_calls(ir) == []
+
+
+def test_assign_param_keys_cover_every_pin_expand_reads():
+    """`expand`'s documented params must all be reachable from a graph pin, or a later stage would
+    have no way to pass one in."""
+    mod = _v1_editor()
+    mapped = {v for v in mod.ASSIGN_PARAM_KEYS.values() if v is not None}
+    doc = A.expand.__doc__
+    for key in ("position_offset", "rotation_offset", "scale_offset", "extents_scale", "uniform_scale",
+                "use_mesh_bounds", "use_mesh_attribute", "mesh_attribute", "random_position_range",
+                "random_rotation_range", "random_scale_range"):
+        assert key in mapped, "%s is read by expand but no graph pin maps to it" % key
+        assert key in doc, "%s is not documented on expand" % key
+    assert "rng" not in mapped, "rng is the stage's, not a graph pin"

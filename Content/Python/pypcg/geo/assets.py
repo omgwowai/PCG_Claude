@@ -174,7 +174,9 @@ def _qmul(a, b):
 def _qrot(q, v):
     """`QuatRotateVector`: the rotation of `v` by `q`. Verified against the editor's own output on
     2026-10-16: an input point with yaw 90 carries the mesh point (-500, -400, -303.79) to the delta
-    (+400, -1000, -303.79) -- i.e. to (-source.y, +source.x, source.z)."""
+    (+400, -500, -303.79) -- i.e. to (-source.y, +source.x, source.z). (The (+400, -1000) delta in
+    `test_expand_rotates_and_scales_the_position_together` is a different case: the same yaw with an
+    input scale of (2, 1, 1), which stretches the source x before the rotation.)"""
     x, y, z, w = q
     vx, vy, vz = v
     tx = 2.0 * (y * vz - z * vy)
@@ -362,12 +364,17 @@ def _compose(tloc, tq, tscale, src_loc, src_rot, src_scale):
         OutRotation = TargetRotation * SourceRotation
         OutScale    = SourceScale * TargetScale
 
-    Confirmed against the editor's own output on 2026-10-16 (pyg_probe_t12_pair.py, the pairs
-    recorded in task-12-report.md): an input point at (10000, 20000, 0) with yaw 90 carried the mesh
-    point (-500, -400, -303.79) to (10400, 19000, -303.79), and the same mesh with an input at the
-    origin and no rotation landed at exactly the mesh point plus the input's translation. Every copied
-    point is therefore in world space, measured in the input point's frame; the asset is never scaled
-    by the fit ratio or by the fixed `ScaleOffset` beyond what `src_scale` already carries."""
+    Confirmed against the editor's own output on 2026-10-16 (pyg_probe_t12_one.py /
+    pyg_probe_t12_case.py, the pairs recorded in task-12-report.md):
+      - the mesh point (-500, -400, -303.79) with an input at (10000, 20000, 0), yaw 90 and scale 1
+        landed at (10400, 19500, -303.79), a delta of (+400, -500, -303.79);
+      - the same mesh point with an input at the origin and no rotation landed at exactly the mesh
+        point plus the input's translation;
+      - the same mesh point with an input scale of (2, 1, 1) and yaw 90 landed at (400, -1000,
+        -303.79): the input's scale stretches x (to -1000) before the rotation swaps the axes.
+    Every copied point is therefore in world space, measured in the input point's frame; the asset is
+    never scaled by the fit ratio or by the fixed `ScaleOffset` beyond what `src_scale` already
+    carries."""
     mq = quat_of(*src_rot)
     loc = _qrot(tq, tuple(src_loc[a] * tscale[a] for a in range(3)))
     return (tuple(tloc[a] + loc[a] for a in range(3)),
