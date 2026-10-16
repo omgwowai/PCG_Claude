@@ -24,6 +24,10 @@ def _polygons(pl):
     return out
 
 
+def _closed(path):
+    return len(path) > 1 and abs(path[0][0] - path[-1][0]) < 1e-9 and abs(path[0][1] - path[-1][1]) < 1e-9
+
+
 class Ops:
     def intersection(self, rings_a, rings_b):
         return _polygons(PL.polygons_intersection(_list(rings_a), _list(rings_b)))
@@ -33,6 +37,38 @@ class Ops:
 
     def union(self, rings):
         return _polygons(PL.polygons_union(_list(rings), True))
+
+    def offset(self, rings, distance, join="square", miter_limit=2.0):
+        """`OffsetPolygon2D`: push each ring's edges out by `distance` (inward negative, outward
+        positive). The primitive's node is Clipper2's `InflatePaths`; its settings leave the join at
+        the default (square, miter limit 2), which is what every PCGPrimitives caller here uses.
+        `polygons_offset` returns `(polygon_list, operation_success)` (probed 2026-10-16); the flag is
+        not trusted, matching how the other booleans in this file are read."""
+        opts = unreal.GeometryScriptPolygonOffsetOptions()
+        opts.set_editor_property("join_type", unreal.GeometryScriptPolyOffsetJoinType.SQUARE
+                                 if join == "square" else unreal.GeometryScriptPolyOffsetJoinType.MITER)
+        opts.set_editor_property("miter_limit", float(miter_limit))
+        out, _ok = PL.polygons_offset(_list(rings), opts, float(distance), True)
+        return _polygons(out)
+
+    def path_offset(self, path, distance, end="butt", join="square", miter_limit=2.0):
+        """`CreatePolygon2D(ForceOpen, OpenPolygonWidth)`: close an open path into the area within
+        `distance` of it. This is `UE::Geometry::PolygonsOffset` on an open poly-path
+        (`PCGCreatePolygon2D.cpp:243-269`), which GeometryScript exposes as
+        `CreatePolygonsFromPathOffset` with an `FGeometryScriptOpenPathOffsetOptions`.
+
+        `EndType` is the one thing the PCG node sets from its own settings: `Butt` caps the path
+        square at both ends, which is what `Transform_Outline` leaves in place."""
+        opts = unreal.GeometryScriptOpenPathOffsetOptions()
+        opts.set_editor_property("join_type", unreal.GeometryScriptPolyOffsetJoinType.SQUARE
+                                 if join == "square" else unreal.GeometryScriptPolyOffsetJoinType.MITER)
+        opts.set_editor_property("end_type", getattr(unreal.GeometryScriptPathOffsetEndType, end.upper(),
+                                                     unreal.GeometryScriptPathOffsetEndType.BUTT))
+        opts.set_editor_property("miter_limit", float(miter_limit))
+        ring = [unreal.Vector2D(x, y) for x, y in path[:-1]] if _closed(path) else \
+            [unreal.Vector2D(x, y) for x, y in path]
+        out, _ok = PL.create_polygons_from_path_offset(ring, opts, float(distance), True)
+        return _polygons(out)
 
     def cut_with_paths(self, ring, paths):
         """Polygon2DOperation(CutWithPaths): the booleans run in the subject polygon's own plane frame,
