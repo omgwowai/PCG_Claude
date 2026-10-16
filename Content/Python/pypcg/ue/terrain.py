@@ -8,6 +8,7 @@ class Terrain:
 
     def __init__(self, data):
         self._data = data
+        self.kind = data.get_class().get_name()           # the PCG data class, for reports
 
     def height(self, x, y):
         """Surface z under (x, y), or None where the ray misses."""

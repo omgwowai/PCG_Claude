@@ -76,7 +76,10 @@ def _reset_to_class_defaults(g, ir, made):
     done = []
     for exported in json.loads(L.export_graph_ir(g))["nodes"]:
         name = names.get(exported["name"])
-        if name is None:
+        # The input/output nodes come with the graph, not from add_node_of_type, and their settings
+        # (e.g. the protected bHasAddedDefaultPin) are written from the IR or left as the new graph
+        # made them; a slim IR lists none of them (compare.slim_normalize).
+        if name is None or name in _ir.IO_NODES:
             continue
         n = by_name[name]
         stale = sorted(set(exported.get("settings") or {}) - set(n.get("settings") or {}) - {"Seed"})
