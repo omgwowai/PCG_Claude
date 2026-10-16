@@ -72,7 +72,14 @@ def assign_calls(ir):
     `ASSIGN_PARAM_KEYS`), and `unhonoured` lists the pins the graph sets that `expand` does not read,
     so a caller can see the gap rather than silently lose it. `random` is True when this call has a
     non-zero random range: a caller that does not supply an `rng` then cannot reproduce the
-    primitive's draw."""
+    primitive's draw.
+
+    `seed` is the node's OWN `Seed` pin (instance override first, then the settings' value). It is
+    recorded for a reader and is deliberately NOT fed to `expand`: the primitive spends that seed on
+    `TransformPoints_2`'s draws and on the asset pick, while `expand` takes only `params["rng"]`, and
+    this phase supplies no rng. A caller that wants to reproduce a random call must construct an
+    `rng` and pass the call's `seed` to it; nothing today does, which is what `random_calls`
+    reports."""
     out = []
     for node in ir.get("nodes", []):
         sub = node.get("subgraph") or ""
