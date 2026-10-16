@@ -136,6 +136,12 @@ def phase_verdict(args):
     notes = []
     if after is not None and not v2.same(official, after, tags):
         down.append("the official graph did not reproduce its own output after restore (determinism)")
+    th = v2.thresholds(n)
+    if th["bbox_margin_cm"] > v2.DEFAULTS["bbox_margin_cm"]:
+        notes.append("the %.0f m bounds margin is the size of this stage's own noise, so the bounds check "
+                     "above cannot see a systematic placement bias of that size; V1's oracle, which replays "
+                     "with the official parameters, carries the placement evidence instead"
+                     % (th["bbox_margin_cm"] / 100))
     for s in seeds:
         run = _load(os.path.join(d, "slim_%d.run.json" % s), {})
         if run.get("notes"):
