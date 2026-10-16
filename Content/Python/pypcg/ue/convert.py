@@ -57,6 +57,12 @@ def _plain(type_name, v):
     return v
 
 
+# `FSoftObjectPath.export_text()` gives the literal string "None" for the null path (probed
+# 2026-10-16). `unreal.SoftObjectPath("None")` raises, so the writer must turn it back into the null
+# path rather than passing the text through. `pypcg.geo.assets` reads the same spelling.
+NULL_PATH = "None"
+
+
 def _rotator(r):
     return unreal.Rotator(pitch=r[0], yaw=r[1], roll=r[2])          # keywords: positional is (roll, pitch, yaw)
 
@@ -75,9 +81,9 @@ def _ue(type_name, v):
     if type_name == "Transform":
         return unreal.Transform(unreal.Vector(*v[0]), _rotator(v[1]), unreal.Vector(*v[2]))
     if type_name == "SoftObjectPath":
-        return unreal.SoftObjectPath(v)
+        return unreal.SoftObjectPath() if v == NULL_PATH else unreal.SoftObjectPath(v)
     if type_name == "SoftClassPath":
-        return unreal.SoftClassPath(v)
+        return unreal.SoftClassPath() if v == NULL_PATH else unreal.SoftClassPath(v)
     return v
 
 
@@ -155,6 +161,11 @@ def from_pcg(d):
     if isinstance(d, unreal.PCGSpatialData):
         return Terrain(d)
     raise TypeError("PyPCG cannot read %s" % d.get_class().get_name())
+
+
+def points_of(d):
+    """A PCG point data's points as a plain `Points` (the public name of `_points_of`)."""
+    return _points_of(d)
 
 
 def _points_of(d):

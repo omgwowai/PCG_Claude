@@ -76,6 +76,18 @@ class Points:
             out.add(self.loc[i], **kw)
         return out
 
+    def extend(self, other):
+        """Append `other`'s points to this one, declaring any attribute this one does not have yet
+        (a name that is a point column is skipped: the column carries it)."""
+        for name, type_name in other.types.items():
+            if name not in self.COLUMNS and name not in self.attrs:
+                self.declare(name, type_name)
+        for i in range(len(other)):
+            kw = {c: getattr(other, c)[i] for c in self.DEFAULTS}
+            kw.update({n: column[i] for n, column in other.attrs.items()})
+            self.add(other.loc[i], **kw)
+        return self
+
 
 def values(items):
     """The values of a list of (value, tags) items."""

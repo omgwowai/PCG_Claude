@@ -1,0 +1,392 @@
+"""The Assign_Assets helper: the pure choice, the expansion, and the interfaces the brief fixes.
+
+The primitive is /PCGPrimitives/Primitives/Assign/Assign_Assets; its computation is the subgraph
+Assign_Assets_CoreProcess (dump of 2026-10-16 in Saved/graph_dumps/), and its copy step is the
+engine's own CopyPoints. The transform rule asserted here was MEASURED in the editor on 2026-10-16
+against the real primitive (pyg_probe_t12_pair.py, recorded in task-12-report.md): the mesh's own
+points, the primitive's output for one input point with yaw 90, and the primitive's output for the
+same input with yaw 0 / offset 0 / scale 1 are all three used below as fixtures.
+"""
+import inspect
+import math
+import random
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / ".." / ".." / "Content" / "Python"))
+
+from pypcg import geo  # noqa: E402
+from pypcg.geo import Points  # noqa: E402
+from pypcg.geo import assets as A  # noqa: E402
+
+# Four real points of /CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_A_PCG, read from the asset:
+# (loc, rot, scale, seed).
+MESH_POINTS = [
+    ((-500.0, -400.0, -303.79074597358704), (0.0, 0.0, 0.0), (10.0, 8.0, 10.0), -2111086339),
+    ((235.54061889648438, 99.33786010742188, -303.9906437397003), (0.0, -179.99971313206382, 0.0),
+     (0.9999999404078892, 0.9999999404078892, 1.0), -1759265780),
+    ((-306.45941162109375, 114.19580078125, -303.9906437397003), (0.0, 85.3147757072082, 0.0),
+     (1.000000019706748, 1.000000019706748, 1.0), -1613868329),
+    ((69.54051208496094, 161.33660888671875, -303.9906437397003), (0.0, 0.0002288113371942108, 0.0),
+     (1.000000000007974, 1.000000000007974, 1.0), -895864832),
+]
+MESH_BOUNDS = ((-500.0, -500.0, 0.0), (500.0, 500.0, 100.0))
+
+
+def mesh_points(bounds=MESH_BOUNDS, subset=None):
+    p = Points()
+    for loc, rot, scale, seed in (MESH_POINTS if subset is None else subset):
+        p.add(loc, rot=rot, scale=scale, seed=seed, bounds_min=bounds[0], bounds_max=bounds[1])
+    return p
+
+
+def asset(path="/G/Plaza.Plaza", points=None, bounds=MESH_BOUNDS):
+    pts = mesh_points(bounds) if points is None else points
+    b = A.bounds_of(pts)
+    return {"path": path, "points": pts, "bounds": b, "size": A.size_of(b), "note": ""}
+
+
+def targets(specs):
+    """specs: [(loc, rot, scale, seed)] on the standard box."""
+    t = Points()
+    for loc, rot, scale, seed in specs:
+        t.add(loc, rot=rot, scale=scale, seed=seed, bounds_min=MESH_BOUNDS[0], bounds_max=MESH_BOUNDS[1])
+    return t
+
+
+# ---- choose: the random pick (MatchAndSetAttributes_0) -------------------------------------------
+def test_choose_gives_one_index_per_point():
+    rng = random.Random(7)
+    idx = A.choose(5, ["a", "b", "c"], rng)
+    assert len(idx) == 5
+    assert all(i in (0, 1, 2) for i in idx)
+    assert len(set(idx)) > 1, "a uniform draw over three assets should not always pick the same one"
+
+
+def test_choose_is_seed_deterministic():
+    a = A.choose(50, ["a", "b", "c"], random.Random("1:7"))
+    b = A.choose(50, ["a", "b", "c"], random.Random("1:7"))
+    c = A.choose(50, ["a", "b", "c"], random.Random("2:7"))
+    assert a == b
+    assert a != c
+
+
+def test_choose_of_no_assets_is_all_minus_one():
+    assert A.choose(3, [], random.Random(1)) == [-1, -1, -1]
+    assert A.choose(0, ["a"], random.Random(1)) == []
+
+
+def test_choose_covers_every_asset_given_enough_points():
+    rng = random.Random(3)
+    assert set(A.choose(200, ["a", "b", "c", "d"], rng)) == {0, 1, 2, 3}
+
+
+def test_choose_weights_bias_the_draw():
+    rng = random.Random(5)
+    idx = A.choose(400, ["a", "b"], rng, weights=[9.0, 1.0])
+    assert idx.count(0) > idx.count(1) * 3
+
+
+# ---- bounds and sizes (BoundsFromMesh, AttributeMathsOp_6/7, _4/_16) -----------------------------
+def test_bounds_of_is_the_union_of_the_point_bounds():
+    p = mesh_points()
+    assert A.bounds_of(p) == ([-500.0, -500.0, 0.0], [500.0, 500.0, 100.0])
+    assert A.size_of(A.bounds_of(p)) == (1000.0, 1000.0, 100.0)
+
+
+def test_bounds_of_empty_points_is_none_and_size_zero():
+    assert A.bounds_of(Points()) is None
+    assert A.size_of(None) == (0.0, 0.0, 0.0)
+
+
+def test_fit_ratio_is_own_size_over_mesh_size():
+    own = ([-500.0, -250.0, 0.0], [500.0, 250.0, 100.0])            # 1000 x 500 x 100
+    assert A.fit_ratio(own, (200.0, 200.0, 20.0), False) == (5.0, 2.5, 5.0)
+
+
+def test_fit_ratio_uniform_uses_x_for_all_three():
+    own = ([-500.0, -250.0, 0.0], [500.0, 250.0, 100.0])
+    assert A.fit_ratio(own, (200.0, 200.0, 20.0), True) == (5.0, 5.0, 5.0)
+
+
+def test_fit_ratio_leaves_a_zero_mesh_axis_alone():
+    """A zero-thickness axis must not divide by zero: the ratio stays 1."""
+    own = ([-500.0, -500.0, 0.0], [500.0, 500.0, 100.0])
+    assert A.fit_ratio(own, (200.0, 200.0, 0.0), False) == (5.0, 5.0, 1.0)
+
+
+def test_fit_ratio_is_reported_but_not_applied():
+    """Measured 2026-10-16: an input box ten times the mesh's left the output scale at 1."""
+    one = mesh_points(subset=MESH_POINTS[:1])
+    table = [asset(points=one)]
+    t = Points()
+    t.add((0.0, 0.0, 0.0), bounds_min=(-5000.0, -2500.0, 0.0), bounds_max=(5000.0, 2500.0, 500.0))
+    out = A.expand(t, table, [0], {})
+    assert out.scale[0] == (10.0, 8.0, 10.0), "the mesh keeps its own scale"
+    assert out.attrs["$Scale"] == [(10.0, 5.0, 5.0)]    # 10000/1000, 5000/1000, 500/100
+
+
+# ---- expand: the copy (CopyPoints) ---------------------------------------------------------------
+def test_expand_reproduces_the_primitive_identity_case():
+    """One real input point (yaw 0, scale 1, offset 0) against the primitive's own output, byte for
+    byte on loc, and exactly on rot, scale and seed."""
+    table = [asset()]
+    t = targets([((10000.0, 20000.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 42)])
+    out = A.expand(t, table, [0], {})
+    assert len(out) == len(MESH_POINTS)
+    official_loc = [(9500.0, 19600.0, -303.79074597358704),
+                    (10235.540618896484, 20099.337860107422, -303.9906437397003),
+                    (9693.540588378906, 20114.19580078125, -303.9906437397003),
+                    (10069.540512084961, 20161.33660888672, -303.9906437397003)]
+    official_seed = [-455695611, 1072875822, 100085031, -353494110]
+    official_rot = [(0.0, 0.0, 0.0), (0.0, -179.99971313206382, 0.0), (0.0, 85.3147757072082, 0.0),
+                    (0.0, 0.0002288113371942108, 0.0)]
+    for i, want in enumerate(official_loc):
+        assert out.loc[i] == pytest.approx(want, abs=1e-6)
+    assert out.seed == official_seed
+    for i, want in enumerate(official_rot):
+        assert out.rot[i] == pytest.approx(want, abs=1e-6)
+    assert [tuple(s) for s in out.scale] == [(10.0, 8.0, 10.0),
+                                             (0.9999999404078892, 0.9999999404078892, 1.0),
+                                             (1.000000019706748, 1.000000019706748, 1.0),
+                                             (1.000000000007974, 1.000000000007974, 1.0)]
+    assert out.attrs["Asset"] == ["/G/Plaza.Plaza"] * 4, "no per-point Mesh: the assigned path stands in"
+
+
+def test_expand_rotates_the_mesh_into_the_input_frame():
+    """The primitive's own output for the same input with yaw 90: the mesh's local point
+    (-500, -400, -303.79) lands at (10400, 19500, -303.79), i.e. (+400, -1000) from the input point
+    (the measured `yaw90` case of pyg_probe_t12_one.py)."""
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((10000.0, 20000.0, 0.0), (0.0, 90.0, 0.0), (1.0, 1.0, 1.0), 42)])
+    out = A.expand(t, table, [0], {})
+    assert out.loc[0] == pytest.approx((10400.0, 19500.0, -303.79074597358704), abs=1e-3)
+    assert out.rot[0] == pytest.approx((0.0, 90.0, 0.0), abs=1e-3)
+    assert out.scale[0] == (10.0, 8.0, 10.0)
+
+
+def test_expand_rotates_and_scales_the_position_together():
+    """The measured `yaw90_scale2` case: the same yaw 90 with an input scale of (2, 1, 1) -- the input
+    scale multiplies the mesh point BEFORE the rotation."""
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 90.0, 0.0), (2.0, 1.0, 1.0), 42)])
+    out = A.expand(t, table, [0], {})
+    assert out.loc[0] == pytest.approx((400.0, -1000.0, -303.79074597358704), abs=1e-3)
+    assert out.scale[0] == (20.0, 8.0, 10.0)
+
+
+def test_expand_multiplies_the_input_scale_into_the_point_and_the_position():
+    """The measured `scale2` case: the input point's scale multiplies the mesh point's position and its
+    scale (CopyPoints' Relative inheritance)."""
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (2.0, 1.0, 1.0), 42)])
+    out = A.expand(t, table, [0], {})
+    assert out.loc[0] == pytest.approx((-1000.0, -400.0, -303.79074597358704), abs=1e-3)
+    assert out.scale[0] == (20.0, 8.0, 10.0)
+
+
+def test_expand_composes_the_rotations():
+    """OutRotation = TargetRotation * SourceRotation, not a sum of Euler angles."""
+    q = A._qmul(A.quat_of(0.0, 90.0, 0.0), A.quat_of(0.0, -179.99971313206382, 0.0))
+    assert tuple(A.rotator_of(q)) == pytest.approx((0.0, -89.99971313206382, 0.0), abs=1e-6)
+    table = [asset(points=mesh_points(subset=MESH_POINTS[1:2]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 90.0, 0.0), (1.0, 1.0, 1.0), 42)])
+    out = A.expand(t, table, [0], {})
+    assert out.rot[0] == pytest.approx((0.0, -89.99971313206382, 0.0), abs=1e-6)
+
+
+def test_expand_writes_the_asset_path_and_the_bounds():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((5.0, 6.0, 7.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 7)])
+    out = A.expand(t, table, [0], {"use_mesh_bounds": True, "extents_scale": (2.0, 2.0, 2.0)})
+    assert out.attrs["Asset"] == ["/G/SM_A.SM_A"]
+    assert out.attrs["$Extents"] == [(2000.0, 2000.0, 200.0)]
+    assert tuple(out.bounds_min[0]) == (-500.0, -500.0, 0.0)   # UseMeshBounds: the asset's own box
+    assert tuple(out.bounds_max[0]) == (500.0, 500.0, 100.0)
+
+
+def test_expand_without_use_mesh_bounds_keeps_the_assembly_point_bounds():
+    """Measured twice on 2026-10-16: the copied point keeps the ASSET point's own bounds, not the
+    input box's (the lane mesh's 200x200x20 and the plaza point's came through against a
+    -500..500 x -500..500 x 0..100 input box)."""
+    narrow = ((-7.0, -8.0, -9.0), (1.0, 2.0, 3.0))
+    table = [asset(points=mesh_points(narrow, subset=MESH_POINTS[:1]), bounds=narrow)]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {})
+    assert tuple(out.bounds_min[0]) == (-7.0, -8.0, -9.0)
+    assert tuple(out.bounds_max[0]) == (1.0, 2.0, 3.0)
+
+
+def test_expand_offset_is_carried_by_the_assemblys_own_rotation():
+    """`TransformPoints` with a non-absolute offset rotates it by the point's own rotation, so a mesh
+    point with yaw 90 moves along its own Y."""
+    table = [asset(points=mesh_points(subset=MESH_POINTS[1:2]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {"position_offset": (0.0, -492.541261, 0.0)})
+    # the point's own yaw is ~180, so its local +Y offset comes back to (nearly) the local -Y axis
+    assert out.loc[0][1] == pytest.approx(99.33786010742188 + 492.541261, abs=0.01)
+    assert out.loc[0][0] == pytest.approx(235.54061889648438, abs=0.01)
+
+
+def test_expand_multiplies_the_scale_offset_and_adds_the_rotation_offset():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {"scale_offset": (2.0, 1.0, 0.5), "rotation_offset": (0.0, 30.0, 0.0)})
+    assert out.scale[0] == (20.0, 8.0, 5.0)
+    assert out.rot[0] == pytest.approx((0.0, 30.0, 0.0), abs=1e-6)
+
+
+def test_expand_multiple_targets_stay_contiguous_in_target_order():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:2])),
+             asset("/G/SM_B.SM_B", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((100.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0),
+                 ((200.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0, 1], {})
+    assert len(out) == 3
+    assert out.attrs["Asset"] == ["/G/SM_A.SM_A", "/G/SM_A.SM_A", "/G/SM_B.SM_B"]
+    # target 0 at x 100 carries mesh points at x -500 and +236; target 1 at x 200 carries the first
+    assert [round(l[0]) for l in out.loc] == [-400, 336, -300]
+
+
+def test_expand_keeps_each_input_points_points_contiguous():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:3]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0),
+                 ((1000.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0, 0], {})
+    assert len(out) == 6
+    assert [round(l[0]) for l in out.loc] == [-500, 236, -306, 500, 1236, 694]
+
+
+def test_expand_carries_the_input_point_attributes_onto_every_copied_point():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:2]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    t.declare("local_Width", "Double", 1900.0)
+    out = A.expand(t, table, [0], {})
+    assert out.attrs["local_Width"] == [1900.0, 1900.0]
+
+
+def test_expand_seed_is_the_engines_own_mix_of_source_and_input_seed():
+    """`CopyPoints`' Relative seed inheritance is `PCGHelpers::ComputeSeed(source, target)`
+    (`PCGHelpers.cpp:40-43`). Measured in the editor on 2026-10-16: the plaza's first point (seed
+    -2111086339) with an input point seeded 42 gave -455695611, and with 7 gave 258744612."""
+    assert A.compute_seed(-2111086339, 42) == -455695611
+    assert A.compute_seed(-2111086339, 7) == 258744612
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:2]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 42)])
+    assert A.expand(t, table, [0], {}).seed == [-455695611, 1072875822]
+
+
+def test_expand_declares_Asset_Extents_and_Scale_even_when_nothing_is_picked():
+    out = A.expand(targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)]), [asset()], [-1], {})
+    assert len(out) == 0
+    assert out.types.get("Asset") == "SoftObjectPath"
+    for name in ("$Extents", "$Scale", "$BoundsMin", "$BoundsMax"):
+        assert name in out.attrs
+
+
+def test_expand_uses_mesh_attribute_when_asked():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1])),
+             asset("/G/SM_B.SM_B", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    t.declare("Mesh", "SoftObjectPath", "/G/SM_B.SM_B")
+    out = A.expand(t, table, None, {"use_mesh_attribute": True})
+    assert out.attrs["Asset"] == ["/G/SM_B.SM_B"]
+
+
+def test_expand_mesh_attribute_names_the_attribute_to_read():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1])),
+             asset("/G/SM_B.SM_B", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    t.declare("KitMesh", "SoftObjectPath", "/G/SM_B.SM_B")
+    out = A.expand(t, table, None, {"use_mesh_attribute": True, "mesh_attribute": "KitMesh"})
+    assert out.attrs["Asset"] == ["/G/SM_B.SM_B"]
+
+
+def test_expand_with_an_unknown_mesh_attribute_drops_the_point_rather_than_raising():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    t.declare("Mesh", "SoftObjectPath", "/G/SM_ZZZ.SM_ZZZ")
+    assert len(A.expand(t, table, None, {"use_mesh_attribute": True})) == 0
+
+
+def test_expand_random_position_range_draws_from_the_rng_and_repeats():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    params = {"random_position_range": ((0.0, -100.0, 0.0), (0.0, 100.0, 0.0))}
+    a = A.expand(t, table, [0], dict(params, rng=random.Random("1:12")))
+    b = A.expand(t, table, [0], dict(params, rng=random.Random("1:12")))
+    c = A.expand(t, table, [0], dict(params, rng=random.Random("2:12")))
+    assert a.loc == b.loc
+    assert a.loc != c.loc
+    assert -100.0 + MESH_POINTS[0][0][1] <= a.loc[0][1] <= 100.0 + MESH_POINTS[0][0][1]
+
+
+def test_expand_random_scale_range_multiplies_the_scale():
+    """TransformPoints_2's scale is multiplicative; min = max draws that one value."""
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {"random_scale_range": (0.1, 0.1, 0.1), "rng": random.Random(1)})
+    assert out.scale[0] == pytest.approx((1.0, 0.8, 1.0))
+    out = A.expand(t, table, [0], {"random_scale_range": (0.1, 0.1, 0.1),
+                                   "scale_offset": (2.0, 2.0, 2.0), "rng": random.Random(1)})
+    assert out.scale[0] == pytest.approx((2.0, 1.6, 2.0))
+
+
+def test_expand_uniform_random_scale_draws_one_number():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {"random_scale_range": (0.0, 0.5, 0.0), "uniform_scale": True,
+                                   "rng": random.Random(4)})
+    assert out.scale[0][0] == out.scale[0][2], "UniformScale draws one number for all three axes"
+
+
+# ---- the empty forms (Review Focus 1) ------------------------------------------------------------
+def test_expand_with_no_targets_is_empty():
+    assert len(A.expand(Points(), [asset()], [], {})) == 0
+
+
+def test_expand_with_no_assets_is_empty():
+    assert len(A.expand(targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)]), [], [], {})) == 0
+
+
+def test_expand_with_an_empty_assembly_skips_that_point():
+    empty = {"path": "/G/SM_A.SM_A", "points": Points(), "bounds": None, "size": (0.0, 0.0, 0.0), "note": ""}
+    assert len(A.expand(targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)]), [empty], [0], {})) == 0
+
+
+def test_expand_indices_shorter_than_the_targets_drops_the_rest():
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0),
+                 ((10.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    assert len(A.expand(t, table, [0], {})) == 1
+
+
+# ---- the interfaces the brief fixes --------------------------------------------------------------
+def test_the_three_names_the_brief_fixes_exist_with_their_signatures():
+    assert list(inspect.signature(A.choose).parameters)[:3] == ["n", "assets", "rng"]
+    assert list(inspect.signature(A.expand).parameters) == ["targets", "table", "indices", "params"]
+    src = (Path(A.__file__)).read_text(encoding="utf-8")
+    assert "import unreal" not in src, "pypcg.geo is pure: the loader belongs in pypcg.ue"
+
+
+def test_geo_assets_choose_is_not_geo_choose():
+    """The package's `choose` is Filter_RandomChoice's ratio pick; the asset pick is a different
+    function and must not shadow it (stage 18 calls both)."""
+    assert geo.choose is not geo.assets.choose
+    assert geo.choose(10, 0.5, random.Random(1)) == sorted(geo.choose(10, 0.5, random.Random(1)))
+
+
+def test_points_extend_declares_missing_attributes():
+    a = Points()
+    a.declare("Mesh", "SoftObjectPath")
+    a.add((0.0, 0.0, 0.0), Mesh="/G/A.A")
+    b = Points()
+    b.declare("Mesh", "SoftObjectPath")
+    b.declare("Material", "SoftObjectPath")
+    b.add((1.0, 0.0, 0.0), Mesh="/G/B.B", Material="/G/M.M")
+    a.extend(b)
+    assert len(a) == 2
+    assert a.types["Material"] == "SoftObjectPath"
+    assert a.attrs["Material"] == [None, "/G/M.M"]
