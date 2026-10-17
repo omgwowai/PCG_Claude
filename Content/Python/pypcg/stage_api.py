@@ -29,6 +29,26 @@ RUNS_DIR = os.path.join(REPO, "Saved", "PyPCG", "runs")
 VALUE_TYPES = (geo.Polygon, geo.Spline, geo.Points, geo.ParamSet)
 
 
+def volume_point(inputs, pin="Volume"):
+    """(loc, yaw) of the volume that owns a stage, from the one-point `geo.Points` a
+    `Get Actor Data (GetSinglePoint)` node delivers on the `Volume` pin.
+
+    Measured 2026-10-17 from `Saved/PyPCG/runs/s04.json` and `s05.json`: the value is a `Points`
+    with exactly one point, `loc[0]` is the volume actor's WORLD translation, `rot[0]` is
+    `(pitch, yaw, roll)` -- so the yaw every official `Create_Spline_Shape` uses is `[1]` -- and the
+    value also carries `scale[0]` (the actor's own scale) and `attrs["ActorReference"]`. THE ACTOR
+    SCALE IS NOT APPLIED by the official shapes: stage 4 builds `(1, Length/Width, 1)` and stage 5
+    `(1, 1, 1)`, so a stage that multiplied by `scale[0]` would publish a 25x tower and a 500x park.
+
+    Returns `(None, 0.0)` when the pin is empty, so an empty pin publishes an empty output."""
+    for value, _tags in inputs.get(pin, []):
+        loc, rot = getattr(value, "loc", None), getattr(value, "rot", None)
+        if loc:
+            r = rot[0] if rot else (0.0, 0.0, 0.0)
+            return tuple(loc[0]), float(r[1])
+    return None, 0.0
+
+
 class StageError(Exception):
     pass
 

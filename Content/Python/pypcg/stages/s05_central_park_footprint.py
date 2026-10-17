@@ -7,7 +7,7 @@ Replaces the 3-node graph: the `Create_Spline_Shape` primitive (`Park_Footprint`
 and the `$Position.Z` maths node; the debug mesh goes."""
 from pypcg import geo
 from pypcg.geo import Spline
-from pypcg.stage_api import Param
+from pypcg.stage_api import Param, volume_point
 
 STAGE = 5
 DOC = """CentralParkFootprint (中央公园范围): the central park's footprint as a closed four-vertex
@@ -26,17 +26,6 @@ OUTPUTS = ("Footprint",)
 # `geo.rect`'s default order is that order. Keep it: later stages read these vertices.
 ORDER = ((-1, 1), (1, 1), (1, -1), (-1, -1))
 Z = 0.0
-
-
-def volume_point(inputs):
-    """(loc, yaw) of the volume, from the single point `Get Actor Data (GetSinglePoint)` writes on
-    the `Volume` pin. yaw is `rot[1]`: convert._points_of stores a rotator as (pitch, yaw, roll)."""
-    for value, _tags in inputs.get("Volume", []):
-        loc, rot = getattr(value, "loc", None), getattr(value, "rot", None)
-        if loc:
-            r = rot[0] if rot else (0.0, 0.0, 0.0)
-            return tuple(loc[0]), float(r[1])
-    return None, 0.0
 
 
 def rectangle(center, width, length, yaw_deg=0.0):

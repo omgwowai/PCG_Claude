@@ -195,6 +195,64 @@ def test_rect_corner_order_is_the_official_one():
                        (-50000.0, -10000.0)]
 
 
+def test_the_two_vertex_radii_follow_the_width_and_length_ratio():
+    """`S4.radii` is derived, not read back from the builder. At ratio 2 the local Y stretch puts the
+    four off-axis vertices at R sqrt(1/4 + 3/4 x 4) = R sqrt(13)/2, not at R x ratio."""
+    R = 8000.0
+    assert S4.radii(16000.0, 16000.0) == [R] * 6
+    far = R * (0.25 + 0.75 * 4.0) ** 0.5
+    assert S4.radii(16000.0, 32000.0) == [far, far, R, far, far, R]
+    assert far == pytest.approx(8000.0 * (13 ** 0.5) / 2.0, rel=1e-12)       # 14422.205 cm
+    assert far != pytest.approx(R * 2.0)                                     # the old claim
+    # and the builder agrees with the derivation, vertex for vertex
+    ring = S4.hexagon((0.0, 0.0), 16000.0, 32000.0, 0.0)
+    assert all(abs(math.dist((x, y), (0.0, 0.0)) - want) < 1e-9
+               for (x, y), want in zip(ring, S4.radii(16000.0, 32000.0)))
+
+
+def test_v1_size_clause_fires_at_a_non_unit_ratio():
+    """The review's Important 1: the old clause compared min/max radii to Width/2 and
+    Width/2 x Length/Width, so it read 14422.21 cm against 16000 and failed on a CORRECT port."""
+    from pypcg.checks import s04 as C4
+    p = params(S4, RectLength=32000.0)
+    vin = volume()
+    assert C4.check(vin, p, S4.run(vin, p, None), FakeOps()) == []
+    # a footprint built for the unit ratio while the parameters say 2:1 must fail
+    wrong = S4.run(vin, params(S4), None)
+    assert any("put it at" in x for x in C4.check(vin, p, wrong, FakeOps()))
+
+
+def test_v1_yaw_clause_fires_on_a_wrong_rotation():
+    """The review's Important 3: side lengths and area are rotation-invariant, so only the corner
+    measure can see a wrong yaw. A 5-degree error moves a corner ~4400 cm off its local corner."""
+    from pypcg.checks import s05 as C5
+    built = S5.run(volume(PARK_AT[:2], PARK_YAW), params(S5), None)       # the right yaw
+    assert C5.check(volume(PARK_AT[:2], PARK_YAW), params(S5), built, FakeOps()) == []
+    f = C5.check(volume(PARK_AT[:2], PARK_YAW + 5.0), params(S5), built, FakeOps())
+    assert any("turned back by the volume's yaw" in x for x in f)
+    # the modulo-90 property itself, on a square. (Through check() a wrong yaw also trips the
+    # "where the volume puts it" clause first, so the bounds are tested on the measure directly.)
+    square = S5.rectangle((0.0, 0.0), 10000.0, 10000.0, 30.0)
+    assert C5._corners_at_yaw(square, 30.0, 10000.0, 10000.0) == []
+    assert C5._corners_at_yaw(square, 120.0, 10000.0, 10000.0) == []          # +90: same shape
+    assert C5._corners_at_yaw(square, 75.0, 10000.0, 10000.0) != []           # +45: not
+    rect = S5.rectangle((0.0, 0.0), 100000.0, 20000.0, PARK_YAW)
+    assert C5._corners_at_yaw(rect, PARK_YAW + 0.0004, 100000.0, 20000.0) == []   # 0.35 cm
+    assert C5._corners_at_yaw(rect, PARK_YAW + 0.001, 100000.0, 20000.0) != []    # 0.87 cm
+
+
+def test_volume_point_is_one_shared_helper():
+    """The read is machinery now, not two copies: `stage_api.volume_point` is what both stages and
+    both checks import, and it handles the empty pin."""
+    from pypcg import stage_api
+    assert S4.volume_point is stage_api.volume_point and S5.volume_point is stage_api.volume_point
+    assert stage_api.volume_point({"Volume": []}) == (None, 0.0)
+    assert stage_api.volume_point({}) == (None, 0.0)
+    from pypcg.checks import s04 as C4
+    from pypcg.checks import s05 as C5
+    assert C4.volume_point is stage_api.volume_point and C5.volume_point is stage_api.volume_point
+
+
 # ---- determinism -----------------------------------------------------------------------------------
 @pytest.mark.parametrize("module", [S4, S5])
 def test_the_stage_is_deterministic_across_repeats(module):
