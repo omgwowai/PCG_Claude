@@ -16,6 +16,8 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 # pypcg_v1_editor.py -- V1 checks with the editor's real booleans, on the runs V2 recorded (spec 3, V1).
 # Args: {"stage": n}                                   -> stage mode (below)
 #       {"assign": {"stage": n}}                       -> assign mode (Task 12)
+#       {"published": {"stage": n}}                    -> published mode (Task 11): the LIVE volume's
+#                                                         output against the stage's own parameters
 # The two are told apart by the presence of the "assign" key, whose value must be a DICT carrying
 # "stage"; `{"stage": n, "assign": true}` is not a form this file accepts.
 # Stage mode: for every Saved/Reports/v2/sNN/slim_<seed>.run.json:
@@ -251,6 +253,106 @@ def _official_outputs(n):
     return out
 
 
+HIGHWAY_SPLINES = ("HighwaySpline2", "HighwaySpline3")
+
+
+def _highway_spline_lengths():
+    """The two highway spline actors' own lengths, in cm, read off the scene the graph reads. Empty
+    when the stage's level does not carry them."""
+    from pypcg.profiles import official
+    out = []
+    for role in HIGHWAY_SPLINES:
+        path = official.ROLES.get(role)
+        if not path:
+            return []
+        obj = unreal.load_object(None, path)
+        if obj is None:
+            return []
+        comps = obj.get_components_by_class(unreal.SplineComponent)
+        if not comps:
+            return []
+        out.append(comps[0].get_spline_length())
+    return out
+
+
+def published_phase(n, as_name, width_name):
+    """`{"published": {"stage": n, "as": <param>, "width": <param>}}`: the LIVE volume's published
+    output checked against a parameter, on the live volume rather than on a recorded run.
+
+    Needed because stage 8's published polygon comes out of NATIVE nodes, so the recorded run holds
+    the Python node's splines and never sees it: `check()`'s polygon half otherwise only runs when a
+    volume happens to hold its official graph. This reads the volume's generated output as
+    `pypcg.geo` values and calls the stage's own `check()`. `as_name` is the parameter the published
+    AREA is measured against through the highway spline lengths (default `Highway_Width`); the
+    lengths come from the volume's own inputs where the check can reach them, else from the graph.
+
+    Stage 8 only. Returns the check's failures plus the numbers it was judged on, so the bound is
+    visible even when it passes."""
+    from pypcg import census, geo, stages
+    from pypcg.ue import convert
+    module = stages.spec(n)
+    try:
+        chk = importlib.import_module("pypcg.checks.s%02d" % n)
+    except ImportError:
+        return {"stage": n, "abort": "no checks module"}
+    pc = census.component(n)
+    outs = {}
+    for td in pc.get_generated_graph_output().get_editor_property("tagged_data"):
+        d = td.get_editor_property("data").get_editor_property("data")
+        try:
+            value = convert.from_pcg(d)
+        except TypeError:
+            continue
+        for t in td.get_editor_property("tags"):
+            if ":" not in str(t):
+                outs.setdefault(str(t), []).append((value, [str(t)]))
+    params = {name: spec.default for name, spec in module.PARAMS.items()}
+    # the volume's own instance overrides win over the declared defaults
+    inst = pc.get_editor_property("graph_instance")
+    over = json.loads(unreal.PyPCGToolsLibrary.export_instance_overrides(inst)) if inst else {}
+    params.update({k: v for k, v in over.items() if k in params})
+    # the highway spline lengths, from the stage's own recorded run when there is one
+    ins = None
+    run = os.path.join(_REPO, "Saved", "PyPCG", "runs", "s%02d.json" % n)
+    if os.path.exists(run):
+        with open(run, encoding="utf-8") as fh:
+            rec = json.load(fh)
+        try:
+            ins = {pin: [(geo.from_json(v), frozenset(t)) for v, t in items]
+                   for pin, items in rec["inputs"].items()}
+        except ValueError:
+            ins = None
+    # the LIVE volume has no recorded input to read the spline lengths from, but the check's area
+    # clause needs them; take them off the highway spline actors the graph reads, which is what the
+    # recorded path measures too. Only stages whose published output is a polygon need this.
+    lengths = None
+    if outs.get("Highway"):
+        lengths = _highway_spline_lengths()
+    failures = chk.check(ins, params, outs, None)
+    if lengths:
+        failures += chk._published_area(outs, params.get(width_name, 0.0), ins, lengths)
+    polys = [v for v in geo.values(outs.get("Highway", [])) if hasattr(v, "outer")]
+    detail = {"stage": n, "volume": census.volume(n).get_actor_label(), "params": params,
+              "items": {k: len(v) for k, v in outs.items()}, "inputs_recorded": ins is not None}
+    if polys:
+        from pypcg.stages import s08_highways
+        detail["half_width_cm"] = [round(chk.half_width(p), 1) for p in polys]
+        detail["area_m2"] = round(sum(geo.area_m2(p) for p in polys), 2)
+        detail["published_width_cm"] = s08_highways.published_width_cm(params.get(width_name, 0.0))
+        want_half = 0.5 * params.get(width_name, 0.0) + s08_highways.EXPAND_CM
+        detail["want_half_width_cm"] = want_half
+        detail["width_tol_cm"] = chk.WIDTH_TOL_CM
+        detail["width_error_cm"] = round(max(abs(h - want_half) for h in detail["half_width_cm"]), 1)
+        detail["area_tol"] = chk.PUBLISHED_AREA_TOL
+        if lengths:
+            want_area = s08_highways.published_width_cm(params.get(width_name, 0.0)) * sum(lengths) / 1e4
+            detail["spline_length_m"] = round(sum(lengths) / 100.0, 2)
+            detail["want_area_m2"] = round(want_area, 2)
+            detail["area_error"] = round(100.0 * (detail["area_m2"] - want_area) / want_area, 3)
+    detail["failures"] = failures[:20]
+    return detail
+
+
 def run_stage(args):
     from pypcg import geo, stage_api, stages
     from pypcg.ue.ops import Ops
@@ -291,7 +393,11 @@ def run_stage(args):
 
 try:
     _args = mcp_args or {}
-    if "assign" in _args:
+    if "published" in _args:
+        _pub = _args["published"]
+        mcp_result = json.loads(json.dumps(published_phase(int(_pub["stage"]), _pub.get("as", "Highway_Width"),
+                                                           _pub.get("width", "Highway_Width")), default=str))
+    elif "assign" in _args:
         mcp_result = json.loads(json.dumps(assign_phase(int(_args["assign"]["stage"]
                                                          if isinstance(_args["assign"], dict)
                                                          else _args["stage"])), default=str))

@@ -72,16 +72,19 @@ at three widths, the published area is linear in the parameter: 433 468 m2 at 20
 
 Deliberate differences and what is not reproduced:
 
-1. **The width conventions, measured.** `CreatePolygon2D`'s `OpenPolygonWidth` is the band's FULL
-   width: `PCGCreatePolygon2D.cpp:256` passes it to `UE::Geometry::PolygonsOffset`, and a 36 118.85 cm
-   straight path at 1900 gives a band 1900 cm across (measured 2026-10-17). `Ops.path_offset`'s
-   distance is the band's HALF-width -- a 100 000 cm straight path at `d` comes back spanning
-   `y = 2 d` -- so reproducing a `CreatePolygon2D` of width `W` needs `path_offset(path, W / 2)`.
-   The stage's published polygon is reproduced by `path_offset(path, W)` then `expand(1500)` to
-   +0.10 % / +0.53 % on area and the same implied half-width as the official (2 485 / 2 486 cm), and
-   its published width is `Highway_Width + 3000`. The port does not call any of this -- the grammar
-   node, the expansion and the tag are native -- but the note records it because the V1 check has to
-   know what a correct published width looks like and because stage 7 uses the same node.
+1. **The width convention: the offset argument is the band's FULL width.** `CreatePolygon2D`'s
+   `OpenPolygonWidth` reaches `ClipperOffset` unchanged (`PCGCreatePolygon2D.cpp:256`,
+   `PolygonOffsetUtils.cpp:52`), and Clipper halves it internally for every non-`Polygon` end type --
+   `clipper.offset.cpp:415`: `if (group.end_type_ != EndType::Polygon) delta = std::abs(delta) / 2;`
+   -- so an open-path offset of `W` puts a rail `W / 2` either side and the band is `W` across. The
+   same argument therefore means the same thing in `Ops.path_offset` and in `CreatePolygon2D`: a
+   100 000 cm path at 2000 comes back spanning `y = 2000`. A 36 118.85 cm path at 1900 gives 6 862.58
+   m2, measured in the editor (2026-10-17). **No halving belongs at the call site.** The stage's
+   published polygon is reproduced by `path_offset(path, W)` then `expand(1500)` to +0.10 % / +0.53 %
+   on area and the same implied half-width as the official (2 485 / 2 486 cm), and its published width
+   is `Highway_Width + 3000`. The port does not call any of this -- the grammar node, the expansion and
+   the tag are native -- but the note records it because the V1 check has to know what a correct
+   published width looks like and because stage 7 uses the same node.
 2. **`Subgraph_6 "Filter: Road-Modified Terrain"` is not kept.** It filters the Roads actor output
    for the `ModifiedTerrain` tag and nothing reads it: it has no outgoing edge in the official graph.
    Keeping it would add a native node whose output the compiler culls.
@@ -130,14 +133,17 @@ CLAMP_MAX_CM = 1.0e9
 # footprint. The expansion itself stays native; the constant is here because it is the stage's, and
 # the V1 check reads it to know the published width.
 EXPAND_CM = 1500.0
-# `Assign_HighwayShapeGrammar`'s `Size` pin, in the sense `CreatePolygon2D` reads it: measured in the
-# editor on a 36 118.85 cm straight path (2026-10-17), `OpenPolygonWidth` 1900 gives a band of exactly
-# `36118.85 x 1900` cm, so the parameter is the band's FULL width. `Ops.path_offset`'s distance is
-# that same band's HALF-width (measured: a 100 000 cm path at d spans `y = 2 * d`), while the offline
-# stand-in in `Tools/pypcg/tests/fakes.py` takes the full width. The width itself is the native
-# grammar node's business here; the constant is recorded because the V1 check has to know what a
-# correct published width looks like.
-WIDTH_IS_FULL = True
+# `Assign_HighwayShapeGrammar`'s `Size` pin is the band's FULL width, and the offset argument is that
+# same full width: measured in the editor on a 36 118.85 cm straight path (2026-10-17),
+# `OpenPolygonWidth` 1900 gives `36118.85 x 1900` cm, and Clipper halves the delta internally for an
+# open path (`clipper.offset.cpp:415`). The offline stand-in in `Tools/pypcg/tests/fakes.py` takes the
+# same full width, so all three agree. The width is the native grammar node's business here; the
+# constant is recorded because the V1 check has to know what a correct published width looks like.
+def published_width_cm(width):
+    """The width of the polygon the stage publishes: the grammar node's `Highway_Width` footprint
+    plus 1500 cm on each side. Measured at three widths: 433 468 m2 at 2000, 606 862 at 4000,
+    953 642 at 8000, i.e. `(W + 3000) x L` to 0.7 %."""
+    return float(width) + 2.0 * EXPAND_CM
 
 
 def _xyz(p):

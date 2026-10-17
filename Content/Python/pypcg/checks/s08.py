@@ -9,25 +9,45 @@ grammar node consumes. `check()` therefore reads whichever it is given:
     its Z must have come from the terrain (the highway follows the ground -- measured 2026-10-17, the
     port's splines run from the clamp floor at -500 cm up to the terrain's own high ground), and there
     must be one per highway spline on the input;
-  - a **polygon**: it must be well formed, and the half-width read back off it (`area / perimeter`)
-    must be `Highway_Width / 2 + 15 m` within tolerance.
+  - a **polygon**: it must be well formed, and the width read back off it (`area / perimeter`, which
+    is the HALF-width of a long thin ribbon) must be `Highway_Width / 2 + 15 m` within
+    `WIDTH_TOL_CM`; where the run carries its own highway splines, its area must also match
+    `(Highway_Width + 3000) x spline_length` within `PUBLISHED_AREA_TOL`.
 
 On the official output it also runs the oracle, which compares whatever both sides hold.
 
+**The bounds are V1 diagnostics, not the brief's invariant.** The brief asks for the width within
+1 cm and the area within 1 %, and that pair is about the ribbon the native
+`Assign_HighwayShapeGrammar` builds -- it is not reachable end to end through three engine booleans.
+What IS reachable is the published polygon: its AREA holds to the brief's 1 % (measured +0.09 % and
++0.52 %), and its width is read back through its own 2 442-vertex discretisation, which moves
+`area / perimeter` by 14 cm (2 486 against the 2 500 the formula predicts). `WIDTH_TOL_CM` is 60 cm,
+set inside that read-back error; a 1 cm bound would fail the OFFICIAL polygon itself, and so would
+anything under about 2.4 % of the width. Measured in the editor (2026-10-17): 2500 against 2000 fails
+both clauses (the width by 264 cm, the area by 9.1 %), and 1990 against 2000 passes both (the width
+moves 10 cm, the area 0.2 %). The AREA clause is the sharper instrument -- a 10 cm error passes, a
+500 cm error fails -- and that is the bound this port can hold, stated rather than implied. The gap
+is recorded in `docs/pypcg/stages/s08.md` section 8 and in the stage's note.
+
 The measured numbers this check is built from (live demo level, 2026-10-17): the official footprint's
 half-width at a mid-path perpendicular is 2500.01 cm at `Highway_Width` 2000, i.e. `W / 2 + 1500`, and
-its area is `(W + 3000) x length`. The port's splines come out with Z
-between the clamp floor of -500 cm and the terrain's own high ground, and 110 and 100 points.
+its area is `(W + 3000) x length`. The port's splines come out with Z between the clamp floor of -500
+cm and the terrain's own high ground, and 110 and 100 points.
 """
 from pypcg import geo
 from pypcg.stages import s08_highways as S
 
-# Measured 2026-10-17 against the live official output: the port's two polygons land within 0.24 % of
-# the official area and within 2 427 cm on the worst bbox edge of a 6 km extent. These are V1
-# diagnostic bounds on a single-city oracle, not V2 thresholds.
+# --- V1 DIAGNOSTICS, all four. Not the brief's invariant (see the module docstring). -------------
+# AREA_TOL / BBOX_TOL_CM are the oracle's bounds against the official polygons; WIDTH_TOL_CM is the
+# published width read back through the polygon's own discretisation; PUBLISHED_AREA_TOL is the one
+# bound that is the brief's own number, applied to the published area against `(W + 3000) x length`.
+# Measured 2026-10-17 against the live official output: the port's two polygons land within 0.52 % of
+# the official area and within 3 640 cm on the worst bbox edge of a 6 km extent; the width reads back
+# 14 cm below the formula's 2 500 cm on the official polygon itself.
 AREA_TOL = 0.05
 BBOX_TOL_CM = 4000.0
-WIDTH_TOL_CM = 600.0
+WIDTH_TOL_CM = 60.0
+PUBLISHED_AREA_TOL = 0.01
 # The clamp band `AttributeMathsOp_1` writes, plus the terrain's own range: the demo terrain is flat at
 # -600 cm in the city and rises to a few hundred cm outside it, and the clamp raises -600 to -500.
 Z_MIN_CM = S.CLAMP_MIN_CM
@@ -50,6 +70,43 @@ def _splines(outputs):
 
 def _polygons(outputs):
     return [v for v in geo.values(outputs.get("Highway", [])) if hasattr(v, "outer")]
+
+
+def spline_lengths(outputs, inputs=None):
+    """The highway spline lengths the published area is measured against, in cm.
+
+    Three sources, in this order: the recorded run's own `Highway` pin (it holds the SPLINES the
+    module published, so their length is what the grammar node ribboned over); a live volume's
+    polygons' case, where the lengths come from a `HighwaySplines` input pin; and the exported
+    `spline_lengths` the published phase passes in. Returns [] when none is available, and the area
+    clause then stays silent rather than guessing."""
+    for items in (outputs.get("Highway", []), (inputs or {}).get("HighwaySplines", [])):
+        lengths = [geo.path_length([(p[0], p[1]) for p in v.points]) for v in geo.values(items)
+                   if hasattr(v, "points") and len(v.points) >= 2]
+        if lengths:
+            return lengths
+    return []
+
+
+def _published_area(outputs, width, inputs=None, lengths=None):
+    """The brief's 1 % on area, against `(Highway_Width + 3000) x length`.
+
+    The sum is compared, not each polygon: the two highways differ in length by 9 %, so a polygon
+    matched to the wrong spline would fail on its own. On the live input pair (2026-10-17) the two
+    lengths sum to 165 369.8 m and the official published total is 826 969.3 m2, i.e. 2.4 m of length
+    more than the splines -- 0.015 %. The port's 829 424.4 m2 is +0.31 %, inside the bound."""
+    lengths = list(lengths) if lengths else spline_lengths(outputs, inputs)
+    polys = _polygons(outputs)
+    if not lengths or not polys:
+        return []
+    want = (S.published_width_cm(width)) * sum(lengths) / 1e4
+    got = sum(geo.area_m2(p) for p in polys)
+    if abs(got - want) > PUBLISHED_AREA_TOL * want:
+        return ["the published area is %.1f m2 against %.1f m2 for (Highway_Width + 3000) x the "
+                "%.1f m of highway spline (%+.2f %%, the V1 bound is %.0f %%)"
+                % (got, want, sum(lengths) / 100.0, 100.0 * (got - want) / want,
+                   100 * PUBLISHED_AREA_TOL)]
+    return []
 
 
 def check(inputs, params, outputs, ops, official=None):
@@ -87,6 +144,7 @@ def check(inputs, params, outputs, ops, official=None):
         if half is not None and abs(half - want_half) > WIDTH_TOL_CM:
             f.append("a Highway polygon implies a half-width of %.0f cm against the %.0f cm "
                      "Highway_Width %.0f + the 15 m expansion give" % (half, want_half, width))
+    f += _published_area(outputs, width, inputs)
     lines_in = len(geo.values(inputs.get("HighwaySplines", []))) if inputs else 0
     if inputs and lines_in and len(items) != lines_in:
         f.append("%d highway splines in, %d Highway items out" % (lines_in, len(items)))

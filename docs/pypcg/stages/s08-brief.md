@@ -65,3 +65,19 @@ Official nodes: 34 (excluding input/output). param 1, input 3, carrier 0, gen 2,
 - GetGraphParameter_1 PCGUserParameterGetSettings 'Partitioned'
 - Loop_1 LoopSpawnActorPerData ''
 - Subgraph_2 GridPartition ''
+
+## Invariants (from the task brief, with what this port can hold)
+
+| Invariant | Status | Bound held |
+|---|---|---|
+| two flat parallel highways -> two footprints whose width equals `Highway_Width` within 1 cm | ⚠️ **not testable in this port**, because the ribbon is built by the native `Assign_HighwayShapeGrammar` and never becomes a Python value; the only width observable is the published polygon's `area / perimeter`, whose own discretisation moves the OFFICIAL reading by 14 cm | **60 cm**, the width read back off the published polygon (`checks/s08.py`'s `WIDTH_TOL_CM`) |
+| ... and whose area equals `width x length` within 1 % | ⚠️ shape held, number changed: the published width is `Highway_Width + 3000`, so the invariant's "width" is the published one | **1 %**, the brief's own number, against `(Highway_Width + 3000) x spline length` (`PUBLISHED_AREA_TOL`) |
+| pillar points (if used) sit on Roads' footprints | native: the whole pillar chain (`Projection_0` onto `MakeConcrete_1`) is kept, so the engine enforces it | not ported |
+| empty inputs -> empty outputs | held offline (`test_empty_inputs_give_empty_outputs`, `test_missing_input_pins_are_tolerated`) | exact |
+| `Highway` present in every run | held, both live (`{"published": {"stage": 8}}`) and offline (`test_empty_input_gives_empty_output_and_the_tag_survives_a_run`) | exact |
+
+The first row is the one to read carefully: it is not a covered invariant with a loose bound, it is
+an invariant that **cannot be measured at 1 cm through a native node**, and the 60 cm is what is left
+once that is admitted. `docs/pypcg/stages/s08.md` section 8 carries the full reasoning.
+
+*This section is hand-written; `port_brief.py` regenerates everything above it.*

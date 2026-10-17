@@ -5,14 +5,18 @@
   - empty inputs -> empty outputs;
   - `Highway` present in every run.
 
-The brief's first invariant is about the RIBBON the grammar node would build, which is native in the
-slim graph, so the offline test pins the module's own half-width rule (`path_offset(path, W / 2)` ->
-a band `W` across) against the offline stand-in, and the in-editor V1 check pins the published
-polygon's width (`Highway_Width / 2 + 1500`) against the live official output.
+The brief's first invariant -- width within 1 cm, area within 1 % -- is about the RIBBON the native
+`Assign_HighwayShapeGrammar` builds, and **it is not reachable end to end**: the published polygon
+passes through three engine booleans (`CreatePolygon2D`, `Transform_Areas_Expand`, and the grammar
+node's own inner loop), and its 2 442-vertex discretisation alone moves `area / perimeter` by 14 cm.
+The bounds this port can actually hold are `PUBLISHED_AREA_TOL` (1 %, the brief's own area number)
+and `PUBLISHED_HALF_TOL_CM` (60 cm), both in `pypcg/checks/s08.py` and both labelled V1 diagnostics;
+`test_the_published_width_grows_with_the_parameter` pins the shape offline and the in-editor `check`
+holds the live numbers. See `docs/pypcg/stages/s08.md` section 8 for the gap, stated rather than
+implied.
 
 The width relationship the live graph shows is `published width = Highway_Width + 3000`, measured at
-three widths (433 468 m2 at 2000, 606 862 m2 at 4000, 953 642 m2 at 8000). `test_the_published_width_
-grows_with_the_parameter` pins the linearity offline.
+three widths (433 468 m2 at 2000, 606 862 m2 at 4000, 953 642 m2 at 8000).
 """
 import json
 import os
@@ -48,13 +52,17 @@ def inputs(splines=None, surface=None, roads=None):
 
 
 STRAIGHT = [(0.0, 0.0, 5550.0), (100000.0, 0.0, 5550.0)]
+# Highway 2's own length: the width's `area / perimeter` read-back is `(w / 2) x L / (L + w)`, so a
+# fixture's aspect ratio matters and a short one reads several per cent low.
+LIVE_LENGTH = 865268.62
 PARALLEL = [(0.0, 20000.0, 5550.0), (100000.0, 20000.0, 5550.0)]
 
 
 # ---- 1. contract -----------------------------------------------------------------------------
 def test_contract_parameters_and_inputs_match_the_official_graph():
-    off = json.load(open(os.path.join(REPO, "Tools", "pypcg", "official_ir", "PCG_3_1_3_Highways.json"),
-                         encoding="utf-8"))
+    with open(os.path.join(REPO, "Tools", "pypcg", "official_ir", "PCG_3_1_3_Highways.json"),
+              encoding="utf-8") as fh:
+        off = json.load(fh)
     defaults = {p["name"]: p["value"] for p in off["params"]}
     assert defaults["Highway_Width"] == 2000
     assert S.PARAMS["Highway_Width"].default == defaults["Highway_Width"]
@@ -180,7 +188,9 @@ def test_a_flat_highway_becomes_a_flat_spline_at_the_terrain_height():
     assert "Highway" in tags
     assert all(p[2] == S.CLAMP_MIN_CM for p in got.points), \
         "the terrain is at -600 cm and the clamp's floor is -500 cm"
-    assert [p[:2] for p in got.points[:2]] == [(p[0], p[1]) for p in got.points[:2]]
+    assert got.points[0][:2] == pytest.approx((0.0, 0.0))
+    assert got.points[1][:2] == pytest.approx((8000.0, 0.0))
+    assert got.points[-1][:2] == pytest.approx((100000.0, 0.0)), "the X/Y must survive the projection"
     assert got.linear, "`CreateSpline_0` builds a linear spline and the two maths ops keep it level"
     assert len(got.points) == 14, "100000 / 8000 floors to 12 interior steps plus two ends"
     # a terrain above the clamp floor keeps its own height
@@ -201,31 +211,32 @@ def test_two_parallel_highways_give_two_footprints():
     assert all("Highway" in tags for _v, tags in out["Highway"])
 
 
-def test_the_ribbon_width_follows_the_parameter():
-    """The width convention, measured in the editor (2026-10-17) and pinned here on a straight path.
+def test_the_offset_argument_is_the_bands_full_width():
+    """The width convention, measured in the editor (2026-10-17) and pinned on a straight path.
 
-    `CreatePolygon2D`'s `OpenPolygonWidth` is the band's FULL width: `PCGCreatePolygon2D.cpp:256`
-    passes it to `UE::Geometry::PolygonsOffset`, and a 36 118.85 cm path at 1900 gives a band 1900 cm
-    across. `Ops.path_offset`'s distance is the band's HALF-width (a 100 000 cm path at 2000 spans
-    `y = 2000`, i.e. `+-1002`), so a caller reproducing `OpenPolygonWidth = W` passes `W / 2`. The
-    offline stand-in halves the distance itself, so it is given the full width."""
+    `CreatePolygon2D`'s `OpenPolygonWidth` reaches `ClipperOffset` unchanged
+    (`PCGCreatePolygon2D.cpp:256`, `PolygonOffsetUtils.cpp:52`), and Clipper halves it internally for
+    every non-`Polygon` end type (`clipper.offset.cpp:415`), so an open-path offset of `W` spans
+    `+-W / 2` and the band is `W` across. `Ops.path_offset` takes the same argument in the same sense
+    -- a 100 000 cm path at 2000 comes back spanning `y = 2000` -- and so does the offline stand-in.
+    **No halving belongs at the call site**, which is what this note's first draft got wrong."""
     path = [(0.0, 0.0), (36118.85, 0.0)]
     for width in (1900.0, 2000.0, 3400.0):
         band = OPS.path_offset(path, width, end="butt", join="square", miter_limit=2.0)
         (x0, y0), (x1, y1) = geo.bbox(band[0].outer)
         assert y1 - y0 == pytest.approx(width, abs=1e-6), "the band is `width` across"
         assert geo.area_m2(band[0]) == pytest.approx(36118.85 * width / 1e4, rel=1e-6)
-    assert S.WIDTH_IS_FULL, "the documented convention must stay the measured one"
 
 
 def test_the_published_width_grows_with_the_parameter():
     """The live graph's measured relationship, pinned offline: the published polygon is
     `Highway_Width + 3000` wide (433 468 m2 at 2000, 606 862 at 4000, 953 642 at 8000), and the
-    construction that reproduces it is `path_offset(path, Highway_Width)` -- `path_offset`'s distance
-    is a HALF-width -- followed by `Transform_Areas_Expand(1500)`. On the live splines that pair gives
-    +0.10 % and +0.53 % on area and the official's own implied half-width (2 485 / 2 486 cm)."""
+    construction that reproduces it is `path_offset(path, Highway_Width)` followed by
+    `Transform_Areas_Expand(1500)`. On the live splines that pair gives +0.10 % and +0.53 % on area
+    and the official's own implied half-width (2 485 / 2 486 cm)."""
     path = [p[:2] for p in STRAIGHT]
     for width, want in ((2000.0, 5000.0), (4000.0, 7000.0), (8000.0, 11000.0)):
+        assert S.published_width_cm(width) == want
         band = OPS.path_offset(path, width, end="butt", join="square", miter_limit=2.0)
         grown = geo.roads.expand(band, S.EXPAND_CM, OPS)
         (x0, y0), (x1, y1) = geo.bbox(grown[0].outer)
@@ -248,8 +259,10 @@ def test_the_check_flags_a_wrong_width():
     fail, and the live one must not."""
     from pypcg import checks
     from pypcg.checks import s08 as C
-    wide = Polygon([(0.0, -2500.0), (100000.0, -2500.0), (100000.0, 2500.0), (0.0, 2500.0)])
-    narrow = Polygon([(0.0, -100.0), (100000.0, -100.0), (100000.0, 100.0), (0.0, 100.0)])
+    # the live highway's own aspect ratio: `area / perimeter` is `(w / 2) x L / (L + w)`, so a
+    # 100 000 cm fixture would read 4.8 % low on its own and needs the live 865 268.62 cm
+    wide = Polygon([(0.0, -2500.0), (LIVE_LENGTH, -2500.0), (LIVE_LENGTH, 2500.0), (0.0, 2500.0)])
+    narrow = Polygon([(0.0, -100.0), (LIVE_LENGTH, -100.0), (LIVE_LENGTH, 100.0), (0.0, 100.0)])
     outs = {"Highway": [(wide, ["Highway"])]}
     assert C.check(None, PARAMS, outs, OPS) == []
     outs = {"Highway": [(narrow, ["Highway"])]}
@@ -262,15 +275,19 @@ def test_the_check_flags_a_wrong_width():
     outs = {"Highway": [(wide, ["Highway"]), (wide, ["Highway"]), (wide, ["Highway"])]}
     ins = inputs(splines=line(STRAIGHT) + line(PARALLEL))
     assert C.check(ins, PARAMS, outs, OPS), "three items for two highways must fail"
-    assert C.check(ins, PARAMS, {"Highway": [(wide, ["Highway"]), (wide, ["Highway"])]}, OPS) == []
+    # two items for two highways is the count the graph produces; the AREA clause is a separate test
+    # (the fixture polygons are not the fixture splines' own ribbons, so only the count is asserted)
+    two = C.check(ins, PARAMS, {"Highway": [(wide, ["Highway"]), (wide, ["Highway"])]}, OPS)
+    assert not any("items for" in x for x in two), "two items for two highways must not be a count error"
 
 
 def test_the_oracle_compares_by_area_and_bbox():
     from pypcg.checks import s08 as C
-    wide = Polygon([(0.0, -2500.0), (100000.0, -2500.0), (100000.0, 2500.0), (0.0, 2500.0)])
+    wide = Polygon([(0.0, -2500.0), (LIVE_LENGTH, -2500.0), (LIVE_LENGTH, 2500.0), (0.0, 2500.0)])
     official = {"Highway": [wide]}
     assert C._oracle([wide], official["Highway"]) == []
-    shifted = Polygon([(50000.0, -2500.0), (150000.0, -2500.0), (150000.0, 2500.0), (50000.0, 2500.0)])
+    shifted = Polygon([(50000.0, -2500.0), (50000.0 + LIVE_LENGTH, -2500.0),
+                       (50000.0 + LIVE_LENGTH, 2500.0), (50000.0, 2500.0)])
     f = C._oracle([shifted], official["Highway"])
     assert any("bbox" in x for x in f), "a 500 m shift must show up"
     f = C._oracle([wide, wide], official["Highway"])
@@ -342,3 +359,93 @@ def test_the_slim_graph_routes_the_grammar_output_through_expand_and_tag():
     assert out and any(src == tag[0]["name"] for pin in out[0].get("inputs", [])
                        for src, _ in pin["edges"]), \
         "the output node is not sourced from the Highway tag node"
+
+
+# ---- 7. the published width and area, the closest the native chain allows ---------------------
+def test_the_published_area_check_holds_the_briefs_one_percent():
+    """`checks/s08.py`'s `_published_area` is the in-editor assertion of the brief's AREA invariant:
+    the published total against `(Highway_Width + 3000) x the highway spline length`.
+
+    The live numbers it was built on (2026-10-17): the official polygons total 826 944.64 m2 against
+    826 819.88 m2 for 1 653 639.8 cm of spline at a 5 000 cm published width -- +0.015 %, inside the
+    1 % bound. The port's 829 424.44 is +0.31 %. Offline, a polygon 5 000 cm across and as long as
+    its spline passes, and a 1 % narrow one does not."""
+    from pypcg.checks import s08 as C
+    length = 865268.62
+    want = S.published_width_cm(2000.0) * length / 1e4
+    exact = Polygon([(0.0, -2500.0), (length, -2500.0), (length, 2500.0), (0.0, 2500.0)])
+    outs = {"Highway": [(exact, ["Highway"])]}
+    splines = {"HighwaySplines": [(Spline([(0.0, 0.0, 0.0), (length, 0.0, 0.0)]), frozenset())]}
+    assert geo.area_m2(exact) == pytest.approx(want, rel=1e-6)
+    assert C._published_area(outs, 2000.0, splines) == []
+    narrow = Polygon([(0.0, -2400.0), (length, -2400.0), (length, 2400.0), (0.0, 2400.0)])
+    f = C._published_area({"Highway": [(narrow, ["Highway"])]}, 2000.0, splines)
+    assert f and "published area" in f[0], "a 4 % narrow footprint must fail the 1 % area bound"
+    # the width half of the brief's invariant is NOT testable at 1 cm: the official polygon reads
+    # back 2 485.9 cm against the formula's 2 500, so the bound is 60 cm
+    assert C.WIDTH_TOL_CM == 60.0
+    assert abs(2485.9 - 0.5 * 2000.0 - S.EXPAND_CM) <= C.WIDTH_TOL_CM
+
+
+def test_the_check_needs_no_inputs_to_hold_its_bounds():
+    """On the oracle-only path there is no input pin to read the spline length from, so the area
+    clause stays silent rather than guessing -- and the width clause still runs, because it needs
+    nothing but the parameter."""
+    from pypcg.checks import s08 as C
+    wide = Polygon([(0.0, -2500.0), (LIVE_LENGTH, -2500.0), (LIVE_LENGTH, 2500.0), (0.0, 2500.0)])
+    assert C.check(None, {"Highway_Width": 2000.0}, {"Highway": [(wide, ["Highway"])]}, None) == []
+    narrow = Polygon([(0.0, -2400.0), (LIVE_LENGTH, -2400.0), (LIVE_LENGTH, 2400.0), (0.0, 2400.0)])
+    f = C.check(None, {"Highway_Width": 2000.0}, {"Highway": [(narrow, ["Highway"])]}, None)
+    assert f, "the width clause must fire without any inputs"
+
+
+def test_the_ribbon_width_holds_one_centimetre_on_an_exact_path():
+    """The brief's 1 cm, at the one place this port can hold it: the ribbon call itself, on a path with
+    no discretisation. `Ops.path_offset(path, W)` is the same `UE::Geometry::PolygonsOffset` the
+    grammar node's `CreatePolygon2D` makes, and the stock `RibbonOps` stand-in cannot express a 1 cm
+    claim (its `_sides` is built from the path's vertices), so this test runs a local exact stand-in:
+    a straight path's band is its two rails, `+-W / 2`, capped square at both ends.
+
+    What this does NOT claim: that the PUBLISHED polygon is within 1 cm. It is not -- its own
+    discretisation moves `area / perimeter` by 14 cm even on the official output, which is why the
+    live bound is 60 cm and `docs/pypcg/stages/s08.md` section 8 says so explicitly."""
+    class ExactRibbon:
+        """A straight path's band, exactly: two rails at `+-W / 2`, the ends capped at the path's own
+        x. This is what `CreatePolygon2D(ForceOpen, Butt, OpenPolygonWidth = W)` produces for a
+        straight path -- measured in the editor at 36 118.85 x 1900 cm = 6 862.58 m2."""
+
+        def path_offset(self, path, width, end="butt", join="square", miter_limit=2.0):
+            (x0, y0), (x1, y1) = path[0], path[-1]
+            half = 0.5 * float(width)
+            return [Polygon([(x0, y0 - half), (x1, y1 - half), (x1, y1 + half), (x0, y0 + half)])]
+
+    path = [(0.0, 0.0), (36118.85, 0.0)]
+    for width in (1900.0, 2000.0, 3400.0):
+        band = ExactRibbon().path_offset(path, width)
+        (x0, y0), (x1, y1) = geo.bbox(band[0].outer)
+        assert (y1 - y0) - width == pytest.approx(0.0, abs=1.0), "the width holds to 1 cm"
+        assert geo.area_m2(band[0]) == pytest.approx(36118.85 * width / 1e4, rel=0.01), \
+            "the area holds to the brief's 1 %"
+    # the ribbon rule itself: `S`'s constant is the published width, and W / 2 each side is the half
+    assert S.EXPAND_CM == 1500.0
+    assert abs(0.5 * S.published_width_cm(2000.0) - (0.5 * 2000.0 + S.EXPAND_CM)) < 1e-9
+
+
+def test_the_published_area_rejects_the_halved_offset():
+    """The reviewer's Important 1, pinned as a behavioural test rather than a comment: a port that
+    halved the offset at the call site (`path_offset(W / 2)` then `expand(1500)`) publishes 20 % too
+    little, and `checks/s08.py`'s area clause must reject it while accepting `path_offset(W)`.
+
+    Numbers from the live splines (2026-10-17): highway 2 is 865 268.62 cm, so the published area is
+    `5000 x 8652.6862` = 43 263 m2 at the correct construction and `4000 x 8652.6862` = 34 611 m2 at
+    the halved one; the official polygon is 43 346.8 m2."""
+    from pypcg.checks import s08 as C
+    length = 865268.62
+    splines = {"HighwaySplines": [(Spline([(0.0, 0.0, 0.0), (length, 0.0, 0.0)]), frozenset())]}
+    right = Polygon([(0.0, -2500.0), (length, -2500.0), (length, 2500.0), (0.0, 2500.0)])
+    halved = Polygon([(0.0, -2000.0), (length, -2000.0), (length, 2000.0), (0.0, 2000.0)])
+    assert C._published_area({"Highway": [(right, ["Highway"])]}, 2000.0, splines) == []
+    f = C._published_area({"Highway": [(halved, ["Highway"])]}, 2000.0, splines)
+    assert f and "-20.0" in f[0], f
+    # and the width clause rejects it too: a 2 000 cm half-width against the 2 500 cm expectation
+    assert C.check(splines, {"Highway_Width": 2000.0}, {"Highway": [(halved, ["Highway"])]}, None)
