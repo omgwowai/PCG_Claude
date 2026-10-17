@@ -11,14 +11,14 @@ them; `Subgraph_0 Transform_Areas_Expand(1500)` and `AddTag_Highway` are the two
 between that footprint and the published `Highway` tag, and they stay native too, so the published
 polygon is the engine's own expansion rather than a Python re-derivation.
 
-Three edges the official graph carries and this one does not:
+What differs from the official graph's own wiring:
 
-  - `GetParam_HighwayWidth` -> `Assign_HighwayShapeGrammar Size` is kept, but the getter is the slim
-    graph's own (`g.p('Highway_Width')`), because a slim graph carries one parameter and one getter
-    per entry rather than the official GUID-bound getters.
-  - `Register_2`-style parameter getters into the dropped partition machinery (`GetGraphParameter_0/1`
-    -> `Subgraph_2 GridPartition` / `Loop_1` / `Branch_0`) go with their nodes. `Branch_0` is kept
-    and takes `Partitioned`, which the slim graph declares for it.
+  - `Assign_HighwayShapeGrammar Size` reads `g.p('Highway_Width')` rather than the official
+    `GetParam_HighwayWidth`: a slim graph carries one getter per declared parameter (ruling E6), and
+    the official getter's GUID binding is not something a slim graph reproduces.
+  - The dropped partition machinery (`GetGraphParameter_0/1` -> `Subgraph_2 GridPartition` ->
+    `Loop_1 LoopSpawnActorPerData`) goes with its nodes. `Branch_0` is kept and still tests
+    `Partitioned`, so the slim graph declares the parameter for it and leaves it false.
   - `Subgraph_6 "Filter: Road-Modified Terrain"` is dropped: it has no outgoing edge in the official
     graph, so nothing reads it.
 """
