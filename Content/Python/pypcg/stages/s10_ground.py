@@ -36,7 +36,6 @@ import math
 from pypcg import geo
 from pypcg.geo import Points, Polygon, Spline
 from pypcg.geo import areas as A
-from pypcg.geo import assets as AS
 from pypcg.geo import ground as G
 
 STAGE = 10
@@ -144,37 +143,16 @@ def project(pts, surface):
 
 def split_seven(n, rng):
     """`FC_RandomChoice_1..6` (RandomPerDataset): one draw per remaining piece at each step. Returns the
-    way (0..6 = A..G) of each of the n pieces."""
-    way = [6] * n
-    left = list(range(n))
-    for k, ratio in enumerate(SPLIT_RATIOS):
-        keep = geo.keep_each(len(left), ratio, rng)
-        way_k = [i for i, f in zip(left, keep) if f]
-        for i in way_k:
-            way[i] = k
-        left = [i for i, f in zip(left, keep) if not f]
-    return way
+    way (0..6 = A..G) of each of the n pieces (`geo.ground.split_ways`)."""
+    return G.split_ways(n, SPLIT_RATIOS, rng)
 
 
 def assign_tiles(sets, way, table):
     """`AssignGroundTiles_A..G`: each call merges its pieces' points (`$Seed += dataIndex`, the piece's
     index in that call's input) and assigns its one static mesh -- the primitive's output is then the
-    moved targets alone, with the mesh's box. Returns `{letter: Points}` for the calls that got points."""
-    out = {}
-    for k, (letter, path) in enumerate(TILE_CALLS):
-        mine = [sets[i] for i in range(len(sets)) if way[i] == k]
-        targets = Points()
-        for idx, s in enumerate(mine):
-            for j in range(len(s)):
-                targets.add(s.loc[j], rot=s.rot[j], scale=s.scale[j], density=s.density[j],
-                            bounds_min=s.bounds_min[j], bounds_max=s.bounds_max[j], color=s.color[j],
-                            steepness=s.steepness[j], seed=AS._i32(int(s.seed[j]) + idx))
-        if not len(targets):
-            continue
-        items = AS.expand_items(targets, [table[k]], [0] * len(targets), {"position_offset": TILE_OFFSET})
-        if items:
-            out[letter] = items[-1]
-    return out
+    moved targets alone, with the mesh's box. Returns `{letter: Points}` for the calls that got points
+    (`geo.ground.assign_ways`)."""
+    return G.assign_ways(sets, way, table, TILE_CALLS, TILE_OFFSET)
 
 
 def tiles(src, surface, ops, rng, loader):

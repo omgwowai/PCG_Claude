@@ -9,6 +9,7 @@ A stage module defines:
   INPUTS   {pin: kind}; kind documents what arrives: "spline" | "polygon" | "area" | "points" |
            "surface" | "param" | "any"
   OUTPUTS  (pin, ...)
+  RECORD   optional: the run record's file name (default "sNN"), for a stage's second Python node
   run(inputs, params, ctx) -> {pin: [(value, [tags])]}
            inputs is {pin: [(value, frozenset(tags))]}, values are pypcg.geo types (or a surface
            object with height(x, y)); params excludes Seed; ctx.rng is random.Random(f"{Seed}:{STAGE}")
@@ -154,7 +155,9 @@ def record(module, inputs, params, outputs, seconds, ctx):
            "notes": list(ctx.notes),
            "inputs": {pin: [[geo.to_json(v), sorted(t)] for v, t in items] for pin, items in inputs.items()},
            "outputs": {pin: [[geo.to_json(v), list(t)] for v, t in items] for pin, items in outputs.items()}}
-    path = os.path.join(RUNS_DIR, "s%02d.json" % module.STAGE)
+    # A stage's second Python node (`SlimGraph(more_modules=...)`, stage 13 first) names its own record
+    # with `RECORD`, so it does not overwrite the stage's main one, which V2's `read` copies.
+    path = os.path.join(RUNS_DIR, "%s.json" % (getattr(module, "RECORD", None) or "s%02d" % module.STAGE))
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(doc, fh)
     return path

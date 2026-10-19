@@ -31,13 +31,17 @@ def run(stage_name, scope):
     data_in, data_out = scope["data_in"], scope["data_out"]
     t0 = time.perf_counter()
     params = convert.read_params(data_in, stage_api.PARAMS_PIN)
-    inputs = {pin: convert.read_pin(data_in, pin) for pin in module.INPUTS}
+    # The input polygons' own data objects, for this run only (traps.md 25): a polygon the stage hands
+    # back unchanged is forwarded as the engine's object, frame and local coordinates included (Task 18).
+    registry = {}
+    inputs = {pin: convert.read_pin(data_in, pin, registry) for pin in module.INPUTS}
     outputs, ctx = stage_api.execute(module, inputs, params, ue_ops.Ops())
     count = 0
     for pin, items in outputs.items():
         for value, tags in items:
-            data_out.add_to_collection(convert.to_pcg(value), pin, list(tags))
+            data_out.add_to_collection(convert.to_pcg(value, registry), pin, list(tags))
             count += 1
+    registry.clear()
     seconds = time.perf_counter() - t0
     if os.environ.get(stage_api.RECORD_ENV):
         stage_api.record(module, inputs, params, outputs, seconds, ctx)

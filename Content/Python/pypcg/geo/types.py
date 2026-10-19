@@ -7,10 +7,14 @@ MAX_RECORDED_POINTS = 20000          # larger point sets are recorded as a summa
 @dataclass
 class Polygon:
     """An area: outer and holes are [(x, y)] rings, outer counter-clockwise (positive shoelace
-    area); z is the height the area sits at."""
+    area); z is the height the area sits at. `source` is set by `pypcg.ue.convert` on a polygon read
+    from a Python node's input (an opaque key, not a UObject; it takes no part in equality or records):
+    a stage that hands that very polygon back unchanged publishes the engine's own data object, frame
+    and stored local coordinates included (Task 18, s13.md 4.6)."""
     outer: list
     holes: list = field(default_factory=list)
     z: float = 0.0
+    source: object = field(default=None, compare=False, repr=False)
 
 
 @dataclass

@@ -133,9 +133,34 @@ def read_params(data_in, pin):
     return out
 
 
-def read_pin(data_in, pin):
+def read_pin(data_in, pin, registry=None):
+    """The pin's items as `(value, tags)`. With a `registry` (a dict the caller keeps for ONE run, in its
+    locals -- traps.md 25), every input polygon is registered under its `Polygon.source` key with a
+    snapshot of its geometry, so `to_pcg` can hand the very same data object back (`passed_through`)."""
     datas, tagged = data_in.get_typed_inputs_by_pin_label(pin, unreal.PCGData)
-    return [(from_pcg(d), frozenset(str(t) for t in td.get_editor_property("tags"))) for d, td in zip(datas, tagged)]
+    out = []
+    for d, td in zip(datas, tagged):
+        v = from_pcg(d)
+        if registry is not None and isinstance(v, Polygon):
+            v.source = len(registry)
+            registry[v.source] = (d, _snapshot(v))
+        out.append((v, frozenset(str(t) for t in td.get_editor_property("tags"))))
+    return out
+
+
+def _snapshot(p):
+    return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z)
+
+
+def passed_through(v, registry):
+    """The input data object a polygon came from, when the stage handed it back with its geometry
+    unchanged; else None. Forwarding the engine's own object keeps the polygon's frame and stored local
+    coordinates, which a rewrite through `MakePolygon2DData` cannot (it frames each polygon on its own
+    centroid; the official lots carry the City's shared frame -- measured 2026-10-19, s13.md 4.6)."""
+    if registry is None or not isinstance(v, Polygon) or v.source not in registry:
+        return None
+    d, snap = registry[v.source]
+    return d if _snapshot(v) == snap else None
 
 
 def from_pcg(d):
@@ -191,7 +216,10 @@ def _points_of(d):
 
 
 # ---- write ----------------------------------------------------------------------------------------
-def to_pcg(v):
+def to_pcg(v, registry=None):
+    same = passed_through(v, registry)
+    if same is not None:
+        return same
     if isinstance(v, Polygon):
         d = L.make_polygon2d_data(json.dumps({"outer": [[x, y, v.z] for x, y in v.outer],
                                               "holes": [[[x, y, v.z] for x, y in h] for h in v.holes]}))

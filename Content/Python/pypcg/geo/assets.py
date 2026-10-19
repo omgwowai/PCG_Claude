@@ -87,14 +87,21 @@ live volume; "exact" = Asset, seed, scale and bounds bit for bit, location <= 2.
   UseMeshBounds true        MEASURED  on static meshes (s14 Subgraph_8, s15 Subgraph_20 with UniformScale)
                                       and on kits (s17 default: kit boxes unchanged)
   UseMeshBounds false       MEASURED  s14 Subgraph_7, s17 run D
-  random ranges             DERIVED ONLY  the primitive draws from `TransformPoints_2`'s own seeded
-                                      `FRandomStream`; the port draws from `ctx.rng` (spec E2), so no
-                                      oracle can compare values. The oracle compares item sizes, order
-                                      and `Asset` on random calls (s14 Subgraph_4: equal)
-  UseIndexattribute         NOT IMPLEMENTED  `expand` ignores it (`assign_calls` reports it unhonoured);
-                                      every official user is also random (s13 / s18 Outer Forest)
-  MatchScaleToInputBounds   NOT IMPLEMENTED (no official call sets it)
-  UseMeshAttribute          DERIVED ONLY  (no official call sets it)
+  random ranges             RANGES MEASURED, values derived only  the primitive draws from `TransformPoints_2`'s
+                                      own seeded `FRandomStream`; the port draws from `ctx.rng` (spec E2), so no
+                                      oracle can compare values. The oracle compares item sizes, order and
+                                      `Asset` (s14 Subgraph_4, s13 Subgraph_73: equal). The READING of a pin
+                                      value v (`_pin_range`: scale 1 +- v, position / rotation +- v, a rotation
+                                      vector's X/Y/Z = Roll/Pitch/Yaw) was corrected in Task 18 -- Task 12 took v
+                                      as min = max -- and the drawn ranges measured: s13 Subgraph_26 (6 518
+                                      draws: scale 0.8001..1.1997 one number for all axes, pitch / roll
+                                      -2..2, yaw -180..180), s13 Subgraph_73 (515 draws: scale 0.8002..1.1996)
+  UseIndexattribute         MEASURED  s13 Subgraph_26 (Task 18; the substitute texture on the two texture writes,
+                                      the random ranges zeroed): all 6 518 points bit for bit on every field;
+                                      the value truncated to an entry index, an index naming no entry (8, 9)
+                                      KEPT with entry 0 (`index_picks`: `bKeepUnmatched` defaults true)
+  MatchScaleToInputBounds   NOT IMPLEMENTED (no official call sets it; none of stage 13's eleven either)
+  UseMeshAttribute          DERIVED ONLY  (no official call sets it; none of stage 13's eleven either)
 """
 import math
 import struct
@@ -177,26 +184,49 @@ def _rotator(v):
     return v[:3]
 
 
+def _pin_range(v, rotator, dlo):
+    """(min, max) of ONE `Assign_Assets` random-range pin value, as `Assign_Assets_CoreProcess` turns it
+    into `TransformPoints_2`'s pins (IR dump of 2026-10-19, `Saved/t18/assign.txt`; corrected in Task 18 --
+    the Task 12 reading took a single value as min = max = that value):
+
+      RandomPositionRange v   OffsetMin = v x -1 (`AttributeMathsOp_8`), OffsetMax = v      -> [-v, v]
+      RandomRotationRange v   a VECTOR whose X/Y/Z are `MakeRotFromAngles`' Roll/Pitch/Yaw pins
+                              (`MakeRotatorAttribute_0/1`, from `BreakVectorAttribute_0` (v) and
+                              `_1` (v x -1, `AttributeMathsOp_9`))                       -> [-v, v]
+      RandomScaleRange v      ScaleMin = (1,1,1) - v (`AttributeMathsOp_11`, Subtract), ScaleMax =
+                              v + 1 (`AttributeMathsOp_10`, the maths node's default Add) -> [1 - v, 1 + v]
+
+    A rotation given as a dict of Rotator names (Pitch / Yaw / Roll) is taken as that rotator."""
+    if rotator:
+        if isinstance(v, dict) and not any(k in v for k in ("X", "Y", "Z", "x", "y", "z")):
+            r = _rotator(v)
+        else:
+            x, y, z = _vector(v, (0.0, 0.0, 0.0))
+            r = (y, z, x)                       # (pitch, yaw, roll) = (Y, Z, X)
+        return tuple(-a for a in r), r
+    x = _vector(v, (0.0, 0.0, 0.0))
+    if tuple(dlo) == DEFAULT_SCALE_RANGE:
+        return tuple(1.0 - a for a in x), tuple(a + 1.0 for a in x)
+    return tuple(-a for a in x), x
+
+
 def _range_draw(params, key, rng, rotator=False, dlo=DEFAULT_POSITION_RANGE, uniform=False):
     """A random range from `params[key]`, as `TransformPoints_2` reads it.
 
-    The pin takes `min` and `max`; our parameter carries the pair as one value, so a pair-of-pairs is
-    read as (min, max) and anything else as a single point (min = max = that value), which is what
-    the official graphs mean when they only offset. The rotation range is a Rotator, not a Vector,
-    but `TransformPoints` reads its three angles in the same per-axis way, so `_rotator` names them.
-    The engine draws X, then Y, then Z (`PCGTransformPoints.cpp:172-192`) and, with `bUniformScale`,
-    one number for all three axes."""
+    Two forms: an explicit `(min, max)` pair (a pair of vectors / rotators), taken as it is; or ONE pin
+    value -- the form the graph carries and `assign_calls` hands over -- read as the CoreProcess reads it
+    (`_pin_range`: +-v for position and rotation, 1 +- v for scale). The engine draws X, then Y, then Z
+    (`PCGTransformPoints.cpp:172-192`) and, with `bUniformScale`, one number for all three axes."""
     v = params.get(key)
     if v is None:
-        span = (dlo, dlo)
+        lo = hi = _rotator(None) if rotator else tuple(float(a) for a in dlo)
     elif isinstance(v, (list, tuple)) and len(v) == 2 and not isinstance(v[0], (int, float)):
-        span = (v[0], v[1])
+        if rotator:
+            lo, hi = _rotator(v[0]), _rotator(v[1])
+        else:
+            lo, hi = _vector(v[0], dlo), _vector(v[1], dlo)
     else:
-        span = (v, v)
-    if rotator:
-        lo, hi = _rotator(span[0]), _rotator(span[1])
-    else:
-        lo, hi = _vector(span[0], dlo), _vector(span[1], dlo)
+        lo, hi = _pin_range(v, rotator, dlo)
     if uniform:
         x = rng.uniform(lo[0], hi[0])
         return (x, x, x)
@@ -288,6 +318,10 @@ def expand(targets, table, indices, params):
 
       use_mesh_attribute  `UseMeshAttribute`: take the asset from the point's own attribute
       mesh_attribute      that attribute's name, default `Mesh`
+      use_index_attribute `UseIndexattribute`: take entry k of the table, k = the point's `index_attribute`
+                          read as an integer, entry 0 when k names no entry (`index_picks`); `indices`
+                          is then ignored
+      index_attribute     that attribute's name (`IndexAttribute`)
       uniform_scale       `UniformScale`, DEFAULT TRUE (the primitive's own default, read 2026-10-19):
                           `TransformPoints_1/2`'s `bUniformScale` -- `ScaleOffset.X` (and one random
                           scale draw) scales all three axes; the fit ratio's X likewise
@@ -394,7 +428,8 @@ def _expand(targets, table, indices, params, report):
     rot_q = quat_of(*rot_off) if any(rot_off) else None
     rng = params.get("rng")
 
-    picked = _picked(targets, table, indices, use_attr, mesh_attr)
+    picked = _picked(targets, table, indices, use_attr, mesh_attr, bool(params.get("use_index_attribute", False)),
+                     params.get("index_attribute"))
     valid = [i for i in range(n) if _entry(table, picked[i]) is not None]
     moved = {i: _moved(targets, i, pos_off, rot_q, scale_off, rng, params, uniform) for i in valid}
 
@@ -599,21 +634,58 @@ def _compose_matrix(tloc, tq, tscale, src_loc, src_q, src_scale):
     return (m[3][0], m[3][1], m[3][2]), q, desired
 
 
-def _picked(targets, table, indices, use_attr, mesh_attr):
+def _picked(targets, table, indices, use_attr, mesh_attr, use_index=False, index_attr=None):
     """The asset index of every target point (`Select_1`, `MatchAndSetAttributes_0/1`).
 
     `UseMeshAttribute` reads the point's own attribute -- named by `mesh_attribute`, which the
     primitive's `MeshAttribute` pin holds; the official graphs leave it at `Mesh`, the attribute a
-    loaded kit point carries -- and finds that path in the table. Otherwise `indices` is the pick
-    `choose` drew. A name that is not in the table gives -1, which drops the point rather than
-    raising: the official graph's `BoundsFromMesh` only warns about that."""
+    loaded kit point carries -- and finds that path in the table. `UseIndexattribute` (`Branch_1_Index`
+    B side) picks the entry whose index equals the point's `index_attribute` (`index_picks`). Otherwise
+    `indices` is the pick `choose` drew. `Select_1` takes the mesh attribute over either pick. A name that
+    is not in the table gives -1, which drops the point rather than raising: the official graph's
+    `BoundsFromMesh` only warns about that."""
     n = len(targets)
     if use_attr:
         column = targets.attrs.get(mesh_attr)
         if column is None:
             return [-1] * n
         return [_index_of(table, column[i]) for i in range(n)]
+    if use_index:
+        return index_picks(targets, index_attr, len(table))
     return list(indices) + [-1] * (n - len(indices)) if indices is not None else [-1] * n
+
+
+def index_picks(targets, attr, n_assets):
+    """`UseIndexattribute`: `MatchAndSetAttributes_1` (`bMatchAttributes`, `MatchAttribute` = `ind`) over
+    the `Assets` attribute set, where `CopyAttributes_1` wrote each entry's `$Index` (0-based) into `ind`.
+    Each point's `attr` value is read AS the match attribute's integer type (`ApplyOnAccessor` with
+    `AllowConstructible`, `PCGMatchAndSetAttributes.cpp:438-484`): a double is C++-converted, i.e.
+    truncated toward zero, so 3.7 picks entry 3. A value that matches no entry (past the last one,
+    negative, or no such attribute) is UNMATCHED, and `bKeepUnmatched` is TRUE by default
+    (`PCGMatchAndSetAttributes.h:90`): the point is kept and its new `Asset` is the attribute's default
+    value, which is the set's FIRST entry -- measured 2026-10-19 on stage 13's `Subgraph_26` (oracle with a
+    substitute texture, `assign_oracle_rows.json`): the 389 points of index 8 or 9 all took entry 0
+    (`Field_05`), indices 1..7 took entries 1..7, all 6 518 kept. So an unmatched point picks 0.
+    Attribute names are `FName`s, so the lookup ignores case (stage 13's `Write_Attribute_fromTexture`
+    writes `index`, its `Assign_Assets` reads `Index`)."""
+    n = len(targets)
+    if n_assets <= 0:
+        return [-1] * n
+    column = None
+    for name, col in targets.attrs.items():
+        if name.lower() == str(attr or "").lower():
+            column = col
+            break
+    if column is None:
+        return [0] * n
+    out = []
+    for v in column:
+        if v is None or isinstance(v, str):
+            out.append(0)
+            continue
+        k = int(v)                                   # truncation toward zero, as C++'s double -> int64
+        out.append(k if 0 <= k < n_assets else 0)
+    return out
 
 
 def _point_mesh(assembly, j, entry):

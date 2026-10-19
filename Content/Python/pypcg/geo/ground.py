@@ -174,7 +174,7 @@ def rot_from_xy(x_axis, y_axis):
 CORNERS = ((0.0, 0.0, 0.5), (1.0, 0.0, 0.5), (0.0, 1.0, 0.5))
 
 
-def project_tile(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0):
+def project_tile(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0, scale=(1.0, 1.0, 1.0), quat=None):
     """`Custom_Projector_with_rotation_fix` with its defaults (`ProjectPosition`, `ProjectRotation`,
     `RestoreOrigZPos` on, `Z_offset_for_proj` 0) on ONE point: `(loc, rot)` after, or None when the
     centre misses the surface (the engine keeps such a point at density 0; it does not occur on a
@@ -190,15 +190,20 @@ def project_tile(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0):
       Projection_0           the point itself dropped onto the surface
       AttributeMathsOp_2/3   `$Position.Z += StoredPostion.Z - Z_offset_for_proj`
 
+    The corners are placed with `FTransform::TransformVector` -- the point's SCALE, then its rotation
+    (`PCGPointHelpers.h:89-97`); stage 10's tiles have scale 1, stage 13's plaza kit points do not (measured
+    2026-10-19: without the scale 1 044 of 32 108 plaza points tilted up to 0.25 deg off the official). `quat`
+    is the point's engine quaternion when the caller has it (`Points.quat`), else `rot` is converted.
+
     `surface.height(x, y)` is the surface's own sample (`UPCGMeshPartitionData::ProjectPoint` falls back
     to `SamplePoint`, a vertical ray -- the same call `pypcg.ue.terrain.Terrain.height` makes)."""
     h = surface.height(loc[0], loc[1])
     if h is None:
         return None
-    q = quat_of(*rot)
+    q = tuple(quat) if quat is not None else quat_of(*rot)
     corners = []
     for ratio in CORNERS:
-        c = tuple(bounds_min[a] + (bounds_max[a] - bounds_min[a]) * ratio[a] for a in range(3))
+        c = tuple((bounds_min[a] + (bounds_max[a] - bounds_min[a]) * ratio[a]) * scale[a] for a in range(3))
         d = quat_rotate(q, c)
         x, y = loc[0] + d[0], loc[1] + d[1]
         hz = surface.height(x, y)
@@ -208,6 +213,201 @@ def project_tile(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0):
     y_axis = _safe_normal((p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]))
     new_rot = rot_from_xy(x_axis, y_axis)
     return (loc[0], loc[1], h + (loc[2] - float(z_offset))), new_rot
+
+
+# ---- the tile ways: Filter_RandomChoice chain + one static mesh per way (stages 10, 13) -------------
+def split_ways(n, ratios, rng):
+    """A chain of `Filter_RandomChoice` nodes (`RandomPerDataset`, the primitive's default), each keeping a
+    share `ratios[k]` of what the previous one left over: one draw per remaining ITEM at each step
+    (`geo.keep_each`), the last step's Unselected the final way. Returns the way (0 .. len(ratios)) of each
+    of the n items. Stage 10's `FC_RandomChoice_1..6` and stage 13's `Subgraph_59..64` (moved here from
+    stage 10 when stage 13 needed the same chain)."""
+    from .sample import keep_each
+    way = [len(ratios)] * n
+    left = list(range(n))
+    for k, ratio in enumerate(ratios):
+        keep = keep_each(len(left), ratio, rng)
+        for i, f in zip(left, keep):
+            if f:
+                way[i] = k
+        left = [i for i, f in zip(left, keep) if not f]
+    return way
+
+
+def assign_ways(sets, way, table, calls, offset):
+    """One `Assign_Assets` call per way, each with a single static mesh and `PositionOffset` = `offset`:
+    the call merges its items' points (`$Seed += dataIndex`, the item's index in that call's input) and,
+    the asset being a static mesh, outputs the moved targets alone with the mesh's box
+    (`geo.assets.expand_items`). `calls` is `[(letter, path)]` in the ways' order and `table[k]` the loaded
+    entry of `calls[k]`. Returns `{letter: Points}` for the calls that got points."""
+    from . import assets as AS
+    from .types import Points
+    out = {}
+    for k, (letter, _path) in enumerate(calls):
+        mine = [sets[i] for i in range(len(sets)) if way[i] == k]
+        targets = Points()
+        for idx, s in enumerate(mine):
+            for j in range(len(s)):
+                targets.add(s.loc[j], rot=s.rot[j], scale=s.scale[j], density=s.density[j],
+                            bounds_min=s.bounds_min[j], bounds_max=s.bounds_max[j], color=s.color[j],
+                            steepness=s.steepness[j], seed=AS._i32(int(s.seed[j]) + idx))
+        if not len(targets):
+            continue
+        items = AS.expand_items(targets, [table[k]], [0] * len(targets), {"position_offset": offset})
+        if items:
+            out[letter] = items[-1]
+    return out
+
+
+# ---- Fill_Areas_Randomly ---------------------------------------------------------------------------
+def fill_random(poly, per_m2, rng, sampling_extent=1.0):
+    """`Fill_Areas_Randomly` (`Uniformity` 0, `FinalCount` -1, zero ranges: the primitive's defaults) on ONE
+    polygon, with Python's own numbers (spec E2). The CoreProcess's `SurfaceSampler_1` (`bUnbounded`,
+    `Looseness` = 1 - `Uniformity` = 1) lays a grid over the polygon's bounds whose cell is
+    `sqrt(1e4 / PointsPerSquaredMeter)` cm (the non-legacy grid, `PCGSurfaceSampler.cpp:66-97`: square
+    `SamplingPointExtents` (1, 1, 1)), cells `CeilToInt(min / cell) .. FloorToInt(max / cell)`; each cell
+    gets ONE point jittered over the cell less the point's own size (`InnerCellSize` = cell - 2 x extent,
+    `InnerCellOffset` 0), kept when the polygon's interior holds it (`ProjectPoint` on the interior
+    surface; holes excluded). The engine draws each cell from `FRandomStream(ComputeSeed(Seed, X, Y))`;
+    the port draws from `rng`, so the count follows the same grid and the layout is new.
+    Returns the world locations (z = the polygon's)."""
+    from .plane import inside
+    if per_m2 <= 0 or len(poly.outer) < 3:
+        return []
+    cell = math.sqrt(1e4 / float(per_m2))
+    inner = cell - 2.0 * float(sampling_extent)
+    xs, ys = [p[0] for p in poly.outer], [p[1] for p in poly.outer]
+    i0, i1 = math.ceil(min(xs) / cell), math.floor(max(xs) / cell)
+    j0, j1 = math.ceil(min(ys) / cell), math.floor(max(ys) / cell)
+    out = []
+    for j in range(j0, j1 + 1):
+        for i in range(i0, i1 + 1):
+            x = i * cell + rng.random() * inner
+            y = j * cell + rng.random() * inner
+            if inside((x, y), poly.outer) and not any(inside((x, y), h) for h in poly.holes):
+                out.append((x, y, float(poly.z)))
+    return out
+
+
+def project_point(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0, scale=(1.0, 1.0, 1.0), quat=None):
+    """`Custom_Projector_with_rotation_fix` on ONE point, MISSES included: `(loc, rot, hit)`. A hit is
+    `project_tile`'s result. On a miss the point stays where it is (`Projection_0` keeps it,
+    `bKeepZeroDensityPoints`) at density 0, its rotation unchanged, and `AttributeMathsOp_2/3` still add the
+    stored z, so its z doubles -- measured 2026-10-19 on stage 13's highway tiles outside the terrain
+    (`Subgraph_57`: z 841.95 -> 1683.90, density 0). The caller sets the density to 0 when `hit` is False."""
+    res = project_tile(loc, rot, bounds_min, bounds_max, surface, z_offset, scale, quat)
+    if res is not None:
+        return res[0], res[1], True
+    return (loc[0], loc[1], loc[2] + (loc[2] - float(z_offset))), tuple(rot), False
+
+
+# ---- Compose_Points_Difference (Discrete, Binary) ---------------------------------------------------
+def _matrix(loc, q, scale):
+    from .assets import _matrix as m
+    return m(loc, q, scale)
+
+
+def _mul(a, b):
+    return [[sum(a[r][k] * b[k][c] for k in range(4)) for c in range(4)] for r in range(4)]
+
+
+def _inverse(m):
+    """The inverse of an affine row-vector matrix (rows 0..2 the axes, row 3 the origin)."""
+    a = [row[:3] for row in m[:3]]
+    det = (a[0][0] * (a[1][1] * a[2][2] - a[1][2] * a[2][1]) - a[0][1] * (a[1][0] * a[2][2] - a[1][2] * a[2][0])
+           + a[0][2] * (a[1][0] * a[2][1] - a[1][1] * a[2][0]))
+    if det == 0.0:
+        return None
+    inv = [[(a[(c + 1) % 3][(r + 1) % 3] * a[(c + 2) % 3][(r + 2) % 3]
+             - a[(c + 1) % 3][(r + 2) % 3] * a[(c + 2) % 3][(r + 1) % 3]) / det for c in range(3)] for r in range(3)]
+    t = m[3][:3]
+    ti = [-(t[0] * inv[0][c] + t[1] * inv[1][c] + t[2] * inv[2][c]) for c in range(3)]
+    return [inv[0] + [0.0], inv[1] + [0.0], inv[2] + [0.0], ti + [1.0]]
+
+
+def _box_by(lo, hi, m):
+    """`FBox::TransformBy(FMatrix)`: the axis-aligned box of the eight transformed corners."""
+    xs, ys, zs = [], [], []
+    for x in (lo[0], hi[0]):
+        for y in (lo[1], hi[1]):
+            for z in (lo[2], hi[2]):
+                xs.append(x * m[0][0] + y * m[1][0] + z * m[2][0] + m[3][0])
+                ys.append(x * m[0][1] + y * m[1][1] + z * m[2][1] + m[3][1])
+                zs.append(x * m[0][2] + y * m[1][2] + z * m[2][2] + m[3][2])
+    return (min(xs), min(ys), min(zs)), (max(xs), max(ys), max(zs))
+
+
+def _overlap_ratio(a, b):
+    """`FBox::Overlap` then `ComputeOverlapRatio`: the overlap's volume over `b`'s; 0 when they do not meet."""
+    lo = [max(a[0][k], b[0][k]) for k in range(3)]
+    hi = [min(a[1][k], b[1][k]) for k in range(3)]
+    if any(lo[k] > hi[k] for k in range(3)):
+        return 0.0
+    vb = (b[1][0] - b[0][0]) * (b[1][1] - b[0][1]) * (b[1][2] - b[0][2])
+    if vb <= 0.0:
+        return 0.0
+    return (hi[0] - lo[0]) * (hi[1] - lo[1]) * (hi[2] - lo[2]) / vb
+
+
+def volume_overlap(diff, query):
+    """`PCGPointHelpers::VolumeOverlap` (PCGBasePointData.cpp:110-137) of a difference point over a query point,
+    both `(loc, quat, scale, bounds_min, bounds_max)` with steepness 1 (the density bounds ARE the bounds): the
+    diff box taken into the query's frame and overlapped with the query box, and the query box taken into
+    the diff's frame and overlapped with the diff box; the smaller of the two overlap ratios."""
+    pm = _matrix(diff[0], diff[1], diff[2])
+    qm = _matrix(query[0], query[1], query[2])
+    qinv = _inverse(qm)
+    if qinv is None:
+        return 0.0
+    p2q = _mul(pm, qinv)
+    first = _overlap_ratio(_box_by(diff[3], diff[4], p2q), (tuple(query[3]), tuple(query[4])))
+    if first <= 0.0:
+        return 0.0
+    q2p = _inverse(p2q)
+    if q2p is None:
+        return 0.0
+    qb = _box_by(query[3], query[4], q2p)
+    second = _overlap_ratio(qb, (tuple(diff[3]), tuple(diff[4])))
+    if second <= 0.0:
+        return 0.0
+    return min(first, second)
+
+
+def difference_binary(sources, diffs, cell=2000.0):
+    """`Compose_Points_Difference` (`Difference_0`: `Mode` Discrete, `DensityFunction` Binary): a source point is
+    REMOVED when the difference points sampled with its own transform and box give a density above 0, i.e.
+    when some difference point of density > 0 overlaps it with positive volume (`volume_overlap`). Both
+    arguments are lists of `(loc, quat, scale, bounds_min, bounds_max, density)`; returns the kept source
+    indices. A difference point of density 0 (a projector miss) removes nothing."""
+    import math as _m
+    grid = {}
+    reach = 0.0
+    for d in diffs:
+        if d[5] <= 0.0:
+            continue
+        r = max(abs(v) for v in tuple(d[3]) + tuple(d[4])) * max(abs(s) for s in d[2]) * 1.7320508075688772
+        reach = max(reach, r)
+        key = (int(_m.floor(d[0][0] / cell)), int(_m.floor(d[0][1] / cell)))
+        grid.setdefault(key, []).append(d)
+    kept = []
+    for i, s in enumerate(sources):
+        rs = max(abs(v) for v in tuple(s[3]) + tuple(s[4])) * max(abs(x) for x in s[2]) * 1.7320508075688772
+        span = int(_m.ceil((reach + rs) / cell))
+        cx, cy = int(_m.floor(s[0][0] / cell)), int(_m.floor(s[0][1] / cell))
+        hit = False
+        for gx in range(cx - span, cx + span + 1):
+            for gy in range(cy - span, cy + span + 1):
+                for d in grid.get((gx, gy), ()):
+                    if volume_overlap(d[:5], s[:5]) > 0.0:
+                        hit = True
+                        break
+                if hit:
+                    break
+            if hit:
+                break
+        if not hit:
+            kept.append(i)
+    return kept
 
 
 # ---- Extract_Segments on an OPEN path --------------------------------------------------------------

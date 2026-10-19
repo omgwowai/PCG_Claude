@@ -7,4 +7,5 @@
                            "LargeBuildingSkirt": {"area": 0.25},
                            "UnderHighway": {"area": 0.15},
                            "unbuildableLots": {"count": 0.30, "area": 0.15},
-                           "reservedLots": {"count": 0.55, "area": 0.75, "bbox_margin_cm": 35000.0}}}}}
+                           "reservedLots": {"count": 0.55, "area": 0.75, "bbox_margin_cm": 35000.0}}},
+            "13": {"tags": {"(all)": {"count": 0.60, "area": 0.75, "bbox_margin_cm": 30000.0}}}}}

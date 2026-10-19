@@ -362,14 +362,31 @@ def test_expand_random_position_range_draws_from_the_rng_and_repeats():
 
 
 def test_expand_random_scale_range_multiplies_the_scale():
-    """TransformPoints_2's scale is multiplicative; min = max draws that one value."""
+    """TransformPoints_2's scale is multiplicative; an explicit (min, max) pair with min = max draws that
+    one value."""
     table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
     t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
-    out = A.expand(t, table, [0], {"random_scale_range": (0.1, 0.1, 0.1), "rng": random.Random(1)})
+    fixed = ((0.1, 0.1, 0.1), (0.1, 0.1, 0.1))
+    out = A.expand(t, table, [0], {"random_scale_range": fixed, "rng": random.Random(1)})
     assert out.scale[0] == pytest.approx((1.0, 0.8, 1.0))
-    out = A.expand(t, table, [0], {"random_scale_range": (0.1, 0.1, 0.1),
+    out = A.expand(t, table, [0], {"random_scale_range": fixed,
                                    "scale_offset": (2.0, 2.0, 2.0), "rng": random.Random(1)})
     assert out.scale[0] == pytest.approx((2.0, 1.6, 2.0))
+
+
+def test_random_range_pins_read_as_the_core_process_reads_them():
+    """ONE pin value (the graph's form, Task 18): `Assign_Assets_CoreProcess` makes position and rotation
+    ranges [-v, v] (`AttributeMathsOp_8/9`) and the scale range [1 - v, 1 + v] (`AttributeMathsOp_10/11`);
+    a rotation VECTOR's X/Y/Z are MakeRotFromAngles' Roll/Pitch/Yaw."""
+    assert A._pin_range({"X": 0.2, "Y": 0, "Z": 0}, False, A.DEFAULT_SCALE_RANGE) == ((0.8, 1.0, 1.0), (1.2, 1.0, 1.0))
+    assert A._pin_range({"X": 50, "Y": 0, "Z": 0}, False, A.DEFAULT_POSITION_RANGE) == ((-50.0, -0.0, -0.0), (50.0, 0.0, 0.0))
+    lo, hi = A._pin_range({"X": 2, "Y": 3, "Z": 180}, True, None)
+    assert hi == (3.0, 180.0, 2.0) and lo == (-3.0, -180.0, -2.0)        # (pitch, yaw, roll)
+    rng = random.Random(5)
+    for _ in range(200):
+        s = A._range_draw({"random_scale_range": {"X": 0.2, "Y": 0, "Z": 0}}, "random_scale_range", rng,
+                          dlo=A.DEFAULT_SCALE_RANGE, uniform=True)
+        assert 0.8 <= s[0] <= 1.2 and s[0] == s[1] == s[2]
 
 
 def test_expand_uniform_random_scale_draws_one_number():
@@ -508,8 +525,8 @@ def test_assign_calls_maps_the_graph_pin_names_onto_expands_keys():
     assert params["use_mesh_bounds"] is True
     assert params["mesh_attribute"] == "Mesh"
     # the pins expand does not read are reported, not silently dropped
-    assert set(calls[0]["unhonoured"]) == {"MatchScaleToInputBounds", "UseIndexattribute",
-                                           "IndexAttribute"}
+    assert set(calls[0]["unhonoured"]) == {"MatchScaleToInputBounds"}
+    assert params["use_index_attribute"] is False and params["index_attribute"] == "ind"
     # ... and no graph spelling survives into `params`
     assert not (set(params) & set(mod.ASSIGN_PARAM_KEYS))
 
@@ -566,6 +583,12 @@ def test_the_recorded_oracle_rows_back_every_measured_setting():
     rows = json.loads(path.read_text(encoding="utf-8"))["rows"]
     covered = set()
     for r in rows:
+        if r.get("compared") == "drawn ranges":
+            # Task 18: the primitive's own draws, measured against `_pin_range`'s reading of the pins
+            assert r["equal"] == {"inside_expected_range": True}, r["run"]
+            assert r["measured"]["scale_uniform"] and r["measured"]["location_moved_cm"] == 0.0, r["run"]
+            covered.add("random_ranges")
+            continue
         assert r["items"] == r["python_items"], r["run"]
         if r["random"]:
             assert r["equal"] == {"items": True, "Asset": True}, r["run"]
@@ -580,10 +603,37 @@ def test_the_recorded_oracle_rows_back_every_measured_setting():
             if v and any(abs(float(x) - (1.0 if key in ("scale_offset", "extents_scale") else 0.0)) > 0
                          for x in v.values()):
                 covered.add(key)
+        if st.get("use_index_attribute"):
+            covered.add("use_index_attribute")
         covered.add("uniform_%s" % st.get("uniform_scale", A.DEFAULT_UNIFORM_SCALE))
         covered.add("mesh_bounds_%s" % st.get("use_mesh_bounds", A.DEFAULT_USE_MESH_BOUNDS))
         if len(r["items"]) == 1:
             covered.add("static_mesh_no_copy_item")
     assert covered >= {"position_offset", "rotation_offset", "scale_offset", "extents_scale", "uniform_True",
                        "uniform_False", "mesh_bounds_True", "mesh_bounds_False", "static_mesh_no_copy_item",
-                       "random_compare"}
+                       "random_compare", "use_index_attribute", "random_ranges"}
+
+
+# ---- UseIndexattribute (Task 18) -------------------------------------------------------------------
+def test_index_picks_truncate_the_value_and_send_the_unmatched_to_entry_0():
+    """`MatchAndSetAttributes_1` reads the point's value as the entries' integer `$Index` (truncation); a
+    value that names no entry is unmatched, KEPT (`bKeepUnmatched` true) and given the attribute's default,
+    the first entry (measured on stage 13's Subgraph_26: indices 8 and 9 took entry 0)."""
+    t = targets([((float(i), 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), i) for i in range(6)])
+    t.declare("index", "Double")
+    t.attrs["index"] = [0.0, 1.9, 7.999, 8.0, -0.5, 9.0]
+    assert A.index_picks(t, "Index", 8) == [0, 1, 7, 0, 0, 0]       # FName lookup ignores case
+    assert A.index_picks(t, "Missing", 8) == [0] * 6
+    assert A.index_picks(t, "Index", 0) == [-1] * 6
+
+
+def test_expand_use_index_attribute_assigns_by_entry_and_ignores_the_draw():
+    table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1])),
+             asset("/G/SM_B.SM_B", points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0),
+                 ((10.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 1),
+                 ((20.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 2)])
+    t.declare("Index", "Double")
+    t.attrs["Index"] = [1.5, 0.2, 5.0]
+    items = A.expand_items(t, table, [1, 1, 1], {"use_index_attribute": True, "index_attribute": "Index"})
+    assert [str(a) for a in items[-1].attrs["Asset"]] == ["/G/SM_B.SM_B", "/G/SM_A.SM_A", "/G/SM_A.SM_A"]

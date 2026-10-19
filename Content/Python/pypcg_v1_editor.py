@@ -39,13 +39,11 @@ ASSIGN_SUBGRAPH = "/PCGPrimitives/Primitives/Assign/Assign_Assets"
 # every parameter recorded from the graph would arrive at `expand` under a name it does not read and
 # be silently replaced by its default. Task 12's review found exactly that.
 #
-# Three pins are deliberately mapped to None, which `assign_calls` reads as "collected but not
+# One pin is deliberately mapped to None, which `assign_calls` reads as "collected but not
 # honoured by `expand`":
 #   MatchScaleToInputBounds  the ratio is reported as `$Scale` either way; whether the primitive
 #                            also writes it into the input points' `$Scale` is unmeasured
-#   UseIndexattribute / IndexAttribute
-#                            the index-attribute pick (`Branch_1_Index`) is not implemented; `choose`
-#                            always draws
+# (`UseIndexattribute` / `IndexAttribute` were too until Task 18: `geo.assets.index_picks`.)
 # The four graph-override pins are not parameters of the computation at all and are not listed.
 ASSIGN_PARAM_KEYS = {
     "PositionOffset": "position_offset",
@@ -60,8 +58,8 @@ ASSIGN_PARAM_KEYS = {
     "RandomRotationRange": "random_rotation_range",
     "RandomScaleRange": "random_scale_range",
     "MatchScaleToInputBounds": None,
-    "UseIndexattribute": None,
-    "IndexAttribute": None,
+    "UseIndexattribute": "use_index_attribute",
+    "IndexAttribute": "index_attribute",
 }
 # The three `TransformPoints_2` pins, whose values only mean anything together with an `rng`.
 ASSIGN_RANDOM_PINS = ("RandomPositionRange", "RandomRotationRange", "RandomScaleRange")
@@ -414,11 +412,21 @@ def _assign_oracle_compare(n, official_calls, uassets):
         table = [tabled[p] for p in call["assets"]]
         picked = outs[-1].attrs.get(A.ASSET_ATTR) or []
         index = {p: i for i, p in enumerate(call["assets"])}
-        if len(picked) != len(targets) or any(p not in index for p in picked):
+        if call["params"].get("use_index_attribute"):
+            # The pick is the targets' own index attribute (Task 18, `geo.assets.index_picks`), not a draw:
+            # the output's last item names it, and is checked against it below like every other field.
+            picks = A.index_picks(targets, call["params"].get("index_attribute"), len(table))
+            if [call["assets"][k] if k >= 0 else None for k in picks] != list(picked):
+                failures.append("Assign_Assets %s: the index pick differs from the primitive's on %d of %d targets"
+                                % (call["node"], sum(1 for k, p in zip(picks, picked)
+                                                     if k < 0 or call["assets"][k] != p), len(targets)))
+            ours = A.expand_items(targets, table, None, dict(call["params"]))
+        elif len(picked) != len(targets) or any(p not in index for p in picked):
             failures.append("Assign_Assets %s: the output's last item does not name a kit per target "
                             "(%d targets, %d named)" % (call["node"], len(targets), len(picked)))
             continue
-        ours = A.expand_items(targets, table, [index[p] for p in picked], dict(call["params"]))
+        else:
+            ours = A.expand_items(targets, table, [index[p] for p in picked], dict(call["params"]))
         row = {"node": call["node"], "targets": len(targets), "items": [len(x) for x in outs],
                "python_items": [len(x) for x in ours], "random": bool(call.get("random")),
                "settings": call["params"]}

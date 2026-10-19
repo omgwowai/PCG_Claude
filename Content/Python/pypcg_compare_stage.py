@@ -75,6 +75,10 @@ def phase_gen(args):
         values = dict(state[label]["overrides"])
         values[stage_api.SEED] = int(args.get("seed", stage_api.SEED_DEFAULT))
         applied = census.apply_overrides(pc, values)               # after set_graph (trap 44)
+        # The kept native nodes draw from the COMPONENT seed (their own Seed combined with it): keep it the
+        # shipped one, or a probe that moved it (Task 18's official multi-seed captures) silently changes
+        # every native draw of the slim run while the Python seed above stays put.
+        pc.set_editor_property("seed", int(state[label]["seed"]))
         os.environ[stage_api.RECORD_ENV] = "1"
     else:
         pc.set_graph(unreal.EditorAssetLibrary.load_asset(state[label]["graph"].split(".")[0]))

@@ -670,6 +670,310 @@
     "Asset": 21469,
     "seed": 21469
    }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_65",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 265,
+   "items": [
+    265
+   ],
+   "python_items": [
+    265
+   ],
+   "points": 265,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 265,
+    "quat": 265,
+    "scale": 265,
+    "bounds": 265
+   },
+   "equal": {
+    "Asset": 265,
+    "seed": 265
+   }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_71",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 2364,
+   "items": [
+    2364
+   ],
+   "python_items": [
+    2364
+   ],
+   "points": 2364,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 2364,
+    "quat": 2364,
+    "scale": 2364,
+    "bounds": 2364
+   },
+   "equal": {
+    "Asset": 2364,
+    "seed": 2364
+   }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_73",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": true,
+   "settings": {
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 515,
+   "items": [
+    515
+   ],
+   "python_items": [
+    515
+   ],
+   "points": 515,
+   "compared": "sizes, order, Asset",
+   "equal": {
+    "items": true,
+    "Asset": true
+   }
+  },
+  {
+   "run": "s13_index_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_26",
+   "what": "stage 13 Subgraph_26 (UseIndexattribute on Index, ScaleOffset (0.7, 1, 1)) with /Game/Textures/Noise/T_Noises_Clouds_4k_ on Subgraph_27/28 (the official T_CloudNoise_4k is not in the project) and its random ranges zeroed: index 1..7 -> entries 1..7, index 0, 8, 9 -> entry 0 (unmatched, kept, the attribute default)",
+   "random": false,
+   "settings": {
+    "scale_offset": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "random_scale_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "use_index_attribute": true,
+    "index_attribute": "Index"
+   },
+   "targets": 6518,
+   "items": [
+    6518
+   ],
+   "python_items": [
+    6518
+   ],
+   "points": 6518,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 6518,
+    "quat": 6518,
+    "scale": 6518,
+    "bounds": 6518
+   },
+   "equal": {
+    "Asset": 6518,
+    "seed": 6518
+   }
+  },
+  {
+   "run": "s13_random_ranges_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_26",
+   "what": "the call's random ranges ON (substitute texture on Subgraph_27/28): the drawn ranges against the CoreProcess reading of the pins (geo.assets._pin_range: scale 1 +- v, rotation +-v with X/Y/Z = Roll/Pitch/Yaw); 6518 draws",
+   "random": true,
+   "settings": {
+    "random_rotation_range": {
+     "X": 2,
+     "Y": 2,
+     "Z": 180
+    },
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "scale_offset": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "use_index_attribute": true,
+    "index_attribute": "Index"
+   },
+   "targets": 6518,
+   "points": 6518,
+   "compared": "drawn ranges",
+   "measured": {
+    "scale_factor": [
+     0.8001,
+     1.1997
+    ],
+    "scale_uniform": true,
+    "pitch": [
+     -2.0,
+     1.999
+    ],
+    "yaw": [
+     -179.99,
+     179.928
+    ],
+    "roll": [
+     -2.0,
+     2.0
+    ],
+    "location_moved_cm": 0.0,
+    "assets": {
+     "SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP": 2076,
+     "SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP": 1777,
+     "SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP": 1220,
+     "SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP": 1052,
+     "SM_BlackAlder_Field_05_PP.SM_BlackAlder_Field_05_PP": 393
+    }
+   },
+   "expected": {
+    "scale_factor": [
+     0.8,
+     1.2
+    ],
+    "pitch": [
+     -2.0,
+     2.0
+    ],
+    "yaw": [
+     -180.0,
+     180.0
+    ],
+    "roll": [
+     -2.0,
+     2.0
+    ]
+   },
+   "equal": {
+    "inside_expected_range": true
+   }
+  },
+  {
+   "run": "s13_random_ranges_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_73",
+   "what": "the call's random ranges ON (substitute texture on Subgraph_27/28): the drawn ranges against the CoreProcess reading of the pins (geo.assets._pin_range: scale 1 +- v, rotation +-v with X/Y/Z = Roll/Pitch/Yaw); 515 draws",
+   "random": true,
+   "settings": {
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "targets": 515,
+   "points": 515,
+   "compared": "drawn ranges",
+   "measured": {
+    "scale_factor": [
+     0.8002,
+     1.1996
+    ],
+    "scale_uniform": true,
+    "pitch": [
+     -0.0,
+     0.0
+    ],
+    "yaw": [
+     -0.0,
+     0.0
+    ],
+    "roll": [
+     -0.0,
+     0.0
+    ],
+    "location_moved_cm": 0.0,
+    "assets": {
+     "SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP": 128,
+     "SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP": 135,
+     "SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP": 127,
+     "SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP": 125
+    }
+   },
+   "expected": {
+    "scale_factor": [
+     0.8,
+     1.2
+    ],
+    "pitch": [
+     0.0,
+     0.0
+    ],
+    "yaw": [
+     0.0,
+     0.0
+    ],
+    "roll": [
+     0.0,
+     0.0
+    ]
+   },
+   "equal": {
+    "inside_expected_range": true
+   }
   }
  ]
 }
