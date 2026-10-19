@@ -430,3 +430,27 @@ def create_polygon_points(curve):
     if curve.closed and pts:
         pts.pop()
     return pts
+
+
+class SplinePolygon:
+    """A closed linear spline as `CreatePolygon2D` makes it into a polygon (the `InputsProcessing_ForcePolygon` of
+    every area primitive), and that polygon read back out (stage 12):
+
+      points    the 3D points the element reads (`create_polygon_points`)
+      frame     (translation, quaternion): `polygon_frame`
+      local     the stored 2D ring, counter-clockwise (reversed when the points run clockwise, as the element does)
+      area      `@data.$area`: the stored ring's area, cm2
+      vertices  `ToPoint` / `GetSplineControlPoints` on the polygon (`vertex_points`), in the stored ring's order
+      rotations their rotations
+    """
+
+    def __init__(self, spline):
+        self.points = create_polygon_points(SplineCurve.of(spline))
+        self.frame = polygon_frame(self.points)
+        t, q = self.frame
+        local = to_local(self.points, t, q)
+        if signed_area_2d(local) < 0:
+            local = local[::-1]
+        self.local = local
+        self.area = abs(signed_area_2d(local))
+        self.vertices, self.rotations = vertex_points(local, t, q)

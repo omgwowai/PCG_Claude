@@ -17,13 +17,19 @@ class Polygon:
     0, world)`, which recomputes each vertex from its segment and may differ from `outer` in the last bits),
     and the data's frame `((tx, ty, tz), (qx, qy, qz, qw))`. Neither takes part in equality; records carry
     them only when set. Both describe the polygon AS READ: a stage that rebuilds or edits `outer` must not
-    carry them over (a new `Polygon(...)` has neither)."""
+    carry them over (a new `Polygon(...)` has neither).
+
+    `zs` (optional): one z per OUTER vertex, for a polygon built from 3D points whose z differ (stage 12: a
+    rooftop's ToPoint vertices differ in the last bit of z, because Newell's normal is a hair off vertical, and
+    `Transform_Offset` builds its polygon from exactly those points). None = every vertex at `z`. Part of the
+    geometry (equality, records); the writer hands each vertex its own z to MakePolygon2DData."""
     outer: list
     holes: list = field(default_factory=list)
     z: float = 0.0
     source: object = field(default=None, compare=False, repr=False)
     vertices: list = field(default=None, compare=False, repr=False)
     frame: tuple = field(default=None, compare=False, repr=False)
+    zs: list = field(default=None, repr=False)
 
 
 @dataclass
@@ -148,6 +154,8 @@ def to_json(v):
             d["vertices"] = [list(p) for p in v.vertices]
         if v.frame:
             d["frame"] = [list(x) for x in v.frame]
+        if v.zs is not None:
+            d["zs"] = list(v.zs)
         return d
     if isinstance(v, Spline):
         d = {"kind": "spline", "points": [list(p) for p in v.points], "closed": v.closed, "linear": v.linear,
@@ -179,7 +187,8 @@ def from_json(d):
     if kind == "polygon":
         return Polygon(_tuples(d["outer"]), [_tuples(h) for h in d["holes"]], d.get("z", 0.0),
                        vertices=_tuples(d["vertices"]) if d.get("vertices") else None,
-                       frame=tuple(tuple(x) for x in d["frame"]) if d.get("frame") else None)
+                       frame=tuple(tuple(x) for x in d["frame"]) if d.get("frame") else None,
+                       zs=list(d["zs"]) if d.get("zs") is not None else None)
     if kind == "spline":
         return Spline(_tuples(d["points"]), d["closed"], d["linear"],
                       [(tuple(a), tuple(b)) for a, b in d["tangents"]] if d.get("tangents") else None,

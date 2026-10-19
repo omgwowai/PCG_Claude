@@ -226,12 +226,13 @@ def _points_of(d):
 
 
 # ---- write ----------------------------------------------------------------------------------------
-def to_pcg(v, registry=None):
+def to_pcg(v, registry=None, exact_rotations=False):
     same = passed_through(v, registry)
     if same is not None:
         return same
     if isinstance(v, Polygon):
-        d = L.make_polygon2d_data(json.dumps({"outer": [[x, y, v.z] for x, y in v.outer],
+        zs = v.zs if v.zs is not None and len(v.zs) == len(v.outer) else [v.z] * len(v.outer)
+        d = L.make_polygon2d_data(json.dumps({"outer": [[x, y, z] for (x, y), z in zip(v.outer, zs)],
                                               "holes": [[[x, y, v.z] for x, y in h] for h in v.holes]}))
         if d is None:
             raise ValueError("MakePolygon2DData refused a polygon with %d outer vertices" % len(v.outer))
@@ -239,7 +240,7 @@ def to_pcg(v, registry=None):
     if isinstance(v, Spline):
         return _spline_data(v)
     if isinstance(v, Points):
-        return _point_data(v)
+        return _point_data(v, exact_rotations)
     if isinstance(v, ParamSet):
         return _param_data(v)
     raise TypeError("PyPCG cannot write %r" % (v,))
@@ -268,15 +269,26 @@ def _spline_data(s):
     return d
 
 
-def _point_data(pts):
+def _point_data(pts, exact_rotations=False):
+    """`exact_rotations` (a stage's `EXACT_ROTATIONS`, stage 12): a point whose engine quaternion `convert` read
+    (`Points.quat`, kept by the stage) is written with that quaternion rather than with the rotator `rot`, which
+    cannot give the same bits back (types.py). Off, every point is written from `rot`, as before."""
     d = unreal.PCGPointData()
     md = d.mutable_metadata()
     for name, tname in pts.types.items():
         _create(md, name, tname)
+    quats = pts.quat if exact_rotations and pts.quat and len(pts.quat) == len(pts) else None
     out = []
     for i in range(len(pts)):
         p = unreal.PCGPoint()
-        p.transform = unreal.Transform(unreal.Vector(*pts.loc[i]), _rotator(pts.rot[i]), unreal.Vector(*pts.scale[i]))
+        t = unreal.Transform(unreal.Vector(*pts.loc[i]), _rotator(pts.rot[i]), unreal.Vector(*pts.scale[i]))
+        if quats is not None:
+            # `unreal.Quat(x, y, z, w)` rounds every component to float32 (probed 2026-10-20); the attribute
+            # assignment keeps the double.
+            q = unreal.Quat()
+            q.x, q.y, q.z, q.w = quats[i]
+            t.rotation = q
+        p.transform = t
         p.density = pts.density[i]
         p.bounds_min = unreal.Vector(*pts.bounds_min[i])
         p.bounds_max = unreal.Vector(*pts.bounds_max[i])

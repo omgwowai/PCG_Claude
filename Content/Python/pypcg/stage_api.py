@@ -65,13 +65,14 @@ def volume_quat(inputs, pin="Volume"):
 
 
 def snapshot(p):
-    """The geometry `unchanged` compares: a polygon's outer, holes and z as plain tuples; a spline's control
-    points, closed / linear flags, tangents and rotations."""
+    """The geometry `unchanged` compares: a polygon's outer, holes, z and per-vertex z (`zs`) as plain tuples; a
+    spline's control points, closed / linear flags, tangents and rotations."""
     if isinstance(p, geo.Spline):
         return ([tuple(q) for q in p.points], bool(p.closed), bool(p.linear),
                 [(tuple(a), tuple(b)) for a, b in p.tangents] if p.tangents else None,
                 [tuple(r) for r in p.rotations] if p.rotations else None)
-    return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z)
+    return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z,
+            list(p.zs) if p.zs is not None else None)
 
 
 def unchanged(v, registry):

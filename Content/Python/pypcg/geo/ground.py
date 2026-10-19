@@ -338,73 +338,122 @@ def _box_by(lo, hi, m):
 
 
 def _overlap_ratio(a, b):
-    """`FBox::Overlap` then `ComputeOverlapRatio`: the overlap's volume over `b`'s; 0 when they do not meet."""
+    """`FBox::Overlap` then `ComputeOverlapRatio(Overlap, b)` (PCGBasePointData.cpp:99-107): 0 when the boxes do
+    not meet (`FBox::Intersect` is inclusive, so touching boxes DO meet, with a zero-thickness overlap); else the
+    product over the axes of the overlap's extent over `b`'s, an axis on which `b` has no extent counting 1."""
     lo = [max(a[0][k], b[0][k]) for k in range(3)]
     hi = [min(a[1][k], b[1][k]) for k in range(3)]
     if any(lo[k] > hi[k] for k in range(3)):
         return 0.0
-    vb = (b[1][0] - b[0][0]) * (b[1][1] - b[0][1]) * (b[1][2] - b[0][2])
-    if vb <= 0.0:
-        return 0.0
-    return (hi[0] - lo[0]) * (hi[1] - lo[1]) * (hi[2] - lo[2]) / vb
+    ratio = 1.0
+    for k in range(3):
+        den = (b[1][k] - b[0][k]) * 0.5
+        ratio *= ((hi[k] - lo[k]) * 0.5) / den if den > 0.0 else 1.0
+    return ratio
 
 
-def volume_overlap(diff, query):
-    """`PCGPointHelpers::VolumeOverlap` (PCGBasePointData.cpp:110-137) of a difference point over a query point,
-    both `(loc, quat, scale, bounds_min, bounds_max)` with steepness 1 (the density bounds ARE the bounds): the
-    diff box taken into the query's frame and overlapped with the query box, and the query box taken into
-    the diff's frame and overlapped with the diff box; the smaller of the two overlap ratios."""
-    pm = _matrix(diff[0], diff[1], diff[2])
-    qm = _matrix(query[0], query[1], query[2])
-    qinv = _inverse(qm)
-    if qinv is None:
-        return 0.0
+def density_scale(steepness):
+    """`GetLocalDensityBounds`' factor `2 - Steepness`, in floats (the steepness is a float)."""
+    from .frames import f32
+    return f32(2.0 - f32(steepness))
+
+
+def _prepared_diff(diff, steepness):
+    """A difference point ready for `_overlap_core`: (its matrix, density box min, max)."""
+    k = density_scale(steepness)
+    return (_matrix(diff[0], diff[1], diff[2]), tuple(k * v for v in diff[3]), tuple(k * v for v in diff[4]))
+
+
+def _overlap_core(pm, dmin, dmax, qinv, qmin, qmax):
+    """`VolumeOverlap` on prepared operands: the diff point's matrix and density box, the query's INVERSE matrix
+    and its plain box."""
     p2q = _mul(pm, qinv)
-    first = _overlap_ratio(_box_by(diff[3], diff[4], p2q), (tuple(query[3]), tuple(query[4])))
+    first = _overlap_ratio(_box_by(dmin, dmax, p2q), (qmin, qmax))
     if first <= 0.0:
         return 0.0
     q2p = _inverse(p2q)
     if q2p is None:
         return 0.0
-    qb = _box_by(query[3], query[4], q2p)
-    second = _overlap_ratio(qb, (tuple(diff[3]), tuple(diff[4])))
+    qb = _box_by(qmin, qmax, q2p)
+    second = _overlap_ratio((dmin, dmax), qb)          # the denominator is the TRANSFORMED query box
     if second <= 0.0:
         return 0.0
     return min(first, second)
 
 
-def difference_binary(sources, diffs, cell=2000.0):
+def volume_overlap(diff, query, steepness=1.0):
+    """`PCGPointHelpers::VolumeOverlap` (PCGBasePointData.cpp:110-137) of a difference point over a query point,
+    both `(loc, quat, scale, bounds_min, bounds_max)`: the diff point's DENSITY box (its bounds times `2 -
+    steepness`, `GetLocalDensityBounds`; steepness 1 = the bounds) taken into the query's frame and overlapped
+    with the query's box (its plain bounds: `SampleBasedRangeProcessing` samples with `GetLocalBounds`), over the
+    query box; and the query box taken into the diff's frame and overlapped with the diff box, over that
+    transformed query box; the smaller of the two ratios."""
+    qinv = _inverse(_matrix(query[0], query[1], query[2]))
+    if qinv is None:
+        return 0.0
+    pm, dmin, dmax = _prepared_diff(diff, steepness)
+    return _overlap_core(pm, dmin, dmax, qinv, tuple(query[3]), tuple(query[4]))
+
+
+BROAD_PHASE_SLACK_CM = 0.01     # the world boxes of the broad phase are grown by this much: it only admits pairs
+
+
+def difference_binary(sources, diffs, cell=2000.0, drop_empty_sources=False):
     """`Compose_Points_Difference` (`Difference_0`: `Mode` Discrete, `DensityFunction` Binary): a source point is
     REMOVED when the difference points sampled with its own transform and box give a density above 0, i.e.
     when some difference point of density > 0 overlaps it with positive volume (`volume_overlap`). Both
-    arguments are lists of `(loc, quat, scale, bounds_min, bounds_max, density)`; returns the kept source
-    indices. A difference point of density 0 (a projector miss) removes nothing."""
+    arguments are lists of `(loc, quat, scale, bounds_min, bounds_max, density[, steepness])` (steepness 1 when
+    absent); returns the kept source indices. A difference point of density 0 (a projector miss) removes nothing.
+
+    The pairs are found as the engine's octree does, conservatively: each diff point's world density box and each
+    source's world box (`FBox::TransformBy`, grown by `BROAD_PHASE_SLACK_CM`) on a `cell` grid; only pairs whose
+    world boxes meet are tested, and the test itself is the exact `VolumeOverlap`. (Stage 12 fix: the first form,
+    a fixed reach around every source, ran 109 s on stage 12's 9 137 x 19 134 points.)
+
+    `drop_empty_sources`: the engine keeps a point only when `source density - sampled density > 0`
+    (PCGDifferenceData.cpp:316), so whenever the Differences pin holds any spatial data a source point of density 0
+    goes too (the caller knows whether it does). Stage 12 sets it; stage 13 (its first user) predates the reading
+    and keeps the old behaviour."""
     import math as _m
-    grid = {}
-    reach = 0.0
+    e = BROAD_PHASE_SLACK_CM
+
+    def cells(box):
+        return [(gx, gy) for gx in range(int(_m.floor((box[0][0] - e) / cell)), int(_m.floor((box[1][0] + e) / cell)) + 1)
+                for gy in range(int(_m.floor((box[0][1] - e) / cell)), int(_m.floor((box[1][1] + e) / cell)) + 1)]
+
+    prepared, grid = [], {}
     for d in diffs:
         if d[5] <= 0.0:
             continue
-        r = max(abs(v) for v in tuple(d[3]) + tuple(d[4])) * max(abs(s) for s in d[2]) * 1.7320508075688772
-        reach = max(reach, r)
-        key = (int(_m.floor(d[0][0] / cell)), int(_m.floor(d[0][1] / cell)))
-        grid.setdefault(key, []).append(d)
+        pm, dmin, dmax = _prepared_diff(d, d[6] if len(d) > 6 else 1.0)
+        world = _box_by(dmin, dmax, pm)
+        for key in cells(world):
+            grid.setdefault(key, []).append(len(prepared))
+        prepared.append((pm, dmin, dmax, world))
     kept = []
     for i, s in enumerate(sources):
-        rs = max(abs(v) for v in tuple(s[3]) + tuple(s[4])) * max(abs(x) for x in s[2]) * 1.7320508075688772
-        span = int(_m.ceil((reach + rs) / cell))
-        cx, cy = int(_m.floor(s[0][0] / cell)), int(_m.floor(s[0][1] / cell))
+        if drop_empty_sources and not s[5] > 0.0:
+            continue
+        qm = _matrix(s[0], s[1], s[2])
+        qinv = _inverse(qm)
+        qmin, qmax = tuple(s[3]), tuple(s[4])
+        world = _box_by(qmin, qmax, qm)
         hit = False
-        for gx in range(cx - span, cx + span + 1):
-            for gy in range(cy - span, cy + span + 1):
-                for d in grid.get((gx, gy), ()):
-                    if volume_overlap(d[:5], s[:5]) > 0.0:
+        seen = set()
+        if qinv is not None:
+            for key in cells(world):
+                for j in grid.get(key, ()):
+                    if j in seen:
+                        continue
+                    seen.add(j)
+                    pm, dmin, dmax, w = prepared[j]
+                    if any(w[0][k] - e > world[1][k] + e or world[0][k] - e > w[1][k] + e for k in range(3)):
+                        continue
+                    if _overlap_core(pm, dmin, dmax, qinv, qmin, qmax) > 0.0:
                         hit = True
                         break
                 if hit:
                     break
-            if hit:
-                break
         if not hit:
             kept.append(i)
     return kept
