@@ -201,12 +201,20 @@ def test_expand_composes_the_rotations():
 
 
 def test_expand_writes_the_asset_path_and_the_bounds():
+    """UseMeshBounds puts the asset's whole box on the copy, and `AttributeMathsOp_14` then multiplies
+    the point's `$Extents` (its HALF-size) by `ExtentsScale` about the box centre -- the CoreProcess
+    dump's `InputSource1 = $Extents, Operation = Multiply`, and on stage 17 (scale 1) the rewrite as
+    centre +- half-size reproduced all 9 843 official boxes exactly (2026-10-19). (Task 12 asserted the
+    unscaled box here; that was never measured with a scale other than 1.)"""
     table = [asset("/G/SM_A.SM_A", points=mesh_points(subset=MESH_POINTS[:1]))]
     t = targets([((5.0, 6.0, 7.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 7)])
     out = A.expand(t, table, [0], {"use_mesh_bounds": True, "extents_scale": (2.0, 2.0, 2.0)})
     assert out.attrs["Asset"] == ["/G/SM_A.SM_A"]
     assert out.attrs["$Extents"] == [(2000.0, 2000.0, 200.0)]
-    assert tuple(out.bounds_min[0]) == (-500.0, -500.0, 0.0)   # UseMeshBounds: the asset's own box
+    assert tuple(out.bounds_min[0]) == (-1000.0, -1000.0, -50.0)   # the asset's box, doubled about its centre
+    assert tuple(out.bounds_max[0]) == (1000.0, 1000.0, 150.0)
+    out = A.expand(t, table, [0], {"use_mesh_bounds": True})
+    assert tuple(out.bounds_min[0]) == (-500.0, -500.0, 0.0)       # UseMeshBounds alone: the asset's own box
     assert tuple(out.bounds_max[0]) == (500.0, 500.0, 100.0)
 
 
@@ -222,15 +230,25 @@ def test_expand_without_use_mesh_bounds_keeps_the_assembly_point_bounds():
     assert tuple(out.bounds_max[0]) == (1.0, 2.0, 3.0)
 
 
-def test_expand_offset_is_carried_by_the_assemblys_own_rotation():
-    """`TransformPoints` with a non-absolute offset rotates it by the point's own rotation, so a mesh
-    point with yaw 90 moves along its own Y."""
+def test_expand_offset_moves_the_target_along_its_own_rotation():
+    """`TransformPoints_1` runs on the TARGETS (`FilterDataByType_4 -> TransformPoints_1 ->
+    TransformPoints_2 -> Reroute_0 -> AttributePartition_1 -> CopyPoints_0.Target`), with a non-absolute
+    offset rotated by the target's own rotation and held as a float. Measured 2026-10-19 on stage 17's
+    official call: every one of the 30 targets came out at `RotateVector(q, float(0, -492.541261, 0))`
+    from its hull vertex, to 2e-13 cm, and every copy hangs off the MOVED target. (Task 12 rotated the
+    offset by the assembly point's own rotation; on a target at yaw 0 with an assembly point at yaw
+    ~180 that sends the copy the other way.)"""
     table = [asset(points=mesh_points(subset=MESH_POINTS[1:2]))]
     t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
     out = A.expand(t, table, [0], {"position_offset": (0.0, -492.541261, 0.0)})
-    # the point's own yaw is ~180, so its local +Y offset comes back to (nearly) the local -Y axis
-    assert out.loc[0][1] == pytest.approx(99.33786010742188 + 492.541261, abs=0.01)
-    assert out.loc[0][0] == pytest.approx(235.54061889648438, abs=0.01)
+    f = A._f32(-492.541261)
+    assert out.loc[0][1] == pytest.approx(99.33786010742188 + f, abs=1e-9)
+    assert out.loc[0][0] == pytest.approx(235.54061889648438, abs=1e-9)
+    # a target at yaw 90 carries its local -Y offset to world +X
+    t = targets([((0.0, 0.0, 0.0), (0.0, 90.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    items = A.expand_items(t, table, [0], {"position_offset": (0.0, -492.541261, 0.0)})
+    moved = items[-1]
+    assert moved.loc[0] == pytest.approx((-f, 0.0, 0.0), abs=1e-9)
 
 
 def test_expand_multiplies_the_scale_offset_and_adds_the_rotation_offset():
@@ -253,13 +271,17 @@ def test_expand_multiple_targets_stay_contiguous_in_target_order():
     assert [round(l[0]) for l in out.loc] == [-400, 336, -300]
 
 
-def test_expand_keeps_each_input_points_points_contiguous():
+def test_expand_copies_source_major_within_one_asset():
+    """Inside one asset's output set the copies run SOURCE-major: assembly point 0 on every target of
+    that asset, then point 1, ... Measured 2026-10-19 on stage 17 (five kits, 3 to 10 targets each):
+    source-major reproduces all 9 843 official copies to 7e-12 cm, target-major is 2.9 km off. (Task 12
+    asserted target-major; its measurements had one target per call, where the two agree.)"""
     table = [asset(points=mesh_points(subset=MESH_POINTS[:3]))]
     t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0),
                  ((1000.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
     out = A.expand(t, table, [0, 0], {})
     assert len(out) == 6
-    assert [round(l[0]) for l in out.loc] == [-500, 236, -306, 500, 1236, 694]
+    assert [round(l[0]) for l in out.loc] == [-500, 500, 236, 1236, -306, 694]
 
 
 def test_expand_carries_the_input_point_attributes_onto_every_copied_point():

@@ -90,7 +90,14 @@ class Points:
 
     def extend(self, other):
         """Append `other`'s points to this one, declaring any attribute this one does not have yet
-        (a name that is a point column is skipped: the column carries it)."""
+        (a name that is a point column is skipped: the column carries it). The engine quaternions come
+        along when both sides carry them (or this one is empty), so a kit merged from several entries
+        keeps its points' own rotation bits; otherwise the column is dropped, as `add` does."""
+        quats = self.quat
+        if len(other):
+            quats = None
+            if other.quat and (len(self) == 0 or self.quat):
+                quats = list(self.quat or []) + list(other.quat)
         for name, type_name in other.types.items():
             if name not in self.COLUMNS and name not in self.attrs:
                 self.declare(name, type_name)
@@ -98,6 +105,7 @@ class Points:
             kw = {c: getattr(other, c)[i] for c in self.DEFAULTS}
             kw.update({n: column[i] for n, column in other.attrs.items()})
             self.add(other.loc[i], **kw)
+        self.quat = quats
         return self
 
 

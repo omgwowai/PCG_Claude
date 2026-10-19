@@ -15,7 +15,8 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 
 # pypcg_v1_editor.py -- V1 checks with the editor's real booleans, on the runs V2 recorded (spec 3, V1).
 # Args: {"stage": n}                                   -> stage mode (below)
-#       {"assign": {"stage": n}}                       -> assign mode (Task 12)
+#       {"assign": {"stage": n}}                       -> assign mode (Task 12; + the oracle, Task 15)
+#       {"assign": {"stage": n, "step": "gen"}}        -> generate the assign oracle (Task 15)
 #       {"published": {"stage": n}}                    -> published mode (Task 11): the LIVE volume's
 #                                                         output against the stage's own parameters
 # The two are told apart by the presence of the "assign" key, whose value must be a DICT carrying
@@ -192,18 +193,30 @@ def _assign_target(fixtures):
             "from": "the fixed box (no recorded run)"}
 
 
-def assign_phase(n):
+def assign_phase(n, step=None):
     """`{"assign": {"stage": n}}`: rebuild every Assign_Assets call of stage `n` in Python from its OWN
     recorded settings, with one target point, and check the Python expansion's shape against the
     graph's own parameters.
 
     This runs WITHOUT the demo level's volumes: it reads the official graph's IR (the calls and their
     overrides), loads the real assets through `pypcg.ue.assets.load`, and expands the fixture target.
-    The equality with the primitive's output is what `pyg_probe_t12_*.py` established and what
-    task-12-report.md records; the first stage to port calls this phase and adds the primitive's own
-    output to the comparison through `pypcg.check`."""
+
+    The exact comparison with the primitive is two more calls (Task 15):
+      `{"assign": {"stage": n, "step": "gen"}}`  builds the ORACLE graph -- the official nodes upstream
+          of every Assign_Assets call, the call itself, and a tap on its input and its output -- puts it
+          on stage n's own volume (so the scene reads, the component seed and every node seed are the
+          official ones) and generates. Restore the volume with V2's `gen {variant: official}` or
+          `restore`.
+      `{"assign": {"stage": n}}` (after that generation) also reads both taps and runs
+          `pypcg.geo.assets.expand_items` on the tapped input with the call's own settings and the
+          primitive's own picks (the tapped output's last item names each target's kit), and compares
+          the result with the tapped output item for item: point counts, location, rotation
+          (quaternion), scale, `Asset`, bounds and seed, reporting how many are bit for bit equal and
+          the largest difference of each. `oracle` is absent when the volume does not hold the oracle."""
     from pypcg import extract, geo, stages
     from pypcg.ue import assets as uassets
+    if step == "gen":
+        return _assign_oracle_gen(n)
     graph = unreal.EditorAssetLibrary.load_asset(stages.official_path(n))
     if graph is None:
         return {"stage": n, "abort": "cannot load %s" % stages.official_path(n)}
@@ -226,11 +239,186 @@ def assign_phase(n):
     # clean `failures` list is therefore not a claim that those calls agree with the primitive.
     random_calls = [c["node"] for c in checked if c.get("random")]
     unhonoured = sorted({p for c in checked for p in (c.get("unhonoured") or [])})
-    return {"stage": n, "calls": len(calls), "runs": len(fixtures),
-            "target": {k: list(v) if isinstance(v, tuple) else v for k, v in _assign_target(fixtures).items()},
-            "expanded": checked, "random_calls": random_calls,
-            "random": bool(random_calls), "unhonoured_pins": unhonoured,
-            "failures": failures[:20]}
+    out = {"stage": n, "calls": len(calls), "runs": len(fixtures),
+           "target": {k: list(v) if isinstance(v, tuple) else v for k, v in _assign_target(fixtures).items()},
+           "expanded": checked, "random_calls": random_calls,
+           "random": bool(random_calls), "unhonoured_pins": unhonoured,
+           "failures": failures[:20]}
+    oracle = _assign_oracle_compare(n, calls, tabled)
+    if oracle is not None:
+        out["oracle"] = oracle
+        out["failures"] = (failures + oracle.get("failures", []))[:20]
+    return out
+
+
+ORACLE_GRAPH = "/Game/PyPCG/Probe/PCG_AssignOracle_s%02d"
+ORACLE_IN, ORACLE_OUT = "AssignIn_", "AssignOut_"
+
+
+def _upstream(nodes, name):
+    """Every node `name` depends on (its inputs, transitively), `name` included."""
+    by = {x["name"]: x for x in nodes}
+    seen, todo = set(), [name]
+    while todo:
+        k = todo.pop()
+        if k in seen or k not in by:
+            continue
+        seen.add(k)
+        for p in by[k].get("inputs", []):
+            todo += [e[0] for e in p["edges"]]
+    return seen
+
+
+def _io_node(name, seed, label):
+    pin = {"Label": label, "PinStatus": "Normal", "Tooltip": "", "Usage": "Normal",
+           "bAllowMultipleConnections": True, "bAllowMultipleData": True, "bInvisiblePin": False,
+           "AllowedTypes": {"CustomSubtype": -1,
+                            "Ids": [{"Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"}]}}
+    return {"name": name, "class": "PCGGraphInputOutputSettings", "title": "",
+            "settings": {"Seed": seed, "Pins": [pin], "bHasAddedDefaultPin": True}, "comment": "",
+            "bubble_visible": False, "bubble_pinned": False, "inputs": [], "pin_defaults": [],
+            "getter_param": "", "pos": None}
+
+
+def _tag_node(name):
+    return {"name": name, "class": "PCGAddTagSettings", "title": "", "settings": {"Seed": 0, "TagsToAdd": name},
+            "comment": "", "bubble_visible": False, "bubble_pinned": False, "inputs": [], "pin_defaults": [],
+            "getter_param": "", "pos": None}
+
+
+def _assign_oracle_gen(n):
+    """Build `/Game/PyPCG/Probe/PCG_AssignOracle_sNN` from the official IR snapshot and generate it on
+    stage n's own volume (one generation; read with `{"assign": {"stage": n}}` in a later call)."""
+    from pypcg import build as B, census, ir as _ir, stages
+    off = _ir.load(os.path.join(_REPO, "Tools", "pypcg", "official_ir", stages.name(n) + ".json"))
+    calls = [x for x in off["nodes"] if ASSIGN_SUBGRAPH in (x.get("subgraph") or "")]
+    if not calls:
+        return {"stage": n, "abort": "this stage calls no Assign_Assets"}
+    keep = set()
+    for c in calls:
+        keep |= _upstream(off["nodes"], c["name"])
+    keep.discard("DefaultInputNode")
+    by = {x["name"]: x for x in off["nodes"]}
+    nodes = [_io_node("DefaultInputNode", by["DefaultInputNode"]["settings"]["Seed"], "In")]
+    for name in sorted(keep):
+        x = json.loads(json.dumps(by[name]))
+        x["inputs"] = [{"label": p["label"], "edges": [e for e in p["edges"] if e[0] in keep]}
+                       for p in x.get("inputs", [])]
+        x["inputs"] = [p for p in x["inputs"] if p["edges"]]
+        x["pos"] = None
+        nodes.append(x)
+    taps = []
+    for c in calls:
+        src = next((p["edges"] for p in c["inputs"] if p["label"] == "PrimaryInput"), [])
+        tin, tout = _tag_node(ORACLE_IN + c["name"]), _tag_node(ORACLE_OUT + c["name"])
+        tin["inputs"] = [{"label": "In", "edges": [list(e) for e in src]}]
+        tout["inputs"] = [{"label": "In", "edges": [[c["name"], "Out"]]}]
+        nodes += [tin, tout]
+        taps += [tin["name"], tout["name"]]
+    out = _io_node("DefaultOutputNode", by["DefaultOutputNode"]["settings"]["Seed"], "Out")
+    out["inputs"] = [{"label": "Out", "edges": [[t, "Out"] for t in taps]}]
+    nodes.append(out)
+    ir = {"schema": off["schema"], "graph": stages.name(n) + "_AssignOracle", "graph_props": {},
+          "params": [p for p in off["params"]], "comment_boxes": [], "nodes": nodes, "sites": []}
+    path = ORACLE_GRAPH % n
+    diffs = B.build_slim(ir, path, save=True)
+    if diffs:
+        return {"stage": n, "abort": "oracle graph differs from its description", "diffs": [str(x) for x in diffs[:5]]}
+    pc = census.component(n)
+    state = json.load(open(os.path.join(_REPO, "Saved", "Reports", "v2", "_state.json"), encoding="utf-8")) \
+        if os.path.exists(os.path.join(_REPO, "Saved", "Reports", "v2", "_state.json")) else {}
+    pc.set_graph(unreal.EditorAssetLibrary.load_asset(path))
+    shipped = state.get(stages.name(n), {})
+    if shipped.get("overrides"):
+        census.apply_overrides(pc, shipped["overrides"])
+    if "seed" in shipped:
+        pc.set_editor_property("seed", int(shipped["seed"]))
+    pc.activate(True)
+    pc.generate_local(True)
+    return {"stage": n, "oracle": path, "nodes": len(nodes), "calls": [c["name"] for c in calls],
+            "seed": int(pc.get_editor_property("seed")), "next": "{\"assign\": {\"stage\": %d}} after the generation" % n}
+
+
+def _assign_oracle_compare(n, calls, tabled):
+    """The tapped primitive against `expand_items`, or None when the volume does not hold the oracle."""
+    from pypcg import census, geo
+    from pypcg.geo import assets as A
+    from pypcg.ue import convert
+    pc = census.component(n)
+    g = pc.get_graph()
+    if g is None or g.get_path_name().split(".")[0] != ORACLE_GRAPH % n:
+        return None
+    taps = {}
+    for td in pc.get_generated_graph_output().get_editor_property("tagged_data"):
+        tags = [str(t) for t in td.get_editor_property("tags")]
+        tap = next((t for t in tags if t.startswith(ORACLE_IN) or t.startswith(ORACLE_OUT)), None)
+        if tap is None:
+            continue
+        d = td.get_editor_property("data").get_editor_property("data")
+        if isinstance(d, unreal.PCGBasePointData):
+            taps.setdefault(tap, []).append(convert.points_of(d))
+    rows, failures = [], []
+    for call in calls:
+        ins, outs = taps.get(ORACLE_IN + call["node"], []), taps.get(ORACLE_OUT + call["node"], [])
+        if not ins or not outs:
+            failures.append("Assign_Assets %s: the oracle tapped %d input and %d output items"
+                            % (call["node"], len(ins), len(outs)))
+            continue
+        targets = geo.Points()
+        for t in ins:
+            targets.extend(t)
+        table = [tabled[p] for p in call["assets"]]
+        picked = outs[-1].attrs.get(A.ASSET_ATTR) or []
+        index = {p: i for i, p in enumerate(call["assets"])}
+        if len(picked) != len(targets) or any(p not in index for p in picked):
+            failures.append("Assign_Assets %s: the output's last item does not name a kit per target "
+                            "(%d targets, %d named)" % (call["node"], len(targets), len(picked)))
+            continue
+        ours = A.expand_items(targets, table, [index[p] for p in picked], dict(call["params"]))
+        row = {"node": call["node"], "targets": len(targets), "items": [len(x) for x in outs],
+               "python_items": [len(x) for x in ours]}
+        stats = {k: {"exact": 0, "max": 0.0} for k in ("loc", "quat", "scale", "bounds")}
+        same = {"Asset": 0, "seed": 0}
+        total = 0
+        if len(ours) == len(outs) and all(len(a) == len(b) for a, b in zip(ours, outs)):
+            for a, b in zip(ours, outs):
+                for i in range(len(b)):
+                    total += 1
+                    for k, x, y in (("loc", a.loc[i], b.loc[i]), ("scale", a.scale[i], b.scale[i]),
+                                    ("bounds", tuple(a.bounds_min[i]) + tuple(a.bounds_max[i]),
+                                     tuple(b.bounds_min[i]) + tuple(b.bounds_max[i]))):
+                        dv = max(abs(p - q) for p, q in zip(x, y))
+                        stats[k]["max"] = max(stats[k]["max"], dv)
+                        stats[k]["exact"] += tuple(x) == tuple(y)
+                    qa, qb = a.quat[i], b.quat[i]
+                    dq = min(max(abs(p - q) for p, q in zip(qa, qb)), max(abs(p + q) for p, q in zip(qa, qb)))
+                    stats["quat"]["max"] = max(stats["quat"]["max"], dq)
+                    stats["quat"]["exact"] += tuple(qa) == tuple(qb)
+                    same["Asset"] += a.attrs[A.ASSET_ATTR][i] == b.attrs[A.ASSET_ATTR][i]
+                    same["seed"] += int(a.seed[i]) == int(b.seed[i])
+            row.update(points=total, fields=stats, equal=same)
+            for k in ("Asset", "seed"):
+                if same[k] != total:
+                    failures.append("Assign_Assets %s: %s differs on %d of %d points"
+                                    % (call["node"], k, total - same[k], total))
+            for k, tol in (("loc", ORACLE_LOC_TOL_CM), ("quat", ORACLE_QUAT_TOL), ("scale", 0.0), ("bounds", 0.0)):
+                if stats[k]["max"] > tol:
+                    failures.append("Assign_Assets %s: %s off by up to %.3g (bound %.3g)"
+                                    % (call["node"], k, stats[k]["max"], tol))
+        else:
+            failures.append("Assign_Assets %s: item sizes %s, Python %s"
+                            % (call["node"], row["items"], row["python_items"]))
+        rows.append(row)
+    return {"graph": ORACLE_GRAPH % n, "calls": rows, "failures": failures}
+
+
+# What `_assign_oracle_compare` calls agreement. The counts, `Asset`, seed, scale and bounds must be
+# exact; location and rotation carry the FTransform multiply's vectorised arithmetic, which Python's
+# scalar order does not reproduce in the last bits. Measured 2026-10-19 on stage 17's one call (9 873
+# points: 9 843 copies + 30 docks): location bit for bit on 9 864, the rest within 7.3e-12 cm; the
+# quaternion bit for bit on 9 809, the rest within 4.4e-16; Asset, seed, scale and bounds all exact.
+ORACLE_LOC_TOL_CM = 1e-9
+ORACLE_QUAT_TOL = 1e-12
 
 
 def _official_outputs(n):
@@ -398,9 +586,10 @@ try:
         mcp_result = json.loads(json.dumps(published_phase(int(_pub["stage"]), _pub.get("as", "Highway_Width"),
                                                            _pub.get("width", "Highway_Width")), default=str))
     elif "assign" in _args:
-        mcp_result = json.loads(json.dumps(assign_phase(int(_args["assign"]["stage"]
-                                                         if isinstance(_args["assign"], dict)
-                                                         else _args["stage"])), default=str))
+        _asg = _args["assign"]
+        mcp_result = json.loads(json.dumps(assign_phase(int(_asg["stage"] if isinstance(_asg, dict) else _args["stage"]),
+                                                        _asg.get("step") if isinstance(_asg, dict) else None),
+                                           default=str))
     else:
         mcp_result = json.loads(json.dumps(run_stage(_args), default=str))
 except Exception as _exc:

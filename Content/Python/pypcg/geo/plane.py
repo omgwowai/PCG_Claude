@@ -276,6 +276,43 @@ def extract_segments(ring, angle_deg):
     return out
 
 
+# ---- ConvexHull2D: Andrew's monotone chain, as the engine runs it ---------------------------
+def convex_hull(points):
+    """Indices of the 2D convex hull of `points` (each `(x, y, ...)`), in the order
+    `PCGConvexHull2D` outputs them.
+
+    This is `ConvexHull2D::ComputeConvexHull` (Engine/Source/Runtime/Core/Public/Math/ConvexHull2d.h),
+    which `FPCGConvexHull2DElement` calls on the points' locations (Z ignored):
+      - three points or fewer come back as they are, in input order;
+      - otherwise the indices are sorted by X, then Y (`Algo::Sort` is not stable, so the engine's
+        order between EXACT duplicates is unspecified; Python's sort keeps input order); the lower hull is built left to right and the upper hull right to left, popping
+        while the turn is clockwise OR COLLINEAR (`<= 0`), so collinear points are dropped and the
+        result runs counter-clockwise from the lowest-X (then lowest-Y) point; the last index (the
+        start again) is cut off.
+    Measured 2026-10-19 on stage 17's 100 666 above-sea terrain points: the same 57 indices in the same
+    order as the official node."""
+    n = len(points)
+    if n <= 3:
+        return list(range(n))
+    order = sorted(range(n), key=lambda i: (points[i][0], points[i][1]))
+
+    def clockwise(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]) <= 0
+
+    out = []
+    for i in order:
+        while len(out) >= 2 and clockwise(points[out[-2]], points[out[-1]], points[i]):
+            out.pop()
+        out.append(i)
+    start = len(out) + 1
+    for k in range(n - 1, 0, -1):
+        i = order[k - 1]
+        while len(out) >= start and clockwise(points[out[-2]], points[out[-1]], points[i]):
+            out.pop()
+        out.append(i)
+    return out[:-1]
+
+
 # ---- the longest-edge frame + CombinePoints bounds ----------------------------------------
 def longest(ring):
     n = len(ring)

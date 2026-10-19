@@ -35,6 +35,12 @@ def _v2(p):
 
 
 class Ops:
+    def assets(self, paths):
+        """The loaded kits `Assign_Assets` assigns (`pypcg.ue.assets.load`): a stage reaches the asset
+        registry only through here, so its module stays pure (ruling N2). Stage 17 is the first user."""
+        from pypcg.ue import assets as _assets
+        return _assets.load(paths)
+
     def intersection(self, rings_a, rings_b):
         return _polygons(PL.polygons_intersection(_list(rings_a), _list(rings_b)))
 

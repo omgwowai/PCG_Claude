@@ -6,9 +6,9 @@ must never share a name. Call it as `geo.assets.choose`."""
 from . import assets  # noqa: F401
 from . import roads  # noqa: F401
 from . import sections  # noqa: F401
-from .plane import (at, bbox, ccw, clean_points, clip_path, drop_closing, enclosing_polygon,  # noqa: F401
-                    extract_segments, frame_box, inside, longest, ngon, path_length, place, quat_from_yaw,
-                    quat_rotate, rect, rotate, signed_area, split_frame, unit, xy)
+from .plane import (at, bbox, ccw, clean_points, clip_path, convex_hull, drop_closing,  # noqa: F401
+                    enclosing_polygon, extract_segments, frame_box, inside, longest, ngon, path_length, place,
+                    quat_from_yaw, quat_rotate, rect, rotate, signed_area, split_frame, unit, xy)
 from .sample import area_m2, choose, contains, scatter  # noqa: F401
 from .subdivide import SLIVER_CM2, auto_split, grid_lines, recursive_split  # noqa: F401
 from .types import (MAX_RECORDED_POINTS, ParamSet, Points, Polygon, Spline, from_json, to_json,  # noqa: F401

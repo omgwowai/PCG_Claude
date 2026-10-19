@@ -19,25 +19,48 @@ What the primitive does, node by node (all inside `Assign_Assets_CoreProcess`):
                               data item, N point sets out. Every output point is in WORLD space:
                               see `_compose` for the rule (measured, not guessed)
   TransformPoints_1           add `PositionOffset` / `RotationOffset` / `ScaleOffset` -- on the
-                              ASSEMBLY's points, before the copy, so the offsets move the assembly
-                              inside its own frame
-  TransformPoints_2           add `RandomPositionRange` / `RandomRotationRange` / `RandomScaleRange`
+                              TARGET points, before the partition and the copy, in each target's own
+                              frame (corrected 2026-10-19, see below)
+  TransformPoints_2           add `RandomPositionRange` / `RandomRotationRange` / `RandomScaleRange`,
+                              also on the targets
   BoundsFromMesh_0/1          the asset's and the input point's bounds, from the `Asset` attribute
   AttributeMathsOp_6/7        `MeshSize` / `Size` = bounds max - bounds min
   AttributeMathsOp_4/16       `Scale` = the input's `Size` over the asset's = the fit ratio, which
                               `MatchScaleToInputBounds` swaps in for `$Scale`
-  AttributeMathsOp_14         `$Extents` = the asset's bounds size x `ExtentsScale`
+  AttributeMathsOp_14         `$Extents` (the point property, half the box) x `ExtentsScale`, on every
+                              output point -- the box is rewritten as centre +- extents
   Branch_0 / Branch_2         `UseMeshBounds` / `UniformScale` decide whether the asset's bounds and
-                              the ratio are applied
+                              the ratio are applied; `Branch_0`'s input is the copies AND `Reroute_0`
+                              (the moved targets), so the targets are part of the output
   AttributeRename_0           the node's `Assets` pin becomes the attribute `Asset`
   Select_1                    `UseMeshAttribute` picks the point's own mesh attribute over the pick
   Branch_1_Index              `UseIndexattribute` picks `IndexAttribute` over the random pick
   AttributeMathsOp_13         `$Seed` += `dataIndex`, on the SOURCE point before the copy
 
-`choose` covers the random pick (`MatchAndSetAttributes_0`); `expand` covers the copy, the offsets,
-the ratio, the bounds and the seed bump.
+`choose` covers the random pick (`MatchAndSetAttributes_0`); `expand_items` covers everything after
+it and returns the primitive's output item for item; `expand` is the copies merged into one point set
+plus four report attributes, the form Task 12 shipped.
+
+**Corrected 2026-10-19 (Task 15, stage 17).** The Task 12 helper put the offsets on the ASSEMBLY's
+points and wrote the copies target by target. The stage 17 tap of the official primitive
+(`pyg_probe_t15_tap.py`: 30 rotated targets, five kits, 9 843 copies; the comparison script is
+`Saved/t15_scratch/assign_study.py`) shows otherwise, and the CoreProcess dump agrees
+(`FilterDataByType_4 -> TransformPoints_1 -> TransformPoints_2 -> Reroute_0 -> AttributePartition_1 ->
+CopyPoints_0.Target`):
+  - `PositionOffset` moves each TARGET along its own rotation (`TransformPoints`, non-absolute:
+    `RotateVector(offset)`, no scale), and the offset is a float (`FRandRange` returns float): the
+    targets come out of the primitive 492.541260 cm from the hull vertex, to 2e-13 cm;
+  - the output is one point set per asset, in the order each asset is FIRST PICKED, then the moved
+    targets themselves (carrying `Asset` = the assigned path);
+  - inside one asset's set the order is SOURCE-major: assembly point 0 on every target of that asset,
+    then point 1, ... (target-major is 2.9 km off on the same data, source-major 7e-12 cm);
+  - an assembly point whose `Mesh` is the null path keeps it (`"None"`): it is NOT replaced by the
+    assigned kit path, or the spawner would spawn the kit a second time from that point;
+  - every output box is rewritten as centre +- half-size x `ExtentsScale` (exactly, all 9 843).
+Single-target, zero-offset calls -- what Task 12 measured -- come out the same under either reading.
 """
 import math
+import struct
 
 DEFAULT_POSITION_RANGE = (0.0, 0.0, 0.0)
 DEFAULT_ROTATION_RANGE = (0.0, 0.0, 0.0)
@@ -171,22 +194,6 @@ def _qmul(a, b):
             aw * bw - ax * bx - ay * by - az * bz)
 
 
-def _qrot(q, v):
-    """`QuatRotateVector`: the rotation of `v` by `q`. Verified against the editor's own output on
-    2026-10-16: an input point with yaw 90 carries the mesh point (-500, -400, -303.79) to the delta
-    (+400, -500, -303.79) -- i.e. to (-source.y, +source.x, source.z). (The (+400, -1000) delta in
-    `test_expand_rotates_and_scales_the_position_together` is a different case: the same yaw with an
-    input scale of (2, 1, 1), which stretches the source x before the rotation.)"""
-    x, y, z, w = q
-    vx, vy, vz = v
-    tx = 2.0 * (y * vz - z * vy)
-    ty = 2.0 * (z * vx - x * vz)
-    tz = 2.0 * (x * vy - y * vx)
-    return (vx + w * tx + (y * tz - z * ty),
-            vy + w * ty + (z * tx - x * tz),
-            vz + w * tz + (x * ty - y * tx))
-
-
 # ---- the geometry ------------------------------------------------------------------------------
 def bounds_of(points):
     """`([min], [max])` of a point set: the union of its own bounds columns, or None when it is empty.
@@ -222,9 +229,14 @@ def fit_ratio(input_bounds, mesh_size, uniform):
     return out
 
 
+REPORT_ATTRS = (("$BoundsMin", "Vector"), ("$BoundsMax", "Vector"), (EXTENTS_ATTR, "Vector"), ("$Scale", "Vector"))
+
+
 def expand(targets, table, indices, params):
-    """The target points carrying `Asset` (a mesh path) and the asset's `$Bounds`/`$Extents`, with the
-    asset's own points copied onto them in world space. Returns a fresh `pypcg.geo.Points`.
+    """The asset's own points copied onto the target points in world space, every copy carrying `Asset`
+    (its own mesh path) and the four report attributes `$BoundsMin`/`$BoundsMax`/`$Extents`/`$Scale`.
+    Returns a fresh `pypcg.geo.Points`: the copies of `expand_items` merged in their output order,
+    WITHOUT the moved targets (the primitive's last output item).
 
     `targets`  the input point set (`Points`); `table` the loaded assets from `pypcg.ue.assets.load`;
     `indices`  one asset index per target point (-1 = none, the point is dropped), or None when
@@ -234,103 +246,187 @@ def expand(targets, table, indices, params):
       mesh_attribute      that attribute's name, default `Mesh`
       uniform_scale       `UniformScale`: the ratio's X also scales Y and Z, and a random scale range
                           draws one number for all three axes
-      use_mesh_bounds     `UseMeshBounds`: replace the asset's own bounds with the input point's
-      extents_scale       `ExtentsScale`, a per-axis multiplier on the asset's `$Extents`
-      position_offset / rotation_offset / scale_offset   `TransformPoints_1`, applied to the
-                          ASSEMBLY's points in its own frame
-      random_position_range / random_rotation_range / random_scale_range   `TransformPoints_2`
+      use_mesh_bounds     `UseMeshBounds`: replace the asset point's own bounds with the asset's whole box
+      extents_scale       `ExtentsScale`, a per-axis multiplier on every output point's half-size
+      position_offset / rotation_offset / scale_offset   `TransformPoints_1`, applied to each TARGET
+                          in its own frame before the copy
+      random_position_range / random_rotation_range / random_scale_range   `TransformPoints_2`, on the
+                          targets too (one draw per target)
       rng                 the `random.Random` those three draw from; a stage passes `ctx.rng` (the
                           primitive seeds `TransformPoints_2` with its own `Seed` parameter)
 
-    Point order is the primitive's: for each input point, its asset's points in table order, so input
-    point i's points are contiguous (`CopyPoints` copies one partition per input data item)."""
+    The four `$` attributes are this helper's report, NOT the primitive's output (it writes none of
+    them, measured 2026-10-16); `expand_items` is the primitive's output as it is."""
     from .types import Points as _Points
 
-    params = params or {}
+    items = _expand(targets, table, indices, params or {}, report=True)
+    out = _Points()
+    for name, tname in targets.types.items():
+        out.declare(name, tname)
+    for name, tname in ((ASSET_ATTR, "SoftObjectPath"),) + REPORT_ATTRS:
+        if name not in out.attrs:
+            out.declare(name, tname)
+    quats = []
+    for part in items[:-1]:
+        out.extend(part)
+        quats += list(part.quat or [])
+    out.quat = quats or None
+    return out
+
+
+def expand_items(targets, table, indices, params):
+    """The `Assign_Assets` primitive's output, item for item (measured 2026-10-19 on stage 17, see the
+    module docstring): one `Points` per assigned asset, in the order each asset is first picked, with
+    that asset's points copied onto each of its targets source-major; then the moved targets
+    themselves, carrying `Asset` = the assigned path. Arguments as `expand`. An empty list when
+    nothing was assigned.
+
+    Every point carries the engine quaternion in `Points.quat` (the composed `Target * Source`), so a
+    comparison with the primitive can be made on the rotation itself rather than on a rotator."""
+    return _expand(targets, table, indices, params or {}, report=False)
+
+
+def _f32(v):
+    """A double rounded through a C++ float, as `FPCGTransformPointsElement` holds its offsets
+    (`const float OffsetX = RandomSource.FRandRange(...)`)."""
+    return struct.unpack("f", struct.pack("f", float(v)))[0]
+
+
+def _box(lo, hi, scale):
+    """`AttributeMathsOp_14`: `$Extents *= ExtentsScale`, which rewrites the box as centre +- half-size
+    (measured exact on all 9 843 stage 17 copies at a scale of 1)."""
+    c = [(lo[a] + hi[a]) / 2.0 for a in range(3)]
+    e = [(hi[a] - lo[a]) / 2.0 * scale[a] for a in range(3)]
+    return tuple(c[a] - e[a] for a in range(3)), tuple(c[a] + e[a] for a in range(3))
+
+
+def _moved(targets, i, pos_off, rot_q, scale_off, rng, params, uniform):
+    """`TransformPoints_1` (the fixed offsets) then `TransformPoints_2` (the random ranges) on target i:
+    non-absolute offset `loc + RotateVector(q, offset)`, rotation `q * offset_q`, scale `s * offset`."""
+    from .plane import quat_rotate
+    loc = tuple(float(x) for x in targets.loc[i])
+    q = tuple(targets.quat[i]) if targets.quat else quat_of(*targets.rot[i])
+    s = tuple(float(x) for x in targets.scale[i])
+    d = quat_rotate(q, pos_off)
+    loc = (loc[0] + d[0], loc[1] + d[1], loc[2] + d[2])
+    if rot_q is not None:
+        q = _qmul(q, rot_q)
+    s = tuple(s[a] * scale_off[a] for a in range(3))
+    if rng is not None:
+        rp = tuple(_f32(x) for x in _range_draw(params, "random_position_range", rng))
+        rr = tuple(_f32(x) for x in _range_draw(params, "random_rotation_range", rng, rotator=True))
+        rs = tuple(_f32(x) for x in _range_draw(params, "random_scale_range", rng,
+                                                dlo=DEFAULT_SCALE_RANGE, uniform=uniform))
+        d = quat_rotate(q, rp)
+        loc = (loc[0] + d[0], loc[1] + d[1], loc[2] + d[2])
+        if any(rr):
+            q = _qmul(q, quat_of(*rr))
+        s = tuple(s[a] * rs[a] for a in range(3))
+    return loc, q, s
+
+
+def _expand(targets, table, indices, params, report):
+    from .types import Points as _Points
+
     n = len(targets)
     if n <= 0 or not table:
-        return _Points()
+        return []
 
     use_attr = bool(params.get("use_mesh_attribute", False))
     mesh_attr = params.get("mesh_attribute") or MESH_ATTR
     uniform = bool(params.get("uniform_scale", False))
     mesh_bounds = bool(params.get("use_mesh_bounds", False))
     extents_scale = _vector(params.get("extents_scale"), (1.0, 1.0, 1.0))
-    pos_off = _vector(params.get("position_offset"), DEFAULT_POSITION_RANGE)
-    rot_off = _rotator(params.get("rotation_offset"))
-    scale_off = _vector(params.get("scale_offset"), DEFAULT_SCALE_RANGE)
+    pos_off = tuple(_f32(x) for x in _vector(params.get("position_offset"), DEFAULT_POSITION_RANGE))
+    rot_off = tuple(_f32(x) for x in _rotator(params.get("rotation_offset")))
+    scale_off = tuple(_f32(x) for x in _vector(params.get("scale_offset"), DEFAULT_SCALE_RANGE))
+    rot_q = quat_of(*rot_off) if any(rot_off) else None
     rng = params.get("rng")
 
     picked = _picked(targets, table, indices, use_attr, mesh_attr)
+    valid = [i for i in range(n) if _entry(table, picked[i]) is not None]
+    moved = {i: _moved(targets, i, pos_off, rot_q, scale_off, rng, params, uniform) for i in valid}
 
-    out = _Points()
-    for name, tname in targets.types.items():
-        out.declare(name, tname)
-    for name, tname in ((ASSET_ATTR, "SoftObjectPath"), ("$BoundsMin", "Vector"),
-                        ("$BoundsMax", "Vector"), (EXTENTS_ATTR, "Vector"), ("$Scale", "Vector")):
-        if name not in out.attrs:
-            out.declare(name, tname)
+    # AttributePartition_1: one partition per asset, in the order the asset is first picked.
+    order = []
+    for i in valid:
+        if picked[i] not in order:
+            order.append(picked[i])
 
-    for i in range(n):
-        entry = _entry(table, picked[i])
-        if entry is None:
-            continue
+    items = []
+    for a in order:
+        entry = table[a]
         assembly = entry.get("points")
         if assembly is None or len(assembly) == 0:
             continue
         bounds = bounds_of(assembly) or entry.get("bounds")
         if bounds is None:
             continue
+        members = [i for i in valid if picked[i] == a]
         mesh_size = size_of(bounds)
-        ratio = fit_ratio((targets.bounds_min[i], targets.bounds_max[i]), mesh_size, uniform)
-        tloc, trot, tscale = targets.loc[i], targets.rot[i], targets.scale[i]
-        tq = _quat_of_rot(trot)
+        part = _Points()
+        for name, tname in targets.types.items():
+            part.declare(name, tname)
+        for name, tname in assembly.types.items():
+            name = ASSET_ATTR if name == MESH_ATTR else name
+            if name not in part.attrs and name not in _Points.COLUMNS:
+                part.declare(name, tname)
+        if ASSET_ATTR not in part.attrs:
+            part.declare(ASSET_ATTR, "SoftObjectPath")
+        if report:
+            for name, tname in REPORT_ATTRS:
+                if name not in part.attrs:
+                    part.declare(name, tname)
+        quats = []
         for j in range(len(assembly)):
-            loc, rot, scale = assembly.loc[j], assembly.rot[j], assembly.scale[j]
-            if rng is not None:
-                rp = _range_draw(params, "random_position_range", rng)
-                rr = _range_draw(params, "random_rotation_range", rng, rotator=True)
-                rs = _range_draw(params, "random_scale_range", rng,
-                                 dlo=DEFAULT_SCALE_RANGE, uniform=uniform)
-            else:
-                rp = rr = (0.0, 0.0, 0.0)
-                rs = (1.0, 1.0, 1.0)
-            # TransformPoints_1 then TransformPoints_2, both on the assembly in its own frame: the
-            # offset is rotated by the assembly's own rotation (`bAbsoluteOffset` is off).
-            src_loc = tuple(loc[a] + _rotate_offset(rot, tuple(pos_off[a] + rp[a] for a in range(3)))[a]
-                            for a in range(3))
-            src_rot = tuple(rot[a] + rot_off[a] + rr[a] for a in range(3))
-            src_scale = tuple(scale[a] * scale_off[a] * rs[a] for a in range(3))
-            wloc, wrot, wscale = _compose(tloc, tq, tscale, src_loc, src_rot, src_scale)
-            kw = {}
-            for name in targets.types:
-                kw[name] = targets.attrs[name][i]
-            # Measured 2026-10-16 (pyg_probe_t12_case.py): with UseMeshBounds OFF the copied point keeps
-            # the ASSET's own bounds (the lane mesh's 200x200x20 and the plaza's first point both came
-            # through unchanged against an input box of -500..500 x -500..500 x 0..100), which is what
-            # `CopyPoints` does -- it copies the source point and only overwrites what `BoundsFromMesh`
-            # was asked to overwrite. With it ON the box is the asset's whole bounds.
-            kw["bounds_min"] = bounds[0] if mesh_bounds else assembly.bounds_min[j]
-            kw["bounds_max"] = bounds[1] if mesh_bounds else assembly.bounds_max[j]
-            kw["density"] = assembly.density[j]
-            kw["color"] = assembly.color[j]
-            kw["steepness"] = assembly.steepness[j]
-            # `CopyPoints`' Relative seed inheritance is `ComputeSeed(source, target)`
-            # (PCGHelpers.cpp:40-43). Measured 2026-10-16: an assembly point seeded -2111086339 with an
-            # input point seeded 42 gave -455695611, and the same assembly with 7 gave 258744612 --
-            # both equal `ComputeSeed(assembly, input)`.
-            kw["seed"] = compute_seed(int(assembly.seed[j]), int(targets.seed[i]))
-            # `AttributeRename_1` turns the loaded data's `Mesh` into `Asset` BEFORE the copy, so the
-            # output's `Asset` is the ASSEMBLY POINT's own mesh (measured: a kit assigned as one asset
-            # gave SM_Plane_NN_A on point 0 and SM_Cone_C_A on point 2), and only falls back to the
-            # assigned path when the point carries no mesh.
-            kw[ASSET_ATTR] = _point_mesh(assembly, j, entry)
-            kw["$BoundsMin"] = tuple(bounds[0])
-            kw["$BoundsMax"] = tuple(bounds[1])
-            kw[EXTENTS_ATTR] = tuple(mesh_size[a] * extents_scale[a] for a in range(3))
-            kw["$Scale"] = tuple(ratio)
-            out.add(wloc, rot=wrot, scale=wscale, **kw)
-    return out
+            sq = tuple(assembly.quat[j]) if assembly.quat else quat_of(*assembly.rot[j])
+            sloc, sscale = assembly.loc[j], assembly.scale[j]
+            base = (bounds[0], bounds[1]) if mesh_bounds else (assembly.bounds_min[j], assembly.bounds_max[j])
+            bmin, bmax = _box(base[0], base[1], extents_scale)
+            for i in members:
+                tloc, tq, ts = moved[i]
+                # `CopyPoints`: Out = Source * Target, i.e. T + RotateVector(qT, sT * S); qT * qS; sS * sT.
+                wloc, q, wscale = _compose(tloc, tq, ts, sloc, sq, sscale)
+                quats.append(q)
+                kw = {name: targets.attrs[name][i] for name in targets.types}
+                for name in assembly.types:
+                    kw[ASSET_ATTR if name == MESH_ATTR else name] = assembly.attrs[name][j]
+                kw[ASSET_ATTR] = _point_mesh(assembly, j, entry)
+                if report:
+                    ratio = fit_ratio((targets.bounds_min[i], targets.bounds_max[i]), mesh_size, uniform)
+                    kw["$BoundsMin"] = tuple(bounds[0])
+                    kw["$BoundsMax"] = tuple(bounds[1])
+                    kw[EXTENTS_ATTR] = tuple(mesh_size[k] * extents_scale[k] for k in range(3))
+                    kw["$Scale"] = tuple(ratio)
+                # `CopyPoints`' Relative seed inheritance is `ComputeSeed(source, target)`
+                # (PCGHelpers.cpp:40-43), measured 2026-10-16 and again on all 9 843 stage 17 copies.
+                part.add(wloc, rot=rotator_of(q), scale=wscale, bounds_min=bmin, bounds_max=bmax,
+                         density=assembly.density[j], color=assembly.color[j],
+                         steepness=assembly.steepness[j],
+                         seed=compute_seed(int(assembly.seed[j]), int(targets.seed[i])), **kw)
+        part.quat = quats
+        items.append(part)
+
+    # `Branch_0` takes `Reroute_0` too: the moved targets, each carrying the assigned path as `Asset`.
+    tail = _Points()
+    for name, tname in targets.types.items():
+        tail.declare(name, tname)
+    if ASSET_ATTR not in tail.attrs:
+        tail.declare(ASSET_ATTR, "SoftObjectPath")
+    quats = []
+    for i in valid:
+        tloc, tq, ts = moved[i]
+        bmin, bmax = _box(targets.bounds_min[i], targets.bounds_max[i], extents_scale)
+        kw = {name: targets.attrs[name][i] for name in targets.types}
+        kw[ASSET_ATTR] = table[picked[i]]["path"]
+        tail.add(tloc, rot=rotator_of(tq), scale=ts, bounds_min=bmin, bounds_max=bmax,
+                 density=targets.density[i], color=targets.color[i], steepness=targets.steepness[i],
+                 seed=int(targets.seed[i]), **kw)
+        quats.append(tq)
+    tail.quat = quats or None
+    if len(tail):
+        items.append(tail)
+    return items
 
 
 _U32 = 0xFFFFFFFF
@@ -352,8 +448,9 @@ def compute_seed(a, b=None, c=None):
     return _i32(out)
 
 
-def _compose(tloc, tq, tscale, src_loc, src_rot, src_scale):
-    """`CopyPoints`' transform rule: the output transform is `Target * Source`.
+def _compose(tloc, tq, tscale, src_loc, src_q, src_scale):
+    """`CopyPoints`' transform rule: the output transform is `Target * Source`, returned as
+    `(location, quaternion, scale)`.
 
     The node's CPU path builds `OutPoint.Transform = SourceTransform * TargetTransform`
     (`PCGCopyPoints.cpp:369`) and the GPU path adds the rotated, scaled source offset to the target
@@ -364,7 +461,8 @@ def _compose(tloc, tq, tscale, src_loc, src_rot, src_scale):
         OutRotation = TargetRotation * SourceRotation
         OutScale    = SourceScale * TargetScale
 
-    Confirmed against the editor's own output on 2026-10-16 (pyg_probe_t12_one.py /
+    The rotation of the position is `geo.quat_rotate`, `FQuat::RotateVector` in the engine's own
+    operation order. Confirmed against the editor's own output on 2026-10-16 (pyg_probe_t12_one.py /
     pyg_probe_t12_case.py, the pairs recorded in task-12-report.md):
       - the mesh point (-500, -400, -303.79) with an input at (10000, 20000, 0), yaw 90 and scale 1
         landed at (10400, 19500, -303.79), a delta of (+400, -500, -303.79);
@@ -372,29 +470,13 @@ def _compose(tloc, tq, tscale, src_loc, src_rot, src_scale):
         point plus the input's translation;
       - the same mesh point with an input scale of (2, 1, 1) and yaw 90 landed at (400, -1000,
         -303.79): the input's scale stretches x (to -1000) before the rotation swaps the axes.
-    Every copied point is therefore in world space, measured in the input point's frame; the asset is
-    never scaled by the fit ratio or by the fixed `ScaleOffset` beyond what `src_scale` already
-    carries."""
-    mq = quat_of(*src_rot)
-    loc = _qrot(tq, tuple(src_loc[a] * tscale[a] for a in range(3)))
-    return (tuple(tloc[a] + loc[a] for a in range(3)),
-            rotator_of(_qmul(tq, mq)),
+    and on 2026-10-19 on all 9 843 copies of stage 17's official call, to 7e-12 cm. Every copied point
+    is therefore in world space, measured in the input point's frame; the asset is never scaled by the
+    fit ratio."""
+    from .plane import quat_rotate
+    d = quat_rotate(tq, (src_loc[0] * tscale[0], src_loc[1] * tscale[1], src_loc[2] * tscale[2]))
+    return ((tloc[0] + d[0], tloc[1] + d[1], tloc[2] + d[2]), _qmul(tq, src_q),
             tuple(src_scale[a] * tscale[a] for a in range(3)))
-
-
-_QUAT_CACHE = {}
-
-
-def _quat_of_rot(rot):
-    key = (round(rot[0], 6), round(rot[1], 6), round(rot[2], 6))
-    if key not in _QUAT_CACHE:
-        _QUAT_CACHE[key] = quat_of(*rot)
-    return _QUAT_CACHE[key]
-
-
-def _rotate_offset(rot, offset):
-    """`TransformPoints`' non-absolute offset: the assembly's own rotation carries the offset."""
-    return _qrot(quat_of(*rot), offset)
 
 
 def _picked(targets, table, indices, use_attr, mesh_attr):
@@ -415,12 +497,15 @@ def _picked(targets, table, indices, use_attr, mesh_attr):
 
 
 def _point_mesh(assembly, j, entry):
-    """The mesh path of one assembly point: its own `Mesh` attribute, else the assigned asset path."""
+    """The `Asset` of one copied point: the assembly point's own `Mesh` (renamed by `AttributeRename_1`)
+    when the assembly carries a `Mesh` attribute AT ALL -- the null path `"None"` included, which the
+    primitive keeps (measured 2026-10-19: 30 of stage 17's 9 843 copies are `"None"`, and the spawner
+    skips them; replacing them with the kit path would spawn the kit again from each). Only an assembly
+    with no mesh attribute (a single `StaticMesh` entry) stands in the assigned path."""
     mesh_attr = MESH_ATTR if MESH_ATTR in assembly.attrs else ASSET_ATTR
     if mesh_attr in assembly.attrs:
         value = assembly.attrs[mesh_attr][j]
-        if value not in (None, "", "None"):
-            return str(value)
+        return "None" if value in (None, "") else str(value)
     return entry["path"]
 
 
