@@ -10,6 +10,7 @@ import math
 import unreal
 
 from pypcg.geo import ParamSet, Points, Polygon, Spline, drop_closing
+from pypcg import stage_api
 from pypcg.ue.terrain import Terrain
 
 L = unreal.PyPCGToolsLibrary
@@ -143,24 +144,18 @@ def read_pin(data_in, pin, registry=None):
         v = from_pcg(d)
         if registry is not None and isinstance(v, Polygon):
             v.source = len(registry)
-            registry[v.source] = (d, _snapshot(v))
+            registry[v.source] = (d, stage_api.snapshot(v))
         out.append((v, frozenset(str(t) for t in td.get_editor_property("tags"))))
     return out
 
 
-def _snapshot(p):
-    return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z)
-
-
 def passed_through(v, registry):
     """The input data object a polygon came from, when the stage handed it back with its geometry
-    unchanged; else None. Forwarding the engine's own object keeps the polygon's frame and stored local
-    coordinates, which a rewrite through `MakePolygon2DData` cannot (it frames each polygon on its own
-    centroid; the official lots carry the City's shared frame -- measured 2026-10-19, s13.md 4.6)."""
-    if registry is None or not isinstance(v, Polygon) or v.source not in registry:
-        return None
-    d, snap = registry[v.source]
-    return d if _snapshot(v) == snap else None
+    unchanged; else None (`pypcg.stage_api.unchanged`, the pure decision, tested offline). Forwarding the
+    engine's own object keeps the polygon's frame and stored local coordinates, which a rewrite through
+    `MakePolygon2DData` cannot (it frames each polygon on its own centroid; the official lots carry the
+    City's shared frame -- measured 2026-10-19, s13.md 4.6)."""
+    return stage_api.unchanged(v, registry)
 
 
 def from_pcg(d):

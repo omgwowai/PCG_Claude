@@ -625,6 +625,8 @@ def test_index_picks_truncate_the_value_and_send_the_unmatched_to_entry_0():
     assert A.index_picks(t, "Index", 8) == [0, 1, 7, 0, 0, 0]       # FName lookup ignores case
     assert A.index_picks(t, "Missing", 8) == [0] * 6
     assert A.index_picks(t, "Index", 0) == [-1] * 6
+    t.attrs["index"] = [float("nan"), float("inf"), -float("inf"), 2.5, None, 3.0]
+    assert A.index_picks(t, "Index", 8) == [0, 0, 0, 2, 0, 3]          # non-finite: unmatched, entry 0
 
 
 def test_expand_use_index_attribute_assigns_by_entry_and_ignores_the_draw():

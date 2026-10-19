@@ -10,8 +10,8 @@ node does what follows them, as officially:
   Branch_4                 `UseMegaplantsTrees` false -> `Subgraph_26` (Black Alder field trees),
                            true -> `Subgraph_14` (Megaplants)
   Subgraph_26 / 14         `Assign_Assets` with `UseIndexattribute` on `Index`: each point takes the entry
-                           its texture index names (`geo.assets.index_picks`; truncated, an index past the
-                           last entry drops the point), plus the call's random rotation (+-2, +-2, +-180)
+                           its texture index names (`geo.assets.index_picks`; truncated; an index that
+                           names no entry keeps the point with entry 0, as measured), plus the call's random rotation (+-2, +-2, +-180)
                            and scale (1 +- 0.2, uniform) drawn from `ctx.rng` (spec E2)
   Branch_2                 `Partitioned` false: everything to the kept `Subgraph_76 Spawn Outer Forest Trees`
 

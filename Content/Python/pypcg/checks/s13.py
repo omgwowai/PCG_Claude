@@ -18,7 +18,8 @@ The stage reads the final mesh terrain, so its run record cannot be replayed who
   - the skirt areas are the stage-9 `LargeBuildingSkirt` items lifted 30 cm -- the node TITLED "Only
     unbuildable lots" (`Subgraph_36`) filters `LargeBuildingSkirt` -- and none is an unbuildable lot;
   - the plaza / tree split is on items: on 20 lots or more the plaza share is within 0.10 of
-    `Ratio_Plaza_vs_Trees` (one draw per lot);
+    `Ratio_Plaza_vs_Trees` (one draw per lot; a kept lot too narrow for its setback counts as tree side, see
+    the comment in `check`);
   - tree points lie on the surface within 5 cm (on the replay's flat surface; the real terrain fit is the
     projector `geo.ground.project_tile`, measured point for point against the official one, s13.md 6);
   - every ground tile set carries one plaza tile mesh.
@@ -107,6 +108,10 @@ def check(inputs, params, outputs, ops, official=None):
     # ---- the split: on items, the plaza share near the ratio ----
     n = len(reserved)
     if n >= SHARE_MIN_ITEMS:
+        # A kept plaza lot is recognised by a fitted setback inside it. One narrower than twice the setback
+        # (645.8 cm) contracts to nothing and is then counted on the tree side -- the outputs cannot tell it
+        # from a tree-side lot -- so the measured plaza share is biased LOW by such lots. None on the demo
+        # level: its narrowest reserved lot is 15 m wide (minimum-width over its edges, slim_42's inputs).
         tree_side = n - len(published) - len([r for r in kept if any(_inside(a, r) for a in fitted)])
         share = 1.0 - tree_side / float(n)
         if abs(share - params["Ratio_Plaza_vs_Trees"]) > SHARE_TOL:

@@ -661,7 +661,7 @@ def index_picks(targets, attr, n_assets):
     Each point's `attr` value is read AS the match attribute's integer type (`ApplyOnAccessor` with
     `AllowConstructible`, `PCGMatchAndSetAttributes.cpp:438-484`): a double is C++-converted, i.e.
     truncated toward zero, so 3.7 picks entry 3. A value that matches no entry (past the last one,
-    negative, or no such attribute) is UNMATCHED, and `bKeepUnmatched` is TRUE by default
+    negative, NaN / infinite, or no such attribute) is UNMATCHED, and `bKeepUnmatched` is TRUE by default
     (`PCGMatchAndSetAttributes.h:90`): the point is kept and its new `Asset` is the attribute's default
     value, which is the set's FIRST entry -- measured 2026-10-19 on stage 13's `Subgraph_26` (oracle with a
     substitute texture, `assign_oracle_rows.json`): the 389 points of index 8 or 9 all took entry 0
@@ -680,8 +680,8 @@ def index_picks(targets, attr, n_assets):
         return [0] * n
     out = []
     for v in column:
-        if v is None or isinstance(v, str):
-            out.append(0)
+        if v is None or isinstance(v, str) or not math.isfinite(float(v)):
+            out.append(0)                            # nothing to match: unmatched, kept, entry 0
             continue
         k = int(v)                                   # truncation toward zero, as C++'s double -> int64
         out.append(k if 0 <= k < n_assets else 0)

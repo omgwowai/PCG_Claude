@@ -394,9 +394,55 @@ def test_difference_binary_removes_only_what_a_live_tile_overlaps():
     assert G.volume_overlap(tiles[0][:5], ((400.0, 0.0, 0.0),) + touching[0][1:5]) == 0.0
 
 
-def test_split_ways_matches_stage_10s_chain():
+# The ways stage 10's own `split_seven` gave BEFORE it moved to `geo.ground` (computed from commit 8ffb8a3's
+# s10_ground.py: n = 50, random.Random(7)); frozen, so the moved helper is held to the old behaviour.
+PRE_MOVE_WAYS = [6, 1, 3, 0, 4, 1, 0, 3, 0, 1, 0, 0, 3, 3, 0, 3, 5, 3, 2, 2, 3, 0, 3, 3, 4, 0, 3, 2, 1, 4, 5, 3, 5,
+                 0, 0, 4, 6, 3, 1, 4, 2, 1, 1, 6, 1, 6, 5, 3, 1, 3]
+
+
+def test_split_ways_keeps_stage_10s_pre_move_chain():
     from pypcg.stages import s10_ground as S10
-    assert G.split_ways(50, S10.SPLIT_RATIOS, random.Random(7)) == S10.split_seven(50, random.Random(7))
+    assert G.split_ways(50, S10.SPLIT_RATIOS, random.Random(7)) == PRE_MOVE_WAYS
+    assert S10.split_seven(50, random.Random(7)) == PRE_MOVE_WAYS
+
+
+# ---- forwarding of unchanged input polygons (s13.md 4.6) --------------------------------------------------
+def _registered(p, key=0):
+    p.source = key
+    obj = object()
+    return obj, {key: (obj, stage_api.snapshot(p))}
+
+
+def test_unchanged_forwards_only_the_untouched_input_polygon():
+    p = box(0, 0, 10, 10, z=5.0)
+    obj, reg = _registered(p)
+    assert stage_api.unchanged(p, reg) is obj                           # handed back as read
+    moved = box(0, 0, 10, 10, z=5.0)
+    obj, reg = _registered(moved)
+    moved.outer[1] = (11.0, 0.0)                                       # mutated in place
+    assert stage_api.unchanged(moved, reg) is None
+    lifted = box(0, 0, 10, 10, z=5.0)
+    obj, reg = _registered(lifted)
+    lifted.z = 35.0                                                    # z changed
+    assert stage_api.unchanged(lifted, reg) is None
+    orig = box(0, 0, 10, 10, z=5.0)
+    obj, reg = _registered(orig)
+    copy = Polygon(list(orig.outer), [list(h) for h in orig.holes], orig.z)   # a copy carries no source
+    assert copy == orig and stage_api.unchanged(copy, reg) is None
+    assert stage_api.unchanged(orig, None) is None and stage_api.unchanged(PRE_MOVE_WAYS, reg) is None
+
+
+def test_published_plaza_lots_are_the_input_objects():
+    """If a refactor copied the reserved lots, forwarding would stop silently (stage 14 drifts ~10 instances,
+    which V2's widened row cannot see): every published value must BE an object of the `Lots` input."""
+    ins = inputs()
+    ids = {id(v) for v, _t in ins["Lots"]}
+    published = 0
+    for seed in range(6):
+        out, _ctx = stage_api.execute(S, ins, dict(params(), Seed=seed), OPS)
+        assert all(id(v) in ids for v in values(out, "PlazaLots"))
+        published += len(values(out, "PlazaLots"))
+    assert published > 0
 
 
 # ---- the plaza node ---------------------------------------------------------------------------------------

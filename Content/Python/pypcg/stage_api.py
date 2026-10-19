@@ -64,6 +64,23 @@ def volume_quat(inputs, pin="Volume"):
     return None
 
 
+def snapshot(p):
+    """The geometry `unchanged` compares: a polygon's outer, holes and z as plain tuples."""
+    return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z)
+
+
+def unchanged(v, registry):
+    """The registered input object a polygon came from, when a stage hands that polygon back with its
+    geometry unchanged; else None (Task 18, s13.md 4.6). `registry` maps `Polygon.source` -> (object,
+    `snapshot` taken when the input was read); `pypcg.ue.convert` fills it for one run and forwards what this
+    returns. A polygon mutated in place, given another z, or rebuilt (a copy carries no `source`) is not
+    forwarded -- it is written anew."""
+    if registry is None or not isinstance(v, geo.Polygon) or v.source is None or v.source not in registry:
+        return None
+    obj, snap = registry[v.source]
+    return obj if snapshot(v) == snap else None
+
+
 class StageError(Exception):
     pass
 

@@ -459,3 +459,15 @@ def test_check_flags_tiles_under_a_landmark_that_overlaps_a_lot():
     out, _ = run(ins)
     f = C.check(ins, {}, out, OPS)
     assert any("in the landmark" in x for x in f), f
+
+
+def test_corner_shapes_hand_back_the_input_lot_objects():
+    """The lots in `CornerShapes` must BE the `Lots` input objects: the host forwards an input polygon handed
+    back unchanged as the engine's own data (Task 18, s13.md 4.6), and a copy would silently stop that."""
+    ins = inputs()
+    out, _ctx = run(ins)
+    lot_ids = {id(v) for v, t in ins["Lots"] if "Lots" in t}
+    corners = [v for v, _t in out["CornerShapes"]]
+    forwarded = [v for v in corners if id(v) in lot_ids]
+    assert len(forwarded) == len(LOTS)
+    assert all(isinstance(v, Polygon) for v in forwarded)
