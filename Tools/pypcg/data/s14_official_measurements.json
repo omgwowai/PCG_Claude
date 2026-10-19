@@ -1,0 +1,511 @@
+{
+ "date": "2026-10-20",
+ "end_to_end": {
+  "border": {
+   "item_for_item_max_diff_cm": 8274.50193007073,
+   "n": [
+    41,
+    41
+   ],
+   "point_count_differs": 4,
+   "points": [
+    276,
+    276
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "cells": {
+   "area_m2": [
+    25738.957,
+    25738.957
+   ],
+   "max_vertex_diff_cm_same_count": 8830.957026279753,
+   "n": [
+    52,
+    52
+   ],
+   "same_start_vertex": 30,
+   "same_vertex_count": 38
+  },
+  "central lines": {
+   "item_for_item_max_diff_cm": 7500.195525324915,
+   "n": [
+    36,
+    36
+   ],
+   "point_count_differs": 0,
+   "points": [
+    72,
+    72
+   ],
+   "reversed": 18,
+   "unmatched_by_midpoint": [
+    8,
+    8
+   ]
+  },
+  "inner": {
+   "area_m2": [
+    25738.957,
+    25738.957
+   ],
+   "max_vertex_diff_cm_same_count": 1.289786067448483e-08,
+   "n": [
+    4,
+    4
+   ],
+   "same_start_vertex": 4,
+   "same_vertex_count": 4
+  },
+  "notes": [
+   "5 lots: 31 outer lines, 52 cells, 36 central lines, 10 medians, 41 border runs",
+   "733 spaces, 834 line points, 580 occupied (0 forward, 0 reversed), 40 arrows, 10570 tiles"
+  ],
+  "official counts": {
+   "arrow points": 40,
+   "barrier points": 557,
+   "border runs": 41,
+   "central lines": 36,
+   "fence points": 358,
+   "forward": 312,
+   "line points": 834,
+   "occupied": 588,
+   "outer lines": 31,
+   "reversed": 276,
+   "spaces": 733,
+   "tiles": 10570
+  },
+  "outer": {
+   "area_m2": [
+    37143.952,
+    37143.952
+   ],
+   "max_vertex_diff_cm_same_count": 1.8134259291922644e-09,
+   "n": [
+    5,
+    5
+   ],
+   "same_start_vertex": 5,
+   "same_vertex_count": 5
+  }
+ },
+ "finish": {
+  "compared": 13535,
+  "items": [
+   128,
+   128
+  ],
+  "loc_bit_exact": 1,
+  "max_loc_diff_cm": 0.0002441499023037314,
+  "max_quat_diff": 1.552828226506625e-07,
+  "notes": [
+   "126 items, 12947 points in; 588 vehicles (+588 transparent twins)"
+  ],
+  "points": [
+   13535,
+   13535
+  ],
+  "same_asset": 13535,
+  "seconds": 0.99,
+  "surface": "Terrain"
+ },
+ "inner_ring_1_edge_lengths": {
+  "official": [
+   "5899.999999999995",
+   "7900.000000000015",
+   "5899.9999999999645",
+   "7900.000000000018"
+  ],
+  "port": [
+   "5899.999999999998",
+   "7900.000000000003",
+   "5899.999999999943",
+   "7899.999999999979"
+  ]
+ },
+ "steps": {
+  "aisles Subgraph_30": {
+   "area_m2": [
+    8305.444,
+    8305.444
+   ],
+   "max_vertex_diff_cm_same_count": 3613.613287507679,
+   "n": [
+    36,
+    36
+   ],
+   "same_start_vertex": 26,
+   "same_vertex_count": 28
+  },
+  "arrow points Subgraph_65": {
+   "max_diff_cm_in_order": 0.0,
+   "n": [
+    40,
+    40
+   ]
+  },
+  "arrow side A Subgraph_66": {
+   "item_for_item_max_diff_cm": 0.00120229146653438,
+   "n": [
+    10,
+    10
+   ],
+   "point_count_differs": 0,
+   "points": [
+    20,
+    20
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "arrow side B reversed Subgraph_68": {
+   "item_for_item_max_diff_cm": 0.0009832598257287137,
+   "n": [
+    10,
+    10
+   ],
+   "point_count_differs": 0,
+   "points": [
+    20,
+    20
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "border cut Subgraph_60": {
+   "item_for_item_max_diff_cm": 8274.50193007073,
+   "n": [
+    41,
+    41
+   ],
+   "point_count_differs": 4,
+   "points": [
+    276,
+    276
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "border runs Subgraph_59": {
+   "item_for_item_max_diff_cm": 2.0579515874459978e-11,
+   "n": [
+    21,
+    21
+   ],
+   "point_count_differs": 0,
+   "points": [
+    64,
+    64
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "border subdivide Subgraph_58": {
+   "item_for_item_max_diff_cm": 0.0009773827073449445,
+   "n": [
+    21,
+    21
+   ],
+   "point_count_differs": 0,
+   "points": [
+    279,
+    279
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "cells Subgraph_32": {
+   "area_m2": [
+    25738.957,
+    25738.957
+   ],
+   "max_vertex_diff_cm_same_count": 9.604539651222938e-11,
+   "n": [
+    52,
+    52
+   ],
+   "same_start_vertex": 38,
+   "same_vertex_count": 38
+  },
+  "central lines Subgraph_35": {
+   "item_for_item_max_diff_cm": 0.41429362275932485,
+   "n": [
+    36,
+    36
+   ],
+   "point_count_differs": 0,
+   "points": [
+    72,
+    72
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "inner Subgraph_33": {
+   "area_m2": [
+    25738.957,
+    25738.957
+   ],
+   "max_vertex_diff_cm_same_count": 2.009850313043982e-08,
+   "n": [
+    4,
+    4
+   ],
+   "same_start_vertex": 4,
+   "same_vertex_count": 4
+  },
+  "inner resample Subgraph_45": {
+   "item_for_item_max_diff_cm": 0.00020861552068363856,
+   "n": [
+    35,
+    35
+   ],
+   "point_count_differs": 0,
+   "points": [
+    250,
+    250
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "line points Subgraph_52": {
+   "max_diff_cm_in_order": 0.0,
+   "n": [
+    834,
+    834
+   ]
+  },
+  "median bands Subgraph_57": {
+   "area_m2": [
+    7167.915,
+    7167.915
+   ],
+   "max_vertex_diff_cm_same_count": 16168.804821560077,
+   "n": [
+    10,
+    10
+   ],
+   "same_start_vertex": 0,
+   "same_vertex_count": 9
+  },
+  "median expand Subgraph_56": {
+   "area_m2": [
+    45598.579,
+    45598.579
+   ],
+   "max_vertex_diff_cm_same_count": 3583.84937179002,
+   "n": [
+    5,
+    5
+   ],
+   "same_start_vertex": 4,
+   "same_vertex_count": 5
+  },
+  "median truncate Subgraph_63": {
+   "item_for_item_max_diff_cm": 0.0010518782905639824,
+   "n": [
+    10,
+    10
+   ],
+   "point_count_differs": 0,
+   "points": [
+    20,
+    20
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "medians Subgraph_55": {
+   "item_for_item_max_diff_cm": 0.39772344325827286,
+   "n": [
+    10,
+    10
+   ],
+   "point_count_differs": 0,
+   "points": [
+    20,
+    20
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "outer Subgraph_29": {
+   "area_m2": [
+    37143.952,
+    37143.952
+   ],
+   "max_vertex_diff_cm_same_count": 1.8134259291922644e-09,
+   "n": [
+    5,
+    5
+   ],
+   "same_start_vertex": 5,
+   "same_vertex_count": 5
+  },
+  "outer chord Subgraph_44": {
+   "item_for_item_max_diff_cm": 0.0,
+   "n": [
+    21,
+    21
+   ],
+   "point_count_differs": 0,
+   "points": [
+    42,
+    42
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "outer cut Subgraph_61": {
+   "item_for_item_max_diff_cm": 7475.938025978682,
+   "n": [
+    38,
+    38
+   ],
+   "point_count_differs": 0,
+   "points": [
+    76,
+    76
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "outer resample Subgraph_62": {
+   "item_for_item_max_diff_cm": 0.5864953910288684,
+   "n": [
+    31,
+    31
+   ],
+   "point_count_differs": 0,
+   "points": [
+    334,
+    334
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "outer runs Subgraph_36": {
+   "item_for_item_max_diff_cm": 1.626953582672133e-11,
+   "n": [
+    21,
+    21
+   ],
+   "point_count_differs": 0,
+   "points": [
+    65,
+    65
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "outer truncate Subgraph_43": {
+   "item_for_item_max_diff_cm": 7.498599534674523e-05,
+   "n": [
+    21,
+    21
+   ],
+   "point_count_differs": 0,
+   "points": [
+    62,
+    62
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "row A Subgraph_46": {
+   "item_for_item_max_diff_cm": 0.00020861552068363856,
+   "n": [
+    35,
+    35
+   ],
+   "point_count_differs": 0,
+   "points": [
+    250,
+    250
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "row B Subgraph_47": {
+   "item_for_item_max_diff_cm": 0.00020861552068363856,
+   "n": [
+    35,
+    35
+   ],
+   "point_count_differs": 0,
+   "points": [
+    250,
+    250
+   ],
+   "reversed": 0,
+   "unmatched_by_midpoint": [
+    0,
+    0
+   ]
+  },
+  "space centres Subgraph_38/40": {
+   "max_diff_cm_in_order": 0.0005374831395558423,
+   "n": [
+    733,
+    733
+   ]
+  },
+  "tiles Subgraph_10/11": {
+   "max_diff_cm_in_order": 1.433197438279764e-10,
+   "n": [
+    10570,
+    10570
+   ]
+  }
+ },
+ "what": "Stage 14 Parkings: the port's steps against the official graph's own intermediates, tapped by Content/Python/pypcg_s14_measure.py {step: gen / dump} on the demo level (component seed 42, the official stage-13 upstream: 5 lots). 'steps' runs each Python step on the TAPPED official upstream with the editor's booleans; 'end_to_end' runs the whole stage from the tapped lots. n = [port, official]; distances in cm; 'reversed' counts items that match only end to start."
+}

@@ -143,6 +143,40 @@ def contract(polys, distance, ops, union=True):
     return out
 
 
+def follow_subjects(results, subjects):
+    """The order and the start vertex the engine gives an offset's results (`OffsetPolygon2D`, with or
+    without `Transform_Areas_Contract`'s union): each result in the order of the subject it came from (the
+    subject whose ring holds its vertex mean, else the nearest by vertex mean), its ring turned to start at
+    the vertex nearest that subject's FIRST vertex. Measured on stage 14's taps (2026-10-20): the outer
+    contract 5 of 5, the inner contract 4 of 4, the median expansion 5 of 5, the aisle contract 33 of 36 (the
+    three others carry duplicated vertices); every union output in subject order. Booleans computed in the
+    world (or in a frame other than the polygon's stored one, trap 68) start elsewhere, and a ring's start
+    decides its "first longest edge" -- the frame `Subdivide_Areas_withGrid` lays its grid from."""
+    import math as _m
+    from .plane import inside
+
+    def mean(r):
+        n = len(r)
+        return (sum(q[0] for q in r) / n, sum(q[1] for q in r) / n) if n else (0.0, 0.0)
+
+    keyed = []
+    for k, p in enumerate(results):
+        if not p.outer:
+            continue
+        c = mean(p.outer)
+        idx = [i for i, s in enumerate(subjects) if s.outer and inside(c, s.outer)]
+        i = idx[0] if idx else min(range(len(subjects)), key=lambda j: _m.dist(mean(subjects[j].outer), c)) \
+            if subjects else 0
+        ring = list(p.outer)
+        if subjects:
+            first = subjects[i].outer[0]
+            s = min(range(len(ring)), key=lambda j: _m.dist(ring[j][:2], first[:2]))
+            ring = ring[s:] + ring[:s]
+        keyed.append((i, k, Polygon(ring, [list(h) for h in p.holes], p.z)))
+    keyed.sort(key=lambda t: (t[0], t[1]))
+    return [p for _i, _k, p in keyed]
+
+
 def by_size(polys, size_m2, greater=True):
     """`Filter_Areas_BySize`: (selected, unselected). `Operator = Greater` keeps an area strictly
     larger than `Size` m2, `Lesser` one strictly smaller (the CoreProcess compares `@data.$area` in

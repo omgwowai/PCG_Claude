@@ -8,6 +8,7 @@ from . import assets  # noqa: F401
 from . import ground  # noqa: F401
 from . import roads  # noqa: F401
 from . import sections  # noqa: F401
+from . import splines  # noqa: F401
 from .plane import (at, bbox, ccw, clean_points, clip_path, convex_hull, drop_closing,  # noqa: F401
                     enclosing_polygon, extract_segments, frame_box, inside, longest, ngon, path_length, place,
                     quat_from_yaw, quat_rotate, rect, rotate, signed_area, split_frame, unit, xy)
