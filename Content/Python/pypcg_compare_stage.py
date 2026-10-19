@@ -94,9 +94,18 @@ def phase_read(args):
     from pypcg import census, stage_api
     n, name = int(args["stage"]), args["as"]
     into = int(args.get("into", n))
+    run = os.path.join(stage_api.RUNS_DIR, "s%02d.json" % n)
+    if name.startswith("slim_") and os.path.exists(run):
+        # Trap 71: generate_local can silently skip a seed change, leaving the previous seed's run (and its
+        # census) in place. A slim_<seed> read whose run record carries another seed is refused before
+        # anything is written, so a stale census never lands under the new seed's name.
+        want = name[len("slim_"):]
+        got = (_load(run, {}).get("params") or {}).get(stage_api.SEED)
+        if want.isdigit() and got is not None and int(got) != int(want):
+            return {"abort": "stale run: slim_%s read a run record with Seed %s; regenerate (trap 71)" % (want, got),
+                    "stage": n, "as": name}
     rec = census.record(n)
     _save(os.path.join(_stage_dir(into), name + ".json"), rec)
-    run = os.path.join(stage_api.RUNS_DIR, "s%02d.json" % n)
     if name.startswith("slim_") and os.path.exists(run):
         shutil.copyfile(run, os.path.join(_stage_dir(into), name + ".run.json"))
     tags = {}
