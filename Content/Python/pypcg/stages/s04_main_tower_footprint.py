@@ -51,7 +51,11 @@ def hexagon(center, width, length, yaw_deg=0.0, quat=None):
     too, measured bit-exact there at yaw 34.22 deg). `quat` is the volume's own quaternion
     (`stage_api.volume_quat`); without one the yaw's quaternion is used, which is the same rotation
     but not the engine's bits. At the demo transform the six vertices equal the official ones BIT
-    FOR BIT (`test_hexagon_matches_the_demo_bit_for_bit`)."""
+    FOR BIT (`test_hexagon_matches_the_demo_bit_for_bit`).
+
+    Composition shared with stage 5; bit-exact measured on the stage-5 park and on stage 4 at yaw 0;
+    stage 4 at non-zero yaw NOT measured -- if the hexagon's negation is really a 180-degree rotation
+    folded into the engine's transform, a turned tower would produce other bits."""
     ratio = (length / width) if width else 1.0
     R = width / 2.0
     local = []

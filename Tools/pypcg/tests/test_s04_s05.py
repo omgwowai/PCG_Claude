@@ -367,3 +367,15 @@ def test_volume_quat_prefers_the_engine_quaternion_and_round_trips():
     assert back.quat == [PARK_QUAT]
     assert "quat" not in geo.to_json(volume()["Volume"][0][0])               # older records unchanged
     assert stage_api.volume_quat({"Volume": []}) is None
+
+
+def test_adding_a_point_drops_the_engine_quaternions():
+    """`Points.quat` belongs to the points `convert` read; a later `add` would leave it shorter than
+    `loc`, so `add` clears it and `volume_quat` falls back to the yaw."""
+    from pypcg import stage_api
+    vin = volume(PARK_AT, PARK_YAW)
+    pts = vin["Volume"][0][0]
+    pts.quat = [PARK_QUAT]
+    pts.add((0.0, 0.0, 0.0))
+    assert pts.quat is None and len(pts) == 2
+    assert stage_api.volume_quat(vin) == geo.quat_from_yaw(PARK_YAW)

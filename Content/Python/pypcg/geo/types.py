@@ -70,6 +70,9 @@ class Points:
         if unknown:
             raise KeyError("undeclared point attribute(s) %s" % unknown)
         self.loc.append(tuple(float(v) for v in loc))
+        # `quat` is the engine's per-point quaternion, valid only for the points convert read; a point
+        # added afterwards has none, so a partial column would mislabel it -- drop the whole column.
+        self.quat = None
         for c, default in self.DEFAULTS.items():
             getattr(self, c).append(kw.get(c, default))
         for name, column in self.attrs.items():
