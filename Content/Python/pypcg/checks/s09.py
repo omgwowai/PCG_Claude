@@ -75,11 +75,36 @@ def pieces_of(inputs, ops):
 _CACHE = {}
 
 
+def _digest(obj):
+    import hashlib
+    import json
+    h = hashlib.sha1()
+    if isinstance(obj, dict):
+        for k in sorted(obj):
+            h.update(repr(k).encode())
+            for v in obj[k]:
+                v = v[0] if isinstance(v, tuple) else v
+                h.update(json.dumps(geo.to_json(v), sort_keys=True).encode())
+    return h.hexdigest()
+
+
 def _key(inputs, official=None):
     """Runs of one V1 call share their inputs (the five V2 seeds read the same upstream), so the
-    deterministic pieces and the oracle replay are computed once per input set."""
-    pts = [q for pin in sorted(inputs) for v, _ in inputs[pin] for q in (getattr(v, "outer", None) or [])[:3]]
-    return (tuple(sorted((pin, len(items)) for pin, items in inputs.items())), tuple(pts), id(official))
+    deterministic pieces and the oracle replay are computed once per input set. The key is a digest
+    of the CONTENT (inputs and the official outputs), never an object id, and the cache keeps at most
+    `_CACHE_MAX` entries."""
+    return (_digest(inputs), _digest(official) if official else None)
+
+
+_CACHE_MAX = 8
+
+
+def _cached(k, fn):
+    if k not in _CACHE:
+        if len(_CACHE) >= _CACHE_MAX:
+            _CACHE.clear()
+        _CACHE[k] = fn()
+    return _CACHE[k]
 
 
 def check(inputs, params, outputs, ops, official=None):
@@ -111,10 +136,7 @@ def check(inputs, params, outputs, ops, official=None):
         if crosses != bool(by.get("UnderHighway")):
             f.append("UnderHighway has %d items but the highway %s the districts"
                      % (len(by.get("UnderHighway", [])), "crosses" if crosses else "does not cross"))
-        k = ("pieces",) + _key(inputs)
-        if k not in _CACHE:
-            _CACHE[k] = pieces_of(inputs, ops)
-        pieces = _CACHE[k]
+        pieces = _cached(("pieces",) + _key(inputs), lambda: pieces_of(inputs, ops))
         if pieces:
             kept = 1.0 - len(by.get("reservedLots", [])) / float(len(pieces))
             if len(pieces) >= 20 and abs(kept - params["PlazaReservationRatio"]) > SHARE_TOL:
@@ -142,9 +164,7 @@ def check(inputs, params, outputs, ops, official=None):
                 return f
     if inputs and official and official.get("reservedLots") is not None and official.get("Lots"):
         k = ("oracle",) + _key(inputs, official) + (tuple(sorted(params.items())),)
-        if k not in _CACHE:
-            _CACHE[k] = oracle(inputs, params, ops, official)
-        f += _CACHE[k]
+        f += _cached(k, lambda: oracle(inputs, params, ops, official))
     return f
 
 

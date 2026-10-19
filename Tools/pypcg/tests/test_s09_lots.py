@@ -318,3 +318,43 @@ def test_the_oracle_draw_reserves_exactly_the_official_lots():
     pieces = [box(0, 0, 100, 100), box(200, 0, 300, 100), box(400, 0, 600, 100)]
     d = C.OfficialPlaza(random.Random(0), [box(200, 0, 300, 100)])
     assert d.keep("plaza", pieces, 0.9) == [True, False, True]
+
+
+def _strip_city(n):
+    """A city of n 100 x 100 m lots in a row, split by n - 1 roads 20 m wide, all one small district."""
+    w = 12000.0
+    roads = [box(w * k - 2000, -1000, w * k, 11000) for k in range(1, n)]
+    city = box(0, 0, w * n - 2000, 10000)
+    return {"City": [(closed(city), frozenset({"City"}))],
+            "Districts": [(city, frozenset({"SmallDistricts"}))],
+            "RoadFootprints": [(r, frozenset()) for r in roads],
+            "MainTower": [], "CentralParkFootprint": [], "LandmarkPark": [], "Highway": []}
+
+
+def test_the_stage_reserves_one_minus_the_ratio_of_its_lots_on_average():
+    ins = _strip_city(25)
+    pieces = C.pieces_of(ins, OPS)
+    assert len(pieces) == 25                       # above the check's 20-lot guard
+    shares = []
+    for seed in range(60):
+        raw = S.lots(ins, params(), OPS, S.Draws(random.Random(seed)))
+        shares.append(len(raw["ReservedLots"]) / float(len(pieces)))
+    mean = sum(shares) / len(shares)
+    assert mean == pytest.approx(1.0 - params()["PlazaReservationRatio"], abs=0.02)
+    out = run(ins, seed=3)
+    assert not [f for f in C.check(ins, params(), out, OPS) if "kept share" in f]
+    skewed = dict(out, ReservedLots=[(p, ["reservedLots"]) for p in pieces[:10]])
+    assert any("kept share" in f for f in C.check(ins, params(), skewed, OPS))
+
+
+def test_a_zero_grid_size_still_fails_loudly_outside_subdivision_mode():
+    with pytest.raises(ZeroDivisionError):
+        geo.grid_lines(box(0, 0, 10000, 4000).outer, 0.0, 1500.0)
+
+
+def test_the_check_cache_keys_on_content_not_identity():
+    a, b = inputs(), inputs(highway=False)
+    assert C._key(a) == C._key(inputs()) and C._key(a) != C._key(b)
+    off1 = {"Lots": [box(0, 0, 1, 1)]}
+    off2 = {"Lots": [box(0, 0, 2, 2)]}
+    assert C._key(a, off1) != C._key(a, off2)

@@ -58,8 +58,8 @@ def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True):
         axes = (("X", u0, u1, (u1 - u0) / float(subdiv[0])), ("Y", w0, w1, (w1 - w0) / float(subdiv[1])))
         margin = 2
     for axis, lo, hi, step in axes:
-        if not step > 0:
-            continue
+        if subdiv is not None and not step > 0:
+            continue                          # a degenerate box in subdivision mode: no line on that axis
         n = int((hi - lo) / step + 2 * margin)   # CreatePointsGrid(CellCorners), extents = half box + margin cells
         for i in range(2, n + 1):             # FilterDataByIndex drops partitions 0 and 1
             c = lo + (i - margin) * step
