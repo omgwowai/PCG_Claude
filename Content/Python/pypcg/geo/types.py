@@ -50,6 +50,11 @@ class Points:
             setattr(self, c, [])
         self.attrs = {}
         self.types = {}
+        # Optional: the engine's own rotation quaternion (x, y, z, w) per point, filled by
+        # convert._points_of. `rot` is a rotator derived from it and cannot be turned back into the
+        # same bits (measured 2026-10-19), so a stage that must reproduce the engine's placement
+        # bit for bit reads this. Not carried by take()/extend().
+        self.quat = None
 
     def __len__(self):
         return len(self.loc)
@@ -126,6 +131,8 @@ def to_json(v):
             return d
         d.update({c: [list(x) if isinstance(x, tuple) else x for x in getattr(v, c)] for c in Points.COLUMNS})
         d["attrs"] = {k: list(col) for k, col in v.attrs.items()}
+        if v.quat:                       # only when set, so older records still compare equal
+            d["quat"] = [list(q) for q in v.quat]
         return d
     return {"kind": type(v).__name__}              # e.g. a terrain surface: not recordable
 
@@ -147,5 +154,6 @@ def from_json(d):
             setattr(p, c, _tuples(d[c]))
         p.types = dict(d["types"])
         p.attrs = {k: list(col) for k, col in d["attrs"].items()}
+        p.quat = _tuples(d["quat"]) if d.get("quat") else None
         return p
     raise ValueError("cannot rebuild a %s value from its record" % kind)

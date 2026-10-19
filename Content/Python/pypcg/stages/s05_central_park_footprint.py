@@ -7,7 +7,7 @@ Replaces the 3-node graph: the `Create_Spline_Shape` primitive (`Park_Footprint`
 and the `$Position.Z` maths node; the debug mesh goes."""
 from pypcg import geo
 from pypcg.geo import Spline
-from pypcg.stage_api import Param, volume_point
+from pypcg.stage_api import Param, volume_point, volume_quat
 
 STAGE = 5
 DOC = """CentralParkFootprint (中央公园范围): the central park's footprint as a closed four-vertex
@@ -28,18 +28,25 @@ ORDER = ((-1, 1), (1, 1), (1, -1), (-1, -1))
 Z = 0.0
 
 
-def rectangle(center, width, length, yaw_deg=0.0):
+def rectangle(center, width, length, yaw_deg=0.0, quat=None):
     """The polygon `Create_Spline_Shape_CoreProcess` builds for Ngon = 4: `CreatePointsGrid_0` emits
     the cell corners of a grid `Width` x `Length` around the origin (one cell, `GridExtents` =
-    (Width, Length) / 2), `FindConvexHull2D_0` keeps the four corners, and the parent actor transform
-    turns them by the volume's yaw. Returns corners in the official order (see ORDER)."""
-    return geo.rect(center, width / 2.0, length / 2.0, yaw_deg, order=ORDER)
+    (Width, Length) / 2), `FindConvexHull2D_0` keeps the four corners, and `AttributeTransformOp_2`
+    composes them with the volume transform. Corners in the official order (see ORDER).
+
+    The composition is `geo.place`: the volume's QUATERNION rotate in UE's operation order, then the
+    translation. With the actor's own quaternion (`stage_api.volume_quat`) this reproduces the demo
+    park's eight coordinates BIT FOR BIT (measured 2026-10-19); a cos/sin turn by the yaw is ~1e-11
+    cm off, and stage 7 reads those bits. Without a quaternion the yaw's is used."""
+    local = [(sx * (width / 2.0), sy * (length / 2.0)) for sx, sy in ORDER]
+    return geo.place(local, quat or geo.quat_from_yaw(yaw_deg), center)
 
 
 def run(inputs, params, ctx):
     loc, yaw = volume_point(inputs)
     if loc is None:
         return {"Footprint": []}
-    ring = rectangle((loc[0], loc[1]), float(params["RectWidth"]), float(params["RectLength"]), yaw)
+    ring = rectangle((loc[0], loc[1]), float(params["RectWidth"]), float(params["RectLength"]), yaw,
+                     volume_quat(inputs))
     return {"Footprint": [(Spline([(x, y, Z) for x, y in ring], closed=True, linear=True),
                            ["Footprint"])]}

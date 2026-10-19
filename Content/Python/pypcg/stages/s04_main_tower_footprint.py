@@ -10,7 +10,7 @@ import math
 
 from pypcg import geo
 from pypcg.geo import Spline
-from pypcg.stage_api import Param, volume_point
+from pypcg.stage_api import Param, volume_point, volume_quat
 
 STAGE = 4
 DOC = """MainTowerFootprint (主塔占位): the hero tower's footprint as a closed hexagonal spline, built
@@ -38,29 +38,27 @@ STEP_DEG = -60.0           # clockwise: `SplineDirection_0 ForceCounterClockwise
 ENGINE_DEG = [120.0 - 60.0 * k for k in range(N)]
 
 
-def hexagon(center, width, length, yaw_deg=0.0):
+def hexagon(center, width, length, yaw_deg=0.0, quat=None):
     """The polygon `Create_Spline_Shape_CoreProcess` builds for Ngon = 6: `CreatePointsSphere_0` puts
     `LongitudinalSegments = Ngon` points on a circle of radius `Width / 2`, the convex hull keeps
     them, and `MakeVectorAttribute_1`'s `Scale` = (1, Length / Width, 1) stretches them along local
     Y. The 6-gon takes the sphere path no matter what (its `Ngon == 4` test fails), so this is the
     Ngon >= 5 branch, not the grid branch. Center is (x, y); Z comes from the caller.
 
-    Computed in the engine's arithmetic, not through `geo.ngon`: each vertex is
-    `-(R cos p, R sin p)` at p in ENGINE_DEG, then scaled on Y, then turned and moved. At the demo's
-    transform (origin, yaw 0, ratio 1) every step after the first is exact, so the six vertices equal
-    the official ones BIT FOR BIT (`test_hexagon_matches_the_demo_bit_for_bit`). At another yaw the
-    turn is `geo.rotate`, which agrees with the engine's quaternion to ~1e-11 cm but is not proven
-    bit-exact (stage 5's yawed park is the measured case of that residual)."""
+    Computed in the engine's arithmetic, not through `geo.ngon`: each local vertex is
+    `-(R cos p, R sin p)` at p in ENGINE_DEG, scaled on Y, then `geo.place`d -- the volume's
+    QUATERNION rotate in UE's operation order, then the translation (the composition stage 5 uses
+    too, measured bit-exact there at yaw 34.22 deg). `quat` is the volume's own quaternion
+    (`stage_api.volume_quat`); without one the yaw's quaternion is used, which is the same rotation
+    but not the engine's bits. At the demo transform the six vertices equal the official ones BIT
+    FOR BIT (`test_hexagon_matches_the_demo_bit_for_bit`)."""
     ratio = (length / width) if width else 1.0
     R = width / 2.0
-    out = []
+    local = []
     for p in ENGINE_DEG:
         a = math.radians(p)
-        x, y = -(R * math.cos(a)), -(R * math.sin(a)) * ratio
-        if yaw_deg:
-            x, y = geo.rotate((x, y), yaw_deg)
-        out.append((x + center[0], y + center[1]))
-    return out
+        local.append((-(R * math.cos(a)), -(R * math.sin(a)) * ratio))
+    return geo.place(local, quat or geo.quat_from_yaw(yaw_deg), center)
 
 
 def radii(width, length):
@@ -101,7 +99,7 @@ def run(inputs, params, ctx):
     if loc is None:
         return {"Footprint": []}
     width, length = float(params["RectWidth"]), float(params["RectLength"])
-    ring = hexagon((loc[0], loc[1]), width, length, yaw)
+    ring = hexagon((loc[0], loc[1]), width, length, yaw, volume_quat(inputs))
     return {"Footprint": [(Spline([(x, y, loc[2]) for x, y in ring], closed=True, linear=True,
                                   rotations=vertex_rotations(yaw)),
                            ["Footprint"])]}

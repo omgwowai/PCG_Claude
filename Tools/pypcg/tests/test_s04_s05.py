@@ -328,3 +328,42 @@ def test_v1_oracle_compares_the_official_vertices():
     moved = Spline([(x + 5000.0, y, 0.0) for x, y in HEX_OFFICIAL], closed=True)
     assert any("oracle" in x for x in C4.check(vin, params(S4), mine, FakeOps(),
                                                {"Footprint": [moved]}))
+
+
+# ---- round 2b: the engine's quaternion composition ---------------------------------------------------
+# The stage-5 volume's own quaternion and the official park's world corners, at full precision
+# (pyg_probe_t13_quat.py, 2026-10-19). UE's rotator -> quaternion does not give these bits back, so
+# the stage reads `Points.quat`.
+PARK_QUAT = (-6.195738473838943e-17, -1.2093979544242493e-16, 0.2942293189855836, 0.9557348522729927)
+PARK_OFFICIAL_BITS = [(13182.984920770628, 37248.0606854786), (95868.80649062656, 93489.1036284926),
+                      (107117.01507922937, 76951.9393145214), (24431.193509373436, 20710.896371507413)]
+
+
+def test_park_matches_the_demo_bit_for_bit_with_the_volume_quaternion():
+    vin = volume(PARK_AT, PARK_YAW)
+    vin["Volume"][0][0].quat = [PARK_QUAT]
+    spl = pts_of(S5.run(vin, params(S5), None))
+    assert xy(spl) == PARK_OFFICIAL_BITS
+
+
+def test_one_placement_serves_both_shapes():
+    """Stage 4 at a non-zero yaw goes through the same `geo.place` as stage 5: a hexagon turned by the
+    park's quaternion is the park quaternion applied to the local hexagon, and at the identity
+    quaternion the placement is exact (the demo tower)."""
+    local = S4.hexagon((0.0, 0.0), 16000.0, 16000.0, 0.0, (0.0, 0.0, 0.0, 1.0))
+    turned = S4.hexagon((10.0, 20.0), 16000.0, 16000.0, 0.0, PARK_QUAT)
+    assert turned == geo.place(local, PARK_QUAT, (10.0, 20.0))
+    assert all(math.dist(a, geo.rotate(b, PARK_YAW)) < 1e-8 for a, b in
+               zip(S4.hexagon((0.0, 0.0), 16000.0, 16000.0, 0.0, PARK_QUAT), local))
+
+
+def test_volume_quat_prefers_the_engine_quaternion_and_round_trips():
+    from pypcg import stage_api
+    vin = volume(PARK_AT, PARK_YAW)
+    assert stage_api.volume_quat(vin) == geo.quat_from_yaw(PARK_YAW)          # fixture: no engine quat
+    vin["Volume"][0][0].quat = [PARK_QUAT]
+    assert stage_api.volume_quat(vin) == PARK_QUAT
+    back = geo.from_json(geo.to_json(vin["Volume"][0][0]))
+    assert back.quat == [PARK_QUAT]
+    assert "quat" not in geo.to_json(volume()["Volume"][0][0])               # older records unchanged
+    assert stage_api.volume_quat({"Volume": []}) is None

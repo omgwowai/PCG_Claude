@@ -50,6 +50,41 @@ def rotate(p, yaw_deg):
     return (p[0] * math.cos(r) - p[1] * math.sin(r), p[0] * math.sin(r) + p[1] * math.cos(r))
 
 
+def _cross(a, b):
+    return (a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
+
+
+def quat_rotate(q, v):
+    """`FQuat::RotateVector` in UE's own operation order (`VectorQuaternionRotateVector`, no FMA):
+    T = 2 (q.xyz x v); v' = (v + w T) + (q.xyz x T). q is (x, y, z, w), v is (x, y, z). Measured
+    2026-10-19: with the stage-5 volume's own quaternion this reproduces all eight official park
+    coordinates bit for bit, where a cos/sin rotation by the yaw is ~1e-11 cm off -- and downstream
+    stages read those bits (stage 15 for stage 4)."""
+    Q, w = q[:3], q[3]
+    t = _cross(Q, v)
+    t = (t[0] + t[0], t[1] + t[1], t[2] + t[2])
+    c = _cross(Q, t)
+    return (w * t[0] + v[0] + c[0], w * t[1] + v[1] + c[1], w * t[2] + v[2] + c[2])
+
+
+def quat_from_yaw(yaw_deg):
+    """A yaw-only quaternion, for callers that have no engine quaternion (offline tests). NOT
+    bit-identical to an actor's stored quaternion: carry `Points.quat` through when you have it."""
+    h = math.radians(yaw_deg) / 2.0
+    return (0.0, 0.0, math.sin(h), math.cos(h))
+
+
+def place(local, quat, loc):
+    """`AttributeTransformOp_2`'s composition of local (x, y) points with the volume transform
+    (scale 1): rotate by the quaternion, then add the translation -- in that order, in doubles. With
+    the identity quaternion the rotation is exact, so a volume at yaw 0 adds only the translation."""
+    out = []
+    for x, y in local:
+        r = quat_rotate(quat, (x, y, 0.0))
+        out.append((r[0] + loc[0], r[1] + loc[1]))
+    return out
+
+
 def ngon(center, radius, n, start_deg=0.0, step_deg=None, y_scale=1.0, yaw_deg=0.0):
     """Create_Spline_Shape's polygon: n points on a circle of `radius`, the first at start_deg,
     stepping step_deg (default 360/n), stretched by y_scale along local Y, turned by yaw_deg."""

@@ -49,6 +49,20 @@ def volume_point(inputs, pin="Volume"):
     return None, 0.0
 
 
+def volume_quat(inputs, pin="Volume"):
+    """The volume's own rotation QUATERNION (x, y, z, w), as the engine stores it -- what an official
+    `Create_Spline_Shape` composes with. Read from `Points.quat` (filled by `convert`); a value
+    without one (an offline fixture) falls back to `geo.quat_from_yaw` of `volume_point`'s yaw, which
+    is the same rotation but not the same bits. None when the pin is empty."""
+    for value, _tags in inputs.get(pin, []):
+        if getattr(value, "loc", None):
+            q = getattr(value, "quat", None)
+            if q:
+                return tuple(float(c) for c in q[0])
+            return geo.quat_from_yaw(volume_point(inputs, pin)[1])
+    return None
+
+
 class StageError(Exception):
     pass
 

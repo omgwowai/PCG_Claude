@@ -176,13 +176,17 @@ def _points_of(d):
     out = Points()
     for name, (tname, _) in attrs:
         out.declare(name, tname)
+    quats = []
     for p in d.get_points():
         t = p.transform
-        r = t.rotation.rotator()
+        q = t.rotation
+        quats.append((q.x, q.y, q.z, q.w))
+        r = q.rotator()
         kw = {name: _plain(tname, getattr(p, "get_%s_attribute" % suffix)(md, name)) for name, (tname, suffix) in attrs}
         out.add(_plain("Vector", t.translation), rot=(r.pitch, r.yaw, r.roll), scale=_plain("Vector", t.scale3d),
                 density=p.density, bounds_min=_plain("Vector", p.bounds_min), bounds_max=_plain("Vector", p.bounds_max),
                 color=_plain("Vector4", p.color), steepness=p.steepness, seed=p.seed, **kw)
+    out.quat = quats or None
     return out
 
 
