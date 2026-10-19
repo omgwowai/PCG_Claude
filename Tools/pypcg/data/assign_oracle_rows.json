@@ -1,0 +1,409 @@
+{
+ "what": "Assign_Assets oracle rows: the official primitive's tapped output against pypcg.geo.assets.expand_items on the same targets with the same kit picks (pypcg_v1_editor.py {'assign': {'stage': n, 'label': ...}}), Task 15 fix round 2, 2026-10-19. max_diff: loc in cm, quat per component (sign-agnostic), scale, bounds (min and max together). bit_exact / equal count points.",
+ "rows": [
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_4",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": true,
+   "settings": {
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 90,
+     "Roll": 0
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 5
+    }
+   },
+   "targets": 312,
+   "items": [
+    312
+   ],
+   "python_items": [
+    312
+   ],
+   "points": 312,
+   "compared": "sizes, order, Asset",
+   "equal": {
+    "items": true,
+    "Asset": true
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_5",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": -90,
+     "Roll": 0
+    },
+    "random_position_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 276,
+   "items": [
+    276
+   ],
+   "python_items": [
+    276
+   ],
+   "points": 276,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 2.220446049250313e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 276,
+    "quat": 21,
+    "scale": 276,
+    "bounds": 276
+   },
+   "equal": {
+    "Asset": 276,
+    "seed": 276
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_7",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 3
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 0,
+     "Roll": 0
+    },
+    "scale_offset": {
+     "X": 1,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 1.2,
+     "Y": 1,
+     "Z": 1
+    },
+    "uniform_scale": false,
+    "use_mesh_bounds": false
+   },
+   "targets": 834,
+   "items": [
+    834
+   ],
+   "python_items": [
+    834
+   ],
+   "points": 834,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 834,
+    "quat": 834,
+    "scale": 834,
+    "bounds": 834
+   },
+   "equal": {
+    "Asset": 834,
+    "seed": 834
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_8",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 40
+    }
+   },
+   "targets": 40,
+   "items": [
+    40
+   ],
+   "python_items": [
+    40
+   ],
+   "points": 40,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 40,
+    "quat": 40,
+    "scale": 40,
+    "bounds": 40
+   },
+   "equal": {
+    "Asset": 40,
+    "seed": 40
+   }
+  },
+  {
+   "run": "s15_maintower_20_scale1414_uniform_meshbounds",
+   "stage": 15,
+   "call": "Subgraph_20",
+   "what": "stage 15 MainTower Subgraph_20 (static meshes, ExtentsScale 0.7), oracle set ScaleOffset (1.414055, 1, 1), UniformScale true, UseMeshBounds true, RandomScaleRange 0",
+   "random": false,
+   "settings": {
+    "scale_offset": {
+     "X": 1.414055,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "uniform_scale": true,
+    "use_mesh_bounds": true,
+    "random_scale_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 44,
+   "items": [
+    44
+   ],
+   "python_items": [
+    44
+   ],
+   "points": 44,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 44,
+    "quat": 44,
+    "scale": 44,
+    "bounds": 44
+   },
+   "equal": {
+    "Asset": 44,
+    "seed": 44
+   }
+  },
+  {
+   "run": "s17_A_rot0_90_0_scale02_ext07",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "run A: oracle set RotationOffset (0, 90, 0), ScaleOffset (0.2, 1, 1) under the default UniformScale, ExtentsScale (0.7, 1, 1)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 90,
+     "Roll": 0
+    },
+    "scale_offset": {
+     "X": 0.2,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 2.9103830456733704e-11,
+    "quat": 3.3306690738754696e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 8877,
+    "quat": 846,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  },
+  {
+   "run": "s17_D_rot10_m90_m20_scale_nonuniform_ext",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "run D: oracle set RotationOffset (pitch 10, yaw -90, roll -20), ScaleOffset (1.414055, 0.6, 0.7), ExtentsScale (1.2, 0.5, 2), UniformScale false, UseMeshBounds false",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 10,
+     "Yaw": -90,
+     "Roll": -20
+    },
+    "scale_offset": {
+     "X": 1.414055,
+     "Y": 0.6,
+     "Z": 0.7
+    },
+    "extents_scale": {
+     "X": 1.2,
+     "Y": 0.5,
+     "Z": 2
+    },
+    "uniform_scale": false,
+    "use_mesh_bounds": false
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 2.9103830456733704e-11,
+    "quat": 3.885780586188048e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 322,
+    "quat": 0,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  },
+  {
+   "run": "s17_default_shipped",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "stage 17 as shipped: PositionOffset Y -492.541261 on 30 yaw-rotated docks, five kits (the mirrored props take the matrix path)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 0,
+     "Roll": 0
+    }
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 1.1102230246251565e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 9873,
+    "quat": 9857,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  }
+ ]
+}

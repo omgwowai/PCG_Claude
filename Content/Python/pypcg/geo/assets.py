@@ -69,20 +69,22 @@ Single-target, zero-offset calls -- what Task 12 measured -- come out the same u
     (`MultiplyUsingMatrixWithScale`); the kits' mirrored props need it (`_compose_matrix`).
   - The offsets and rotations are floats, the scale offset a double (`PCGTransformPoints.cpp`).
 
-Per parameter, by the oracle (`pypcg_v1_editor.py {"assign": ...}`, the primitive's own taps on a
+Every row below is on disk in `Tools/pypcg/data/assign_oracle_rows.json` (run, call, settings, item
+sizes, max difference per field). Per parameter, by the oracle (`pypcg_v1_editor.py {"assign": ...}`, the primitive's own taps on a
 live volume; "exact" = Asset, seed, scale and bounds bit for bit, location <= 2.9e-11 cm, quaternion
 <= 4.4e-16):
   PositionOffset            MEASURED  s17 Subgraph_2 (Y -492.5, 30 rotated docks); s14 Subgraph_7/8 (Z 3/40)
-  RotationOffset            MEASURED  s14 Subgraph_5 (yaw -90, its random ranges zeroed); s17 with
-                                      (10, 90 / -90, -20) set by the oracle
-  ScaleOffset != 1          MEASURED  s17 with (0.2, 1, 1) uniform and (1.414055, 0.6, 0.7) non-uniform;
+  RotationOffset            MEASURED  s14 Subgraph_5 (yaw -90, its random ranges zeroed); s17 run A
+                                      (pitch 0, yaw 90, roll 0) and run D (pitch 10, yaw -90, roll -20),
+                                      both set by the oracle
+  ScaleOffset != 1          MEASURED  s17 run A (0.2, 1, 1) uniform, run D (1.414055, 0.6, 0.7) non-uniform;
                                       s15 Subgraph_20 with (1.414055, 1, 1) uniform
-  ExtentsScale != 1         MEASURED  s14 Subgraph_7 (1.2, 1, 1); s17 with (0.7, 1, 1) and (1.2, 0.5, 2);
+  ExtentsScale != 1         MEASURED  s14 Subgraph_7 (1.2, 1, 1); s17 run A (0.7, 1, 1), run D (1.2, 0.5, 2);
                                       s15 Subgraph_20 (0.7, 1, 1)
   UniformScale true / false MEASURED  both, above
   UseMeshBounds true        MEASURED  on static meshes (s14 Subgraph_8, s15 Subgraph_20 with UniformScale)
                                       and on kits (s17 default: kit boxes unchanged)
-  UseMeshBounds false       MEASURED  s14 Subgraph_7, s17 variant D
+  UseMeshBounds false       MEASURED  s14 Subgraph_7, s17 run D
   random ranges             DERIVED ONLY  the primitive draws from `TransformPoints_2`'s own seeded
                                       `FRandomStream`; the port draws from `ctx.rng` (spec E2), so no
                                       oracle can compare values. The oracle compares item sizes, order

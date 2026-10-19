@@ -552,3 +552,38 @@ def test_assign_param_keys_cover_every_pin_expand_reads():
         assert key in mapped, "%s is read by expand but no graph pin maps to it" % key
         assert key in doc, "%s is not documented on expand" % key
     assert "rng" not in mapped, "rng is the stage's, not a graph pin"
+
+
+# ---- the oracle evidence (Task 15 fix round 2) ------------------------------------------------------
+def test_the_recorded_oracle_rows_back_every_measured_setting():
+    """`Tools/pypcg/data/assign_oracle_rows.json`: the primitive's tapped output against `expand_items`,
+    written by the oracle itself (`pypcg_v1_editor.py {"assign": {"stage": n, "label": ...}}`). Every
+    deterministic row agrees on item sizes, `Asset` and seed for every point, scale and bounds exactly,
+    location within 1e-9 cm and the quaternion within 1e-12; the random row agrees on sizes, order and
+    `Asset`. Between them the rows cover each setting the docstring calls MEASURED."""
+    import json
+    path = Path(__file__).resolve().parents[1] / "data" / "assign_oracle_rows.json"
+    rows = json.loads(path.read_text(encoding="utf-8"))["rows"]
+    covered = set()
+    for r in rows:
+        assert r["items"] == r["python_items"], r["run"]
+        if r["random"]:
+            assert r["equal"] == {"items": True, "Asset": True}, r["run"]
+            covered.add("random_compare")
+            continue
+        assert r["equal"]["Asset"] == r["equal"]["seed"] == r["points"], r["run"]
+        assert r["max_diff"]["scale"] == 0.0 and r["max_diff"]["bounds"] == 0.0, r["run"]
+        assert r["max_diff"]["loc"] <= 1e-9 and r["max_diff"]["quat"] <= 1e-12, r["run"]
+        st = r["settings"]
+        for key in ("position_offset", "rotation_offset", "scale_offset", "extents_scale"):
+            v = st.get(key)
+            if v and any(abs(float(x) - (1.0 if key in ("scale_offset", "extents_scale") else 0.0)) > 0
+                         for x in v.values()):
+                covered.add(key)
+        covered.add("uniform_%s" % st.get("uniform_scale", A.DEFAULT_UNIFORM_SCALE))
+        covered.add("mesh_bounds_%s" % st.get("use_mesh_bounds", A.DEFAULT_USE_MESH_BOUNDS))
+        if len(r["items"]) == 1:
+            covered.add("static_mesh_no_copy_item")
+    assert covered >= {"position_offset", "rotation_offset", "scale_offset", "extents_scale", "uniform_True",
+                       "uniform_False", "mesh_bounds_True", "mesh_bounds_False", "static_mesh_no_copy_item",
+                       "random_compare"}

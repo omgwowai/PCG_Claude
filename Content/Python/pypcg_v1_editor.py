@@ -193,7 +193,7 @@ def _assign_target(fixtures):
             "from": "the fixed box (no recorded run)"}
 
 
-def assign_phase(n, step=None, only=None, overrides=None):
+def assign_phase(n, step=None, only=None, overrides=None, label=None):
     """`{"assign": {"stage": n}}`: rebuild every Assign_Assets call of stage `n` in Python from its OWN
     recorded settings, with one target point, and check the Python expansion's shape against the
     graph's own parameters.
@@ -210,7 +210,7 @@ def assign_phase(n, step=None, only=None, overrides=None):
           `"calls": [node, ...]` keeps only those Assign_Assets calls (and what they read), and
           `"set": {node: {pin: value}}` edits a call's overrides in the oracle graph -- e.g. zeroes a
           random range so a setting that only appears on random calls can be measured exactly.
-      `{"assign": {"stage": n}}` (after that generation) also reads both taps and runs
+      `{"assign": {"stage": n, "label": name}}` (after that generation) also reads both taps and runs
           `pypcg.geo.assets.expand_items` on the tapped input with the call's own settings and the
           primitive's own picks (the tapped output's last item names each target's kit), and compares
           the result with the tapped output item for item: point counts, location, rotation
@@ -218,7 +218,8 @@ def assign_phase(n, step=None, only=None, overrides=None):
           the largest difference of each. The settings compared are the ORACLE graph's own (so a `set`
           edit is honoured). A call with a non-zero random range is marked `random` and compared only
           on item sizes, item order and `Asset`: this phase has no `TransformPoints_2` stream. `oracle`
-          is absent when the volume does not hold the oracle."""
+          is absent when the volume does not hold the oracle. With `label`, the oracle result is
+          written to `Saved/Reports/v2/sNN/assign_oracle_<label>.json`."""
     from pypcg import extract, geo, stages
     from pypcg.ue import assets as uassets
     if step == "gen":
@@ -253,6 +254,14 @@ def assign_phase(n, step=None, only=None, overrides=None):
     oracle = _assign_oracle_compare(n, calls, uassets)
     if oracle is not None:
         out["oracle"] = oracle
+        if label:
+            # The evidence on disk (Task 15 fix round 2): the full oracle result, read in THIS call,
+            # after the generation the previous call started.
+            path = os.path.join(_REPO, "Saved", "Reports", "v2", "s%02d" % n, "assign_oracle_%s.json" % label)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(dict(oracle, stage=n, label=label), fh, indent=1, default=str)
+            oracle["written"] = path
         out["failures"] = (failures + oracle.get("failures", []))[:20]
     return out
 
@@ -634,7 +643,7 @@ try:
         _asg = _args["assign"]
         _d = _asg if isinstance(_asg, dict) else {"stage": _args["stage"]}
         mcp_result = json.loads(json.dumps(assign_phase(int(_d["stage"]), _d.get("step"), _d.get("calls"),
-                                                        _d.get("set")), default=str))
+                                                        _d.get("set"), _d.get("label")), default=str))
     else:
         mcp_result = json.loads(json.dumps(run_stage(_args), default=str))
 except Exception as _exc:
