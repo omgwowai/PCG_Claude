@@ -33,16 +33,41 @@ def recursive_split(ring, ops, iterations, min_area_cm2, ratio_fn, areas, paths,
         recursive_split(r, ops, iterations, min_area_cm2, ratio_fn, areas, paths, depth + 1)
 
 
-def grid_lines(ring, width, length, extend=100000.0):
+def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True):
     """[("X" | "Y", segment)]: lines across the longest-edge frame every `width` (X, perpendicular
-    to the edge) and every `length` (Y, parallel to it), clipped to the ring."""
+    to the edge) and every `length` (Y, parallel to it), clipped to the ring.
+
+    `subdiv=(Subdiv_width, Subdiv_length)` is the primitive's `UseSubdivisionInsteadOfSizes` mode
+    (`Subdivide_Areas_withGridLoop`): `Select_0` takes the cell from `AttributeMathsOp_3` --
+    the box size divided by the subdivision count per axis -- and `Select_1` the grid extents from
+    `AttributeMathsOp_5`, half box + TWO cells (`AttributeMathsOp_6` doubles the cell) instead of
+    one. `CreatePointsGrid` lays corners from -extents in cell steps and `FilterDataByIndex` drops
+    the first two partitions, so the size mode's first line is one cell in from the box and the
+    subdivision mode's first line is ON the box (the frame box carries the 1 cm vertex boxes, so
+    that line lies 1 cm outside the ring and the clip drops it). Stage 9's large lots use
+    `(1, 2)`: one line down the middle, parallel to the longest edge.
+
+    `clipped=False` returns the whole extended line (once) for every line that crosses the ring:
+    that is what the loop's `Polygon2DOperation_2 CutWithPaths` cuts the ring with (`Reroute_6`),
+    while `ClipPaths_1` publishes the clipped pieces."""
     o, X, Y, u0, u1, w0, w1 = frame_box(ring)
     out = []
-    for axis, lo, hi, step in (("X", u0, u1, width), ("Y", w0, w1, length)):
-        n = int((hi - lo) / step + 2)         # CreatePointsGrid(CellCorners), extents = half box + one cell
+    if subdiv is None:
+        axes, margin = (("X", u0, u1, width), ("Y", w0, w1, length)), 1
+    else:
+        axes = (("X", u0, u1, (u1 - u0) / float(subdiv[0])), ("Y", w0, w1, (w1 - w0) / float(subdiv[1])))
+        margin = 2
+    for axis, lo, hi, step in axes:
+        if not step > 0:
+            continue
+        n = int((hi - lo) / step + 2 * margin)   # CreatePointsGrid(CellCorners), extents = half box + margin cells
         for i in range(2, n + 1):             # FilterDataByIndex drops partitions 0 and 1
-            c = lo + (i - 1) * step
+            c = lo + (i - margin) * step
             line = ([at(o, X, Y, c, w0 - extend), at(o, X, Y, c, w1 + extend)] if axis == "X" else
                     [at(o, X, Y, u0 - extend, c), at(o, X, Y, u1 + extend, c)])
-            out += [(axis, seg) for seg in clip_path(line, ring)]
+            segs = clip_path(line, ring)
+            if clipped:
+                out += [(axis, seg) for seg in segs]
+            elif segs:
+                out.append((axis, line))
     return out

@@ -1,3 +1,10 @@
 {"default": {"count": 0.25, "area": 0.10, "length": 0.10, "points": 0.25, "instances": 0.25, "share_pp": 10.0,
              "share_min": 0.01, "deterministic": 0.01, "min_count": 5, "bbox_margin_cm": 20000.0},
- "stages": {"6": {"length": 0.20, "bbox_margin_cm": 50000.0}}}
+ "stages": {"6": {"length": 0.20, "bbox_margin_cm": 50000.0},
+            "9": {"tags": {"Small Courtyards": {"count": 0.50, "area": 0.55},
+                           "SmallDistrictsBldgFootprints": {"count": 0.30, "area": 0.30},
+                           "LargeDistrictsBldgFootprints": {"area": 0.20},
+                           "LargeBuildingSkirt": {"area": 0.25},
+                           "UnderHighway": {"area": 0.15},
+                           "unbuildableLots": {"count": 0.30, "area": 0.15},
+                           "reservedLots": {"count": 0.55, "area": 0.75, "bbox_margin_cm": 35000.0}}}}}

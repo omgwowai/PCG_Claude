@@ -85,7 +85,12 @@ def _within(inner, outer, margin):
 def verdict(official, runs, deterministic, th, tags=None):
     so, sr = summarize(official["items"], tags), [summarize(r["items"], tags) for r in runs]
     failures, rows = [], []
+    stage_th = th
     for tag, o in sorted(so.items()):
+        # A stage may hold a tag to its own limits (`"tags": {tag: {key: value}}` in the stage's entry
+        # of v2_thresholds.json): one tag's measured noise then widens that tag only, not the stage.
+        th = dict(stage_th)
+        th.update((stage_th.get("tags") or {}).get(tag, {}))
         for i, s in enumerate(sr):
             r = s.get(tag)
             if not r:
@@ -113,6 +118,7 @@ def verdict(official, runs, deterministic, th, tags=None):
             if not ok:
                 failures.append("tag %s %s: median %.4g vs official %.4g (%+.1f %%, limit %.0f %%)"
                                 % (tag, metric, med, off, 100 * rel, 100 * limit))
+    th = stage_th
     oi = official["instances"]
     if oi["total"]:
         totals = [r["instances"]["total"] for r in runs]

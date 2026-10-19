@@ -38,3 +38,15 @@ def choose(n, ratio, rng, ceil=False):
     else:
         k = max(0, min(n, int(round(n * ratio))))
     return sorted(rng.sample(range(n), k))
+
+
+def keep_each(n, ratio, rng):
+    """`Filter_RandomChoice` with `RandomPerDataset = true` (its default): one draw per data item,
+    kept (`Selected`) when the draw is not above `Ratio`. This is a per-item Bernoulli cull, NOT a
+    fixed count: the CoreProcess's `Filter_RandomChoice_CoreProcessLoop` stamps `@data.random` with
+    `AttributeNoise` per item, `FilterDataByAttribute_0` (operator `Greater`, the node default) sends
+    `random > Ratio` to `InsideFilter`, and `AddTags_1` tags that side `Unselected`. So a `Ratio` of
+    0.9 keeps each item with probability 0.9 and the kept count varies from run to run.
+    Returns one bool per item, True = selected."""
+    r = float(ratio)
+    return [not (rng.random() > r) for _ in range(n)]

@@ -629,8 +629,13 @@ def run_stage(args):
         if checks is not None:
             failures += ["%s: %s" % (f, x) for x in checks.check(inputs, {k: v for k, v in rec["params"].items()
                                                                          if k != stage_api.SEED}, outputs, ops, official)]
-    return {"stage": n, "runs": len(files), "replayed": replayed, "deterministic": deterministic,
-            "official_seen": official is not None, "failures": failures[:40]}
+    result = {"stage": n, "runs": len(files), "replayed": replayed, "deterministic": deterministic,
+              "official_seen": official is not None, "failures": failures[:40]}
+    # Also on disk: a slow stage (9: about 50 s) can outlast the bridge's websocket keepalive, and the
+    # call then reports a closed connection although the run completed.
+    with open(os.path.join(d, "v1.json"), "w", encoding="utf-8") as fh:
+        json.dump(result, fh, indent=1)
+    return result
 
 
 try:

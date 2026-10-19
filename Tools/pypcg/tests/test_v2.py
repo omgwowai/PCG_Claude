@@ -110,3 +110,15 @@ def test_empty_contract_tags_group_everything_as_all():
     assert not v2.verdict(off, [rec([item(["AnotherTag"], area=300.0) for _ in range(6)], total=10)],
                           False, TH, tags=set())["pass"]
     assert v2.same(off, run, set())
+
+
+def test_a_tag_override_widens_that_tag_only():
+    th = dict(TH, tags={"SmallDistricts": {"area": 0.5}})
+    assert v2.verdict(districts(), [districts(1.3)] * 5, False, th)["pass"]
+    both = rec([item(["SmallDistricts"], area=130.0) for _ in range(6)] + [item(["Other"], area=130.0) for _ in range(6)])
+    off = rec([item(["SmallDistricts"], area=100.0) for _ in range(6)] + [item(["Other"], area=100.0) for _ in range(6)])
+    v = v2.verdict(off, [both] * 5, False, th)
+    assert not v["pass"] and all("Other" in f for f in v["failures"])
+    far = rec([item(["SmallDistricts"], area=100.0, bbox=((0, 0), (40000, 100)))] * 6)
+    assert not v2.verdict(districts(), [far], False, TH)["pass"]
+    assert v2.verdict(districts(), [far], False, dict(TH, tags={"SmallDistricts": {"bbox_margin_cm": 50000.0}}))["pass"]
