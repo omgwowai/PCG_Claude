@@ -22,8 +22,11 @@ The chain, per class (official node names in brackets; Small / Medium / Large):
             [FilterDataByAttribute_0 / 1]: medium ones a new height 2500..7000 [Subgraph_38 Write_Noise]
             x 2 [AttributeMathsOp_2], large ones x 1.3 [AttributeMathsOp_1] -> the complex-shape nodes
   OUT       the rest -> the kept Assign_CitySampleBuildings [Subgraph_3 / 40 / 41], each footprint's
-            height written back to `@data.MaxHeight` by a native CopyAttributes adapter; CollisionGeometry
-            -> the levelled footprints to the kept collision loops [Loop_5 / 4 / 3]
+            height written back to `@data.MaxHeight` by a native CopyAttributes adapter
+  COLLISION the kept collision loops [Loop_5 / 4 / 3] get NOTHING: officially they run only on Branch_9/10/11's
+            Output B (Partitioned true) and then CollisionGeometry; the slim graph drops Partitioned as false,
+            so the collision streams stay empty whatever CollisionGeometry says (ruling T20a: the loops write
+            actors and assets under /CitySamplePCG/Levels/Collision, which the official graph does not here)
 """
 import json
 import math
@@ -111,11 +114,14 @@ class Footprint:
     """One footprint between the nodes: its control points (x, y, z), the vertices' engine quaternions, its
     height and the tags it was read with."""
 
-    def __init__(self, points, quats, height, tags):
+    def __init__(self, points, quats, height, tags, index=None, base=None, selected=False):
         self.points = list(points)
         self.quats = list(quats)
         self.height = float(height)
         self.tags = list(tags)
+        self.index = index              # the footprint's place in its class's input (the texture write's order)
+        self.base = base                # its texture height
+        self.selected = selected        # inside the HighRise zones
 
     def spline(self):
         return Spline([tuple(p) for p in self.points], closed=True, linear=True,
@@ -141,7 +147,9 @@ def heights(items):
 
 
 def ring_points(poly):
-    """The 3D vertices the engine's ToPoint reads off a polygon (`Polygon.vertices`, else outer at z)."""
+    """The 3D vertices the engine's ToPoint reads off a polygon (`Polygon.vertices`, else outer at z).
+    `vertices` describes the polygon as the engine handed it over; it is only valid while `outer` is the one
+    read with it (the stage never edits its input footprints)."""
     if poly.vertices:
         return [tuple(p) for p in poly.vertices]
     return [(p[0], p[1], poly.z) for p in poly.outer]
@@ -258,10 +266,10 @@ def footprints(polys, base, zone_items, ops, surface):
         factors = distance_factors(rings, samples)
         for i, ring, k in zip(sel, rings, factors):
             pos, quats, _frame = F.rebuilt_vertices(ring[::-1])
-            out.append(Footprint(fit(pos, surface), quats, base[i] * k, []))
+            out.append(Footprint(fit(pos, surface), quats, base[i] * k, [], i, base[i], True))
     for i in uns:
         ring = ring_points(polys[i])
-        out.append(Footprint(fit(ring, surface), ring_quats(polys[i], ring), base[i], []))
+        out.append(Footprint(fit(ring, surface), ring_quats(polys[i], ring), base[i], [], i, base[i], False))
     return out, sel
 
 
@@ -391,8 +399,8 @@ def buildings(inputs, params, ops, draws):
             base = (base + [0.0] * len(polys))[:len(polys)]
         fps, sel = footprints(polys, base, zone_items, ops, surface)
         notes.append("%s: %d footprints, %d in the HighRise zones" % (cls, len(fps), len(sel)))
-        if params.get("CollisionGeometry"):
-            streams[cls + "Collision"] = [(fp.spline(), fp.height) for fp in fps]
+        # The collision streams stay empty: Partitioned is dropped as false, and officially the collision loops
+        # need it true before CollisionGeometry is even read (ruling T20a, s11.md 3.3).
         if cls != "Small" and params.get("ComplexBuildingShapes"):
             to_assign, to_shape, counts = complex_split(cls, fps, draws)
             streams[cls + "Footprints"] = to_assign

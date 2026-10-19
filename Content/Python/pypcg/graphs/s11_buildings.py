@@ -15,7 +15,7 @@ Get Final Mesh Terrain`, `Subgraph_2 LoadCitySampleData` (one, shared by the thr
                 LargeFootprints  -> Subgraph_41 Assign City Sample Buildings - Large
                 MediumComplex    -> Loop_2 AssignBuildingShape -> Subgraph_36 SetComplexBuildings
                 LargeComplex     -> Loop_1 AssignBuildingShape -> Subgraph_33 SetComplexBuildings
-                {Small,Medium,Large}Collision -> Loop_5 / Loop_4 / Loop_3 (extruded collision; CollisionGeometry)
+                {Small,Medium,Large}Collision -> Loop_5 / Loop_4 / Loop_3 (extruded collision; always EMPTY)
                 SpawnMeshes (true: Partitioned is dropped) -> the three Assign nodes' SpawnMeshes pins
   Subgraph_3 / (36, 40) / (33, 41) rooftops -> s11_buildings_rooftops -> the output (the three tags) and the
                 thirteen Create_Mesh_Planar rooftop meshes (Subgraph_0, 20 .. 31)
@@ -25,8 +25,8 @@ Adapters (not official nodes): a Python node can neither read nor write a data-d
 `ExtractAttribute` in, eight `CopyAttributes` out. What differs from the official wiring otherwise: the named
 reroutes are plain edges; `Partitioned` is dropped with Branch_0 .. 6 / 9 .. 11, the spawn-actor and planar-
 mesh-actor loops (Loop_13 / 19 / 21, Loop_0 / 18 / 20) and the three `NOT Partitioned` nodes; `Debug` with its
-three branches and extrudes. The collision loops are gated by CollisionGeometry alone (officially they also need
-Partitioned).
+three branches and extrudes. The collision loops stay wired but receive nothing: officially they run only when
+Partitioned is true (then CollisionGeometry), and Partitioned is dropped as false (ruling T20a).
 """
 from pypcg import dsl
 from pypcg.stages import s11_buildings as S

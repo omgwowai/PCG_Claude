@@ -16,7 +16,8 @@ class Polygon:
     vertices as the engine's own `ToPoint` / `GetSplineControlPoints` read them (`GetTransformAtDistance(i,
     0, world)`, which recomputes each vertex from its segment and may differ from `outer` in the last bits),
     and the data's frame `((tx, ty, tz), (qx, qy, qz, qw))`. Neither takes part in equality; records carry
-    them only when set."""
+    them only when set. Both describe the polygon AS READ: a stage that rebuilds or edits `outer` must not
+    carry them over (a new `Polygon(...)` has neither)."""
     outer: list
     holes: list = field(default_factory=list)
     z: float = 0.0

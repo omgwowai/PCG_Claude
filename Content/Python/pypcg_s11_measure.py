@@ -1,7 +1,7 @@
 # pypcg_s11_measure.py -- stage 11 (Task 20): tap the OFFICIAL PCG_3_3_1_Buildings' intermediate data on the
 # stage-11 volume of the demo level, for Tools/pypcg/s11_measure_offline.py and the s11.md measurements.
 # {"step": "gen", "graph": "a", "taps": {name: [node, pin]}, "extract": {name: [node, pin, selector]},
-#  "nodes": {name: [class, settings, [node, pin]]}}
+#  "nodes": {name: [class, settings, [node, pin], input label (default "In")]}}
 #     builds /Game/PyPCG/Probe/PCG_T20Tap_<graph> (the official nodes upstream of the taps, one AddTag per tap,
 #     an ExtractAttribute per extract, any extra node) from the official IR snapshot, puts it on the stage-11
 #     volume (shipped overrides and seed) and generates. Restore afterwards (gen official / restore).
@@ -69,7 +69,7 @@ def gen(args):
     for node, _pin, _sel in extracts.values():
         keep |= _upstream(off["nodes"], node)
     extras = args.get("nodes") or {}
-    for _cls, _set, (node, _pin) in extras.values():
+    for _cls, _set, (node, _pin), *_rest in extras.values():
         keep |= _upstream(off["nodes"], node)
     keep.discard("DefaultInputNode")
     keep.discard("DefaultOutputNode")
@@ -101,9 +101,9 @@ def gen(args):
         t["inputs"] = [{"label": "In", "edges": [[tag + "_x", "Out"]]}]
         nodes.append(t)
         tags.append(tag)
-    for tag, (cls, settings, (node, pin)) in extras.items():
+    for tag, (cls, settings, (node, pin), *rest) in extras.items():
         e = _node(tag + "_n", cls, settings)
-        e["inputs"] = [{"label": "In", "edges": [[node, pin]]}]
+        e["inputs"] = [{"label": rest[0] if rest else "In", "edges": [[node, pin]]}]
         nodes.append(e)
         t = _node(tag, "PCGAddTagSettings", {"TagsToAdd": tag})
         t["inputs"] = [{"label": "In", "edges": [[tag + "_n", "Out"]]}]

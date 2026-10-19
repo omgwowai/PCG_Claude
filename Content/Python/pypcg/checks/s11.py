@@ -17,8 +17,11 @@ The stage reads the final mesh terrain, so its run record cannot be replayed who
     [MinHeight, MaxHeight] -- the heights the building nodes receive are not (the HighRise factor reaches 5,
     the complex shapes x 2 / x 1.3, Write_Noise up to 7000);
   - every footprint reaches exactly one building node: per class, Footprints + Complex = the input count;
-  - no footprint is shorter than its texture height outside the complex branch (the HighRise factor is
-    1..5), and every medium complex height is in 2 x [2500, 7000], every large one 1.3 x its own > 3500;
+  - HIGHRISE (`highrise`, per footprint, on the stage's own `footprints` -- the heights BEFORE the complex
+    split, so it holds on the shipped ComplexBuildingShapes too): every footprint's height is >= its OWN
+    texture height, and every footprint inside the HighRise zones is strictly taller (the factor is the mean
+    of 1..5 remapped vertex distances, 1 only at the class's least deep vertex);
+  - every medium complex height is in 2 x [2500, 7000], every large one 1.3 x its own > 3500;
   - each footprint sits flat (one z for all its vertices: `Transform_Level` Min);
   - SpawnMeshes is true (Partitioned is dropped, so the building nodes spawn their meshes)."""
 from pypcg import geo
@@ -77,10 +80,6 @@ def check(inputs, params, outputs, ops, official=None):
             flat = [v for v in _values(outputs, s) if _zs(v) and max(_zs(v)) - min(_zs(v)) > LEVEL_CM]
             if flat:
                 f.append("%s: %d footprints are not level" % (s, len(flat)))
-        if base and (cls == "Small" or not params.get("ComplexBuildingShapes")):
-            low = [h for h in _heights(outputs, cls + "Footprints") if h < min(base) - TOL]
-            if low:
-                f.append("%s: %d heights below every texture height (the HighRise factor is >= 1)" % (cls, len(low)))
     if params.get("ComplexBuildingShapes"):
         lo, hi = S.NOISE
         bad = [h for h in _heights(outputs, "MediumComplex") if not (S.SCALE["Medium"] * lo - TOL <= h <= S.SCALE["Medium"] * hi + TOL)]
@@ -115,6 +114,29 @@ def _same(a, b):
     return True
 
 
+def highrise(inputs, ops):
+    """The HighRise invariant per footprint (module docstring), on `S.footprints` over the given inputs (the
+    terrain only moves z, so a flat one does)."""
+    f = []
+    for cls in S.CLASSES:
+        polys = [v for v, _t in inputs.get(cls + "Lots", []) if isinstance(v, Polygon)]
+        base = S.heights(inputs.get(cls + "Heights", []))
+        if not polys or len(base) != len(polys):
+            continue
+        fps, sel = S.footprints(polys, base, inputs.get("HighRise", []), ops, _Flat())
+        low = [fp for fp in fps if not fp.height >= fp.base]
+        flat = [fp for fp in fps if fp.selected and not fp.height > fp.base]
+        if low:
+            f.append("%s: %d footprints below their own texture height (e.g. #%d: %.6f < %.6f)"
+                     % (cls, len(low), low[0].index, low[0].height, low[0].base))
+        if flat:
+            f.append("%s: %d HighRise footprints not taller than their texture height (e.g. #%d: %.6f vs %.6f)"
+                     % (cls, len(flat), flat[0].index, flat[0].height, flat[0].base))
+        if sorted(fp.index for fp in fps) != list(range(len(polys))) or len([fp for fp in fps if fp.selected]) != len(sel):
+            f.append("%s: the footprints are not each input exactly once" % cls)
+    return f
+
+
 def check_record(rec, ops, official=None):
     """The partial replay and the invariants on one recorded run (see the module docstring)."""
     from pypcg import stage_api
@@ -139,4 +161,5 @@ def check_record(rec, ops, official=None):
     outputs = {pin: [(v, frozenset(t)) for v, t in items] for pin, items in recorded.items()}
     rec_inputs = {k: v for k, v in inputs.items() if k != "MeshTerrain"}
     f += check(rec_inputs, {k: v for k, v in params.items() if k != stage_api.SEED}, outputs, ops, official)
+    f += highrise(inputs, ops)
     return f

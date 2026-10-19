@@ -268,7 +268,7 @@ def test_highrise_factor_is_at_least_one_and_grows_inward():
     got = {round(v.points[0][0]): h for v, h in zip(values(out, "MediumFootprints"), hs(out, "MediumFootprints"))}
     inside = [x for x in (1000, 5000)]
     for x in inside:
-        assert got[x] >= base[x]
+        assert got[x] > base[x]                                        # strictly taller inside the zone
     assert got[40000] == base[40000] and got[50000] == base[50000]         # outside: untouched
     # the deeper lot (5000..9000) is the farther one from the zone's edge: the larger factor
     assert got[5000] / base[5000] > got[1000] / base[1000]
@@ -324,10 +324,32 @@ def test_clean_spline_drops_a_collinear_point_and_a_duplicate():
     assert out == [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (10.0, 10.0, 0.0), (0.0, 10.0, 0.0)] and len(rots) == 4
 
 
-def test_collision_streams_only_with_collision_geometry():
-    assert all(run()[c + "Collision"] == [] for c in S.CLASSES)
-    out = run(CollisionGeometry=True)
-    assert [len(out[c + "Collision"]) for c in S.CLASSES] == [len(SMALL), len(MEDIUM), len(LARGE)]
+def test_collision_streams_stay_empty_even_with_collision_geometry():
+    """Ruling T20a: officially the collision loops need Partitioned true before CollisionGeometry is read, and
+    the slim graph drops Partitioned as false -- so nothing may reach them (they would write actors and assets
+    under /CitySamplePCG/Levels/Collision, where the official graph writes nothing)."""
+    for complex_ in (False, True):
+        for coll in (False, True):
+            out = run(CollisionGeometry=coll, ComplexBuildingShapes=complex_)
+            assert all(out[c + "Collision"] == [] and out[c + "CollisionHeights"] == [] for c in S.CLASSES)
+
+
+def test_highrise_check_is_per_footprint_and_catches_a_planted_fault(monkeypatch):
+    from pypcg.checks import s11 as C
+    ins = _with_vertices(inputs())
+    assert C.highrise(ins, OPS) == []
+    fps, sel = S.footprints([v for v, _t in ins["MediumLots"]], S.heights(ins["MediumHeights"]), ins["HighRise"], OPS,
+                            FlatTerrain(0.0))
+    assert len(sel) == 2 and all(fp.height > fp.base for fp in fps if fp.selected)
+    assert all(fp.height == fp.base for fp in fps if not fp.selected)
+    # planted: a factor below 1 (one footprint shorter than its own texture height)
+    monkeypatch.setattr(S, "distance_factors", lambda rings, samples: [0.99] + [1.5] * (len(rings) - 1))
+    assert any("Medium: 1 footprints below their own texture height" in x for x in C.highrise(ins, OPS))
+    # planted: a factor of exactly 1 (a HighRise footprint not taller)
+    monkeypatch.setattr(S, "distance_factors", lambda rings, samples: [1.0] * len(rings))
+    found = C.highrise(ins, OPS)
+    assert any("Medium: 2 HighRise footprints not taller" in x for x in found)
+    assert any("Large: 1 HighRise footprints not taller" in x for x in found)
 
 
 def test_rooftops_tagged_by_class_and_each_given_one_material():
@@ -437,3 +459,74 @@ def test_check_flags_a_texture_height_outside_its_class():
     p = {k: v for k, v in params().items()}
     p.update(MinHeightSmallDistrict=1500.0, MaxHeightSmallDistrict=2800.0)
     assert any("Small: 1 texture heights outside" in x for x in C.check(ins, p, out, OPS))
+
+
+# ---- geo.frames pinned against the official engine (Tools/pypcg/data/s11_frames_fixture.json) -------
+def _fixture():
+    with open(os.path.join(REPO, "Tools", "pypcg", "data", "s11_frames_fixture.json"), encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def test_frames_rebuilt_polygons_equal_the_official_bit_for_bit():
+    """Write_DistanceFrom's rebuild (points sorted by descending index -> CreatePolygon2D -> ToPoint)."""
+    for case in _fixture()["rebuilt"]:
+        pos, _rot, (t, q) = F.rebuilt_vertices([tuple(v) for v in case["vp"]][::-1])
+        assert [list(t), list(q)] == case["official_xf"]
+        assert [list(p) for p in pos] == case["official_vp"]
+
+
+def test_frames_levelled_spline_to_polygon_equals_the_official_bit_for_bit():
+    """Filter_Areas_BySize's CreatePolygon2D of a levelled spline, duplicated vertices included (the polyline
+    through the float reparam table collapses a zero-length segment)."""
+    cases = _fixture()["levelled_to_polygon"]
+    assert any(len(c["levelled"]) != len(c["official_vp"]) for c in cases)        # the collapse is exercised
+    for case in cases:
+        pts = [tuple(p) for p in case["levelled"]]
+        n = len(pts)
+        curve = F.SplineCurve(pts, [(0.0, 0.0, 0.0)] * n, [(0.0, 0.0, 0.0)] * n, [True] * n, True)
+        pos, _rot, (t, q) = F.rebuilt_vertices(F.create_polygon_points(curve))
+        assert [list(t), list(q)] == case["official_xf"]
+        assert [list(p) for p in pos] == case["official_vp"]
+
+
+def test_frames_clean_spline_keeps_the_official_points():
+    for case in _fixture()["cleaned"]:
+        vp = [tuple(v) for v in case["vp"]]
+        pts, rots = S.clean(vp, [(0.0, 0.0, 0.0, 1.0)] * len(vp))
+        assert [list(p) for p in pts] == case["official_cleaned"] and len(rots) == len(pts)
+
+
+def test_frames_highrise_samples_match_the_official_sampler():
+    """The curved (Hermite) HighRise splines through FSplineCurves' float table and FDistanceStepSampler: the
+    sample count exactly, every pinned sample within 2e-11 cm (one ulp at 1e5 cm; about a fifth of the official
+    samples differ in that last bit -- s11.md 4.3)."""
+    for h in _fixture()["highrise"]:
+        ctrl = h["control"]
+        assert any(c["type"] != 0 for c in ctrl)                                       # curved segments
+        curve = F.SplineCurve([c["p"] for c in ctrl], [c["arrive"] for c in ctrl], [c["leave"] for c in ctrl],
+                              [c["type"] == 0 for c in ctrl], h["closed"], h["frame"][0])
+        s = curve.sample_distance(min(100.0, max(1.0, curve.length() / 100.0)))
+        assert len(s) == h["n_samples"]
+        for i, p in h["samples"].items():
+            assert max(abs(a - b) for a, b in zip(s[int(i)], p)) <= 2e-11, i
+
+
+def test_frames_quat_from_axes_non_trace_branch():
+    q = F.quat_from_axes((-1.0, 0.0, 0.0), (0.0, -1.0, 0.0), (0.0, 0.0, 1.0))        # yaw 180: trace -1
+    assert q == (0.0, 0.0, 1.0, 0.0)
+    q = F.quat_from_axes((1.0, 0.0, 0.0), (0.0, -1.0, 0.0), (0.0, 0.0, -1.0))        # roll 180
+    assert q == (1.0, 0.0, 0.0, 0.0)
+
+
+def test_frames_make_from_z_vertical_and_tilted_branches():
+    assert F.make_from_z((0.0, 0.0, 1.0)) == (-0.0, 0.0, -0.7071067811865475, 0.7071067811865476)  # up -> X ref
+    z = (1.0, 0.0, 0.0)                                                                # horizontal -> up ref
+    q = F.make_from_z(z)
+    r = geo.quat_rotate(q, (0.0, 0.0, 1.0))
+    assert all(abs(a - b) < 1e-12 for a, b in zip(r, z))
+
+
+def test_frames_polyline_collapses_a_zero_length_segment():
+    pts = [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (10.0, 0.0, 0.0), (10.0, 10.0, 0.0)]
+    c = F.SplineCurve(pts, [(0, 0, 0)] * 4, [(0, 0, 0)] * 4, [True] * 4, True)
+    assert F.create_polygon_points(c) == [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (10.0, 10.0, 0.0)]

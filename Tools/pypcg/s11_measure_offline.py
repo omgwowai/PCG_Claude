@@ -79,12 +79,17 @@ def main():
         selected |= {tuple(map(tuple, r["vp"])) for r in e.get("T_%s_sel" % c, [])}
     noise = [x["rows"][0]["MaxHeight"] for x in a["T_m_Subgraph_38h"]]
     S.within = lambda polys, _zones, _ops: [tuple(map(tuple, p.vertices)) in selected for p in polys]
-    streams, notes = S.buildings(inputs, {"ComplexBuildingShapes": True, "CollisionGeometry": True}, None,
+    streams, notes = S.buildings(inputs, {"ComplexBuildingShapes": True, "CollisionGeometry": False}, None,
                                  S.Draws(random.Random(0), noise))
+    levelled = {}
+    for cls in S.CLASSES:
+        polys = [v for v, _t in inputs[cls + "Lots"]]
+        fps, _sel = S.footprints(polys, S.heights(inputs[cls + "Heights"]), zones, None, inputs["MeshTerrain"][0][0])
+        levelled[cls] = [(fp.spline(), fp.height) for fp in fps]
     res = {"notes": notes, "levelled": {}, "to_assign": {}, "complex": {}}
     for c, cls in zip("sml", S.CLASSES):
         lvl = e["T_%s_lvl" % c]
-        mine = streams[cls + "Collision"]
+        mine = levelled[cls]
         off_h = [x["rows"][0]["MaxHeight"] for x in a["T_%s_lvlh" % c]]
         res["levelled"][cls] = {
             "n": len(mine), "official": len(lvl),
