@@ -17,12 +17,16 @@ class Polygon:
 class Spline:
     """points: [(x, y, z)] control points. linear: straight segments; otherwise tangents holds
     (arrive, leave) per point, or None for automatic tangents. polyline: the dense world polyline
-    the engine draws (filled on inputs, ignored on outputs)."""
+    the engine draws (filled on inputs, ignored on outputs). rotations: optional per-point
+    (pitch, yaw, roll) in degrees, the spline point's own rotation; None writes the identity (the
+    engine's default). Official `Create_Spline_Shape` output carries one per vertex and readers
+    downstream see it (stage 4, measured 2026-10-19)."""
     points: list
     closed: bool = False
     linear: bool = True
     tangents: list = None
     polyline: list = None
+    rotations: list = None
 
 
 @dataclass
@@ -106,9 +110,12 @@ def to_json(v):
     if isinstance(v, Polygon):
         return {"kind": "polygon", "outer": [list(p) for p in v.outer], "holes": [[list(p) for p in h] for h in v.holes], "z": v.z}
     if isinstance(v, Spline):
-        return {"kind": "spline", "points": [list(p) for p in v.points], "closed": v.closed, "linear": v.linear,
-                "tangents": [[list(a), list(b)] for a, b in v.tangents] if v.tangents else None,
-                "polyline": [list(p) for p in v.polyline] if v.polyline else None}
+        d = {"kind": "spline", "points": [list(p) for p in v.points], "closed": v.closed, "linear": v.linear,
+             "tangents": [[list(a), list(b)] for a, b in v.tangents] if v.tangents else None,
+             "polyline": [list(p) for p in v.polyline] if v.polyline else None}
+        if v.rotations:                  # only when set, so records written before the field still compare
+            d["rotations"] = [list(r) for r in v.rotations]
+        return d
     if isinstance(v, ParamSet):
         return {"kind": "params", "values": dict(v.values), "types": dict(v.types)}
     if isinstance(v, Points):
@@ -130,7 +137,8 @@ def from_json(d):
     if kind == "spline":
         return Spline(_tuples(d["points"]), d["closed"], d["linear"],
                       [(tuple(a), tuple(b)) for a, b in d["tangents"]] if d.get("tangents") else None,
-                      _tuples(d["polyline"]) if d.get("polyline") else None)
+                      _tuples(d["polyline"]) if d.get("polyline") else None,
+                      _tuples(d["rotations"]) if d.get("rotations") else None)
     if kind == "params":
         return ParamSet(dict(d["values"]), dict(d["types"]))
     if kind == "points" and not d.get("truncated"):

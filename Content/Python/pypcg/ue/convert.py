@@ -218,6 +218,8 @@ def _spline_data(s):
             sp.set_editor_property("leave_tangent", unreal.Vector(*s.tangents[i][1]))
         else:
             sp.set_editor_property("type", T.CURVE)
+        if s.rotations:
+            sp.set_editor_property("rotation", _rotator(s.rotations[i]))
         pts.append(sp)
     d = unreal.PCGSplineData()
     d.k2_initialize(pts, bool(s.closed), unreal.Transform(), [])

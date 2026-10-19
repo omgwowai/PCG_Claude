@@ -114,6 +114,39 @@ def test_hexagon_matches_the_demo_to_a_tenth_of_a_centimetre():
     assert all(math.dist(p[:2], q) < 0.1 for p, q in zip(xy(spl), HEX_OFFICIAL))
 
 
+# The official vertices at full precision (pyg_probe_t13_delta.py, 2026-10-17). Round 2 measured that
+# stage 15 reads their LAST BITS: the same hexagon 2.9e-12 cm off gave 35 008 instances, these exact
+# doubles give the official 35 239.
+HEX_OFFICIAL_BITS = [(3999.999999999998, -6928.20323027551), (-4000.000000000001, -6928.203230275509),
+                     (-8000.0, 0.0), (-4000.000000000001, 6928.203230275509),
+                     (3999.999999999998, 6928.20323027551), (8000.0, 9.797174393178826e-13)]
+
+
+def test_hexagon_matches_the_demo_bit_for_bit():
+    spl = pts_of(S4.run(volume(), params(S4), None))
+    assert xy(spl) == HEX_OFFICIAL_BITS
+    assert all(p[2] == 0.0 for p in spl.points)
+
+
+def test_hexagon_vertices_carry_the_official_point_rotations():
+    """The official spline points carry yaw 30, -30, -90, -150, 150, 90 (pitch and roll 0): the
+    sphere's tangential orientation. A turned volume adds its yaw."""
+    spl = pts_of(S4.run(volume(), params(S4), None))
+    assert [r[1] for r in spl.rotations] == pytest.approx([30.0, -30.0, -90.0, -150.0, 150.0, 90.0])
+    assert all(r[0] == 0.0 and r[2] == 0.0 for r in spl.rotations)
+    turned = pts_of(S4.run(volume(yaw=40.0), params(S4), None))
+    assert [r[1] for r in turned.rotations] == pytest.approx([70.0, 10.0, -50.0, -110.0, -170.0, 130.0])
+
+
+def test_spline_rotations_round_trip_and_stay_out_of_old_records():
+    """`rotations` is written to a run record only when set, so records made before the field (stages
+    6-8) still replay equal."""
+    spl = pts_of(S4.run(volume(), params(S4), None))
+    back = geo.from_json(geo.to_json(spl))
+    assert back.rotations == spl.rotations and back.points == spl.points
+    assert "rotations" not in geo.to_json(Spline([(0.0, 0.0, 0.0), (1.0, 0.0, 0.0)]))
+
+
 def test_park_matches_the_demo_to_half_a_centimetre():
     spl = pts_of(S5.run(volume(PARK_AT[:2], PARK_YAW), params(S5), None))
     assert len(spl.points) == 4 and spl.closed and spl.linear

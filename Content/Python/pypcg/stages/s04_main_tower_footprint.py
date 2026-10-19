@@ -6,6 +6,8 @@ volume's Z. The official graph reads that transform inside the `Create_Spline_Sh
 (`GetActorData_1`, `Mode = GetSinglePoint`) and the slim graph delivers the same point on the `Volume`
 pin, so the stage takes no scene reads. Replaces the 6-node graph (2 parameter getters, the primitive
 with its 52-node CoreProcess, a reroute, a debug offset and the debug mesh)."""
+import math
+
 from pypcg import geo
 from pypcg.geo import Spline
 from pypcg.stage_api import Param, volume_point
@@ -28,7 +30,12 @@ OUTPUTS = ("Footprint",)
 N = 6
 START_DEG = -60.0          # the official hexagon's first vertex is (R/2, -R*sqrt(3)/2)
 STEP_DEG = -60.0           # clockwise: `SplineDirection_0 ForceCounterClockwise` leaves a NEGATIVE
-                           # standard area (traps.md 41); geo.ngon's default order is that order.
+                           # standard area (traps.md 41). START/STEP name the order; ENGINE_DEG builds it.
+# The engine's own angles, as measured bit for bit (2026-10-19): vertex k is -(R cos p, R sin p) at
+# p = 120 - 60k degrees, i.e. the sphere's longitudes normalised into [-180, 180) and negated. This
+# is the same point set as `ngon(R, 6, -60, -60)` but NOT the same last bits -- and the last bits
+# matter: stage 15 publishes 35 008 instances instead of 35 239 when the vertices are off by 3e-12 cm.
+ENGINE_DEG = [120.0 - 60.0 * k for k in range(N)]
 
 
 def hexagon(center, width, length, yaw_deg=0.0):
@@ -36,10 +43,24 @@ def hexagon(center, width, length, yaw_deg=0.0):
     `LongitudinalSegments = Ngon` points on a circle of radius `Width / 2`, the convex hull keeps
     them, and `MakeVectorAttribute_1`'s `Scale` = (1, Length / Width, 1) stretches them along local
     Y. The 6-gon takes the sphere path no matter what (its `Ngon == 4` test fails), so this is the
-    Ngon >= 5 branch, not the grid branch. Center is (x, y); Z comes from the caller."""
+    Ngon >= 5 branch, not the grid branch. Center is (x, y); Z comes from the caller.
+
+    Computed in the engine's arithmetic, not through `geo.ngon`: each vertex is
+    `-(R cos p, R sin p)` at p in ENGINE_DEG, then scaled on Y, then turned and moved. At the demo's
+    transform (origin, yaw 0, ratio 1) every step after the first is exact, so the six vertices equal
+    the official ones BIT FOR BIT (`test_hexagon_matches_the_demo_bit_for_bit`). At another yaw the
+    turn is `geo.rotate`, which agrees with the engine's quaternion to ~1e-11 cm but is not proven
+    bit-exact (stage 5's yawed park is the measured case of that residual)."""
     ratio = (length / width) if width else 1.0
-    return geo.ngon(center, width / 2.0, N, start_deg=START_DEG, step_deg=STEP_DEG,
-                    y_scale=ratio, yaw_deg=yaw_deg)
+    R = width / 2.0
+    out = []
+    for p in ENGINE_DEG:
+        a = math.radians(p)
+        x, y = -(R * math.cos(a)), -(R * math.sin(a)) * ratio
+        if yaw_deg:
+            x, y = geo.rotate((x, y), yaw_deg)
+        out.append((x + center[0], y + center[1]))
+    return out
 
 
 def radii(width, length):
@@ -61,11 +82,26 @@ def radii(width, length):
     return [far, far, R, far, far, R]
 
 
+def vertex_rotations(yaw_deg=0.0):
+    """Each vertex's own spline-point rotation, (pitch, yaw, roll). `CreatePointsSphere_0` orients
+    each point it puts on the circle tangentially -- its local angle + 90 degrees -- and the points
+    keep that rotation through the hull, the parent transform (which adds the volume's yaw) and
+    `CreateSpline_1`. Measured on the official output (2026-10-19): yaw 30, -30, -90, -150, 150, 90
+    for the local angles -60 .. -360, pitch and roll 0. Stage 15 reads it (the 0.66 % instance
+    difference of round 1), so the port writes it. Normalised to (-180, 180]."""
+    out = []
+    for k in range(N):
+        a = (START_DEG + k * STEP_DEG + 90.0 + yaw_deg) % 360.0
+        out.append((0.0, a - 360.0 if a > 180.0 else a, 0.0))
+    return out
+
+
 def run(inputs, params, ctx):
     loc, yaw = volume_point(inputs)
     if loc is None:
         return {"Footprint": []}
     width, length = float(params["RectWidth"]), float(params["RectLength"])
     ring = hexagon((loc[0], loc[1]), width, length, yaw)
-    return {"Footprint": [(Spline([(x, y, loc[2]) for x, y in ring], closed=True, linear=True),
+    return {"Footprint": [(Spline([(x, y, loc[2]) for x, y in ring], closed=True, linear=True,
+                                  rotations=vertex_rotations(yaw)),
                            ["Footprint"])]}
