@@ -29,6 +29,11 @@ checks module defines it):
     turns by more than that source's cut angle;
   - the corner shapes are the boundary pieces, every lot and the contracted landmark; the railing zones
     sit inside the lots, 21 cm above them.
+
+Two clauses are CONSISTENCY checks, not invariants: the tile count against the stage's own fill of the
+ground pieces, and the segment count against the stage's own `segments_of` -- both rebuild the expected
+value with the stage's functions, so they catch a broken assembly, not a wrong algorithm. The algorithm
+is measured against the official graph instead (`Tools/pypcg/data/s10_official_measurements.json`).
 """
 import math
 
@@ -216,6 +221,7 @@ def check(inputs, params, outputs, ops, official=None):
         for what, n in bad.items():
             if n:
                 f.append("%d of %d tile centres %s" % (n, len(centres), what))
+        # CONSISTENCY, not an invariant: the expected count is rebuilt with the stage's own fill.
         want = sum(len(G.fill_uniform(p.outer, p.z, S.TILE_EXTENT_CM)[0]) for p in pieces)
         if want != len(centres):
             f.append("tile sets hold %d tiles, the ground pieces fill %d" % (len(centres), want))
@@ -249,6 +255,7 @@ def check(inputs, params, outputs, ops, official=None):
         landmark = []
         for t in src["tower"]:
             landmark += A.in_frame(t, lambda p: A.contract([p], S.LANDMARK_SETBACK_CM, ops))
+        # CONSISTENCY, not an invariant: the expected count is rebuilt with the stage's own functions.
         want = sum(len(S.segments_of(r, c, S.LOT_CUT_DEG)) for r, c, _z, _y in bound)
         want += sum(len(S.segments_of(lot.outer, True, S.LOT_CUT_DEG)) for lot in src["lots"])
         want += sum(len(S.segments_of(lm.outer, True, S.LANDMARK_CUT_DEG)) for lm in landmark)

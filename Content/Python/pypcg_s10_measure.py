@@ -12,6 +12,8 @@
 #   {"step": "nontile"}             the port's sidewalk / corner / railing values from the recorded inputs
 #                                   -> nontile_outputs.json (compared offline with tap_official.json)
 #   {"step": "corners", "as": name} the volume's spawned corner instances -> corners_<name>.json
+#   {"step": "frame"}               the two exclusions run per subject in its CreatePolygon2D frame (ruling
+#                                   T17b) -> frame_exclusion.json (needs tap_official.json)
 # Distilled into Tools/pypcg/data/s10_official_measurements.json.
 import gc
 import json
@@ -284,7 +286,45 @@ def corners():
     return {k: len(v) for k, v in out.items()}
 
 
-STEPS = {"gen": gen, "read": read, "tiles": tiles, "pieces": pieces, "nontile": nontile, "corners": corners}
+def frame():
+    from pypcg import geo
+    from pypcg.geo import areas as A, ground as G
+    from pypcg.stages import s10_ground as S
+    from pypcg.ue.ops import Ops
+    ops = Ops()
+    src = S.read(_recorded_inputs())
+    Q, QI = A.FRAME_QUAT, A._FRAME_INV
+
+    def excl(subjects, clips):
+        if not clips:
+            return list(subjects)
+        cut, out = A.rings(clips), []
+        for p in subjects:
+            n = len(p.outer)
+            cx, cy = sum(q[0] for q in p.outer) / n, sum(q[1] for q in p.outer) / n
+
+            def to_l(r):
+                return [tuple(geo.quat_rotate(QI, (q[0] - cx, q[1] - cy, 0.0))[:2]) for q in r]
+
+            def to_w(r):
+                return [(v[0] + cx, v[1] + cy) for v in (geo.quat_rotate(Q, (q[0], q[1], 0.0)) for q in r)]
+
+            res = ops.difference([to_l(r) for r in [p.outer] + list(p.holes)], [to_l(r) for r in cut])
+            out += [geo.Polygon(to_w(r.outer), [to_w(h) for h in r.holes], p.z) for r in res]
+        return out
+
+    tap = json.load(open(os.path.join(_OUT, "tap_official.json"), encoding="utf-8"))
+    p2 = excl(excl(src["lots"], src["undividable"] + src["small_park"]), src["reserved"])
+    p3 = A.expand(p2, S.GROUND_EXPAND_CM, ops)
+    R = {"official_pieces": len(tap["T_pieces"]), "frame_pieces": len(p2),
+         "frame_degenerate": sum(1 for p in p2 if A.area_cm2(p) / 1e4 < 1e-6),
+         "frame_tiles": sum(len(G.fill_uniform(p.outer, p.z, S.TILE_EXTENT_CM)[0]) for p in p3),
+         "frame_area_m2": sum(A.area_cm2(p) for p in p2) / 1e4}
+    json.dump(R, open(os.path.join(_OUT, "frame_exclusion.json"), "w"), indent=1)
+    return R
+
+
+STEPS = {"frame": frame, "gen": gen, "read": read, "tiles": tiles, "pieces": pieces, "nontile": nontile, "corners": corners}
 
 try:
     mcp_result = json.loads(json.dumps(STEPS[(mcp_args or {}).get("step", "read")](), default=str))

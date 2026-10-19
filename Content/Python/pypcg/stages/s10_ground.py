@@ -129,9 +129,12 @@ def tile_points(area):
 
 
 def project(pts, surface):
-    """`Subgraph_40 Custom_Projector_with_rotation_fix` on every point of a set (in place)."""
+    """`Subgraph_40 Custom_Projector_with_rotation_fix` on every point of a set (in place). With NO surface
+    the projector emits nothing: its `Projection_0` returns without output when the target pin is empty
+    (`PCGProjectionElement.cpp:78-80`), so no tile survives -- an empty set here. A point whose centre
+    misses a surface keeps its place (`bKeepZeroDensityPoints` on `Projection_0`)."""
     if surface is None:
-        return pts
+        return Points()
     for i in range(len(pts)):
         res = G.project_tile(pts.loc[i], pts.rot[i], pts.bounds_min[i], pts.bounds_max[i], surface)
         if res is not None:

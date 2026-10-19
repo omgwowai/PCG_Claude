@@ -189,6 +189,9 @@ def test_empty_inputs_one_pin_at_a_time():
         assert set(out) == set(S.OUTPUTS)
     out, _ = run(inputs(Lots=[]))
     assert out["GroundTiles"] == [] and out["RailingZones"] == []
+    # no surface: the official projector emits nothing (PCGProjectionElement returns with no target)
+    out, _ = run(inputs(MeshTerrain=[]))
+    assert out["GroundTiles"] == [] and len(out["SidewalkSegments"]) > 0
 
 
 def test_no_asset_loader_assigns_nothing():
@@ -445,3 +448,14 @@ def test_boundary_points_keep_the_yaw_of_their_counter_clockwise_edge():
     assert piece.rotations == [(0.0, y, 0.0) for y in yaws]
     seg = out["SidewalkSegments"][0][0]
     assert seg.rotations is None                    # the sidewalk segments: measured equal without them
+
+
+def test_check_flags_tiles_under_a_landmark_that_overlaps_a_lot():
+    """The demo fixture's landmark lies between lots, so the landmark clause cannot fail on it; here the
+    landmark covers part of a lot, the stage tiles under it (as the official graph would), and the check
+    must flag those tiles."""
+    tower = box(1200, 1200, 2000, 2000)                       # inside LOTS[0]
+    ins = inputs(MainTower=[(tower, frozenset())])
+    out, _ = run(ins)
+    f = C.check(ins, {}, out, OPS)
+    assert any("in the landmark" in x for x in f), f

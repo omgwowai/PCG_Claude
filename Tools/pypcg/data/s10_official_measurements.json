@@ -35,6 +35,13 @@
   "official_tiles_on_degenerate": 247,
   "port_fill_on_official_ground": 155859
  },
+ "buildable_pieces_in_subject_frame": {
+  "official_pieces": 107,
+  "frame_pieces": 130,
+  "frame_degenerate": 35,
+  "frame_tiles": 156164,
+  "frame_area_m2": 1339722.6813367577
+ },
  "sidewalk_segments": {
   "port": 469,
   "official": 469,

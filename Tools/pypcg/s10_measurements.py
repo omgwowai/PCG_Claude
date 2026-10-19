@@ -107,6 +107,8 @@ def main(port_corners="slim_rot"):
                 "Tools/pypcg/s10_measurements.py. Lengths in cm.",
         "fill_and_fit": load("tilecmp.json"),
         "buildable_pieces": load("pieces.json"),
+        "buildable_pieces_in_subject_frame": (load("frame_exclusion.json")
+                                              if os.path.exists(os.path.join(D, "frame_exclusion.json")) else None),
         "sidewalk_segments": match(mine["SidewalkSegments"], off_segs),
         "corner_shapes": match(mine["CornerShapes"], off_corners),
         "railing_zones": match(mine["RailingZones"], off_rails),
