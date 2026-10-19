@@ -120,9 +120,9 @@ def assign_probe_result(call, target, table):
     """The Python half of one Assign_Assets call: expand ONE target point with the call's own
     parameters and report the result beside the primitive's.
 
-    The equality is exact on loc, rot, scale, seed and the `Asset` attribute; the primitive's `$*`
-    attributes are not part of the comparison because it writes none of them to its output (measured:
-    the output carries only the asset's own attributes plus `dataIndex`)."""
+    This is a shape report, not an equality: nothing here is compared with the primitive. The exact
+    comparison is the oracle (`_assign_oracle_compare`), which taps the primitive's own input and
+    output on a live volume."""
     from pypcg import geo
     points = geo.Points()
     points.add(target["loc"], rot=target["rot"], scale=target["scale"], seed=target["seed"],
@@ -193,7 +193,7 @@ def _assign_target(fixtures):
             "from": "the fixed box (no recorded run)"}
 
 
-def assign_phase(n, step=None):
+def assign_phase(n, step=None, only=None, overrides=None):
     """`{"assign": {"stage": n}}`: rebuild every Assign_Assets call of stage `n` in Python from its OWN
     recorded settings, with one target point, and check the Python expansion's shape against the
     graph's own parameters.
@@ -206,17 +206,23 @@ def assign_phase(n, step=None):
           of every Assign_Assets call, the call itself, and a tap on its input and its output -- puts it
           on stage n's own volume (so the scene reads, the component seed and every node seed are the
           official ones) and generates. Restore the volume with V2's `gen {variant: official}` or
-          `restore`.
+          `restore` (the result says `restore_required`). Two options (Task 15 fix round 1):
+          `"calls": [node, ...]` keeps only those Assign_Assets calls (and what they read), and
+          `"set": {node: {pin: value}}` edits a call's overrides in the oracle graph -- e.g. zeroes a
+          random range so a setting that only appears on random calls can be measured exactly.
       `{"assign": {"stage": n}}` (after that generation) also reads both taps and runs
           `pypcg.geo.assets.expand_items` on the tapped input with the call's own settings and the
           primitive's own picks (the tapped output's last item names each target's kit), and compares
           the result with the tapped output item for item: point counts, location, rotation
           (quaternion), scale, `Asset`, bounds and seed, reporting how many are bit for bit equal and
-          the largest difference of each. `oracle` is absent when the volume does not hold the oracle."""
+          the largest difference of each. The settings compared are the ORACLE graph's own (so a `set`
+          edit is honoured). A call with a non-zero random range is marked `random` and compared only
+          on item sizes, item order and `Asset`: this phase has no `TransformPoints_2` stream. `oracle`
+          is absent when the volume does not hold the oracle."""
     from pypcg import extract, geo, stages
     from pypcg.ue import assets as uassets
     if step == "gen":
-        return _assign_oracle_gen(n)
+        return _assign_oracle_gen(n, only, overrides)
     graph = unreal.EditorAssetLibrary.load_asset(stages.official_path(n))
     if graph is None:
         return {"stage": n, "abort": "cannot load %s" % stages.official_path(n)}
@@ -244,7 +250,7 @@ def assign_phase(n, step=None):
            "expanded": checked, "random_calls": random_calls,
            "random": bool(random_calls), "unhonoured_pins": unhonoured,
            "failures": failures[:20]}
-    oracle = _assign_oracle_compare(n, calls, tabled)
+    oracle = _assign_oracle_compare(n, calls, uassets)
     if oracle is not None:
         out["oracle"] = oracle
         out["failures"] = (failures + oracle.get("failures", []))[:20]
@@ -286,12 +292,13 @@ def _tag_node(name):
             "getter_param": "", "pos": None}
 
 
-def _assign_oracle_gen(n):
+def _assign_oracle_gen(n, only=None, overrides=None):
     """Build `/Game/PyPCG/Probe/PCG_AssignOracle_sNN` from the official IR snapshot and generate it on
     stage n's own volume (one generation; read with `{"assign": {"stage": n}}` in a later call)."""
     from pypcg import build as B, census, ir as _ir, stages
     off = _ir.load(os.path.join(_REPO, "Tools", "pypcg", "official_ir", stages.name(n) + ".json"))
-    calls = [x for x in off["nodes"] if ASSIGN_SUBGRAPH in (x.get("subgraph") or "")]
+    calls = [x for x in off["nodes"] if ASSIGN_SUBGRAPH in (x.get("subgraph") or "")
+             and (not only or x["name"] in only)]
     if not calls:
         return {"stage": n, "abort": "this stage calls no Assign_Assets"}
     keep = set()
@@ -306,6 +313,13 @@ def _assign_oracle_gen(n):
                        for p in x.get("inputs", [])]
         x["inputs"] = [p for p in x["inputs"] if p["edges"]]
         x["pos"] = None
+        # A named-reroute usage stores its declaration as an object path inside the OFFICIAL graph;
+        # the oracle must point at its own copy (build resolves {"node_ref": name}).
+        for field in ("settings", "overrides", "pin_defaults"):
+            if field in x:
+                x[field] = _ir.node_refs_to_names(x[field], off["graph"])
+        if overrides and name in overrides:
+            x["overrides"] = dict(x.get("overrides") or {}, **overrides[name])
         nodes.append(x)
     taps = []
     for c in calls:
@@ -336,18 +350,34 @@ def _assign_oracle_gen(n):
     pc.activate(True)
     pc.generate_local(True)
     return {"stage": n, "oracle": path, "nodes": len(nodes), "calls": [c["name"] for c in calls],
-            "seed": int(pc.get_editor_property("seed")), "next": "{\"assign\": {\"stage\": %d}} after the generation" % n}
+            "seed": int(pc.get_editor_property("seed")), "set": overrides or {}, "restore_required": True,
+            "next": "{\"assign\": {\"stage\": %d}} after the generation, then gen official / restore" % n}
 
 
-def _assign_oracle_compare(n, calls, tabled):
-    """The tapped primitive against `expand_items`, or None when the volume does not hold the oracle."""
-    from pypcg import census, geo
+def _assign_oracle_compare(n, official_calls, uassets):
+    """The tapped primitive against `expand_items`, or None when the volume does not hold the oracle.
+    The calls and their settings are read from the oracle graph itself, so a `set` edit is compared."""
+    from pypcg import census, extract, geo
     from pypcg.geo import assets as A
     from pypcg.ue import convert
     pc = census.component(n)
     g = pc.get_graph()
     if g is None or g.get_path_name().split(".")[0] != ORACLE_GRAPH % n:
         return None
+    exported = extract.export(g)
+    calls = assign_calls(exported)
+    # The rebuilt graph names its nodes afresh, so a call is found through the tap wired to it: the
+    # AddTag whose tag is `AssignOut_<official name>` reads the call's `Out`.
+    renamed = {}
+    for x in exported.get("nodes", []):
+        tag = str((x.get("settings") or {}).get("TagsToAdd", ""))
+        if tag.startswith(ORACLE_OUT):
+            for p in x.get("inputs", []):
+                for e in p["edges"]:
+                    renamed[e[0]] = tag[len(ORACLE_OUT):]
+    for c in calls:
+        c["node"] = renamed.get(c["node"], c["node"])
+    tabled = {e["path"]: e for e in uassets.load(sorted({p for c in calls for p in c["assets"]}))}
     taps = {}
     for td in pc.get_generated_graph_output().get_editor_property("tagged_data"):
         tags = [str(t) for t in td.get_editor_property("tags")]
@@ -365,7 +395,10 @@ def _assign_oracle_compare(n, calls, tabled):
                             % (call["node"], len(ins), len(outs)))
             continue
         targets = geo.Points()
-        for t in ins:
+        for k, t in enumerate(ins):
+            # `WriteDataIndex_1` + `AttributeMathsOp_13`: each input data item's seeds += its index,
+            # then `MergePoints_0` makes one target set.
+            t.seed = [A._i32(int(s) + k) for s in t.seed]
             targets.extend(t)
         table = [tabled[p] for p in call["assets"]]
         picked = outs[-1].attrs.get(A.ASSET_ATTR) or []
@@ -376,7 +409,19 @@ def _assign_oracle_compare(n, calls, tabled):
             continue
         ours = A.expand_items(targets, table, [index[p] for p in picked], dict(call["params"]))
         row = {"node": call["node"], "targets": len(targets), "items": [len(x) for x in outs],
-               "python_items": [len(x) for x in ours]}
+               "python_items": [len(x) for x in ours], "random": bool(call.get("random")),
+               "settings": call["params"]}
+        if call.get("random"):
+            # No TransformPoints_2 stream here: only what the random ranges cannot move is compared.
+            same_items = [len(x) for x in ours] == [len(x) for x in outs]
+            same_asset = same_items and all(a.attrs[A.ASSET_ATTR] == b.attrs[A.ASSET_ATTR] for a, b in zip(ours, outs))
+            row.update(points=sum(len(x) for x in outs), compared="sizes, order, Asset",
+                       equal={"items": same_items, "Asset": same_asset})
+            if not (same_items and same_asset):
+                failures.append("Assign_Assets %s (random): item sizes %s vs Python %s, Asset equal %s"
+                                % (call["node"], row["items"], row["python_items"], same_asset))
+            rows.append(row)
+            continue
         stats = {k: {"exact": 0, "max": 0.0} for k in ("loc", "quat", "scale", "bounds")}
         same = {"Asset": 0, "seed": 0}
         total = 0
@@ -587,9 +632,9 @@ try:
                                                            _pub.get("width", "Highway_Width")), default=str))
     elif "assign" in _args:
         _asg = _args["assign"]
-        mcp_result = json.loads(json.dumps(assign_phase(int(_asg["stage"] if isinstance(_asg, dict) else _args["stage"]),
-                                                        _asg.get("step") if isinstance(_asg, dict) else None),
-                                           default=str))
+        _d = _asg if isinstance(_asg, dict) else {"stage": _args["stage"]}
+        mcp_result = json.loads(json.dumps(assign_phase(int(_d["stage"]), _d.get("step"), _d.get("calls"),
+                                                        _d.get("set")), default=str))
     else:
         mcp_result = json.loads(json.dumps(run_stage(_args), default=str))
 except Exception as _exc:

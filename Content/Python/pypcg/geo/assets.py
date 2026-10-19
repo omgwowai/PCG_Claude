@@ -39,7 +39,7 @@ What the primitive does, node by node (all inside `Assign_Assets_CoreProcess`):
 
 `choose` covers the random pick (`MatchAndSetAttributes_0`); `expand_items` covers everything after
 it and returns the primitive's output item for item; `expand` is the copies merged into one point set
-plus four report attributes, the form Task 12 shipped.
+plus four report attributes (`$BoundsMin`/`$BoundsMax`/`$Size`/`$Scale`), the form Task 12 shipped.
 
 **Corrected 2026-10-19 (Task 15, stage 17).** The Task 12 helper put the offsets on the ASSEMBLY's
 points and wrote the copies target by target. The stage 17 tap of the official primitive
@@ -58,6 +58,39 @@ CopyPoints_0.Target`):
     assigned kit path, or the spawner would spawn the kit a second time from that point;
   - every output box is rewritten as centre +- half-size x `ExtentsScale` (exactly, all 9 843).
 Single-target, zero-offset calls -- what Task 12 measured -- come out the same under either reading.
+
+**Fix round 1 (2026-10-19): two more things the oracle found, and what each parameter rests on.**
+  - The primitive's own defaults are `UniformScale` TRUE and `UseMeshBounds` TRUE (its user parameters,
+    read through ExportGraphIR); Task 12 defaulted both to false. With `UniformScale`, `TransformPoints`
+    draws X only, so `ScaleOffset` (0.2, 1, 1) scales a target by 0.2 on every axis (measured).
+  - An asset that is a STATIC MESH loads nothing in `PCGLoadDataAsset_0`: the output is the moved
+    targets alone (no copy item); with `UseMeshBounds` they take the mesh's box (stage 14, measured).
+  - A NEGATIVE scale on either side sends `FTransform::Multiply` down its matrix path
+    (`MultiplyUsingMatrixWithScale`); the kits' mirrored props need it (`_compose_matrix`).
+  - The offsets and rotations are floats, the scale offset a double (`PCGTransformPoints.cpp`).
+
+Per parameter, by the oracle (`pypcg_v1_editor.py {"assign": ...}`, the primitive's own taps on a
+live volume; "exact" = Asset, seed, scale and bounds bit for bit, location <= 2.9e-11 cm, quaternion
+<= 4.4e-16):
+  PositionOffset            MEASURED  s17 Subgraph_2 (Y -492.5, 30 rotated docks); s14 Subgraph_7/8 (Z 3/40)
+  RotationOffset            MEASURED  s14 Subgraph_5 (yaw -90, its random ranges zeroed); s17 with
+                                      (10, 90 / -90, -20) set by the oracle
+  ScaleOffset != 1          MEASURED  s17 with (0.2, 1, 1) uniform and (1.414055, 0.6, 0.7) non-uniform;
+                                      s15 Subgraph_20 with (1.414055, 1, 1) uniform
+  ExtentsScale != 1         MEASURED  s14 Subgraph_7 (1.2, 1, 1); s17 with (0.7, 1, 1) and (1.2, 0.5, 2);
+                                      s15 Subgraph_20 (0.7, 1, 1)
+  UniformScale true / false MEASURED  both, above
+  UseMeshBounds true        MEASURED  on static meshes (s14 Subgraph_8, s15 Subgraph_20 with UniformScale)
+                                      and on kits (s17 default: kit boxes unchanged)
+  UseMeshBounds false       MEASURED  s14 Subgraph_7, s17 variant D
+  random ranges             DERIVED ONLY  the primitive draws from `TransformPoints_2`'s own seeded
+                                      `FRandomStream`; the port draws from `ctx.rng` (spec E2), so no
+                                      oracle can compare values. The oracle compares item sizes, order
+                                      and `Asset` on random calls (s14 Subgraph_4: equal)
+  UseIndexattribute         NOT IMPLEMENTED  `expand` ignores it (`assign_calls` reports it unhonoured);
+                                      every official user is also random (s13 / s18 Outer Forest)
+  MatchScaleToInputBounds   NOT IMPLEMENTED (no official call sets it)
+  UseMeshAttribute          DERIVED ONLY  (no official call sets it)
 """
 import math
 import struct
@@ -66,7 +99,13 @@ DEFAULT_POSITION_RANGE = (0.0, 0.0, 0.0)
 DEFAULT_ROTATION_RANGE = (0.0, 0.0, 0.0)
 DEFAULT_SCALE_RANGE = (1.0, 1.0, 1.0)
 ASSET_ATTR = "Asset"
-EXTENTS_ATTR = "$Extents"
+# The primitive's own defaults for the two switches a call usually leaves alone (Assign_Assets user
+# parameters, read through ExportGraphIR 2026-10-19: UseMeshBounds true, UniformScale true).
+DEFAULT_UNIFORM_SCALE = True
+DEFAULT_USE_MESH_BOUNDS = True
+# The report attribute is the asset box's FULL size x ExtentsScale; it is named `$Size` so it is not
+# mistaken for the engine's `$Extents` property, which is the HALF-size (Task 15 review).
+EXTENTS_ATTR = "$Size"
 MESH_ATTR = "Mesh"        # what the primitive's `MeshAttribute` pin names by default
 
 
@@ -234,7 +273,8 @@ REPORT_ATTRS = (("$BoundsMin", "Vector"), ("$BoundsMax", "Vector"), (EXTENTS_ATT
 
 def expand(targets, table, indices, params):
     """The asset's own points copied onto the target points in world space, every copy carrying `Asset`
-    (its own mesh path) and the four report attributes `$BoundsMin`/`$BoundsMax`/`$Extents`/`$Scale`.
+    (its own mesh path) and the four report attributes `$BoundsMin`/`$BoundsMax`/`$Size` (the asset box's
+    full size x `ExtentsScale`)/`$Scale`.
     Returns a fresh `pypcg.geo.Points`: the copies of `expand_items` merged in their output order,
     WITHOUT the moved targets (the primitive's last output item).
 
@@ -244,9 +284,13 @@ def expand(targets, table, indices, params):
 
       use_mesh_attribute  `UseMeshAttribute`: take the asset from the point's own attribute
       mesh_attribute      that attribute's name, default `Mesh`
-      uniform_scale       `UniformScale`: the ratio's X also scales Y and Z, and a random scale range
-                          draws one number for all three axes
-      use_mesh_bounds     `UseMeshBounds`: replace the asset point's own bounds with the asset's whole box
+      uniform_scale       `UniformScale`, DEFAULT TRUE (the primitive's own default, read 2026-10-19):
+                          `TransformPoints_1/2`'s `bUniformScale` -- `ScaleOffset.X` (and one random
+                          scale draw) scales all three axes; the fit ratio's X likewise
+      use_mesh_bounds     `UseMeshBounds`, DEFAULT TRUE: `Branch_0`'s B side runs `BoundsFromMesh_1` on
+                          every output point's own `Asset`. A kit point's box IS its mesh's box (all
+                          9 873 stage 17 points kept their box exactly), so only a dock whose `Asset`
+                          is a single STATIC MESH changes: it takes that mesh's box
       extents_scale       `ExtentsScale`, a per-axis multiplier on every output point's half-size
       position_offset / rotation_offset / scale_offset   `TransformPoints_1`, applied to each TARGET
                           in its own frame before the copy
@@ -315,8 +359,7 @@ def _moved(targets, i, pos_off, rot_q, scale_off, rng, params, uniform):
     if rng is not None:
         rp = tuple(_f32(x) for x in _range_draw(params, "random_position_range", rng))
         rr = tuple(_f32(x) for x in _range_draw(params, "random_rotation_range", rng, rotator=True))
-        rs = tuple(_f32(x) for x in _range_draw(params, "random_scale_range", rng,
-                                                dlo=DEFAULT_SCALE_RANGE, uniform=uniform))
+        rs = _range_draw(params, "random_scale_range", rng, dlo=DEFAULT_SCALE_RANGE, uniform=uniform)
         d = quat_rotate(q, rp)
         loc = (loc[0] + d[0], loc[1] + d[1], loc[2] + d[2])
         if any(rr):
@@ -334,12 +377,16 @@ def _expand(targets, table, indices, params, report):
 
     use_attr = bool(params.get("use_mesh_attribute", False))
     mesh_attr = params.get("mesh_attribute") or MESH_ATTR
-    uniform = bool(params.get("uniform_scale", False))
-    mesh_bounds = bool(params.get("use_mesh_bounds", False))
+    uniform = bool(params.get("uniform_scale", DEFAULT_UNIFORM_SCALE))
+    mesh_bounds = bool(params.get("use_mesh_bounds", DEFAULT_USE_MESH_BOUNDS))
     extents_scale = _vector(params.get("extents_scale"), (1.0, 1.0, 1.0))
     pos_off = tuple(_f32(x) for x in _vector(params.get("position_offset"), DEFAULT_POSITION_RANGE))
     rot_off = tuple(_f32(x) for x in _rotator(params.get("rotation_offset")))
-    scale_off = tuple(_f32(x) for x in _vector(params.get("scale_offset"), DEFAULT_SCALE_RANGE))
+    # Offsets and rotations are `const float` in `FPCGTransformPointsElement`; the scale is a double
+    # `FVector` (measured: ScaleOffset 0.2 came back as the double 0.2, not 0.20000000298).
+    scale_off = _vector(params.get("scale_offset"), DEFAULT_SCALE_RANGE)
+    if uniform:                     # `FVector(FRandRange(ScaleMin.X, ScaleMax.X))` (PCGTransformPoints.cpp)
+        scale_off = (scale_off[0],) * 3
     rot_q = quat_of(*rot_off) if any(rot_off) else None
     rng = params.get("rng")
 
@@ -358,6 +405,12 @@ def _expand(targets, table, indices, params, report):
         entry = table[a]
         assembly = entry.get("points")
         if assembly is None or len(assembly) == 0:
+            continue
+        if not report and _is_mesh(entry):
+            # `PCGLoadDataAsset_0` loads nothing from a STATIC MESH path, so `CopyPoints_0` has no
+            # source and the primitive's output is the moved targets alone (measured 2026-10-19 on
+            # stage 14's Subgraph_7 / Subgraph_8, one static mesh each: one item, the targets).
+            # `expand` (report form) still stands the mesh in as a one-point assembly, as Task 12 did.
             continue
         bounds = bounds_of(assembly) or entry.get("bounds")
         if bounds is None:
@@ -381,8 +434,7 @@ def _expand(targets, table, indices, params, report):
         for j in range(len(assembly)):
             sq = tuple(assembly.quat[j]) if assembly.quat else quat_of(*assembly.rot[j])
             sloc, sscale = assembly.loc[j], assembly.scale[j]
-            base = (bounds[0], bounds[1]) if mesh_bounds else (assembly.bounds_min[j], assembly.bounds_max[j])
-            bmin, bmax = _box(base[0], base[1], extents_scale)
+            bmin, bmax = _box(assembly.bounds_min[j], assembly.bounds_max[j], extents_scale)
             for i in members:
                 tloc, tq, ts = moved[i]
                 # `CopyPoints`: Out = Source * Target, i.e. T + RotateVector(qT, sT * S); qT * qS; sS * sT.
@@ -416,7 +468,11 @@ def _expand(targets, table, indices, params, report):
     quats = []
     for i in valid:
         tloc, tq, ts = moved[i]
-        bmin, bmax = _box(targets.bounds_min[i], targets.bounds_max[i], extents_scale)
+        entry = table[picked[i]]
+        if mesh_bounds and _is_mesh(entry):
+            bmin, bmax = _box(entry["bounds"][0], entry["bounds"][1], extents_scale)
+        else:
+            bmin, bmax = _box(targets.bounds_min[i], targets.bounds_max[i], extents_scale)
         kw = {name: targets.attrs[name][i] for name in targets.types}
         kw[ASSET_ATTR] = table[picked[i]]["path"]
         tail.add(tloc, rot=rotator_of(tq), scale=ts, bounds_min=bmin, bounds_max=bmax,
@@ -474,9 +530,69 @@ def _compose(tloc, tq, tscale, src_loc, src_q, src_scale):
     is therefore in world space, measured in the input point's frame; the asset is never scaled by the
     fit ratio."""
     from .plane import quat_rotate
+    if any(v < 0.0 for v in tuple(src_scale) + tuple(tscale)):
+        return _compose_matrix(tloc, tq, tscale, src_loc, src_q, src_scale)
     d = quat_rotate(tq, (src_loc[0] * tscale[0], src_loc[1] * tscale[1], src_loc[2] * tscale[2]))
     return ((tloc[0] + d[0], tloc[1] + d[1], tloc[2] + d[2]), _qmul(tq, src_q),
             tuple(src_scale[a] * tscale[a] for a in range(3)))
+
+
+def _matrix(loc, q, scale):
+    """`FTransform::ToMatrixWithScale` (row-vector convention: rows are the scaled axes, row 3 the origin)."""
+    x, y, z, w = q
+    x2, y2, z2 = x + x, y + y, z + z
+    xx2, yy2, zz2 = x * x2, y * y2, z * z2
+    yz2, wx2, xy2, wz2, xz2, wy2 = y * z2, w * x2, x * y2, w * z2, x * z2, w * y2
+    sx, sy, sz = scale
+    return [[(1.0 - (yy2 + zz2)) * sx, (xy2 + wz2) * sx, (xz2 - wy2) * sx, 0.0],
+            [(xy2 - wz2) * sy, (1.0 - (xx2 + zz2)) * sy, (yz2 + wx2) * sy, 0.0],
+            [(xz2 + wy2) * sz, (yz2 - wx2) * sz, (1.0 - (xx2 + yy2)) * sz, 0.0],
+            [loc[0], loc[1], loc[2], 1.0]]
+
+
+def _quat_of_matrix(m):
+    """`FQuat(const FMatrix&)` (Quat.h:775), on a scale-free matrix."""
+    tr = m[0][0] + m[1][1] + m[2][2]
+    if tr > 0.0:
+        inv = 1.0 / math.sqrt(tr + 1.0)
+        s = 0.5 * inv
+        return ((m[1][2] - m[2][1]) * s, (m[2][0] - m[0][2]) * s, (m[0][1] - m[1][0]) * s, 0.5 * (1.0 / inv))
+    i = 0
+    if m[1][1] > m[0][0]:
+        i = 1
+    if m[2][2] > m[i][i]:
+        i = 2
+    j = (1, 2, 0)[i]
+    k = (1, 2, 0)[j]
+    inv = 1.0 / math.sqrt(m[i][i] - m[j][j] - m[k][k] + 1.0)
+    qt = [0.0] * 4
+    qt[i] = 0.5 * (1.0 / inv)
+    s = 0.5 * inv
+    qt[3] = (m[j][k] - m[k][j]) * s
+    qt[j] = (m[i][j] + m[j][i]) * s
+    qt[k] = (m[i][k] + m[k][i]) * s
+    return tuple(qt)
+
+
+def _compose_matrix(tloc, tq, tscale, src_loc, src_q, src_scale):
+    """`FTransform::Multiply` when either side has a NEGATIVE scale (TransformNonVectorized.h:1331):
+    `MultiplyUsingMatrixWithScale` -- the two scaled matrices multiplied, the scale removed row by row,
+    each axis given back the sign of the product scale, and the rotation read off that matrix
+    (`ConstructTransformFromMatrixWithDesiredScale`, :1277). The kits carry mirrored props (negative
+    scale on one axis); on those the quaternion product differs from the engine by up to 2.4e-6
+    (measured 2026-10-19, stage 17 oracle with a pitch/roll RotationOffset)."""
+    a, b = _matrix(src_loc, src_q, src_scale), _matrix(tloc, tq, tscale)
+    m = [[sum(a[r][k] * b[k][c] for k in range(4)) for c in range(4)] for r in range(4)]
+    desired = tuple(src_scale[k] * tscale[k] for k in range(3))
+    for r in range(3):
+        sq = m[r][0] * m[r][0] + m[r][1] * m[r][1] + m[r][2] * m[r][2]
+        f = 1.0 / math.sqrt(sq) if sq > 0.0 else 1.0
+        sign = 1.0 if desired[r] > 0.0 else (-1.0 if desired[r] < 0.0 else 0.0)
+        m[r] = [m[r][0] * f * sign, m[r][1] * f * sign, m[r][2] * f * sign, m[r][3]]
+    q = _quat_of_matrix(m)
+    n = math.sqrt(sum(v * v for v in q))
+    q = tuple(v / n for v in q) if n > 0.0 else (0.0, 0.0, 0.0, 1.0)
+    return (m[3][0], m[3][1], m[3][2]), q, desired
 
 
 def _picked(targets, table, indices, use_attr, mesh_attr):
@@ -507,6 +623,14 @@ def _point_mesh(assembly, j, entry):
         value = assembly.attrs[mesh_attr][j]
         return "None" if value in (None, "") else str(value)
     return entry["path"]
+
+
+def _is_mesh(entry):
+    """A table entry that is one static mesh (`pypcg.ue.assets._from_static_mesh`: one point whose `Mesh`
+    is the entry's own path), which `BoundsFromMesh` can read a box from; a `PCGDataAsset` kit is not."""
+    pts = entry.get("points")
+    return (pts is not None and len(pts) == 1 and entry.get("bounds") is not None
+            and (pts.attrs.get(MESH_ATTR) or [None])[0] == entry["path"])
 
 
 def _entry(table, index):

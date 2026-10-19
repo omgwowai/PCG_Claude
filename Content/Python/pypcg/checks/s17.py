@@ -72,7 +72,9 @@ def check(inputs, params, outputs, ops, official=None):
             f.append("dock %d has pitch %.3g and roll %.3g; both are zeroed" % (i, r[0], r[2]))
             break
     verts = unmoved(docks)
-    if len(verts) >= 3 and not _convex_ccw(verts):
+    # Three docks or fewer prove nothing about convexity: a hull of <= 3 points passes through
+    # `ConvexHull2D` in input order, which can be clockwise.
+    if len(verts) > 3 and not _convex_ccw(verts):
         f.append("the %d docks, moved back by the offset, are not a convex ring in hull order" % len(verts))
     used = [p for p in S.ASSETS if p in paths]
     if len(kits) != len(set(paths)):
@@ -107,7 +109,7 @@ def _against_inputs(inputs, params, docks, verts):
     if not all(on):
         f.append("%d docks are not on a hull vertex" % on.count(False))
     xy = [(p[0], p[1]) for p in ring]
-    if len(xy) >= 3:
+    if len(xy) > 3:
         for p in kept:
             if not _within(p, xy):
                 f.append("the hull does not contain the kept point %s" % (p,))

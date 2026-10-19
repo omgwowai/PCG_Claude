@@ -332,7 +332,7 @@ def test_assign_reproduces_the_official_primitive_on_stage_17():
     assert worst < 1e-9
     qd = max(min(max(abs(a - b) for a, b in zip(x, y)), max(abs(a + b) for a, b in zip(x, y)))
              for x, y in zip(copies.quat, want["quat"]))
-    assert qd < 1e-6
+    assert qd < 1e-12                                    # ORACLE_QUAT_TOL; measured 4.4e-16
     moved = items[-1]
     assert [tuple(l) for l in moved.loc] == [tuple(l) for l in d["moved"]["loc"]]     # bit for bit
     assert moved.attrs["Asset"] == picks

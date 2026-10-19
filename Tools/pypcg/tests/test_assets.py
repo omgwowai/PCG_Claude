@@ -126,7 +126,7 @@ def test_fit_ratio_is_reported_but_not_applied():
     table = [asset(points=one)]
     t = Points()
     t.add((0.0, 0.0, 0.0), bounds_min=(-5000.0, -2500.0, 0.0), bounds_max=(5000.0, 2500.0, 500.0))
-    out = A.expand(t, table, [0], {})
+    out = A.expand(t, table, [0], {"uniform_scale": False})
     assert out.scale[0] == (10.0, 8.0, 10.0), "the mesh keeps its own scale"
     assert out.attrs["$Scale"] == [(10.0, 5.0, 5.0)]    # 10000/1000, 5000/1000, 500/100
 
@@ -210,7 +210,7 @@ def test_expand_writes_the_asset_path_and_the_bounds():
     t = targets([((5.0, 6.0, 7.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 7)])
     out = A.expand(t, table, [0], {"use_mesh_bounds": True, "extents_scale": (2.0, 2.0, 2.0)})
     assert out.attrs["Asset"] == ["/G/SM_A.SM_A"]
-    assert out.attrs["$Extents"] == [(2000.0, 2000.0, 200.0)]
+    assert out.attrs["$Size"] == [(2000.0, 2000.0, 200.0)]       # report: full size x ExtentsScale
     assert tuple(out.bounds_min[0]) == (-1000.0, -1000.0, -50.0)   # the asset's box, doubled about its centre
     assert tuple(out.bounds_max[0]) == (1000.0, 1000.0, 150.0)
     out = A.expand(t, table, [0], {"use_mesh_bounds": True})
@@ -254,9 +254,22 @@ def test_expand_offset_moves_the_target_along_its_own_rotation():
 def test_expand_multiplies_the_scale_offset_and_adds_the_rotation_offset():
     table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
     t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
-    out = A.expand(t, table, [0], {"scale_offset": (2.0, 1.0, 0.5), "rotation_offset": (0.0, 30.0, 0.0)})
+    out = A.expand(t, table, [0], {"scale_offset": (2.0, 1.0, 0.5), "rotation_offset": (0.0, 30.0, 0.0),
+                                   "uniform_scale": False})
     assert out.scale[0] == (20.0, 8.0, 5.0)
     assert out.rot[0] == pytest.approx((0.0, 30.0, 0.0), abs=1e-6)
+
+
+def test_expand_defaults_are_the_primitives_uniform_scale_and_mesh_bounds():
+    """`Assign_Assets`' own user-parameter defaults (read 2026-10-19) are `UniformScale` TRUE and
+    `UseMeshBounds` TRUE. Measured on stage 17's oracle with `ScaleOffset` (0.2, 1, 1) and the default
+    `UniformScale`: every dock came out at scale (0.2, 0.2, 0.2) -- `TransformPoints` draws X only."""
+    assert A.DEFAULT_UNIFORM_SCALE is True and A.DEFAULT_USE_MESH_BOUNDS is True
+    table = [asset(points=mesh_points(subset=MESH_POINTS[:1]))]
+    t = targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)])
+    out = A.expand(t, table, [0], {"scale_offset": (0.2, 1.0, 1.0)})
+    assert out.scale[0] == pytest.approx((2.0, 1.6, 2.0))           # (10, 8, 10) x 0.2 on every axis
+    assert out.loc[0] == pytest.approx((-100.0, -80.0, -303.79074597358704 * 0.2))
 
 
 def test_expand_multiple_targets_stay_contiguous_in_target_order():
@@ -303,11 +316,11 @@ def test_expand_seed_is_the_engines_own_mix_of_source_and_input_seed():
     assert A.expand(t, table, [0], {}).seed == [-455695611, 1072875822]
 
 
-def test_expand_declares_Asset_Extents_and_Scale_even_when_nothing_is_picked():
+def test_expand_declares_Asset_Size_and_Scale_even_when_nothing_is_picked():
     out = A.expand(targets([((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), 0)]), [asset()], [-1], {})
     assert len(out) == 0
     assert out.types.get("Asset") == "SoftObjectPath"
-    for name in ("$Extents", "$Scale", "$BoundsMin", "$BoundsMax"):
+    for name in ("$Size", "$Scale", "$BoundsMin", "$BoundsMax"):
         assert name in out.attrs
 
 

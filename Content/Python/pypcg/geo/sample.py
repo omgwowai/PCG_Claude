@@ -26,10 +26,11 @@ def scatter(polygon, per_m2, rng, max_tries_factor=50):
 
 
 def choose(n, ratio, rng, ceil=False):
-    """Sorted indices of round(n * ratio) of n items (Filter_RandomChoice / RandomChoice).
+    """Sorted indices of `round(n * ratio)` of n items by default -- this package's own count, which the
+    `Filter_RandomChoice` callers use; it is NOT the engine's `PCGRandomChoice` count.
 
-    `ceil=True` is the engine's own `PCGRandomChoice` count, `CeilToInt(n * Clamp(Ratio, 0, 1))`
-    (PCGRandomChoice.cpp, `NumOfElementsToKeep`): measured 2026-10-19 on stage 17, 57 hull vertices at
+    `ceil=True` is the engine's `PCGRandomChoice` count, `CeilToInt(n * Clamp(Ratio, 0, 1))`
+    (PCGRandomChoice.cpp:190, `NumOfElementsToKeep`): measured 2026-10-19 on stage 17, 57 hull vertices at
     `Ratio` 0.5152 kept 30, where round would keep 29. The chosen entries keep their input order
     (the node sorts the shuffled indices before copying)."""
     if ceil:

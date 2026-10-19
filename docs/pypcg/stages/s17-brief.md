@@ -47,3 +47,8 @@ Official nodes: 18 (excluding input/output). param 0, input 2, carrier 0, gen 1,
 - GetGraphParameter_1 PCGUserParameterGetSettings 'Partitioned'
 - Loop_1 LoopSpawnActorPerData ''
 - Subgraph_1 GridPartition ''
+
+## Port note (Task 15)
+
+`RandomChoice_0` keeps `CeilToInt(n × Clamp(Ratio, 0, 1))` entries (`PCGRandomChoice.cpp:190`), not
+`round(n × ratio)`: 30 of the 57 hull vertices at 0.5152. See `s17.md`.
