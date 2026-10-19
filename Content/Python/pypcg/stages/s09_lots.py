@@ -115,29 +115,9 @@ class Draws:
         return lambda ring: 0.5 - c + 2.0 * c * rng.random()
 
 
-# ---- inputs -------------------------------------------------------------------------------------
-def _ring(v):
-    """A closed area as a ring: a Polygon's outer, a CLOSED spline's polyline (`CreatePolygon2D
-    ForceClosed`, 1 cm discretisation, which is what `convert` reads the polyline with). An open
-    spline is no area: `Compose_Shared_InputsProcessing` forwards it and the CoreProcess filters it
-    out."""
-    if isinstance(v, Polygon):
-        return v
-    if isinstance(v, Spline) and v.closed:
-        r = geo.drop_closing(geo.xy(v.polyline or v.points))
-        return Polygon(geo.ccw(r)) if len(r) >= 3 else None
-    return None
-
-
-def areas_of(items, tag=None):
-    out = []
-    for v, tags in items:
-        if tag is not None and tag not in tags:
-            continue
-        p = _ring(v)
-        if p is not None:
-            out.append(p)
-    return out
+# ---- inputs ----------------------------------------------------------------------------------
+_ring = A.area_of
+areas_of = A.areas_of
 
 
 def _split(pieces, spec, ops, draws, step):

@@ -25,7 +25,9 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 #   - replay: when the inputs were recordable, run the stage again with the same params and seed and
 #     require identical outputs (determinism);
 #   - pypcg.checks.sNN.check(inputs or None, params, outputs, ops, official) when that module exists;
-#     official is the volume's current output when it holds its official graph (after V2's restore).
+#     official is the volume's current output when it holds its official graph (after V2's restore);
+#     a checks module that defines check_record(rec, ops, official) gets the whole record instead
+#     (stage 10: a partial replay of what the record can rebuild, then the invariants).
 # Assign mode (Task 12): every Assign_Assets call the official graph holds is rebuilt in Python from
 # its OWN recorded settings, with one target point, and the Python expansion is reported -- the phase
 # `{"assign": {"stage": n}}` of the plan. See `assign_phase` for what it does and does not compare.
@@ -626,7 +628,12 @@ def run_stage(args):
             if not same:
                 deterministic = False
                 failures.append("%s: replay with the same seed gave different outputs" % f)
-        if checks is not None:
+        if checks is not None and hasattr(checks, "check_record"):
+            # A stage whose record cannot be replayed whole (a surface input, point sets over
+            # MAX_RECORDED_POINTS) may check the record itself: a partial replay of what it can rebuild,
+            # then its invariants (stage 10 first). It takes the place of `check`.
+            failures += ["%s: %s" % (f, x) for x in checks.check_record(rec, ops, official)]
+        elif checks is not None:
             failures += ["%s: %s" % (f, x) for x in checks.check(inputs, {k: v for k, v in rec["params"].items()
                                                                          if k != stage_api.SEED}, outputs, ops, official)]
     result = {"stage": n, "runs": len(files), "replayed": replayed, "deterministic": deterministic,

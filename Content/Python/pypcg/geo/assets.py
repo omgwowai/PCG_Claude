@@ -73,7 +73,9 @@ Every row below is on disk in `Tools/pypcg/data/assign_oracle_rows.json` (run, c
 sizes, max difference per field). Per parameter, by the oracle (`pypcg_v1_editor.py {"assign": ...}`, the primitive's own taps on a
 live volume; "exact" = Asset, seed, scale and bounds bit for bit, location <= 2.9e-11 cm, quaternion
 <= 4.4e-16):
-  PositionOffset            MEASURED  s17 Subgraph_2 (Y -492.5, 30 rotated docks); s14 Subgraph_7/8 (Z 3/40)
+  PositionOffset            MEASURED  s17 Subgraph_2 (Y -492.5, 30 rotated docks); s14 Subgraph_7/8 (Z 3/40);
+                                      s10 AssignGroundTiles_A..G (XY (-150, -150) on 155 859 terrain-tilted
+                                      static-mesh targets, pitch/roll to 21 deg: every field bit for bit)
   RotationOffset            MEASURED  s14 Subgraph_5 (yaw -90, its random ranges zeroed); s17 run A
                                       (pitch 0, yaw 90, roll 0) and run D (pitch 10, yaw -90, roll -20),
                                       both set by the oracle

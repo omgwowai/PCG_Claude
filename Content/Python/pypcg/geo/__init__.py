@@ -5,6 +5,7 @@ a different function from this package's `choose` (the Filter_RandomChoice ratio
 must never share a name. Call it as `geo.assets.choose`."""
 from . import areas  # noqa: F401
 from . import assets  # noqa: F401
+from . import ground  # noqa: F401
 from . import roads  # noqa: F401
 from . import sections  # noqa: F401
 from .plane import (at, bbox, ccw, clean_points, clip_path, convex_hull, drop_closing,  # noqa: F401

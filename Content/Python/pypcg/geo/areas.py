@@ -22,7 +22,34 @@ how `pypcg.ue.convert` reads them), so a hole passed as its own ring cancels its
 are dropped: the official stage-9 outputs keep pieces down to 0.0 m2."""
 import math
 
-from .plane import extract_segments, path_length, signed_area
+from .plane import ccw, drop_closing, extract_segments, path_length, signed_area, xy
+from .types import Polygon, Spline
+
+
+def area_of(v):
+    """A closed area as a `Polygon`: a Polygon as it is, a CLOSED spline's polyline (`CreatePolygon2D
+    ForceClosed`, 1 cm discretisation, which is what `convert` reads the polyline with). An open spline
+    is no area: `Compose_Shared_InputsProcessing` forwards it and the CoreProcess filters it out.
+    (Moved here from stage 9, its first user, when stage 10 needed the same read.)"""
+    if isinstance(v, Polygon):
+        return v
+    if isinstance(v, Spline) and v.closed:
+        r = drop_closing(xy(v.polyline or v.points))
+        return Polygon(ccw(r)) if len(r) >= 3 else None
+    return None
+
+
+def areas_of(items, tag=None):
+    """The areas of a pin's `(value, tags)` items, optionally only those carrying `tag` (the
+    `Filter_Tags` primitive, which compares tags exactly)."""
+    out = []
+    for v, tags in items:
+        if tag is not None and tag not in tags:
+            continue
+        p = area_of(v)
+        if p is not None:
+            out.append(p)
+    return out
 
 
 def rings(polys):
@@ -56,6 +83,51 @@ def intersection(subjects, clips, ops):
     for p in subjects:
         out += ops.intersection([p.outer] + list(p.holes), cut)
     return out
+
+
+def expand(polys, distance, ops, union=False):
+    """`Transform_Areas_Expand`: `OffsetPolygon2D(+Expand)` on each polygon, holes included (they shrink),
+    then -- only when `UnionBeforeOutputting`, which defaults to FALSE on this primitive (its user
+    parameter, read 2026-10-19) -- `Polygon2DOperation(Union)` over everything. One polygon in, one
+    out, so overlapping neighbours stay two items."""
+    out = []
+    for p in polys:
+        out += ops.offset([p.outer] + list(p.holes), float(distance))
+    if union and len(out) > 1:
+        return ops.union(rings(out))
+    return out
+
+
+# The frame a `CreatePolygon2D` gives a polygon: a yaw of -90 degrees (probed 2026-10-19 on every Lots,
+# district and road-footprint polygon of the demo level) about its own vertices' mean. The engine's
+# booleans run in that frame, and Clipper's choice of each result ring's FIRST vertex follows it.
+FRAME_QUAT = (0.0, 0.0, -0.7071067811865475, 0.7071067811865476)
+_FRAME_INV = (0.0, 0.0, 0.7071067811865475, 0.7071067811865476)
+
+
+def in_frame(poly, fn):
+    """Run `fn(polygon) -> [Polygon]` with `poly` expressed in its CreatePolygon2D frame, and bring the
+    results back to the world. Only the start vertex of a result ring depends on this (measured on
+    stage 10's grown City outline: computed in the world, the ring starts 754 vertices later than the
+    official one; in this frame it starts on the official vertex, to 1.1e-10 cm)."""
+    from .plane import quat_rotate
+    n = len(poly.outer)
+    if n == 0:
+        return fn(poly)
+    cx, cy = sum(p[0] for p in poly.outer) / n, sum(p[1] for p in poly.outer) / n
+
+    def to_l(ring):
+        return [tuple(quat_rotate(_FRAME_INV, (p[0] - cx, p[1] - cy, 0.0))[:2]) for p in ring]
+
+    def to_w(ring):
+        out = []
+        for p in ring:
+            v = quat_rotate(FRAME_QUAT, (p[0], p[1], 0.0))
+            out.append((v[0] + cx, v[1] + cy))
+        return out
+
+    res = fn(Polygon(to_l(poly.outer), [to_l(h) for h in poly.holes], poly.z))
+    return [Polygon(to_w(r.outer), [to_w(h) for h in r.holes], poly.z) for r in res]
 
 
 def contract(polys, distance, ops, union=True):

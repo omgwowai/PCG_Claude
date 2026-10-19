@@ -404,6 +404,272 @@
     "Asset": 9873,
     "seed": 9873
    }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_A",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 28031,
+   "items": [
+    28031
+   ],
+   "python_items": [
+    28031
+   ],
+   "points": 28031,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 28031,
+    "quat": 28031,
+    "scale": 28031,
+    "bounds": 28031
+   },
+   "equal": {
+    "Asset": 28031,
+    "seed": 28031
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_B",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 18641,
+   "items": [
+    18641
+   ],
+   "python_items": [
+    18641
+   ],
+   "points": 18641,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 18641,
+    "quat": 18641,
+    "scale": 18641,
+    "bounds": 18641
+   },
+   "equal": {
+    "Asset": 18641,
+    "seed": 18641
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_C",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 18976,
+   "items": [
+    18976
+   ],
+   "python_items": [
+    18976
+   ],
+   "points": 18976,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 18976,
+    "quat": 18976,
+    "scale": 18976,
+    "bounds": 18976
+   },
+   "equal": {
+    "Asset": 18976,
+    "seed": 18976
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_D",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 21068,
+   "items": [
+    21068
+   ],
+   "python_items": [
+    21068
+   ],
+   "points": 21068,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 21068,
+    "quat": 21068,
+    "scale": 21068,
+    "bounds": 21068
+   },
+   "equal": {
+    "Asset": 21068,
+    "seed": 21068
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_E",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 17305,
+   "items": [
+    17305
+   ],
+   "python_items": [
+    17305
+   ],
+   "points": 17305,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 17305,
+    "quat": 17305,
+    "scale": 17305,
+    "bounds": 17305
+   },
+   "equal": {
+    "Asset": 17305,
+    "seed": 17305
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_F",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 30369,
+   "items": [
+    30369
+   ],
+   "python_items": [
+    30369
+   ],
+   "points": 30369,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 30369,
+    "quat": 30369,
+    "scale": 30369,
+    "bounds": 30369
+   },
+   "equal": {
+    "Asset": 30369,
+    "seed": 30369
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_G",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 21469,
+   "items": [
+    21469
+   ],
+   "python_items": [
+    21469
+   ],
+   "points": 21469,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 21469,
+    "quat": 21469,
+    "scale": 21469,
+    "bounds": 21469
+   },
+   "equal": {
+    "Asset": 21469,
+    "seed": 21469
+   }
   }
  ]
 }
