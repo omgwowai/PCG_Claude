@@ -13,7 +13,7 @@ import math
 
 from pypcg.stages import s02_bg_buildings as S
 
-SIGMAS = 5.0
+SIGMAS = 5.0                 # the sampled count is sum p(1 - p) distributed, sd ~3.62 at the demo values
 
 
 def check(inputs, params, outputs, ops, official=None, notes=()):
@@ -42,7 +42,7 @@ def check(inputs, params, outputs, ops, official=None, notes=()):
             f.append("kept %d of %d sampled points, KeepRatio %.6g says %d" % (n, sampled[0], ratio, want))
     else:
         mean = S.expected_sampled(params) * ratio
-        sd = math.sqrt(max(mean * (1.0 - ratio), 1.0))
+        sd = math.sqrt(S.sampled_sd(params) ** 2 * ratio * ratio + mean * (1.0 - ratio))
         if abs(n - mean) > SIGMAS * sd:
             f.append("kept %d points, the grid expects %.1f +- %.1f" % (n, mean, sd))
     return f

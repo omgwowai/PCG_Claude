@@ -91,13 +91,16 @@ def sample(params, rng):
     return pts
 
 
-def expected_sampled(params):
-    """How many points `sample` publishes on average: the ring's area inside the cells' jitter
-    squares, over one jitter square. Used by the tests and the V1 check, not by run()."""
+def cell_fractions(params):
+    """The chance each cell's candidate lands on the ring: the outer square's per-axis overlap with
+    the cell's jitter span times the other axis's, minus the same product for the centre square
+    (both axes are independent, so the area test factorises). Empty when the stage yields nothing.
+    Cells wholly inside the ring give 1, cells wholly outside 0, and only the edge cells are random;
+    this is what `expected_sampled` and `sampled_sd` are built from."""
     outer, inner = halves(params)
     cell = cell_size(float(params["PointsPerSquaredMeter"]))
     if cell is None or not outer > 0.0 or inner >= outer:
-        return 0.0
+        return []
     jitter = cell - 2.0 * SAMPLING_EXTENTS
     cells = list(cell_range(outer, cell))
 
@@ -105,9 +108,24 @@ def expected_sampled(params):
         """Per-axis overlap of [lo, hi] with every jitter span, as a fraction of one span."""
         return [max(0.0, min(hi, i * cell + jitter) - max(lo, i * cell)) / jitter for i in cells]
 
-    ox = cover(-outer, outer)
-    ix = cover(-inner, inner)
-    return sum(a * b for a in ox for b in ox) - sum(a * b for a in ix for b in ix)
+    ox, ix = cover(-outer, outer), cover(-inner, inner)
+    return [ox[a] * ox[b] - ix[a] * ix[b] for a in range(len(ox)) for b in range(len(ox))]
+
+
+def expected_sampled(params):
+    """How many points `sample` publishes on average: the sum of the cells' chances, i.e. the ring's
+    area inside the cells' jitter squares over one jitter square. Used by the tests and the V1 check,
+    not by run(). At the demo values 583.295 (the full ring would be 608.045)."""
+    return sum(cell_fractions(params))
+
+
+def sampled_sd(params):
+    """The standard deviation of `expected_sampled`'s outcome: each cell's candidate is a Bernoulli
+    draw with its own chance, so the variance is sum p (1 - p). At the demo values 3.62 -- three times
+    smaller than the cull's own sd (sqrt(374 x 0.36) = 11.6), because only the edge cells are random.
+    Used to size the tests' tolerances and the V1 check's band."""
+    p = cell_fractions(params)
+    return math.sqrt(sum(q * (1.0 - q) for q in p))
 
 
 def run(inputs, params, ctx):

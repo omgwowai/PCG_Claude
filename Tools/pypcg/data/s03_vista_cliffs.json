@@ -1,6 +1,6 @@
 {
 "source": "/CitySamplePCG/PCG/DataAssets/VistaCliffs_PCG",
-"read_by": "pyg_probe_t14_fixture.py",
+"read_by": "Content/Python/pypcg_cliffs_fixture.py",
 "Cliffs": [
 [
 {

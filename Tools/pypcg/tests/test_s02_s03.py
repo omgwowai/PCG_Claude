@@ -152,9 +152,14 @@ def test_count_is_the_cull_of_what_was_sampled(seed):
     out, ctx = run(S2, {}, Seed=seed)
     sampled = int(ctx.notes[0].split()[1])
     assert len(out["Points"][0][0]) == int(round(sampled * S2.PARAMS["KeepRatio"].default))
-    # The sampler is the official grid: one candidate per ~1 km cell, so `sampled` sits within 1 % of
-    # the grid's expectation (583.3 at the demo values; only the edge cells are random).
-    assert sampled == pytest.approx(S2.expected_sampled(params(S2)), rel=0.01)
+    # The sampler is the official grid: one candidate per ~1 km cell. Only the edge cells are random,
+    # each a Bernoulli draw with its own chance, so `sampled` has sd = sqrt(sum p (1 - p)) = 3.62 at the
+    # demo values (a 1 % band would be 1.6 sd and could flip when rng consumption changes). 4 sd is
+    # the bound here; the exact 1 % expectation is asserted on a 20-seed mean below, where the noise
+    # of a single run is gone.
+    sd = S2.sampled_sd(params(S2))
+    assert sd == pytest.approx(3.618, abs=0.01)
+    assert abs(sampled - S2.expected_sampled(params(S2))) <= 4.0 * sd
 
 
 def test_count_matches_the_ring_area_times_density_times_keep_ratio_on_the_grid():
@@ -261,3 +266,27 @@ def test_stage3_is_deterministic():
     a = geo.to_json(run(S3, inp, Seed=7)[0]["Points"][0][0])
     b = geo.to_json(run(S3, inp, Seed=8)[0]["Points"][0][0])
     assert a == b
+
+
+def test_stamp_matches_the_official_spawners_instances():
+    """The offline oracle: the 59 transforms the official graph's `StaticMeshSpawner_0` placed, read
+    2026-10-19 by `Content/Python/pypcg_cliffs_fixture.py` (regenerate that file, then this fixture).
+    The instance transform is the point's own -- location, rotator, scale -- so the stamp must equal it
+    without the Python write path in between: location to the last bit, scale to 1e-9, yaw to 1e-6 deg
+    (the fixtures' rotators carry float precision)."""
+    doc = json.load(open(os.path.join(REPO, "Tools", "pypcg", "data", "s03_official_instances.json"),
+                         encoding="utf-8"))
+    assert doc["graph"].endswith("PCG_1_3_BG_Mountains.PCG_1_3_BG_Mountains")
+    spec = json.load(open(os.path.join(REPO, "Tools", "pypcg", "data", "s03_vista_cliffs.json"), encoding="utf-8"))
+    assert doc["read_by"] == "Content/Python/pypcg_cliffs_fixture.py" and spec["read_by"] == doc["read_by"]
+    pts = run(S3, cliffs())[0]["Points"][0][0]
+    mine = sorted([(pts.attrs[S3.MESH_ATTR][i], tuple(pts.loc[i]), pts.rot[i], tuple(pts.scale[i]))
+                   for i in range(len(pts)) if pts.attrs[S3.MESH_ATTR][i] != "None"], key=lambda r: (r[0], r[1]))
+    theirs = sorted([(r[0], tuple(r[1]), tuple(r[2]), tuple(r[3])) for r in doc["instances"]],
+                    key=lambda r: (r[0], r[1]))
+    assert len(mine) == len(theirs) == 59
+    for a, b in zip(mine, theirs):
+        assert a[0] == b[0]
+        assert a[1] == b[1]                                       # location, bit for bit
+        assert abs(((a[2][1] - b[2][1] + 180.0) % 360.0) - 180.0) <= 1e-6
+        assert max(abs(x - y) for x, y in zip(a[3], b[3])) <= 1e-9
