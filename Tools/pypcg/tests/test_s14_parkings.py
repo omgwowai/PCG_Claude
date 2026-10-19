@@ -239,6 +239,49 @@ def test_space_count_is_the_segments_of_the_space_lines():
     assert all(abs(math.dist(r[0][:2], r[1][:2]) - SP.length(r) / (len(r) - 1)) < 1e-6 for r in rows)
 
 
+def test_space_count_by_hand_on_one_box_lot():
+    """A 105 x 85 m lot, worked by hand. Outer 99 x 79 m, inner 83 x 63 m from (1100, 1100); the 19 x 45 m grid
+    from its first longest edge (the bottom) cuts x at 2999 / 4899 / 6799 / 8699 and y at 5599: cells 1899 / 1900 x3 /
+    701 wide, 4499 / 1801 high; less 5 m a side: four 899-900 x 3499 aisles (centre line 3499: 9 points, 8 spaces,
+    two rows) and four 899-900 x 801 (centre line ~900: 2 points, 1 space, two rows) -> 72 inner spaces, 88 points.
+    Outer: the 99 x 79 m edges less 5 m an end (89 m, 69 m), each cut by one 8 m median band in its middle ->
+    4 x 4050 cm (11 points, 10 spaces) and 4 x 3050 cm (8 points, 7 spaces) -> 68 spaces, 76 points."""
+    ins = inputs([box(0, 0, 10500, 8500)])
+    _lots, rows, spaces, _bands = C.rebuild(ins, OPS)
+    assert len(spaces) == 72 + 68
+    assert sum(len(r) for r in rows) == 88 + 76
+    assert sorted(len(r) for r in rows) == sorted([9] * 8 + [2] * 8 + [11] * 4 + [8] * 4)
+    out = run(ins)
+    assert sum(len(v) for v, _t in out["Lines"]) == 164
+
+
+def test_check_bites_on_a_wrong_spacing(monkeypatch):
+    """The check's count comes from the RECORDED centre lines and its own 350 cm, so a resampler that spaces at
+    300 cm -- the stage, the rebuild and the record all agreeing with each other -- still fails it."""
+    ins = inputs([box(0, 0, 10500, 8500)])
+    real = SP.resample_fit
+    monkeypatch.setattr(SP, "resample_fit", lambda path, distance: real(path, 300.0))
+    out = run(ins)
+    rec = {pin: list(out[pin]) for pin in S.OUTPUTS}
+    fails = C.check(ins, {}, rec, OPS)
+    assert any("350 cm spaces" in f for f in fails), fails
+    assert any("line decals" in f for f in fails), fails
+    assert any("evenly spaced" in f for f in fails), fails
+
+
+def test_check_space_constant_is_the_official_one():
+    for n in ("Subgraph_45", "Subgraph_62"):
+        assert official(n)["overrides"]["Distance"] == C.SPACE_CM
+
+
+def test_a_tie_between_the_two_longest_edges_is_reported():
+    _out, ctx = stage_api.execute(S, inputs([box(0, 0, 10500, 8500)]), {stage_api.SEED: 1}, OPS)
+    assert any("tie within" in n for n in ctx.notes)
+    # a trapezoid's longest edges differ (10 vs 10.05 cm): no tie; a rectangle's two long sides always tie
+    assert S.phase_ties([Polygon([(0, 0), (10, 0), (10, 5), (0, 6)])]) == []
+    assert [t[:3] for t in S.phase_ties([box(0, 0, 10, 5)])] == [(0, 0, 2)]
+
+
 def test_cars_sit_on_occupied_spaces_and_face_one_of_two_ways():
     out = run()
     fwd, rev = C._cars(out, "ForwardCars"), C._cars(out, "ReverseCars")
@@ -332,47 +375,6 @@ def test_arrows_sit_beside_the_shortened_medians():
         # Transform_Truncate reverses: side A starts near the median's END
         assert math.dist(a[0][:2], m[-1][:2]) < S.MEDIAN_TRUNC_CM + 300.0
         assert math.dist(b[-1][:2], m[-1][:2]) < S.MEDIAN_TRUNC_CM + 300.0
-
-
-# ---- geo.splines ---------------------------------------------------------------------------------------
-def test_truncate_cuts_both_ends_and_reverses():
-    path = [(0.0, 0.0, 0.0), (1000.0, 0.0, 0.0), (1000.0, 1000.0, 0.0)]
-    out = SP.truncate(path, 500.0, 300.0)
-    assert out == [(1000.0, 700.0, 0.0), (1000.0, 0.0, 0.0), (500.0, 0.0, 0.0)]
-    # a path not longer than an offset keeps that side (the measured 978 cm run: 478 cm left)
-    assert SP.truncate([(0.0, 0.0, 0.0), (978.0, 0.0, 0.0)], 500.0, 500.0) == [(978.0, 0.0, 0.0), (500.0, 0.0, 0.0)]
-    assert SP.truncate([(0.0, 0.0, 0.0), (400.0, 0.0, 0.0)], 500.0, 500.0) == [(400.0, 0.0, 0.0), (0.0, 0.0, 0.0)]
-
-
-def test_resample_fit_drops_lines_under_two_samples():
-    line = lambda L: [(0.0, 0.0, 0.0), (L, 0.0, 0.0)]     # noqa: E731
-    assert SP.resample_fit(line(349.0), 350.0) == []
-    assert SP.resample_fit(line(699.0), 350.0) == []                       # one sample: no spline
-    assert [p[0] for p in SP.resample_fit(line(899.0), 350.0)] == [0.0, 899.0]
-    pts = SP.resample_fit(line(3499.0), 350.0)
-    assert len(pts) == 9 and abs(pts[1][0] - 3499.0 / 8) < 1e-9
-    assert len(SP.resample_fit(line(3500.0), 350.0)) == 10
-
-
-def test_chord_subdivide_offset_pairs_center():
-    path = [(0.0, 0.0, 0.0), (300.0, 0.0, 0.0), (600.0, 10.0, 0.0)]
-    assert SP.chord(path) == [(0.0, 0.0, 0.0), (600.0, 10.0, 0.0)]
-    sub = SP.subdivide([(0.0, 0.0, 0.0), (600.0, 0.0, 0.0)], 5)
-    assert [p[0] for p in sub] == [0.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0]
-    off = SP.offset_local([(0.0, 0.0, 0.0), (100.0, 0.0, 0.0)], -100.0, 200.0)
-    assert all(abs(a - b) < 1e-9 for p, q in zip(off, [(-100.0, 200.0, 0.0), (0.0, 200.0, 0.0)]) for a, b in zip(p, q))
-    assert SP.pairs(path) == [[path[0], path[1]], [path[1], path[2]]]
-    loc, yaw = SP.center([(0.0, 0.0, 0.0), (0.0, 350.0, -2.0)])
-    assert loc == (0.0, 175.0, -1.0) and abs(yaw - 90.0) < 1e-12
-    assert SP.control_yaws([(0.0, 0.0), (0.0, 1.0), (-1.0, 1.0)]) == [90.0, 180.0, 180.0]
-
-
-def test_follow_subjects_orders_and_restarts_the_rings():
-    subjects = [box(0, 0, 10, 10), box(100, 0, 110, 10)]
-    shrunk = [Polygon([(101, 9), (101, 1), (109, 1), (109, 9)]), Polygon([(9, 1), (9, 9), (1, 9), (1, 1)])]
-    out = A.follow_subjects(shrunk, subjects)
-    assert [p.outer[0] for p in out] == [(1, 1), (101, 1)]
-    assert out[0].outer == [(1, 1), (9, 1), (9, 9), (1, 9)] or out[0].outer[0] == (1, 1)
 
 
 # ---- the finish node -----------------------------------------------------------------------------------

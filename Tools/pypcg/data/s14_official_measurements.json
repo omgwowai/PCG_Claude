@@ -1,4 +1,263 @@
 {
+ "barriers": {
+  "border_modules": [
+   344,
+   343
+  ],
+  "central_modules": [
+   214,
+   214
+  ],
+  "matched_lines_with_different_modules": [
+   {
+    "kind": "border",
+    "length_cm": [
+     4650.0,
+     4650.0
+    ],
+    "modules": [
+     11,
+     9
+    ],
+    "official": 43,
+    "points": [
+     4,
+     4
+    ],
+    "port": 42
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     4650.0,
+     4650.003
+    ],
+    "modules": [
+     9,
+     11
+    ],
+    "official": 42,
+    "points": [
+     4,
+     4
+    ],
+    "port": 43
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     4650.0,
+     4650.0
+    ],
+    "modules": [
+     14,
+     8
+    ],
+    "official": 51,
+    "points": [
+     4,
+     4
+    ],
+    "port": 50
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     4650.0,
+     4650.002
+    ],
+    "modules": [
+     8,
+     14
+    ],
+    "official": 50,
+    "points": [
+     4,
+     4
+    ],
+    "port": 51
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     789.629,
+     789.635
+    ],
+    "modules": [
+     2,
+     3
+    ],
+    "official": 62,
+    "points": [
+     5,
+     5
+    ],
+    "port": 60
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     723.196,
+     723.164
+    ],
+    "modules": [
+     3,
+     1
+    ],
+    "official": 60,
+    "points": [
+     13,
+     13
+    ],
+    "port": 62
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     7474.502,
+     7474.502
+    ],
+    "modules": [
+     17,
+     18
+    ],
+    "official": 70,
+    "points": [
+     4,
+     4
+    ],
+    "port": 69
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     7474.493,
+     7474.495
+    ],
+    "modules": [
+     18,
+     17
+    ],
+    "official": 69,
+    "points": [
+     4,
+     4
+    ],
+    "port": 70
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     5531.808,
+     5531.808
+    ],
+    "modules": [
+     10,
+     11
+    ],
+    "official": 76,
+    "points": [
+     4,
+     4
+    ],
+    "port": 75
+   },
+   {
+    "kind": "border",
+    "length_cm": [
+     5533.965,
+     5533.965
+    ],
+    "modules": [
+     11,
+     10
+    ],
+    "official": 75,
+    "points": [
+     4,
+     4
+    ],
+    "port": 76
+   }
+  ],
+  "modules": [
+   558,
+   557
+  ],
+  "seed": {
+   "Seed": 42
+  },
+  "unmatched": {
+   "official": [
+    {
+     "length_cm": 899.18,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.18,
+     "modules": 8
+    },
+    {
+     "length_cm": 899.8,
+     "modules": 2
+    },
+    {
+     "length_cm": 3498.78,
+     "modules": 8
+    },
+    {
+     "length_cm": 899.99,
+     "modules": 2
+    },
+    {
+     "length_cm": 3498.98,
+     "modules": 7
+    },
+    {
+     "length_cm": 900.17,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.39,
+     "modules": 8
+    }
+   ],
+   "port": [
+    {
+     "length_cm": 899.0,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.0,
+     "modules": 8
+    },
+    {
+     "length_cm": 900.0,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.0,
+     "modules": 8
+    },
+    {
+     "length_cm": 900.0,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.0,
+     "modules": 7
+    },
+    {
+     "length_cm": 900.0,
+     "modules": 2
+    },
+    {
+     "length_cm": 3499.0,
+     "modules": 8
+    }
+   ]
+  }
+ },
  "date": "2026-10-20",
  "end_to_end": {
   "border": {

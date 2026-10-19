@@ -386,7 +386,84 @@ def finish(args):
     return r
 
 
-STEPS = {"gen": gen, "dump": dump, "measure": measure, "finish": finish}
+def barriers(args):
+    """Where the extra barrier is (fix round 1): the concrete-barrier modules of a slim run (its finish record's
+    inputs, `Saved/Reports/v2/s14/<record>` or the live `Saved/PyPCG/runs/s14_finish.json`) and of the official
+    tap, each module assigned to the nearest of ITS OWN graph's barrier lines (central lines, then border runs),
+    the lines paired by midpoint. Collinear halves of one cut edge trade modules across the entrance gap, so each
+    such pair is compared by its sum. Merged into the data file under 'barriers'."""
+    import math
+    from pypcg import geo
+    from pypcg.geo import splines as SP
+    from pypcg.stage_api import RUNS_DIR
+    items, _polys, _paths = _from_taps()
+    fin = json.load(open(os.path.join(RUNS_DIR, "s14_finish.json"), encoding="utf-8"))
+    main = json.load(open(os.path.join(_REPO, "Saved", "Reports", "v2", "s14", args.get("record", "slim_42.run.json")),
+                          encoding="utf-8"))
+    if fin["params"] != main["params"]:
+        return {"abort": "the finish record (%s) is not the run of %s" % (fin["params"], main["params"])}
+
+    def bars(pts):
+        return [p for p in pts if len(p) and any(k in str((p.attrs.get("Asset") or [""])[0])
+                                                  for k in ("Concrete_Barrier", "sdsbo"))]
+    port_bars = bars([geo.from_json(v) for v, _t in fin["inputs"]["Points"]])
+    off_bars = bars(items("T_barrier"))
+    lines = {"port": [[tuple(q) for q in geo.from_json(v).points] for pin in ("CentralLines", "Border")
+                      for v, _t in main["outputs"][pin]],
+             "official": [[tuple(q) for q in s.points] for tap in ("T_central", "T_border") for s in items(tap)]}
+    n_central = {"port": len(main["outputs"]["CentralLines"]), "official": len(items("T_central"))}
+
+    def dpath(pt, path):
+        best = 1e18
+        for a, b in zip(path, path[1:]):
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            L = dx * dx + dy * dy
+            t = 0.0 if L == 0 else max(0.0, min(1.0, ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / L))
+            best = min(best, math.dist(pt, (a[0] + t * dx, a[1] + t * dy)))
+        return best
+
+    count = {}
+    for name, bs in (("port", port_bars), ("official", off_bars)):
+        c = [0] * len(lines[name])
+        for p in bs:
+            for q in p.loc:
+                c[min(range(len(c)), key=lambda k: dpath(q[:2], lines[name][k]))] += 1
+        count[name] = c
+
+    def mid(p):
+        return SP.center([p[0], p[-1]])[0][:2]
+    pairs, used = [], set()
+    for i, p in enumerate(lines["port"]):
+        j = min((j for j in range(len(lines["official"])) if j not in used),
+                key=lambda j: math.dist(mid(p), mid(lines["official"][j])))
+        if math.dist(mid(p), mid(lines["official"][j])) < 5.0:
+            used.add(j)
+            pairs.append((i, j))
+    # collinear halves of one cut edge: group matched border pairs whose port lines are collinear and end to end
+    rows = []
+    for i, j in pairs:
+        kind = "central" if i < n_central["port"] else "border"
+        rows.append({"kind": kind, "length_cm": [round(SP.length(lines["port"][i]), 3),
+                                                 round(SP.length(lines["official"][j]), 3)],
+                     "points": [len(lines["port"][i]), len(lines["official"][j])],
+                     "modules": [count["port"][i], count["official"][j]], "port": i, "official": j})
+    unmatched = {"port": [{"length_cm": round(SP.length(lines["port"][i]), 2), "modules": count["port"][i]}
+                          for i in range(len(lines["port"])) if i not in {a for a, _b in pairs}],
+                 "official": [{"length_cm": round(SP.length(lines["official"][j]), 2), "modules": count["official"][j]}
+                              for j in range(len(lines["official"])) if j not in used]}
+    differ = [r for r in rows if r["modules"][0] != r["modules"][1]]
+    r = {"seed": main["params"], "modules": [sum(count["port"]), sum(count["official"])],
+         "central_modules": [sum(count["port"][:n_central["port"]]), sum(count["official"][:n_central["official"]])],
+         "border_modules": [sum(count["port"][n_central["port"]:]), sum(count["official"][n_central["official"]:])],
+         "matched_lines_with_different_modules": differ, "unmatched": unmatched}
+    doc = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
+    doc["barriers"] = r
+    with open(OUT, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh, indent=1, sort_keys=True)
+    return r
+
+
+STEPS = {"gen": gen, "dump": dump, "measure": measure, "finish": finish, "barriers": barriers}
 
 try:
     _a = mcp_args or {}

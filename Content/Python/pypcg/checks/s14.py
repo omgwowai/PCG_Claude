@@ -9,11 +9,14 @@ intermediates the stage's own functions rebuild from the record's inputs with th
 
   - empty inputs -> every output empty;
   - every space centre lies inside the footprint (within `INSIDE_TOL_CM`);
-  - the number of spaces is the number of 350 cm segments of the space lines, `sum(int(L / 350) - 1)` over
-    every resampled line -- the brief's "within 10 % of area / space area" is not what the official graph
-    computes (s14.md 5.1: 733 official spaces on 42 100 m2 is 57 m2 a space, the aisles, medians and the
-    outer band taking the rest); this one is exact;
-  - one parking line decal per space-line control point, and every car on an occupied space: a forward car
+  - the space COUNT and the decal count against what does not pass through the resampler: the RECORDED
+    `CentralLines` (two rows each) and the outer pieces before their resample, each line holding `int(L / 350)`
+    points (none under two) with this module's own 350 cm, +-1 per line whose length is within 1e-6 of a multiple
+    of 350 (on the demo level eleven 35.0 m aisles sit there: +-22); and every space line evenly spaced at >= 350 cm.
+    Two CONSISTENCY clauses besides: one space per space-line segment, and the recorded decals equal the rebuilt
+    control points exactly (the clause that sees a single dropped decal). The brief's "within 10 % of area / space
+    area" is not what the official graph computes (s14.md 5.1: 57 m2 of lot per space);
+  - one space per space-line segment, and every car on an occupied space: a forward car
     exactly on a space centre, a reversed one within 50 cm of one (`Subgraph_5`'s random Y range), each
     facing one of the two ways -- the space's yaw +90 (forward) or -90 (reversed), within the 5 degree random
     range -- and no two cars on one space;
@@ -28,6 +31,8 @@ from pypcg.geo import splines as SP
 from pypcg.stages import s14_parkings as S
 
 INSIDE_TOL_CM = 1.0
+SPACE_CM = 350.0            # Subgraph_45 / 62 Distance: this module's own copy of the official value (the tests
+                            # read it from the official IR), so a wrong spacing in the stage cannot hide here
 CAR_YAW_TOL_DEG = 5.0 + 1e-6
 CAR_OFFSET_CM = 50.0 + 1e-6
 SAME_CM = 1e-6
@@ -65,6 +70,25 @@ def _cars(outputs, pin):
     return pts[-1] if pts else geo.Points()        # a static-mesh Assign_Assets output is its moved targets
 
 
+def _fit(length):
+    """(points `Transform_Resample (Distance 350, FitToCurve)` gives a line of `length`: int(L / 350), none under
+    two; whether L is within 1e-6 of a multiple of 350, where the count can fall either side)."""
+    n = int(length / SPACE_CM)
+    q = length / SPACE_CM
+    return (n if n >= 2 else 0), int(abs(q - round(q)) < 1e-6)
+
+
+def _even(path):
+    d = [math.dist(path[i][:2], path[i + 1][:2]) for i in range(len(path) - 1)]
+    return min(d) >= SPACE_CM - 1e-6 and max(d) - min(d) <= 1e-6 and max(d) < 3 * SPACE_CM
+
+
+def outer_pieces(lots, bands, ops):
+    """The outer band's lines BEFORE their resample (`Subgraph_36` -> `43` -> `44` -> `61`)."""
+    runs = [SP.chord(SP.truncate(r, S.OUTER_TRUNC_CM, S.OUTER_TRUNC_CM)) for r in S._runs(S.outer_areas(lots, ops))]
+    return S._cut(runs, bands, ops)
+
+
 def check(inputs, params, outputs, ops, official=None):
     fails = []
     if inputs is None:
@@ -74,23 +98,40 @@ def check(inputs, params, outputs, ops, official=None):
         busy = [pin for pin in S.OUTPUTS if outputs.get(pin)]
         return ["empty footprint but outputs on %s" % busy] if busy else []
 
-    # spaces: inside the footprint, and exactly the 350 cm segments of the space lines
+    # spaces: inside the footprint
     out_of = [i for i, p in enumerate(spaces.loc) if not _in_lots(p, lots)]
     if out_of:
         fails.append("%d of %d space centres outside the footprint (first %s)" % (len(out_of), len(spaces), out_of[:3]))
-    want = sum(max(len(r) - 1, 0) for r in rows)
-    if len(spaces) != want:
-        fails.append("%d spaces, but the space lines hold %d segments" % (len(spaces), want))
-    # a resampled line's own length can sit a hair either side of a multiple of 350 cm (the 35.0 m aisles do)
-    bad = [i for i, r in enumerate(rows)
-           if len(r) not in {int((SP.length(r) - 1e-6) / S.SPACE_CM), int((SP.length(r) + 1e-6) / S.SPACE_CM)}]
-    if bad:
-        fails.append("%d space lines do not hold int(L / 350) points" % len(bad))
 
-    # line decals: one per control point of the space lines
+    # the space COUNT, from what does not go through the resampler: the RECORDED centre lines (two rows each) and
+    # the outer pieces before their resample, each holding int(L / 350) points -- the official rule, with this
+    # module's own 350 cm. A length within 1e-6 of a multiple of 350 may land either side (the 35.0 m aisles do).
+    want_spaces = want_points = tol = 0
+    for v, _t in outputs.get("CentralLines", []):
+        n, near = _fit(SP.length(v.points))
+        want_spaces += 2 * max(n - 1, 0)
+        want_points += 2 * n
+        tol += 2 * near
+    for piece in outer_pieces(lots, bands, ops):
+        n, near = _fit(SP.length(piece))
+        want_spaces += max(n - 1, 0)
+        want_points += n
+        tol += near
+    if abs(len(spaces) - want_spaces) > tol:
+        fails.append("%d spaces, but the recorded centre lines and the outer pieces hold %d 350 cm spaces (+-%d)"
+                     % (len(spaces), want_spaces, tol))
     n_lines = sum(len(v) for v, _t in outputs.get("Lines", []))
-    if n_lines != sum(len(r) for r in rows):
-        fails.append("%d line decals for %d space-line control points" % (n_lines, sum(len(r) for r in rows)))
+    if abs(n_lines - want_points) > tol:
+        fails.append("%d line decals, but the recorded centre lines and the outer pieces hold %d (+-%d)"
+                     % (n_lines, want_points, tol))
+    # the spacing itself: even along each line, and L / (N - 1) >= 350 cm with N = int(L / 350) >= 2
+    uneven = [i for i, r in enumerate(rows) if len(r) >= 2 and not _even(r)]
+    if uneven:
+        fails.append("%d space lines are not evenly spaced at >= %.0f cm (first %d)" % (len(uneven), SPACE_CM, uneven[0]))
+    if len(spaces) != sum(max(len(r) - 1, 0) for r in rows):           # consistency: one space per segment
+        fails.append("%d spaces for %d space-line segments" % (len(spaces), sum(max(len(r) - 1, 0) for r in rows)))
+    if n_lines != sum(len(r) for r in rows):                             # consistency: the record against the rebuild
+        fails.append("%d recorded line decals for %d rebuilt space-line control points" % (n_lines, sum(len(r) for r in rows)))
 
     # cars: on occupied spaces, facing one of the two ways
     taken = set()

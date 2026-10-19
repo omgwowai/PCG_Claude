@@ -35,6 +35,8 @@ The chain (official node names in brackets):
 `CentralLines` and `Border` go to the kept `Subgraph_53 Assign Concrete Barrier Grammar`, `Border` to the kept
 `Subgraph_54 Assign Chain-Link Fence Grammar`; the points to `s14_parkings_finish` with the grammars' output.
 """
+import math
+
 from pypcg import geo
 from pypcg.geo import Points, Polygon, Spline
 from pypcg.geo import areas as A
@@ -123,6 +125,24 @@ def inner_areas(outer, ops):
     """`Subgraph_33`: the outer areas contracted 800 cm, united. The start vertex matters here: the grid
     below is laid from the ring's first longest edge, and the two long sides of a rectangle tie."""
     return A.follow_subjects(A.contract(outer, INNER_CONTRACT_CM, ops), outer)
+
+
+def phase_ties(areas, tol_cm=1e-6):
+    """The areas whose two longest edges are within `tol_cm` of each other: the grid's phase then follows the
+    last bits of the ring. The engine's first-longest rule is a strict `>` over the edges
+    (`PCGPolygon2DAccessor.h:255-265`, as `geo.plane.longest`), so this is reported, never "fixed" with a
+    tolerance: `[(area index, edge i, edge j, difference cm)]`."""
+    out = []
+    for k, p in enumerate(areas):
+        r = p.outer
+        n = len(r)
+        if n < 3:
+            continue
+        lens = sorted(((math.dist(r[i], r[(i + 1) % n]), i) for i in range(n)), reverse=True)
+        (a, i), (b, j) = lens[0], lens[1]
+        if a - b <= tol_cm:
+            out.append((k, min(i, j), max(i, j), a - b))
+    return out
 
 
 def grid_cells(inner, ops):
@@ -293,7 +313,8 @@ def parkings(inputs, ops, draws, loader=None):
     if not lots:
         return out, ["no parking footprint"]
     outer = outer_areas(lots, ops)
-    cells = grid_cells(inner_areas(outer, ops), ops)
+    inner = inner_areas(outer, ops)
+    cells = grid_cells(inner, ops)
     central = central_lines(aisles(cells, ops))
     med = medians(lots, ops)
     bands = median_bands(med, ops)
@@ -316,6 +337,9 @@ def parkings(inputs, ops, draws, loader=None):
              "%d spaces, %d line points, %d occupied (%d forward, %d reversed), %d arrows, %d tiles"
              % (len(spaces), sum(len(s) for s in line_sets), taken, sum(len(x) for x in fwd[-1:]),
                 sum(len(x) for x in rev[-1:]), sum(len(s) for s in arrow_sets), sum(len(t) for t in out["Tiles"]))]
+    for k, i, j, d in phase_ties(inner):
+        notes.append("inner area %d: edges %d and %d tie within %.1e cm; the 19 x 45 m grid's phase follows their "
+                     "last bits (s14.md 4.1)" % (k, i, j, d))
     return out, notes
 
 
