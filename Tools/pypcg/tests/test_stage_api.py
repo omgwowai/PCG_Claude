@@ -95,3 +95,28 @@ def test_record_writes_inputs_params_and_outputs(tmp_path, monkeypatch):
     assert rec["stage"] == 9 and rec["params"]["Seed"] == 42 and rec["seconds"] == 0.5
     assert rec["inputs"]["In"][0][1] == ["Lots"] and rec["outputs"]["Out"][0][1] == ["Out"]
     assert geo.from_json(rec["inputs"]["In"][0][0]) == inputs["In"][0][0]
+
+
+def test_engine_vertices_and_frames_travel_through_records_but_not_equality():
+    """Task 20: `Polygon.vertices` / `frame` and `Spline.frame` (set by `convert`) are recorded when set and read
+    back, and take no part in equality, so older records and stage outputs compare as before."""
+    p = Polygon([(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)], [], 2.0, vertices=[(0.0, 0.0, 2.0), (1.0, 0.0, 2.0), (0.0, 1.0, 2.0)],
+                frame=((0.5, 0.5, 2.0), (0.0, 0.0, -0.7071067811865475, 0.7071067811865476)))
+    back = geo.from_json(json.loads(json.dumps(geo.to_json(p))))
+    assert back == p and back.vertices == p.vertices and back.frame == p.frame
+    assert "vertices" not in geo.to_json(Polygon(p.outer, [], 2.0)) and Polygon(p.outer, [], 2.0) == p
+    s = geo.Spline([(0.0, 0.0, 0.0), (1.0, 0.0, 0.0)], frame=((5.0, 6.0, 7.0), (0.0, 0.0, 0.0, 1.0), (1.0, 1.0, 1.0)))
+    sb = geo.from_json(json.loads(json.dumps(geo.to_json(s))))
+    assert sb == s and sb.frame == s.frame and "frame" not in geo.to_json(geo.Spline(s.points))
+
+
+def test_unchanged_forwards_a_registered_spline_only_untouched():
+    s = geo.Spline([(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0)], closed=True)
+    s.source = 0
+    obj = object()
+    reg = {0: (obj, stage_api.snapshot(s))}
+    assert stage_api.unchanged(s, reg) is obj
+    s.points[1] = (2.0, 0.0, 0.0)
+    assert stage_api.unchanged(s, reg) is None
+    copy = geo.Spline(list(reg and [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0)]), closed=True)
+    assert stage_api.unchanged(copy, reg) is None                                   # a copy carries no source

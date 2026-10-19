@@ -34,7 +34,8 @@ def run(stage_name, scope):
     # The input polygons' own data objects, for this run only (traps.md 25): a polygon the stage hands
     # back unchanged is forwarded as the engine's object, frame and local coordinates included (Task 18).
     registry = {}
-    inputs = {pin: convert.read_pin(data_in, pin, registry) for pin in module.INPUTS}
+    splines = bool(getattr(module, "FORWARD_SPLINES", False))
+    inputs = {pin: convert.read_pin(data_in, pin, registry, splines) for pin in module.INPUTS}
     outputs, ctx = stage_api.execute(module, inputs, params, ue_ops.Ops())
     count = 0
     for pin, items in outputs.items():

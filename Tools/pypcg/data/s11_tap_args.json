@@ -1,0 +1,381 @@
+{
+ "a": {
+  "step": "gen",
+  "graph": "a",
+  "taps": {
+   "T_hr": [
+    "Subgraph_5",
+    "Out"
+   ],
+   "T_s_lots": [
+    "FilterTags_SmallDistricts",
+    "Selected"
+   ],
+   "T_s_tex": [
+    "Subgraph_2_SmallDistrict",
+    "Out"
+   ],
+   "T_s_sel": [
+    "Subgraph_6",
+    "Selected"
+   ],
+   "T_s_uns": [
+    "Subgraph_6",
+    "Unselected"
+   ],
+   "T_s_dist": [
+    "Subgraph_7",
+    "Out"
+   ],
+   "T_s_red": [
+    "AttributeReduce_0",
+    "Out"
+   ],
+   "T_s_mul": [
+    "AttributeMathsOp_0",
+    "Out"
+   ],
+   "T_s_proj": [
+    "Subgraph_12_SmallDistrict",
+    "Out"
+   ],
+   "T_s_lvl": [
+    "Subgraph_13_SmallDistrict",
+    "Out"
+   ],
+   "T_m_lots": [
+    "FilterTags_MediumDistricts",
+    "Selected"
+   ],
+   "T_m_tex": [
+    "Subgraph_2_MediumDistrict",
+    "Out"
+   ],
+   "T_m_sel": [
+    "Subgraph_42",
+    "Selected"
+   ],
+   "T_m_uns": [
+    "Subgraph_42",
+    "Unselected"
+   ],
+   "T_m_dist": [
+    "Subgraph_43",
+    "Out"
+   ],
+   "T_m_red": [
+    "AttributeReduce_1",
+    "Out"
+   ],
+   "T_m_mul": [
+    "AttributeMathsOp_7",
+    "Out"
+   ],
+   "T_m_proj": [
+    "Subgraph_12_MediumDistrict",
+    "Out"
+   ],
+   "T_m_lvl": [
+    "Subgraph_13_MediumDistrict",
+    "Out"
+   ],
+   "T_l_lots": [
+    "FilterTags_LargeDistricts",
+    "Selected"
+   ],
+   "T_l_tex": [
+    "Subgraph_2_LargeDistrict",
+    "Out"
+   ],
+   "T_l_sel": [
+    "Subgraph_44",
+    "Selected"
+   ],
+   "T_l_uns": [
+    "Subgraph_44",
+    "Unselected"
+   ],
+   "T_l_dist": [
+    "Subgraph_45",
+    "Out"
+   ],
+   "T_l_red": [
+    "AttributeReduce_2",
+    "Out"
+   ],
+   "T_l_mul": [
+    "AttributeMathsOp_8",
+    "Out"
+   ],
+   "T_l_proj": [
+    "Subgraph_12_LargeDistrict",
+    "Out"
+   ],
+   "T_l_lvl": [
+    "Subgraph_13_LargeDistrict",
+    "Out"
+   ],
+   "T_m_bs_sel": [
+    "Subgraph_37",
+    "Selected"
+   ],
+   "T_m_bs_uns": [
+    "Subgraph_37",
+    "Unselected"
+   ],
+   "T_m_sq_sel": [
+    "Subgraph_35",
+    "selected"
+   ],
+   "T_m_sq_uns": [
+    "Subgraph_35",
+    "unselected"
+   ],
+   "T_m_fa_in": [
+    "FilterDataByAttribute_0",
+    "InsideFilter"
+   ],
+   "T_m_fa_out": [
+    "FilterDataByAttribute_0",
+    "OutsideFilter"
+   ],
+   "T_m_Subgraph_38": [
+    "Subgraph_38",
+    "Out"
+   ],
+   "T_m_AttributeMathsOp_2": [
+    "AttributeMathsOp_2",
+    "Out"
+   ],
+   "T_l_bs_sel": [
+    "Subgraph_34",
+    "Selected"
+   ],
+   "T_l_bs_uns": [
+    "Subgraph_34",
+    "Unselected"
+   ],
+   "T_l_sq_sel": [
+    "Subgraph_32",
+    "selected"
+   ],
+   "T_l_sq_uns": [
+    "Subgraph_32",
+    "unselected"
+   ],
+   "T_l_fa_in": [
+    "FilterDataByAttribute_1",
+    "InsideFilter"
+   ],
+   "T_l_fa_out": [
+    "FilterDataByAttribute_1",
+    "OutsideFilter"
+   ],
+   "T_l_AttributeMathsOp_1": [
+    "AttributeMathsOp_1",
+    "Out"
+   ]
+  },
+  "extract": {
+   "T_s_texh": [
+    "Subgraph_2_SmallDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_s_mulh": [
+    "AttributeMathsOp_0",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_s_projh": [
+    "Subgraph_12_SmallDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_s_lvlh": [
+    "Subgraph_13_SmallDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_texh": [
+    "Subgraph_2_MediumDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_mulh": [
+    "AttributeMathsOp_7",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_projh": [
+    "Subgraph_12_MediumDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_lvlh": [
+    "Subgraph_13_MediumDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_l_texh": [
+    "Subgraph_2_LargeDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_l_mulh": [
+    "AttributeMathsOp_8",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_l_projh": [
+    "Subgraph_12_LargeDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_l_lvlh": [
+    "Subgraph_13_LargeDistrict",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_fa_inh": [
+    "FilterDataByAttribute_0",
+    "InsideFilter",
+    "@data.MaxHeight"
+   ],
+   "T_m_fa_outh": [
+    "FilterDataByAttribute_0",
+    "OutsideFilter",
+    "@data.MaxHeight"
+   ],
+   "T_m_Subgraph_38h": [
+    "Subgraph_38",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_m_AttributeMathsOp_2h": [
+    "AttributeMathsOp_2",
+    "Out",
+    "@data.MaxHeight"
+   ],
+   "T_l_fa_inh": [
+    "FilterDataByAttribute_1",
+    "InsideFilter",
+    "@data.MaxHeight"
+   ],
+   "T_l_fa_outh": [
+    "FilterDataByAttribute_1",
+    "OutsideFilter",
+    "@data.MaxHeight"
+   ],
+   "T_l_AttributeMathsOp_1h": [
+    "AttributeMathsOp_1",
+    "Out",
+    "@data.MaxHeight"
+   ]
+  }
+ },
+ "e": {
+  "step": "gen",
+  "graph": "e",
+  "taps": {
+   "T_l_bs_sel": [
+    "Subgraph_34",
+    "Selected"
+   ],
+   "T_l_dist": [
+    "Subgraph_45",
+    "Out"
+   ],
+   "T_l_lvl": [
+    "Subgraph_13_LargeDistrict",
+    "Out"
+   ],
+   "T_l_proj": [
+    "Subgraph_12_LargeDistrict",
+    "Out"
+   ],
+   "T_l_sel": [
+    "Subgraph_44",
+    "Selected"
+   ],
+   "T_l_sq_sel": [
+    "Subgraph_32",
+    "selected"
+   ],
+   "T_l_sq_uns": [
+    "Subgraph_32",
+    "unselected"
+   ],
+   "T_l_tex": [
+    "Subgraph_2_LargeDistrict",
+    "Out"
+   ],
+   "T_l_uns": [
+    "Subgraph_44",
+    "Unselected"
+   ],
+   "T_m_bs_sel": [
+    "Subgraph_37",
+    "Selected"
+   ],
+   "T_m_bs_uns": [
+    "Subgraph_37",
+    "Unselected"
+   ],
+   "T_m_dist": [
+    "Subgraph_43",
+    "Out"
+   ],
+   "T_m_fa_out": [
+    "FilterDataByAttribute_0",
+    "OutsideFilter"
+   ],
+   "T_m_lvl": [
+    "Subgraph_13_MediumDistrict",
+    "Out"
+   ],
+   "T_m_proj": [
+    "Subgraph_12_MediumDistrict",
+    "Out"
+   ],
+   "T_m_sel": [
+    "Subgraph_42",
+    "Selected"
+   ],
+   "T_m_sq_sel": [
+    "Subgraph_35",
+    "selected"
+   ],
+   "T_m_sq_uns": [
+    "Subgraph_35",
+    "unselected"
+   ],
+   "T_m_tex": [
+    "Subgraph_2_MediumDistrict",
+    "Out"
+   ],
+   "T_m_uns": [
+    "Subgraph_42",
+    "Unselected"
+   ],
+   "T_s_lvl": [
+    "Subgraph_13_SmallDistrict",
+    "Out"
+   ],
+   "T_s_tex": [
+    "Subgraph_2_SmallDistrict",
+    "Out"
+   ]
+  }
+ },
+ "c": {
+  "step": "gen",
+  "graph": "c",
+  "taps": {
+   "T_hr": [
+    "Subgraph_5",
+    "Out"
+   ]
+  }
+ }
+}

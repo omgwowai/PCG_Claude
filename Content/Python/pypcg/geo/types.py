@@ -10,11 +10,19 @@ class Polygon:
     area); z is the height the area sits at. `source` is set by `pypcg.ue.convert` on a polygon read
     from a Python node's input (an opaque key, not a UObject; it takes no part in equality or records):
     a stage that hands that very polygon back unchanged publishes the engine's own data object, frame
-    and stored local coordinates included (Task 18, s13.md 4.6)."""
+    and stored local coordinates included (Task 18, s13.md 4.6).
+
+    `vertices` and `frame` are set by `convert` on a polygon read from the engine (stage 11): the outer
+    vertices as the engine's own `ToPoint` / `GetSplineControlPoints` read them (`GetTransformAtDistance(i,
+    0, world)`, which recomputes each vertex from its segment and may differ from `outer` in the last bits),
+    and the data's frame `((tx, ty, tz), (qx, qy, qz, qw))`. Neither takes part in equality; records carry
+    them only when set."""
     outer: list
     holes: list = field(default_factory=list)
     z: float = 0.0
     source: object = field(default=None, compare=False, repr=False)
+    vertices: list = field(default=None, compare=False, repr=False)
+    frame: tuple = field(default=None, compare=False, repr=False)
 
 
 @dataclass
@@ -24,13 +32,19 @@ class Spline:
     the engine draws (filled on inputs, ignored on outputs). rotations: optional per-point
     (pitch, yaw, roll) in degrees, the spline point's own rotation; None writes the identity (the
     engine's default). Official `Create_Spline_Shape` output carries one per vertex and readers
-    downstream see it (stage 4, measured 2026-10-19)."""
+    downstream see it (stage 4, measured 2026-10-19). `frame` is the data's own transform
+    `((tx, ty, tz), (qx, qy, qz, qw), (sx, sy, sz))`, set by `convert` on a spline read from the engine (the
+    engine evaluates a spline in its local space and adds the translation last: `geo.frames.SplineCurve`).
+    `source` is `Polygon.source`'s twin for a stage that opts in to forwarding unchanged input splines
+    (`FORWARD_SPLINES`, stage 11's rooftops). Neither takes part in equality."""
     points: list
     closed: bool = False
     linear: bool = True
     tangents: list = None
     polyline: list = None
     rotations: list = None
+    frame: tuple = field(default=None, compare=False, repr=False)
+    source: object = field(default=None, compare=False, repr=False)
 
 
 @dataclass
@@ -128,13 +142,20 @@ def _tuples(seq):
 
 def to_json(v):
     if isinstance(v, Polygon):
-        return {"kind": "polygon", "outer": [list(p) for p in v.outer], "holes": [[list(p) for p in h] for h in v.holes], "z": v.z}
+        d = {"kind": "polygon", "outer": [list(p) for p in v.outer], "holes": [[list(p) for p in h] for h in v.holes], "z": v.z}
+        if v.vertices:                   # only when set, so records written before the field still compare
+            d["vertices"] = [list(p) for p in v.vertices]
+        if v.frame:
+            d["frame"] = [list(x) for x in v.frame]
+        return d
     if isinstance(v, Spline):
         d = {"kind": "spline", "points": [list(p) for p in v.points], "closed": v.closed, "linear": v.linear,
              "tangents": [[list(a), list(b)] for a, b in v.tangents] if v.tangents else None,
              "polyline": [list(p) for p in v.polyline] if v.polyline else None}
         if v.rotations:                  # only when set, so records written before the field still compare
             d["rotations"] = [list(r) for r in v.rotations]
+        if v.frame:
+            d["frame"] = [list(x) for x in v.frame]
         return d
     if isinstance(v, ParamSet):
         return {"kind": "params", "values": dict(v.values), "types": dict(v.types)}
@@ -155,12 +176,15 @@ def to_json(v):
 def from_json(d):
     kind = d.get("kind")
     if kind == "polygon":
-        return Polygon(_tuples(d["outer"]), [_tuples(h) for h in d["holes"]], d.get("z", 0.0))
+        return Polygon(_tuples(d["outer"]), [_tuples(h) for h in d["holes"]], d.get("z", 0.0),
+                       vertices=_tuples(d["vertices"]) if d.get("vertices") else None,
+                       frame=tuple(tuple(x) for x in d["frame"]) if d.get("frame") else None)
     if kind == "spline":
         return Spline(_tuples(d["points"]), d["closed"], d["linear"],
                       [(tuple(a), tuple(b)) for a, b in d["tangents"]] if d.get("tangents") else None,
                       _tuples(d["polyline"]) if d.get("polyline") else None,
-                      _tuples(d["rotations"]) if d.get("rotations") else None)
+                      _tuples(d["rotations"]) if d.get("rotations") else None,
+                      frame=tuple(tuple(x) for x in d["frame"]) if d.get("frame") else None)
     if kind == "params":
         return ParamSet(dict(d["values"]), dict(d["types"]))
     if kind == "points" and not d.get("truncated"):

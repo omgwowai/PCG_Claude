@@ -1,0 +1,199 @@
+{
+ "editor_records": {
+  "notes": [
+   "the official census read one minute after generating gave 291657 instances; settled reads 468934 (trap 59)",
+   "a first own-draw seed-42 slim run read 465297; the V2 seed-42 run 465292 (same Python outputs)"
+  ],
+  "official": {
+   "components": {
+    "DynamicMeshComponent": 13,
+    "InstancedStaticMeshComponent": 1008
+   },
+   "meshes": 1008,
+   "total": 468934
+  },
+  "official_after": {
+   "differing": {},
+   "meshes_differing": 0,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 468934
+  },
+  "official_final": {
+   "differing": {
+    "SM_BLDG_SFD_L03_A_Wall_09_N1": [
+     9347,
+     9319
+    ]
+   },
+   "meshes_differing": 1,
+   "note": "a third official generation after V2 (prepare / gen official / restore); the official itself varies run to run",
+   "total": 468906
+  },
+  "oracle_42": {
+   "differing": {
+    "SM_BLDG_NYA_L3_E_CornerEx_01_N1": [
+     58,
+     59
+    ],
+    "SM_BLDG_NYA_L3_E_CornerIn_01_N1": [
+     4,
+     5
+    ],
+    "SM_BLDG_NYA_L3_E_Wall_01S_N1": [
+     310,
+     296
+    ],
+    "SM_BLDG_NYA_L3_E_Wall_01_N1": [
+     48,
+     91
+    ],
+    "SM_BLDG_NYA_L3_E_Wall_02_N1": [
+     711,
+     663
+    ],
+    "SM_BLDG_NYA_L3_E_Wall_03_N1": [
+     48,
+     44
+    ]
+   },
+   "meshes_differing": 6,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 468913
+  },
+  "oracle_42_run2": {
+   "differing": {},
+   "meshes_differing": 0,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 468934
+  },
+  "slim_101": {
+   "meshes_differing": 20,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 467685
+  },
+  "slim_13": {
+   "meshes_differing": 26,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 469725
+  },
+  "slim_42": {
+   "meshes_differing": 20,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 465292
+  },
+  "slim_7": {
+   "meshes_differing": 26,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 469312
+  },
+  "slim_977": {
+   "meshes_differing": 20,
+   "tags": {
+    "LargeRooftops": 163,
+    "MediumRooftops": 203,
+    "SmallRooftops": 74
+   },
+   "total": 467074
+  },
+  "stage12": {
+   "meshes": 46,
+   "meshes_differing": 0,
+   "official_upstream": 27661,
+   "slim_42_upstream": 27661
+  }
+ },
+ "offline_against_official_taps": {
+  "complex": {
+   "Large": {
+    "height_max_rel": 4.1556527163893424e-16,
+    "height_mismatches": 2,
+    "n": 19,
+    "official": 19
+   },
+   "Medium": {
+    "height_max_rel": 0.0,
+    "height_mismatches": 0,
+    "n": 16,
+    "official": 16
+   }
+  },
+  "levelled": {
+   "Large": {
+    "height_max_rel": 5.402348531306144e-16,
+    "height_mismatches": 9,
+    "n": 122,
+    "official": 122,
+    "point_mismatches": 0,
+    "points": 1239,
+    "yaw_max_deg_nondegenerate": 2.40595454670256e-09
+   },
+   "Medium": {
+    "height_max_rel": 5.8107861682697545e-16,
+    "height_mismatches": 2,
+    "n": 180,
+    "official": 180,
+    "point_mismatches": 0,
+    "points": 1538,
+    "yaw_max_deg_nondegenerate": 2.2737367544323206e-13
+   },
+   "Small": {
+    "height_max_rel": 0.0,
+    "height_mismatches": 0,
+    "n": 77,
+    "official": 77,
+    "point_mismatches": 0,
+    "points": 607,
+    "yaw_max_deg_nondegenerate": 2.842170943040401e-14
+   }
+  },
+  "notes": [
+   "Small: 77 footprints, 0 in the HighRise zones",
+   "Medium: 180 footprints, 9 in the HighRise zones",
+   "Medium shapes: small 38, count 75, angle 44, ratio 2, low 5, complex 16",
+   "Large: 122 footprints, 73 in the HighRise zones",
+   "Large shapes: small 0, count 18, angle 75, ratio 10, low 0, complex 19"
+  ],
+  "to_assign": {
+   "Large": {
+    "mismatches": 0,
+    "n": 103,
+    "official": 103,
+    "polygons": 0
+   },
+   "Medium": {
+    "mismatches": 0,
+    "n": 164,
+    "official": 164,
+    "polygons": 38
+   }
+  }
+ }
+}

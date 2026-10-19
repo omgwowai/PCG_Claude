@@ -134,15 +134,16 @@ def read_params(data_in, pin):
     return out
 
 
-def read_pin(data_in, pin, registry=None):
+def read_pin(data_in, pin, registry=None, splines=False):
     """The pin's items as `(value, tags)`. With a `registry` (a dict the caller keeps for ONE run, in its
     locals -- traps.md 25), every input polygon is registered under its `Polygon.source` key with a
-    snapshot of its geometry, so `to_pcg` can hand the very same data object back (`passed_through`)."""
+    snapshot of its geometry, so `to_pcg` can hand the very same data object back (`passed_through`).
+    With `splines` (the stage's `FORWARD_SPLINES`), input splines are registered the same way."""
     datas, tagged = data_in.get_typed_inputs_by_pin_label(pin, unreal.PCGData)
     out = []
     for d, td in zip(datas, tagged):
         v = from_pcg(d)
-        if registry is not None and isinstance(v, Polygon):
+        if registry is not None and (isinstance(v, Polygon) or (splines and isinstance(v, Spline))):
             v.source = len(registry)
             registry[v.source] = (d, stage_api.snapshot(v))
         out.append((v, frozenset(str(t) for t in td.get_editor_property("tags"))))
@@ -158,12 +159,26 @@ def passed_through(v, registry):
     return stage_api.unchanged(v, registry)
 
 
+def _frame(d, scale=False):
+    t = d.get_transform()
+    q = t.rotation
+    f = ((t.translation.x, t.translation.y, t.translation.z), (q.x, q.y, q.z, q.w))
+    return f + ((t.scale3d.x, t.scale3d.y, t.scale3d.z),) if scale else f
+
+
 def from_pcg(d):
     if isinstance(d, unreal.PCGPolygon2DData):
         j = json.loads(L.polygon2d_to_json(d))
         outer = [(p[0], p[1]) for p in j["outer"]]
         z = sum(p[2] for p in j["outer"]) / len(j["outer"]) if j["outer"] else 0.0
-        return Polygon(outer, [[(p[0], p[1]) for p in h] for h in j["holes"]], z)
+        # The vertices as the engine's ToPoint reads them (GetTransformAtDistance(i, 0, world)), and the
+        # frame: stage 11 rebuilds polygons the way CreatePolygon2D does (`pypcg.geo.frames`).
+        vertices = []
+        for i in range(len(outer)):
+            v = d.get_location_at_distance(i, 0.0, True)
+            vertices.append((v.x, v.y, v.z))
+        return Polygon(outer, [[(p[0], p[1]) for p in h] for h in j["holes"]], z, vertices=vertices,
+                       frame=_frame(d))
     if isinstance(d, unreal.PCGSplineData):
         j = json.loads(L.spline_data_to_json(d, POLYLINE_TOL))
         ctrl = j["control"]
@@ -171,7 +186,7 @@ def from_pcg(d):
         poly = [tuple(p) for p in j["polyline"]]
         return Spline([tuple(c["p"]) for c in ctrl], closed=j["closed"], linear=linear,
                       tangents=None if linear else [(tuple(c["arrive"]), tuple(c["leave"])) for c in ctrl],
-                      polyline=drop_closing(poly) if j["closed"] else poly)
+                      polyline=drop_closing(poly) if j["closed"] else poly, frame=_frame(d, scale=True))
     if isinstance(d, unreal.PCGParamData):
         md = d.const_metadata()
         attrs = _attributes(md)

@@ -65,7 +65,12 @@ def volume_quat(inputs, pin="Volume"):
 
 
 def snapshot(p):
-    """The geometry `unchanged` compares: a polygon's outer, holes and z as plain tuples."""
+    """The geometry `unchanged` compares: a polygon's outer, holes and z as plain tuples; a spline's control
+    points, closed / linear flags, tangents and rotations."""
+    if isinstance(p, geo.Spline):
+        return ([tuple(q) for q in p.points], bool(p.closed), bool(p.linear),
+                [(tuple(a), tuple(b)) for a, b in p.tangents] if p.tangents else None,
+                [tuple(r) for r in p.rotations] if p.rotations else None)
     return ([tuple(q) for q in p.outer], [[tuple(q) for q in h] for h in p.holes], p.z)
 
 
@@ -74,8 +79,9 @@ def unchanged(v, registry):
     geometry unchanged; else None (Task 18, s13.md 4.6). `registry` maps `Polygon.source` -> (object,
     `snapshot` taken when the input was read); `pypcg.ue.convert` fills it for one run and forwards what this
     returns. A polygon mutated in place, given another z, or rebuilt (a copy carries no `source`) is not
-    forwarded -- it is written anew."""
-    if registry is None or not isinstance(v, geo.Polygon) or v.source is None or v.source not in registry:
+    forwarded -- it is written anew. A spline is forwarded the same way, but only a stage that sets
+    `FORWARD_SPLINES` registers its input splines (stage 11's rooftops, Task 20)."""
+    if registry is None or not isinstance(v, (geo.Polygon, geo.Spline)) or v.source is None or v.source not in registry:
         return None
     obj, snap = registry[v.source]
     return obj if snapshot(v) == snap else None
