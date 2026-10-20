@@ -505,13 +505,10 @@ def copy_shape(source, turn_deg, centre):
 
     What decides the copy's POSITION is not the PrimaryInput point itself: the hexagons' centroids are
     the inner ring's vertices (4247.2233 cm out, its circumradius) while the squares' are the six
-    `Place_Point_AtCenter` points. So `centre` is the copy's centroid, measured from the graph's own
-    output -- a continuation that needs the rule from the point alone must use each shape's own radius
-    (square: the point; hexagon: the point pushed 3598.2032 cm out from the ring centre)."""
-    r = math.radians(turn_deg)
-    c, s = math.cos(r), math.sin(r)
-    return [(source[k][0] * c - source[k][1] * s + centre[0],
-             source[k][0] * s + source[k][1] * c + centre[1]) for k in range(len(source))]
+    `Place_Point_AtCenter` points (3598.2032 cm out). So `centre` is the copy's centroid, measured from the
+    graph's own output -- a hexagon placed on the outline point instead is 649.02 cm off. `60 - yaw` with
+    the outline point's yaw and `yaw - 90` with the inner-ring vertex's yaw (its outgoing edge + 90, what
+    stage 15 uses) are the same rule in two parameterisations."""
     r = math.radians(turn_deg)
     c, s = math.cos(r), math.sin(r)
     return [(source[k][0] * c - source[k][1] * s + centre[0],

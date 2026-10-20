@@ -248,7 +248,7 @@ def arms(outer, shape, pivot, ops):
     -120 arm the 80 m (Subgraph_38 -> 86 -> FilterDataByIndex_3 -> Subgraph_51), the +120 arm the 70 m
     (Subgraph_37 -> 88 -> FilterDataByIndex_2 -> Subgraph_58). Every tapped sector reproduced to 0 cm."""
     none = {"Sector90": [], "Sector80": [], "Sector70": []}
-    if len(outer) < 3 or pivot is None:
+    if len(outer) < 3:
         return none
     bands = _band_order(_grid_pieces(outer, SUBDIV_BANDS, ops), 1)
     if len(bands) < 2:
@@ -415,8 +415,6 @@ def tower(inputs, params, ops, rng=None, loader=None):
         "sectors %s; hexagons %d; tree samples %d; plaza %d" % (
             [len(sectors[p]) for p in ("Sector90", "Sector80", "Sector70")], len(hexes), len(samples), len(tiles)),
         "UseMegaplantsTrees=%s" % bool(params["UseMegaplantsTrees"])]
-    if pivot is None:
-        notes.append("no pivot: no sectors")
     if loader is None:
         notes.append("no asset loader (ctx.ops.assets): no trees assigned")
     return out, notes

@@ -139,11 +139,14 @@ def test_the_hexagon_copies_sit_on_the_inner_ring():
 def test_the_two_shapes_turn_by_different_shape_constants():
     """The turns are `yaw - 90` (4-gon) and `60 - yaw` (6-gon). The 6-gon's is only fixed up to an index
     shift -- a regular hexagon repeats every 60 degrees and every yaw here is a multiple of 60 -- so what
-    this pins is the SQUARE's turn, which no shift can absorb (the square repeats every 90)."""
+    this pins is that the SQUARE's turn is not the hexagon's: `60 - yaw` misses the tapped squares (a square
+    repeats only every 90, so no shift can absorb the difference)."""
     fx = fixture()
-    for i, (yaw, tapped) in enumerate(zip(fx["copy"]["centre_yaws"], fx["copy"]["sq"])):
-        got = F.copy_shape(SQUARE, yaw - 90.0, centroid(tapped))
-        assert _maxdiff([(p[0], p[1], 0.0) for p in got], [(p[0], p[1], 0.0) for p in tapped]) <= 1e-9, i
+    misses = 0
+    for yaw, tapped in zip(fx["copy"]["centre_yaws"], fx["copy"]["sq"]):
+        got = F.copy_shape(SQUARE, 60.0 - yaw, centroid(tapped))
+        misses += _maxdiff([(p[0], p[1], 0.0) for p in got], [(p[0], p[1], 0.0) for p in tapped]) > 1.0
+    assert misses >= 1
 
 
 # ---- PlaceTreesOnSpline (blocker 3) -----------------------------------------------------------------

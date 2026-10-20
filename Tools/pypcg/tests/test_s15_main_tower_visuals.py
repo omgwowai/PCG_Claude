@@ -350,3 +350,64 @@ def test_megaplants_switch_changes_the_kit():
     out, _ = run_main(mega=True)
     names = {n for v, _t in out["Trees"] for n in v.attrs.get(AS.ASSET_ATTR, [])}
     assert names and all("Megaplants" in n for n in names)
+
+
+# ---- planted faults: every clause of checks.s15 fires --------------------------------------------------------
+def _level_records(tmp_path, ring_out):
+    """Three level records in a temporary runs dir: one 1000 cm pentagon rooftop on Arm90Roofs at level 1,
+    `ring_out` as its contracted Arm90 ring; levels 2 and 3 empty."""
+    roof = [(1000.0 * math.cos(math.radians(a)), 1000.0 * math.sin(math.radians(a)), 8800.0) for a in range(0, 360, 72)]
+    for name, pins in C.LEVELS:
+        rec = {"inputs": {pin: [] for pin in pins.values()}, "outputs": {pin: [] for pin in pins}}
+        if name == "s15_level1":
+            rec["inputs"]["Arm90Roofs"] = [[geo.to_json(Spline(roof, closed=True, linear=True)), []]]
+            rec["outputs"]["Arm90"] = [[geo.to_json(Polygon([p[:2] for p in ring_out], [], 8800.0)), ["Arm90"]]]
+        with open(os.path.join(str(tmp_path), name + ".json"), "w", encoding="utf-8") as fh:
+            json.dump(rec, fh)
+    return roof
+
+
+def _shrunk(roof, d):
+    """The pentagon contracted by `d` (its apothem less d), as a ring."""
+    k = 1.0 - d / (1000.0 * math.cos(math.radians(36)))
+    return [(p[0] * k, p[1] * k, p[2]) for p in roof]
+
+
+def test_check_levels_passes_a_proper_contract(tmp_path):
+    roof = [(1000.0 * math.cos(math.radians(a)), 1000.0 * math.sin(math.radians(a)), 8800.0) for a in range(0, 360, 72)]
+    _level_records(tmp_path, _shrunk(roof, 150.0))
+    assert C.check_levels(str(tmp_path)) == []
+
+
+def test_check_levels_finds_a_ring_outside_its_rooftop(tmp_path):
+    roof = [(1000.0 * math.cos(math.radians(a)), 1000.0 * math.sin(math.radians(a)), 8800.0) for a in range(0, 360, 72)]
+    _level_records(tmp_path, [(p[0] + 5000.0, p[1], p[2]) for p in _shrunk(roof, 150.0)])
+    assert any("outside every Arm90Roofs rooftop" in f for f in C.check_levels(str(tmp_path)))
+
+
+def test_check_levels_finds_a_ring_too_close_to_its_rooftop(tmp_path):
+    roof = [(1000.0 * math.cos(math.radians(a)), 1000.0 * math.sin(math.radians(a)), 8800.0) for a in range(0, 360, 72)]
+    _level_records(tmp_path, _shrunk(roof, 50.0))
+    fails = C.check_levels(str(tmp_path))
+    assert any("from its rooftop, want >= 150" in f for f in fails), fails
+
+
+def test_check_levels_reports_a_missing_record(tmp_path):
+    assert C.check_levels(str(tmp_path)) == ["no %s record" % name for name, _p in C.LEVELS]
+
+
+def test_check_finds_a_perturbed_arm_sector():
+    out, _ctx = run_main()
+    v = out["Sector80"][0][0]
+    pts = [tuple(p) for p in v.points]
+    pts[2] = (pts[2][0] + 300.0, pts[2][1], pts[2][2])
+    out["Sector80"] = [(Spline(pts, closed=True, linear=True), ["Sector80"])]
+    fails = C.check(demo_inputs(), {}, out, None)
+    assert any("unequal area" in f for f in fails) and any("not one shape" in f for f in fails)
+
+
+def test_check_finds_a_plaza_tile_outside_the_shape():
+    out, _ctx = run_main()
+    tiles = out["PlazaTiles"][0][0]
+    tiles.loc[0] = (20000.0, 0.0, tiles.loc[0][2])
+    assert "1 plaza tiles outside the input shape" in C.check(demo_inputs(), {}, out, None)
