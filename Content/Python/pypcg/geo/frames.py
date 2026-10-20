@@ -432,6 +432,72 @@ def create_polygon_points(curve):
     return pts
 
 
+# ---- Transform_Align and Transform_Offset on closed splines (stage 15 first) -----------------------
+def world_box(points):
+    """`([min], [max])` over a closed spline's control points: what `CombinePoints`
+    (`bUseFirstPointTransform` false) reports for an item -- every point's box in the data's own frame,
+    which for a spline read back from the engine has an identity rotation. `None` for no points."""
+    if not points:
+        return None
+    return ([min(p[a] for p in points) for a in range(3)], [max(p[a] for p in points) for a in range(3)])
+
+
+def box_centre(points):
+    """The centre of `world_box`: `(min + max) / 2`, which is what a `Justify_* = Center` reads."""
+    b = world_box(points)
+    if b is None:
+        return None
+    return tuple(0.5 * (b[0][a] + b[1][a]) for a in range(3))
+
+
+def align(points, target):
+    """`Transform_Align` with `Justify_X/Y = Center -> Same` and `Justify_Z = None`: every point moved by
+    the difference between the SECOND input's box centre (`target`: the (min, max) box, or a centre
+    triple) and the first's. The move is a world translation, applied to the control points; the
+    primitive rebuilds the polygon from the moved points, which is the same ring.
+
+    Measured on stage 15 (2026-10-20, `Saved/t22/tap15_a.json`): the three arm alignments and the inner
+    ring's are exactly this shift, to 1e-12 cm, with Z untouched (its `Justify_Z` is None)."""
+    c = box_centre(points)
+    if target is None:
+        return [tuple(p) for p in points]
+    t = box_centre(target) if (len(target) == 2 and isinstance(target[0], (list, tuple))) else tuple(target)
+    if c is None or t is None:
+        return [tuple(p) for p in points]
+    d = (t[0] - c[0], t[1] - c[1])
+    return [(p[0] + d[0], p[1] + d[1], p[2]) for p in points]
+
+
+def rotate_in_frame(points, yaw_deg, origin):
+    """`Transform_Offset` with `PerPoints` FALSE and a yaw-only `rotationOffset`: the primitive inverts
+    the data's own transform, rotates the control points as they stand in that frame (about the frame's
+    ORIGIN), and transforms back. With a frame whose rotation is identity -- every piece of stage 15's
+    chain carries one -- that is a rotation about `origin`, the frame's translation:
+
+        world' = origin + q_yaw (p - origin)
+
+    Measured 2026-10-20 on stage 15: the -60 deg base rotation and both +-120 deg arm rotations are this
+    map about (-613.8667464186474, 142.0539320733078), to 1e-12 cm on every vertex (`tap15_a.json`,
+    `s15.md` section 5). The Z of `origin` does not matter for a yaw."""
+    ox, oy = float(origin[0]), float(origin[1])
+    q = (0.0, 0.0, math.sin(math.radians(yaw_deg) * 0.5), math.cos(math.radians(yaw_deg) * 0.5))
+    out = []
+    for p in points:
+        v = quat_rotate(q, (p[0] - ox, p[1] - oy, 0.0))
+        out.append((ox + v[0], oy + v[1], p[2]))
+    return out
+
+
+def spline_of(polygon):
+    """A ring as the closed linear spline `PrepareOutputs_ClosedSplinesAndSplines` publishes: the polygon's
+    outer vertices (its `ToPoint` reads, z included, one z per vertex) at the polygon's own rotation
+    (`Polygon.frame`), not the centroid. `Polygon.vertices` when `convert` filled them, else `outer`."""
+    pts = list(polygon.vertices) if polygon.vertices else [(p[0], p[1], polygon.z) for p in polygon.outer]
+    if polygon.zs is not None and polygon.vertices is None and len(polygon.zs) == len(pts):
+        pts = [(p[0], p[1], z) for p, z in zip(pts, polygon.zs)]
+    return pts
+
+
 class SplinePolygon:
     """A closed linear spline as `CreatePolygon2D` makes it into a polygon (the `InputsProcessing_ForcePolygon` of
     every area primitive), and that polygon read back out (stage 12):
@@ -445,7 +511,18 @@ class SplinePolygon:
     """
 
     def __init__(self, spline):
-        self.points = create_polygon_points(SplineCurve.of(spline))
+        self._init(SplineCurve.of(spline))
+
+    @classmethod
+    def of_curve(cls, curve):
+        """The same polygon from a `SplineCurve` whose points already carry their own z (a closed spline read
+        back from the engine, which a stage has edited point by point)."""
+        out = cls.__new__(cls)
+        out._init(curve)
+        return out
+
+    def _init(self, curve):
+        self.points = create_polygon_points(curve)
         self.frame = polygon_frame(self.points)
         t, q = self.frame
         local = to_local(self.points, t, q)
@@ -454,3 +531,14 @@ class SplinePolygon:
         self.local = local
         self.area = abs(signed_area_2d(local))
         self.vertices, self.rotations = vertex_points(local, t, q)
+
+
+def polygon_of(points):
+    """`CreatePolygon2D` on a closed linear spline read back from the engine: the stored ring, its area and
+    the vertices `ToPoint` reads (`rebuilt_vertices`), as (Polygon, SplinePolygon)."""
+    from .types import Polygon
+    n = len(points)
+    curve = SplineCurve(points, [(0.0, 0.0, 0.0)] * n, [(0.0, 0.0, 0.0)] * n, [True] * n, True)
+    sp = SplinePolygon.of_curve(curve)
+    return Polygon([(p[0], p[1]) for p in sp.vertices], [], sp.vertices[0][2] if sp.vertices else 0.0,
+                   zs=[p[2] for p in sp.vertices]), sp

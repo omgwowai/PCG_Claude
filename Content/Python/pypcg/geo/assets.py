@@ -102,6 +102,13 @@ live volume; "exact" = Asset, seed, scale and bounds bit for bit, location <= 2.
                                       KEPT with entry 0 (`index_picks`: `bKeepUnmatched` defaults true)
   MatchScaleToInputBounds   NOT IMPLEMENTED (no official call sets it; none of stage 13's eleven either)
   UseMeshAttribute          DERIVED ONLY  (no official call sets it; none of stage 13's eleven either)
+
+Stage 15's two calls (2026-10-20, `{"assign": {"stage": 15}}`): `AssignTrees` (Megaplants, ScaleOffset
+(1.414055, 1, 1), RandomScaleRange X 0.33) and `Subgraph_20` (pivot-painter BlackAlder, ExtentsScale
+(0.7, 1, 1), RandomScaleRange X 0.2) -- both RANDOM, both with `UseIndexattribute` false and
+`IndexAttribute` "" (so the unimplemented index path is untouched), and every setting they use is on a
+MEASURED row above. `Subgraph_20` has its own oracle with the shipped scale: 44 targets, 44 points,
+every field exact (Saved/Reports/v2/s15/assign_oracle_s15_maintower_20_scale1414_uniform_meshbounds.json).
 """
 import math
 import struct
