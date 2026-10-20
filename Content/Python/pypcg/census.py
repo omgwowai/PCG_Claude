@@ -26,6 +26,13 @@ def volume(n):
     return a
 
 
+def volumes():
+    """Every actor of the current level that carries a PCGComponent -- the 18 stages and whatever
+    probe volumes the level happens to hold. The town script cleans them all up (Task 25)."""
+    return [a for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors()
+            if a.get_component_by_class(unreal.PCGComponent) is not None]
+
+
 def component(n):
     return volume(n).get_component_by_class(unreal.PCGComponent)
 
