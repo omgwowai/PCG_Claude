@@ -33,7 +33,7 @@ def recursive_split(ring, ops, iterations, min_area_cm2, ratio_fn, areas, paths,
         recursive_split(r, ops, iterations, min_area_cm2, ratio_fn, areas, paths, depth + 1)
 
 
-def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True):
+def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True, edge=None):
     """[("X" | "Y", segment)]: lines across the longest-edge frame every `width` (X, perpendicular
     to the edge) and every `length` (Y, parallel to it), clipped to the ring.
 
@@ -49,8 +49,8 @@ def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True):
 
     `clipped=False` returns the whole extended line (once) for every line that crosses the ring:
     that is what the loop's `Polygon2DOperation_2 CutWithPaths` cuts the ring with (`Reroute_6`),
-    while `ClipPaths_1` publishes the clipped pieces."""
-    o, X, Y, u0, u1, w0, w1 = frame_box(ring)
+    while `ClipPaths_1` publishes the clipped pieces. `edge` is `frame_box`'s."""
+    o, X, Y, u0, u1, w0, w1 = frame_box(ring, edge)
     out = []
     if subdiv is None:
         axes, margin = (("X", u0, u1, width), ("Y", w0, w1, length)), 1

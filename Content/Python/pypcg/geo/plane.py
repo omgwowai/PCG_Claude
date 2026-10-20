@@ -319,10 +319,13 @@ def longest(ring):
     return max(range(n), key=lambda i: math.dist(ring[i], ring[(i + 1) % n]))
 
 
-def frame_box(ring):
+def frame_box(ring, edge=None):
     """Frame at the longest outer edge's start vertex (X along the edge, Y its left normal) and the
-    bounds of every vertex point (+-1 cm boxes turned with their segment) in that frame."""
-    n, k = len(ring), longest(ring)
+    bounds of every vertex point (+-1 cm boxes turned with their segment) in that frame. `edge` names
+    the frame's edge instead, for a ring whose edges tie and whose winner the engine's last bits decide
+    (stage 15's regular hexagons)."""
+    n = len(ring)
+    k = longest(ring) if edge is None else int(edge) % n
     o = ring[k]
     X = unit(ring[(k + 1) % n][0] - o[0], ring[(k + 1) % n][1] - o[1])
     Y = (-X[1], X[0])
