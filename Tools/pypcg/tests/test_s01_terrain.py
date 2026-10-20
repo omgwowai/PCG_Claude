@@ -20,6 +20,7 @@ from pypcg.stages import s01_terrain as S
 from pypcg.stages import s01_terrain_blend as B
 
 REPO = stage_api.REPO
+DATA = os.path.join(REPO, "Tools", "pypcg", "data")
 
 
 def official_ir():
@@ -435,6 +436,85 @@ def test_v1_partial_replay_catches_planted_faults(fault):
     elif fault == "no_footprint":
         rec["notes"] = [n for n in rec["notes"] if not n.startswith("footprint ")]
     assert K.check_record(rec, BoxHoleOps()) != []
+
+
+# ---- the tap comparison's committed evidence (Task 24 fix round 1) -------------------------------------------
+def _data(name):
+    with open(os.path.join(DATA, name), encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def test_tap_comparison_is_bit_exact():
+    """The comparison s01.md 6 rests on: the official tap and the slim tap of stage 1, every point position of the
+    hills, the flattened set, the city projection and the final write, and the `SourcePositions` the terrain writer
+    reads (four sets of 261 312 points each). `Tools/pypcg/s01_compare.py` distils it; the taps themselves are
+    committed gzipped beside it (`s01_tap_official.json.gz`, `s01_tap_slim.json.gz`). If any position ever differs
+    this test fails with the numbers rather than claiming zero."""
+    c = _data("s01_tap_comparison.json")
+    s = c["summary"]
+    assert s["point_sets"] == 4 and set(s["contained_in"]) == {"t09_annulus", "t13_city_up"}
+    assert s["positions_compared"] == 4 * 261312 == s["positions_equal"], (
+        "%d of %d positions equal, max difference %r cm" % (s["positions_equal"], s["positions_compared"],
+                                                           s["max_abs_cm"]))
+    assert s["max_abs_cm"] == 0.0
+    assert s["source_positions_compared"] == 4 * 261312 == s["source_positions_equal"]
+    for tag, row in c["pairs"].items():
+        assert row.get("loc", {}).get("max_abs") in (0.0, None), tag
+        assert row.get("loc", {}).get("equal") == row.get("loc", {}).get("compared"), tag
+        if row.get("plain_attributes"):
+            assert row["plain_attributes_equal"], tag
+    # the shapes: the same area to 2e-4 cm2, the same outer bounds to 2.4e-10 cm, the hole (1 185 vertices) to
+    # 0.11 cm, the city control points equal and the tangents within 5e-7 cm (s01.md 3)
+    a = c["pairs"]["t09_annulus"]
+    assert a["z"][0] == a["z"][1] and a["holes"][0] == a["holes"][1] == [1185]
+    assert a["outer_area_abs_diff"] < 1e-3 and a["outer_bounds_max_abs"] < 1e-9 and a["hole_bounds_max_abs"] < 0.2
+    z = c["pairs"]["t13_city_up"]
+    assert z["points_equal"] and z["tangents_max_abs"] < 1e-6 and z["polyline"]["max_abs"] < 1e-6
+    # the taps are committed, and the summary says where it came from
+    for name in ("s01_tap_official.json.gz", "s01_tap_slim.json.gz"):
+        assert os.path.getsize(os.path.join(DATA, name)) > 1000, name
+    assert "pypcg_s01_taps.py" in c["source"]
+
+
+def test_tap_comparison_sample_repeats_the_summary():
+    """The every-40th-point sample of the same taps (committed with its own comparison): an offline replay of the
+    comparison on 26 132 positions, all equal."""
+    c = _data("s01_tap_sample.json")
+    s = c["summary"]
+    assert s["point_sets"] == 4 and s["positions_compared"] == 4 * len(range(0, 261312, 40))
+    assert s["positions_equal"] == s["positions_compared"] and s["max_abs_cm"] == 0.0
+    assert s["source_positions_equal"] == s["source_positions_compared"]
+
+
+def test_native_measurements_hold_the_step_f_thresholds():
+    """s01.md 0's reason for keeping three nodes native: the blur takes 445 s and each projection 36 s in Python. A
+    re-measure that halves either must fail here instead of leaving the note stale; Step F's budget is 60 s."""
+    m = _data("s01_native_measurements.json")
+    assert m["blur"]["seconds_two_iterations"] > 60.0
+    assert m["project"]["python_seconds_per_projection"] > 10.0
+    p = m["project"]
+    assert p["bit_exact"] < p["points"] and p["max_abs_cm"] < 0.01     # the GPU's distance is not reproducible
+    assert set(p["ulp_offsets_of_the_rest"]) <= {"1", "-1", "2", "-2", "3", "-3", "None"}
+    assert m["lerp"]["bit_exact"] == m["lerp"]["components"] == 3 * 261312
+
+
+def test_the_offline_measure_is_not_in_the_test_tree():
+    """`s01_measure_offline.py` needs numpy; only the measurement tool imports it, never a stage or a test. The test
+    run is `pytest Tools/pypcg/tests`, whose glob is `test_*.py` under this directory: the tool is not there under
+    either name, and no module of the tree imports it."""
+    tool = os.path.join(REPO, "Tools", "pypcg", "s01_measure_" + "offline.py")
+    assert os.path.exists(tool)
+    here = os.path.dirname(os.path.abspath(__file__))
+    assert os.path.dirname(tool) != here
+    stem = os.path.basename(tool)[:-3]
+    assert not [n for n in os.listdir(here) if n.startswith(stem)]
+    for name in os.listdir(here):
+        if name.endswith(".py"):
+            with open(os.path.join(here, name), encoding="utf-8") as fh:
+                assert ("import " + stem) not in fh.read(), name
+    for name in ("s01_terrain.py", "s01_terrain_blend.py"):
+        with open(os.path.join(REPO, "Content", "Python", "pypcg", "stages", name), encoding="utf-8") as fh:
+            assert "numpy" not in fh.read(), name
 
 
 # ---- seeded runs ---------------------------------------------------------------------------------------------------

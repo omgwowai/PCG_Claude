@@ -1,11 +1,11 @@
 """Distil the stage-1 taps into `Tools/pypcg/data/s01_fixture.json` (the offline tests' official numbers).
 
-Inputs (written by the untracked editor probes, 2026-10-20, on the demo level; the official graph ran as a TAP
-graph on a SPAWNED probe actor with the stage-1 volume's transform -- (0, 0, 0), scale (25, 25, 10), component
+Inputs (written 2026-10-20 by the editor probes, on the demo level; the official graph ran as a TAP graph on a
+SPAWNED probe actor with the stage-1 volume's transform -- (0, 0, 0), scale (25, 25, 10), component
 seed 42, CityFlatness 0.6000000238418579 -- so the stage-1 volume and its terrain write were never touched):
-  Saved/t24/tap_a.json            `pyg_probe_t24_tap.py`: t01 (Extract) .. t16 (the Lerp), positions + attributes
-  Saved/t24/tap_extract_full.json the same t01 with every point field
-  Saved/t24/extract_200000.json   `pyg_probe_t24_extract.py`: Step A+, the 2 km box (`bound` 200000)
+  Saved/t24/tap_a.json            `pypcg_s01_taps.py {"variant": "official"}` + its read: t01 .. t16
+  Saved/t24/tap_extract_full.json the same t01 read with every point field (a fuller read of the same tap)
+  Saved/t24/extract_200000.json   Step A+, the 2 km box (`bound` 200000); an earlier extract probe wrote it
 Run: `C:/Python314/python.exe Tools/pypcg/s01_fixture.py`.
 
 What it keeps (every array is a slice of an official tap, never recomputed here):
