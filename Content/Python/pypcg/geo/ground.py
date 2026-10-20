@@ -270,8 +270,16 @@ def fill_random(poly, per_m2, rng, sampling_extent=1.0):
     `InnerCellOffset` 0), kept when the polygon's interior holds it (`ProjectPoint` on the interior
     surface; holes excluded). The engine draws each cell from `FRandomStream(ComputeSeed(Seed, X, Y))`;
     the port draws from `rng`, so the count follows the same grid and the layout is new.
-    Returns the world locations (z = the polygon's)."""
-    from .plane import inside
+    Returns the world locations (z = the polygon's).
+
+    Measured 2026-10-20 on stage 18 (TreeDensity 0.05, a 447.2 cm cell): the official scatter of four areas
+    of 6.18 km2 is a world-aligned grid -- every point's offset in its cell is 0.001 .. 445.21 cm on both
+    axes (the inner cell, 445.21 cm), one point per cell -- 308 785 points against 308 902 = density x area.
+
+    The containment test is `geo.plane.inside` (even-odd crossings of each ring), evaluated only on the edges
+    whose y-range meets the cell's row (`_row_edges`): an edge outside the row cannot toggle the parity at
+    any y inside it, and the arithmetic per edge is `inside`'s own, so the result is identical to testing
+    every edge (stage 18's areas have up to 945 vertices and 300 000 cells; the full test is minutes)."""
     if per_m2 <= 0 or len(poly.outer) < 3:
         return []
     cell = math.sqrt(1e4 / float(per_m2))
@@ -279,14 +287,45 @@ def fill_random(poly, per_m2, rng, sampling_extent=1.0):
     xs, ys = [p[0] for p in poly.outer], [p[1] for p in poly.outer]
     i0, i1 = math.ceil(min(xs) / cell), math.floor(max(xs) / cell)
     j0, j1 = math.ceil(min(ys) / cell), math.floor(max(ys) / cell)
+    outer = _row_edges(poly.outer, cell, j0, j1)
+    holes = [_row_edges(h, cell, j0, j1) for h in poly.holes]
+    z = float(poly.z)
     out = []
     for j in range(j0, j1 + 1):
+        oe = outer.get(j, ())
+        he = [h.get(j, ()) for h in holes]
         for i in range(i0, i1 + 1):
             x = i * cell + rng.random() * inner
             y = j * cell + rng.random() * inner
-            if inside((x, y), poly.outer) and not any(inside((x, y), h) for h in poly.holes):
-                out.append((x, y, float(poly.z)))
+            if _parity(x, y, oe) and not any(_parity(x, y, e) for e in he if e):
+                out.append((x, y, z))
     return out
+
+
+def _row_edges(ring, cell, j0, j1):
+    """`{row: [(xi, yi, xj, yj)]}`: the edges of `ring` (vertex i and its predecessor j, `inside`'s order)
+    whose y-range meets row `[row * cell, (row + 1) * cell]`, rows `j0 .. j1`, with one row of margin on each
+    side: an extra edge is harmless (the full test holds every edge), a missing one would not be."""
+    rows = {}
+    n = len(ring)
+    j = n - 1
+    for i in range(n):
+        xi, yi = ring[i][0], ring[i][1]
+        xj, yj = ring[j][0], ring[j][1]
+        lo, hi = (yi, yj) if yi <= yj else (yj, yi)
+        for r in range(max(j0, int(math.floor(lo / cell)) - 1), min(j1, int(math.floor(hi / cell)) + 1) + 1):
+            rows.setdefault(r, []).append((xi, yi, xj, yj))
+        j = i
+    return rows
+
+
+def _parity(x, y, edges):
+    """`geo.plane.inside` on a subset of a ring's edges (each `(xi, yi, xj, yj)`)."""
+    c = False
+    for xi, yi, xj, yj in edges:
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi:
+            c = not c
+    return c
 
 
 def project_point(loc, rot, bounds_min, bounds_max, surface, z_offset=0.0, scale=(1.0, 1.0, 1.0), quat=None):

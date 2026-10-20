@@ -19,7 +19,6 @@ ON THE DEMO LEVEL THIS NODE RECEIVES NOTHING: the official texture `/Game/Textur
 is not in this project, so `GetTextureData_0` fails inside both texture writes and they output no points
 (measured 2026-10-19: 6 518 tree points reach `Subgraph_27`, none leave it), officially and in the port.
 """
-from pypcg import geo
 from pypcg.geo import assets as AS
 from pypcg.stage_api import Param
 
@@ -58,21 +57,9 @@ MEGA_SETTINGS = dict(_COMMON)                                                   
 
 def upright(items):
     """`AttributeMathsOp_3` / `4`: `$Rotation.Roll` and `.Pitch` set to 0 on every point; the merged target
-    set `Assign_Assets` makes of its input items (`$Seed += dataIndex`, `MergePoints_0`)."""
-    out = geo.Points()
-    for idx, (pts, _tags) in enumerate(items):
-        if not isinstance(pts, geo.Points):
-            continue
-        for name, tname in pts.types.items():
-            if name not in out.attrs:
-                out.declare(name, tname)
-        for j in range(len(pts)):
-            kw = {name: col[j] for name, col in pts.attrs.items()}
-            out.add(pts.loc[j], rot=(0.0, pts.rot[j][1], 0.0), scale=pts.scale[j], density=pts.density[j],
-                    bounds_min=pts.bounds_min[j], bounds_max=pts.bounds_max[j], color=pts.color[j],
-                    steepness=pts.steepness[j], seed=AS._i32(int(pts.seed[j]) + idx), **kw)
-    out.quat = None
-    return out
+    set `Assign_Assets` makes of its input items (`$Seed += dataIndex`, `MergePoints_0`):
+    `geo.assets.merge_targets` (moved there when stage 18 needed the same merge without the zeroing)."""
+    return AS.merge_targets(items, upright=True)
 
 
 def run(inputs, params, ctx):

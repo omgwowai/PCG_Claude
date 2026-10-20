@@ -541,6 +541,30 @@ def _expand(targets, table, indices, params, report):
 _U32 = 0xFFFFFFFF
 
 
+def merge_targets(items, upright=False):
+    """The one target set `Assign_Assets` makes of its input items (`Assign_Assets_CoreProcess`:
+    `AttributeMathsOp_13` `$Seed += dataIndex` per item, then `MergePoints_0`), item order kept. `items` are
+    `(Points, tags)`; anything else is skipped. `upright` also zeroes each point's roll and pitch (stage 13's
+    `AttributeMathsOp_3/4`, which stand before its tree assignment; stage 18 has no such step). The merged set
+    carries no engine quaternions (`quat` None): its rotations are the rotators."""
+    from .types import Points as _Points
+    out = _Points()
+    for idx, (pts, _tags) in enumerate(items):
+        if not isinstance(pts, _Points):
+            continue
+        for name, tname in pts.types.items():
+            if name not in out.attrs:
+                out.declare(name, tname)
+        for j in range(len(pts)):
+            kw = {name: col[j] for name, col in pts.attrs.items()}
+            rot = (0.0, pts.rot[j][1], 0.0) if upright else pts.rot[j]
+            out.add(pts.loc[j], rot=rot, scale=pts.scale[j], density=pts.density[j],
+                    bounds_min=pts.bounds_min[j], bounds_max=pts.bounds_max[j], color=pts.color[j],
+                    steepness=pts.steepness[j], seed=_i32(int(pts.seed[j]) + idx), **kw)
+    out.quat = None
+    return out
+
+
 def _i32(v):
     """Wrap a Python int into the 32-bit signed range the engine's int arithmetic keeps."""
     v &= _U32
