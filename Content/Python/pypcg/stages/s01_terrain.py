@@ -61,9 +61,9 @@ def circles(items):
     return A.areas_of(items)
 
 
-def flatten_area(points, shaping, ops):
+def flatten_area(fp, shaping, ops):
     """`FlattenArea`: the grown, lowered footprint less every Terrain_shaping_1 outline, at the square's z."""
-    sq = square(footprint(points), ops)
+    sq = square(fp, ops)
     if not sq:
         return []
     z = sq[0].z
@@ -92,7 +92,7 @@ def masks(inputs, ops):
         notes.append("no terrain points: no footprint, no flatten area")
     else:
         notes.append("footprint %r %r %r %r %r (%d points)" % (fp + (sum(len(p) for p in points),)))
-    area = flatten_area(points, inputs.get("TerrainShaping", []), ops)
+    area = flatten_area(fp, inputs.get("TerrainShaping", []), ops)
     zone = city_flat_zone(inputs.get("City", []))
     notes.append("flatten area: %d polygons, %s holes, %.3f m2" % (
         len(area), [len(p.holes) for p in area], sum(A.area_cm2(p) for p in area) / 1e4))
