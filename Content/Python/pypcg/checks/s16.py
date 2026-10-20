@@ -85,6 +85,26 @@ def _area_keys(polys):
     return sorted(round(geo.area_m2(p), AREA_KEY) for p in polys)
 
 
+AREA_MATCH_M2 = 0.01                   # two area lists match when sorted pairwise within this (frame last bits)
+
+
+def _same_areas(a, b):
+    ka, kb = _area_keys(a), _area_keys(b)
+    return len(ka) == len(kb) and all(abs(x - y) <= AREA_MATCH_M2 for x, y in zip(ka, kb))
+
+
+def official_road_expand():
+    """`Expand_Border_Footprint`'s `Expand` as the OFFICIAL IR stores it (800; its title says 425)."""
+    from pypcg import dsl
+    return float(dsl.official_node(16, "Expand_Border_Footprint")["overrides"]["Expand"])
+
+
+def official_roof_drop():
+    """`Subgraph_54`'s Z offset as the official IR stores it (-10)."""
+    from pypcg import dsl
+    return float(dsl.official_node(16, "Subgraph_54")["overrides"]["offset"]["Z"])
+
+
 # ---- the vegetation record ---------------------------------------------------------------------------------
 def check(inputs, params, outputs, ops, official=None):
     from pypcg.stages import s16_central_park_visuals as S
@@ -101,11 +121,19 @@ def check(inputs, params, outputs, ops, official=None):
     if inputs is not None:
         clips = S._polygons(inputs, "Exclusions")
     if inputs is not None and ops is not None:
-        roads = S.road_footprints(S._polygons(inputs, "RoadFootprints"), ops)
+        # Rebuilt HERE, not with the stage's own helpers: the growth comes from the official IR's override
+        # (`Expand_Border_Footprint` Expand), the booleans straight from `ops` -- so a wrong constant or a dropped
+        # clip set in the stage shows as a partition failure.
+        roads = []
+        for p in S._polygons(inputs, "RoadFootprints"):
+            roads += ops.offset([p.outer] + list(p.holes), official_road_expand())
         excl = list(clips)
         clips = excl + roads
-        forest = S.forest_areas(areas, excl, roads, ops)
-        if _area_keys(forest) != _area_keys(sel + uns):
+        forest = []
+        cut = [r for c in clips for r in [c.outer] + list(c.holes)]
+        for a in areas:
+            forest += ops.difference([a.outer] + list(a.holes), cut) if cut else [a]
+        if not _same_areas(forest, sel + uns):
             f.append("the split does not partition the forest areas: %d forest areas (%.1f m2), %d + %d split (%.1f m2)"
                      % (len(forest), sum(geo.area_m2(p) for p in forest), len(sel), len(uns),
                         sum(geo.area_m2(p) for p in sel + uns)))
@@ -118,7 +146,7 @@ def check(inputs, params, outputs, ops, official=None):
             f.append("%d Met rooftops in, %d lowered out" % (len(roofs), len(low)))
         for a, b in zip(roofs, low):
             if len(a.points) != len(b.points) or any(
-                    p[0] != q[0] or p[1] != q[1] or abs((p[2] + S.MET_ROOF_DROP) - q[2]) > 1e-9
+                    p[0] != q[0] or p[1] != q[1] or abs((p[2] + official_roof_drop()) - q[2]) > 1e-9
                     for p, q in zip(a.points, b.points)):
                 f.append("a lowered Met rooftop is not its rooftop 10 cm lower")
     return f

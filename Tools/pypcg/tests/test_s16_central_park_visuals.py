@@ -177,13 +177,23 @@ def test_contract_python_inputs_and_outputs_are_wired():
 def test_contract_the_spawner_reads_what_gather_3_gathered():
     doc, by, _py = _graph()
     spawn = next(n for n in doc["nodes"] if n.get("title") == official("Subgraph_6")["title"])
-    srcs = [(n["title"], p) for n, p in _feeds(spawn, by)["PrimaryInput"]]
-    assert ("Python: s16_central_park_visuals", "Trees") in srcs
-    titles = [t for t, _p in srcs]
-    for name in ("Subgraph_63", "Subgraph_64", "Subgraph_65", "Subgraph_42", "Subgraph_46", "Subgraph_48",
-                 "AttributeCast_0", "FilterDataByAttribute_5"):
-        assert official(name).get("title", "") in titles or name in [n["name"] for n in doc["nodes"]], name
-    assert len(srcs) == 10                     # 3 sidewalk + lake edges + trees + 2 grass + zone grass + walk + road
+    srcs = [(n.get("subgraph") or n["class"], n["title"], p) for n, p in _feeds(spawn, by)["PrimaryInput"]]
+
+    def off(name, pin):
+        n = official(name)
+        return (n.get("subgraph") or n["class"], n.get("title", ""), pin)
+    py = (dsl_python_class(), "Python: s16_central_park_visuals", "Trees")
+    # Gather_3's order: Sidewalks (Gather_2: the transparent copies, the vehicles, the rest), lake edges, trees,
+    # wild grass (Gather_1: dense, sparse), zone grass, walkpath, road
+    assert srcs == [off("AttributeCast_0", "Out"), off("FilterDataByAttribute_5", "InsideFilter"),
+                    off("FilterDataByAttribute_5", "OutsideFilter"), off("Subgraph_46", "Out"), py,
+                    off("Subgraph_63", "Out"), off("Subgraph_64", "Out"), off("Subgraph_65", "Out"),
+                    off("Subgraph_42", "Out"), off("Subgraph_48", "Out")]
+
+
+def dsl_python_class():
+    from pypcg import ir
+    return ir.PYTHON_NODE
 
 
 # ---- empty inputs ---------------------------------------------------------------------------------------------
@@ -298,9 +308,13 @@ def test_invariant_lake_water_area_within_1_percent_of_the_lake_polygon():
 
 
 def test_invariant_met_inside_the_park():
+    """`G.met` itself (the tapped terrain samples under the corners), not the fixture's answer."""
     fx = fixture()
+    loc, q = G.centre(spline(fx["footprint"]))
+    (building, _rot), grown, _rect = G.met(loc, q, TapTerrain(fx["met_projected"]), PassOps())
     park = [tuple(p[:2]) for p in fx["footprint"]["points"]]
-    assert all(geo.inside(tuple(p[:2]), park) for p in fx["met_spline"]["points"])
+    assert len(building) == 4 and all(geo.inside(tuple(p[:2]), park) for p in building)
+    assert all(geo.inside(tuple(p[:2]), park) for g in grown for p in g.outer)
 
 
 def test_brief_invariant_correction_official_trees_stand_within_the_jitter():
@@ -359,11 +373,93 @@ def test_geometry_checks_fire_on_a_moved_met_and_a_shrunk_lake():
     assert K.check_geometry(rec) == []
     moved = Spline([(p[0] + 200000.0, p[1], p[2]) for p in fx["met_spline"]["points"]], closed=True)
     rec["outputs"]["MetFootprint"] = [[geo.to_json(moved), []]]
-    small = Spline([(p[0] * 0.9 + 0.1 * water[0].points[0][0], p[1] * 0.9 + 0.1 * water[0].points[0][1], p[2])
-                    for p in water[0].points], closed=True, linear=False)
-    rec["outputs"]["Lake"][0] = [geo.to_json(small), []]
     fails = " ".join(K.check_geometry(rec))
-    assert "not inside the park" in fails and "over 1 %" in fails
+    assert "not inside the park" in fails and "over 1 %" not in fails
+    rec["outputs"]["MetFootprint"] = []
+
+    def scaled(w, area_factor):
+        # points AND tangents scaled about the centroid: the enclosed area scales by area_factor exactly
+        s_ = math.sqrt(area_factor)
+        cx = sum(p[0] for p in w.points) / len(w.points)
+        cy = sum(p[1] for p in w.points) / len(w.points)
+        pts = [(cx + (p[0] - cx) * s_, cy + (p[1] - cy) * s_, p[2]) for p in w.points]
+        tans = [(tuple(c * s_ for c in a), tuple(c * s_ for c in b)) for a, b in w.tangents]
+        return Spline(pts, closed=True, linear=False, tangents=tans)
+    rec["outputs"]["Lake"][0] = [geo.to_json(scaled(water[0], 0.995)), []]      # 0.5 % smaller: inside 1 %
+    assert K.check_geometry(rec) == []
+    rec["outputs"]["Lake"][0] = [geo.to_json(scaled(water[0], 0.982)), []]      # 1.8 % smaller: over it
+    assert any("over 1 %" in x for x in K.check_geometry(rec))
+
+
+class RectOps(PassOps):
+    """Real booleans on AXIS-ALIGNED rectangles (what the planted-clip tests use): `offset` grows a rectangle's
+    box, `difference` cuts the subject box by the clip boxes on their shared grid and returns the free cells
+    merged per row -- exact areas, no Clipper."""
+
+    @staticmethod
+    def _box(r):
+        xs, ys = [p[0] for p in r], [p[1] for p in r]
+        return min(xs), min(ys), max(xs), max(ys)
+
+    def offset(self, rings, distance, join="square", miter_limit=2.0):
+        x0, y0, x1, y1 = self._box(rings[0])
+        d = float(distance)
+        return [Polygon([(x0 - d, y0 - d), (x1 + d, y0 - d), (x1 + d, y1 + d), (x0 - d, y1 + d)])]
+
+    def difference(self, rings_a, rings_b):
+        sx0, sy0, sx1, sy1 = self._box(rings_a[0])
+        cuts = [self._box(r) for r in rings_b]
+        xs = sorted({sx0, sx1} | {min(max(c[k], sx0), sx1) for c in cuts for k in (0, 2)})
+        ys = sorted({sy0, sy1} | {min(max(c[k], sy0), sy1) for c in cuts for k in (1, 3)})
+        out = []
+        for j in range(len(ys) - 1):
+            for i in range(len(xs) - 1):
+                cx, cy = 0.5 * (xs[i] + xs[i + 1]), 0.5 * (ys[j] + ys[j + 1])
+                if xs[i + 1] - xs[i] <= 0 or ys[j + 1] - ys[j] <= 0:
+                    continue
+                if any(c[0] < cx < c[2] and c[1] < cy < c[3] for c in cuts):
+                    continue
+                out.append(Polygon([(xs[i], ys[j]), (xs[i + 1], ys[j]), (xs[i + 1], ys[j + 1]), (xs[i], ys[j + 1])]))
+        return out
+
+
+def _clipped_record(seed=42, ops=None):
+    """One 200 x 200 m area with a 20 m road footprint across its middle (y 9 000 .. 11 000): the stage grows
+    it 8 m and cuts the area; the trees must keep off it."""
+    area = Polygon([(0.0, 0.0), (20000.0, 0.0), (20000.0, 20000.0), (0.0, 20000.0)])
+    road = Polygon([(-500.0, 9000.0), (20500.0, 9000.0), (20500.0, 11000.0), (-500.0, 11000.0)])
+    inputs = {"ParkAreas": [(area, frozenset())], "Exclusions": [], "RoadFootprints": [(road, frozenset())],
+              "MetRoofs": [], "MeshTerrain": [(FlatTerrain(10.0), frozenset())]}
+    out, _ctx = stage_api.execute(S, inputs, {stage_api.SEED: seed, "UseMegaplantsTrees": False}, ops or RectOps())
+    return {k: v for k, v in inputs.items() if k != "MeshTerrain"}, out
+
+
+def test_trees_keep_off_a_real_road_clip_and_the_check_rebuilds_it_independently():
+    ins, out = _clipped_record()
+    params = {"UseMegaplantsTrees": False}
+    assert K.check(ins, params, out, RectOps()) == []
+    forest = [v for pin in ("Selected", "Unselected") for v, _t in out[pin]]
+    assert abs(sum(geo.area_m2(p) for p in forest) - 200.0 * (200.0 - 36.0)) <= 1e-6      # 20 m + 2 x 8 m cut
+    grown = Polygon([(-1300.0, 8200.0), (21300.0, 8200.0), (21300.0, 11800.0), (-1300.0, 11800.0)])
+    trees = [p for v, _t in out["Trees"] for p in v.loc]
+    assert trees and max(K.depth_inside(p[:2], grown) for p in trees) <= K.JITTER_REACH_CM
+    # planted fault 1: a tree in the middle of the road
+    out["Trees"][0][0].loc[0] = (10000.0, 10000.0, 10.0)
+    assert any("deeper than" in x for x in K.check(ins, params, out, RectOps()))
+
+
+def test_a_wrong_road_growth_in_the_stage_is_caught_by_the_check(monkeypatch):
+    """The check grows the footprints by the OFFICIAL 800 cm itself: a stage that grew them 425 (the node's
+    title) hands it areas that do not partition its rebuild."""
+    monkeypatch.setattr(S, "ROAD_EXPAND_CM", 425.0)
+    ins, out = _clipped_record()
+    assert any("does not partition" in x for x in K.check(ins, {"UseMegaplantsTrees": False}, out, RectOps()))
+
+
+def test_a_dropped_clip_set_in_the_stage_is_caught_by_the_check(monkeypatch):
+    monkeypatch.setattr(S, "road_footprints", lambda polys, ops: [])
+    ins, out = _clipped_record()
+    assert any("does not partition" in x for x in K.check(ins, {"UseMegaplantsTrees": False}, out, RectOps()))
 
 
 # ---- randomness -------------------------------------------------------------------------------------------------
