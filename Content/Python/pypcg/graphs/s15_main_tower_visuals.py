@@ -14,8 +14,8 @@ no `out()` call.
 
 Scene reads (kept): `Subgraph_35 Get Hero Tower PCG Volume` (role MainTower: the stage-4 footprint),
 `Subgraph_26 Get Mesh Terrain (Final)`, `Subgraph_0 LoadCitySampleData` (one, shared by the 17 building nodes,
-as `NamedRerouteDeclaration_2` shares it officially). Added: the volume's own transform (`self_point`), the
-frame the official arm chain's `Transform_Offset` nodes turn about (s15.md section 5).
+as `NamedRerouteDeclaration_2` shares it officially). Nothing else is read: the arm chain's turns are about the
+volume's own location officially, but the set align after them cancels that pivot (s15_main_tower_visuals.arms).
 
 Generation side, kept (all 30, official settings):
 
@@ -73,7 +73,6 @@ def build():
     # ---- the scene reads ----
     for pin, name in READS.items():
         g.connect(k[name], g.py, pin)
-    g.connect(g.self_point(), g.py, "Self")
     g.connect(k[READS["MeshTerrain"]], walk, "MeshTerrain")
     for name in BUILDINGS:
         g.connect(k[CITY_DATA], k[name], "CitySample data")

@@ -21,10 +21,11 @@ The chain (official node names in brackets):
             CreatePolygon2D_1] -> "projected" [Subgraph_42: NO surface pin, a pass-through] -> levelled Min
             [Subgraph_43]: the ring at z ~ 0 the arms stand on
   ARMS      three bands [Subgraph_83, subdiv (1, 3)] -> the middle one [FilterDataByIndex_1 "1"] -> two
-            halves [Subgraph_33, subdiv (2, 1)] -> BOTH turned -60 deg about the VOLUME's own location
-            [Subgraph_34, Transform_Offset PerPoints false: the data frame is the component's transform]
-            -> Reroute_2 -> +120 [Subgraph_37] and -120 [Subgraph_38]; each two-piece SET aligned to the
-            input shape's box centre [Subgraph_89 / 88 / 86] -> its piece 0 [FilterDataByIndex_4 / 2 / 3]
+            halves [Subgraph_33, subdiv (2, 1)] -> BOTH turned -60 deg [Subgraph_34, Transform_Offset
+            PerPoints false, about the data frame's origin: the volume's location -- a pivot the set align
+            below cancels, so the port turns about the origin] -> Reroute_2 -> +120 [Subgraph_37] and -120
+            [Subgraph_38]; each two-piece SET aligned to the input shape's box centre [Subgraph_89 / 88 / 86]
+            -> its piece 0 [FilterDataByIndex_4 / 2 / 3]
   INNER     the aligned shape contracted 32.5 m [Subgraph_72] -> polygon -> projected onto the terrain
             [Subgraph_27] -> levelled Min [Subgraph_28] -> aligned to the input shape [Subgraph_87]: the
             CHC footprint (Reroute_0)
@@ -59,9 +60,8 @@ PARAMS = {
     "UseMegaplantsTrees": Param(False, "Use the Megaplants trees for the ring instead of the Black Alder "
                                        "field trees", type="Bool"),
 }
-# Volume: the stage-4 footprint (`Subgraph_35`); Self: this volume's own transform, the frame every
-# `Transform_Offset` of the arm chain turns about; MeshTerrain: `Subgraph_26` (Final).
-INPUTS = {"Volume": "spline", "Self": "points", "MeshTerrain": "surface"}
+# Volume: the stage-4 footprint (`Subgraph_35`); MeshTerrain: `Subgraph_26` (Final).
+INPUTS = {"Volume": "spline", "MeshTerrain": "surface"}
 OUTPUTS = ("InnerRing", "Hexagons", "Sector90", "Sector80", "Sector70", "TreeBases", "Trees", "PlazaTiles")
 
 # ---- the graph's fixed settings (instance overrides) ------------------------------------------------
@@ -89,6 +89,9 @@ FIELD_TREES = tuple("/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAld
 FIELD_SETTINGS = {"extents_scale": {"X": 0.7, "Y": 1, "Z": 1}, "random_scale_range": {"X": 0.2, "Y": 0, "Z": 0}}
 
 
+PIVOT = (0.0, 0.0)                 # see `arms`: the set align cancels the turns' pivot
+
+
 def _surface(inputs):
     for v, _tags in inputs.get("MeshTerrain", []):
         if hasattr(v, "height"):
@@ -109,15 +112,13 @@ def shape_of(inputs):
 
 
 def pivot_of(inputs):
-    """The data frame every spline of the arm chain carries: this volume's own location (`Self`, the
-    `Get Actor Data GetSinglePoint` of the slim graph). Measured: the tapped frame translation
-    (-613.8667, 142.0539, 2800) IS the stage-15 volume's location, and the -60 / +-120 turns are about it
-    to 1e-12 cm (s15.md section 5). None when the pin is empty."""
-    for v, _tags in inputs.get("Self", []):
-        loc = getattr(v, "loc", None)
-        if loc:
-            return (float(loc[0][0]), float(loc[0][1]))
-    return None
+    """The pivot the arm chain's turns use. Officially it is the data frame every spline of the chain
+    carries -- this volume's own location, (-613.8667, 142.0539) on the demo; the -60 / +-120 turns are
+    about it to 1e-12 cm (s15.md section 5). But each turned SET is then aligned by its own box centre
+    (`_align_set`), and a turn about another pivot differs from it by one translation of the whole set,
+    which that align removes: the sectors come out the same to 1.4e-12 cm for any pivot. So the port turns
+    about the origin and needs no read of its own volume."""
+    return PIVOT
 
 
 # ---- 1. align, 2. outer ring, 3. inner ring ---------------------------------------------------------
@@ -203,7 +204,18 @@ def _grid_pieces(ring, subdiv, ops):
     full = [seg for _a, seg in geo.grid_lines(outer, 0.0, 0.0, 100000.0, subdiv=subdiv, clipped=False,
                                               edge=frame_edge(outer))]
     pieces = ops.cut_with_paths(outer, full) if full else [outer]
-    return [[(c[0], c[1], z) for c in r] for r in pieces]
+    return [[(c[0], c[1], z) for c in _engine_winding(r)] for r in pieces]
+
+
+def _engine_winding(ring):
+    """The winding `Subdivide_Areas_withGrid` publishes: a NEGATIVE standard area (the engine's
+    counter-clockwise in its left-handed frame, traps.md 41), from the same first vertex. Measured: every
+    tapped band, half and sector (t05, t07, t14-16) has area -; `cut_with_paths` returns them +, from the
+    vertex the tap starts on."""
+    ring = list(ring)
+    if len(ring) >= 3 and geo.signed_area([(p[0], p[1]) for p in ring]) > 0:
+        ring = ring[:1] + ring[1:][::-1]
+    return ring
 
 
 def _centroid(ring):
@@ -336,7 +348,9 @@ def trees(samples, z, mega, surface, rng, loader):
     if not samples or loader is None:
         return [], []
     paths, settings = (MEGA_TREES, MEGA_SETTINGS) if mega else (FIELD_TREES, FIELD_SETTINGS)
-    items = AS.expand_items(tree_points(samples, z), loader(list(paths)), None, dict(settings, rng=rng))
+    targets = tree_points(samples, z)
+    picks = AS.choose(len(targets), paths, rng)          # the kit pick (no index attribute on either call)
+    items = AS.expand_items(targets, loader(list(paths)), picks, dict(settings, rng=rng))
     projected = [project(p, surface) for p in items if len(p)]
     bases = [_with(p, lambda r, s: (r, (1.0, 1.0, 1.0))) for p in projected]
     upright = [_with(p, lambda r, s: ((0.0, r[1], 0.0), s)) for p in projected]
@@ -389,7 +403,7 @@ def tower(inputs, params, ops, rng=None, loader=None):
             [len(sectors[p]) for p in ("Sector90", "Sector80", "Sector70")], len(hexes), len(samples), len(tiles)),
         "UseMegaplantsTrees=%s" % bool(params["UseMegaplantsTrees"])]
     if pivot is None:
-        notes.append("no Self point: the arm chain has no frame to turn about, so no sectors")
+        notes.append("no pivot: no sectors")
     if loader is None:
         notes.append("no asset loader (ctx.ops.assets): no trees assigned")
     return out, notes

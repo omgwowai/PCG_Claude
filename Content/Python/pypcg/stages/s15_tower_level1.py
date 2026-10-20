@@ -28,8 +28,7 @@ def level1(inputs, ops):
     chc = R.rings_of(inputs.get("ChcRoofs", []))
     hexes = R.rings_of(inputs.get("Hexagons", []))
     out["OuterChj"] = R.contract(R.notched(chc, ops), R.CHJ_CONTRACT_CM, ops)
-    if chc:
-        out["Courtyard"], out["CourtyardLifted"] = R.courtyard(hexes, chc[0][0][2], ops)
+    out["Courtyard"], out["CourtyardLifted"] = R.courtyard(hexes, ops)
     for arm in ("Arm90", "Arm80", "Arm70"):
         out[arm] = R.contract(R.rings_of(inputs.get(arm + "Roofs", [])), R.ARM_CONTRACT_CM, ops)
     return out, ["level 1: %d CHC rooftops -> %d outer CHJ rings; %d hexagons -> %d courtyard pieces; arms %s"

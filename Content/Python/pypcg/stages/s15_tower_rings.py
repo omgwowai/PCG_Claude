@@ -40,7 +40,9 @@ def poly_of(ring):
 
 def contract(rings, distance, ops):
     """`Transform_Areas_Contract` (`UnionBeforeOutputting` true, the default) on every ring, each in its
-    own frame (trap 64: the start vertex), at that ring's z: the rings it leaves."""
+    own frame (trap 64: the start vertex), at that ring's z: the rings it leaves. The primitive publishes
+    POLYGONS (the tapped `t02_outer30` is `PCGPolygon2DData`), so `tagged_rings` hands these on as
+    polygons."""
     out = []
     for r in rings:
         poly = poly_of(r)
@@ -54,7 +56,11 @@ def spline(ring):
     return Spline([tuple(p) for p in ring], closed=True, linear=True)
 
 
-def tagged_rings(rings, tag):
+def tagged_rings(rings, tag, as_polygon=True):
+    """Each ring as a polygon at its z (`Transform_Areas_Contract`'s output) or, with `as_polygon` false, a
+    closed spline (a rooftop forwarded through a filter)."""
+    if as_polygon:
+        return [(Polygon([(p[0], p[1]) for p in r], [], r[0][2]), [tag]) for r in rings]
     return [(spline(r), [tag]) for r in rings]
 
 
@@ -95,34 +101,47 @@ def notched(roofs, ops):
     return out
 
 
-def courtyard(hexes, roof_z, ops):
-    """AttributeMathsOp_1 (the hexagons' z set to the CHC roof: measured 6556.2605 on the union, s15.md
-    2.13) -> Subgraph_10 `Compose_Areas_Union` -> Subgraph_11 `Transform_Areas_Expand` (350): the courtyard
-    polygons, and Subgraph_15's +40 copy."""
+COURTYARD_Z = 0.0                  # AttributeMathsOp_1 Set $Position.Z: its second input is unwired -> 0
+
+
+def _union_order(polys):
+    """The item order `Compose_Areas_Union` hands back: descending centroid x, then ascending y (the taps
+    u33 / u27 / u28: (4247, 0), (2124, -3678), (2124, 3678), (-2124, -3678), (-2124, 3678), (-4247, 0)).
+    Centroids are rounded to 1e-3 cm so a last-bit difference cannot reorder a tie."""
+    def key(p):
+        n = len(p.outer)
+        return (-round(sum(q[0] for q in p.outer) / n, 3), round(sum(q[1] for q in p.outer) / n, 3))
+    return sorted(polys, key=key)
+
+
+def courtyard(hexes, ops):
+    """AttributeMathsOp_1 -> Subgraph_10 `Compose_Areas_Union` -> Subgraph_11 `Transform_Areas_Expand` (350):
+    the courtyard polygons, and Subgraph_15's +40 copy. `AttributeMathsOp_1` ("Snap Courtyard Z To Building
+    Height") SETS `$Position.Z` from an unwired second input, i.e. to 0: the tapped union, courtyard and lift
+    are at z 0, 0 and 40 (u33, u27, u28; the courtyard mesh's spline u29 at 40), not at the CHC roof that
+    s15.md 2.13 states. On the demo the union is a no-op: six disjoint 405.95 m2 hexagons."""
     if not hexes:
         return [], []
-    polys = [Polygon([(p[0], p[1]) for p in h], [], roof_z) for h in hexes]
+    z = COURTYARD_Z
+    polys = [Polygon([(p[0], p[1]) for p in h], [], z) for h in hexes]
     united = ops.union(A.rings(polys)) if len(polys) > 1 else polys
-    united = [Polygon(p.outer, p.holes, roof_z) for p in united]
-    grown = [Polygon(p.outer, p.holes, roof_z) for p in A.expand(united, COURTYARD_EXPAND_CM, ops)]
+    united = _union_order([Polygon(p.outer, p.holes, z) for p in united])
+    grown = [Polygon(p.outer, p.holes, z) for p in A.expand(united, COURTYARD_EXPAND_CM, ops)]
     lifted = [Polygon(list(p.outer), [list(h) for h in p.holes], p.z + COURTYARD_LIFT_CM) for p in grown]
     return grown, lifted
 
 
 # ---- the antenna (s15_tower_top) ---------------------------------------------------------------------
 def centre_point(ring):
-    """Subgraph_23 `Place_Point_AtCenter` on one rooftop: the box centre of its control points in the
-    polygon's own frame, turned with that frame (`geo.frames.polygon_of`), at the rooftop's z."""
-    poly, sp = F.polygon_of(ring)
-    t, q = sp.frame
-    from pypcg.geo.plane import quat_rotate
-    inv = (-q[0], -q[1], -q[2], q[3])
-    local = [quat_rotate(inv, (p[0] - t[0], p[1] - t[1], p[2] - t[2])) for p in sp.points]
-    c = [(min(v[a] for v in local) + max(v[a] for v in local)) / 2.0 for a in range(3)]
-    w = quat_rotate(q, (c[0], c[1], 0.0))
-    yaw = math.degrees(2.0 * math.atan2(q[2], q[3]))
-    yaw = (yaw + 180.0) % 360.0 - 180.0
-    return (t[0] + w[0], t[1] + w[1], ring[0][2]), yaw
+    """Subgraph_23 `Place_Point_AtCenter` on one rooftop: the box centre of its control points at the
+    rooftop's z, turned along the ring's FIRST edge (control point 0 -> 1) -- the rule `Subgraph_18` follows
+    on its two-point runs. Measured: the official antenna point is (0, 0, 43 756.2605) at yaw 60 (s15.md
+    2.15), and the slim run's skyscraper rooftop has its first edge at 60.000 deg; the polygon's own frame
+    would give -90."""
+    c = F.box_centre(ring)
+    a, b = ring[0], ring[1 % len(ring)]
+    yaw = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+    return (c[0], c[1], ring[0][2]), yaw
 
 
 def antenna(roofs):
