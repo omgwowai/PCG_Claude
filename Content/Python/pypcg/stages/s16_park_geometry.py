@@ -14,7 +14,7 @@ Inputs (kept scene reads): `Footprint` (`Get_Footprint_Actor`, role CentralParkF
 import math
 
 from pypcg import geo
-from pypcg.geo import Points, Polygon, Spline
+from pypcg.geo import Polygon, Spline
 from pypcg.geo import areas as A
 from pypcg.geo import assets as AS
 from pypcg.geo import curves as C
@@ -29,6 +29,7 @@ outlines, the border-road segments, the park pieces and their 8 m sidewalk ring,
 drawn splines, the vegetation areas, the two lakes (edge +20 cm, water plane at the lowest terrain height,
 bed 50 cm below) and the Met footprint. Sizes in cm."""
 RANDOM = False
+EXACT_SPLINE_ROTATORS = True             # the Met footprint's rotations keep their doubles (convert._rotator_exact)
 PARAMS = {}
 INPUTS = {"Footprint": "spline", "DrawnSplines": "spline", "Lake": "spline", "ForestExclusion": "spline",
           "MeshTerrain": "surface"}
@@ -70,14 +71,42 @@ def _xy(points):
 
 
 # ---- 1. the park centre -----------------------------------------------------------------------------
-def centre(footprint):
-    """`Subgraph_0 Place_Point_AtCenter`: the box centre of the footprint's control points at their z, turned
-    along the FIRST edge (control point 0 -> 1). Returns `(loc, quat)`. Measured: (60 150, 57 100, 0), yaw
-    34.2227 deg; the quaternion is the engine's to the last bit only (s16.md section 4)."""
+def rotator_quat(ops, pitch, yaw, roll):
+    """`FRotator::Quaternion()`: the engine's own (`ops.rotator_quat`, SVML sincos) when the ops offer it, else
+    `geo.assets.quat_of` (Python's sin / cos: the same rotation, possibly one ulp off)."""
+    fn = getattr(ops, "rotator_quat", None)
+    return tuple(fn(pitch, yaw, roll)) if fn is not None else AS.quat_of(pitch, yaw, roll)
+
+
+EDGE_TIE_CM = 1e-6                       # edges this close in length are one length (see first_longest)
+
+
+def first_longest(ring, tol=EDGE_TIE_CM):
+    """`@Data.$LongestOuterSegmentIndex` where edges TIE: a rectangle's opposite edges are equal and the
+    engine's strict `>` picks one by its own last bits; the first of the tied edges is the one it picked on
+    the demo park (edge 0, yaw 34.2 -- the strict rule on Python's arithmetic picked edge 2, yaw -145.8, and
+    turned every line and the Met by 180 degrees). Stage 15's `frame_edge` rule."""
+    n = len(ring)
+    lens = [math.dist(ring[k][:2], ring[(k + 1) % n][:2]) for k in range(n)]
+    top = max(lens)
+    return next(k for k, d in enumerate(lens) if d >= top - tol)
+
+
+def centre(footprint, ops=None):
+    """`Subgraph_0 Place_Point_AtCenter` (`Place_Point_AtCenter_CoreProcess_Loop`): the box centre of the
+    footprint's control points at their z; its `$Rotation` is the ROTATOR of the polygon's point at the start
+    of its first longest outer segment -- the CreatePolygon2D frame's quaternion times the segment's
+    `MakeFromXZ` (`geo.frames.vertex_points`) -- with roll 0, turned back into a quaternion by
+    `FRotator::Quaternion`. Returns `(loc, quat)`. Measured: (60 150, 57 100, 0); the rotator's yaw is
+    34.22265945387145 (one ulp above `atan2` of the edge), and the engine's quaternion of it is the tapped one
+    bit for bit (`pyg_probe_t22f_quat.py`); Python's sin / cos is one ulp off in z."""
     pts = [tuple(float(c) for c in p) for p in footprint.points]
     c = F.box_centre(pts)
-    q = F.make_from_xz(F.safe_normal(F._sub(pts[1], pts[0])), (0.0, 0.0, 1.0))
-    return (c[0], c[1], pts[0][2]), q
+    t, q = F.polygon_frame(pts)
+    local = F.to_local(pts, t, q)
+    _pos, rots = F.vertex_points(local, t, q)            # FSegment2d's unit direction, then MakeFromXZ
+    pitch, yaw, _roll = F.rotator_of(rots[first_longest(local)])
+    return (c[0], c[1], pts[0][2]), rotator_quat(ops, pitch, yaw, 0.0)
 
 
 def compose(loc, quat, local):
@@ -88,13 +117,13 @@ def compose(loc, quat, local):
 
 
 # ---- 2. the transverse lines ------------------------------------------------------------------------
-def lines(loc, quat):
+def lines(loc, quat, ops=None):
     """`Road_*_Line` (`Create_Spline_line`, `AtWorldOrigin` false): the points (-L/2, 0, 0) and (+L/2, 0, 0),
     turned by the node's yaw and moved by its `Position` (`CopyPoints_1`), then composed with the centre
     point (`CopyPoints_2`): one linear open 2-point line each, in the official order 65th, 79th, 86th, 97th."""
     out = []
     for _name, x, yaw in LINES:
-        q = AS.quat_of(0.0, yaw, 0.0)
+        q = rotator_quat(ops, 0.0, yaw, 0.0)          # MakeTransformAttribute_1: FQuat(FRotator)
         ends = []
         for s in (-0.5, 0.5):
             p = geo.quat_rotate(q, (s * LINE_LENGTH, 0.0, 0.0))
@@ -255,10 +284,21 @@ def met(loc, quat, surface, ops):
         zs.append(p[2] if h is None else h)
     zmin = min(zs)
     building = [(p[0], p[1], zmin) for p in rect]
+    rotations = footprint_rotations([(p[0], p[1], z) for p, z in zip(rect, zs)])
     poly = Polygon(geo.ccw(_xy(rect)), [], rect[0][2])
     grown = A.in_frame(poly, lambda q: A.expand([q], MET_EXPAND_CM, ops))
     grown = [Polygon(p.outer, p.holes, rect[0][2]) for p in grown]
-    return building, grown, rect
+    return (building, rotations), grown, rect
+
+
+def footprint_rotations(projected):
+    """The control-point rotations `CreateSpline_0` carries into the building: `Transform_Project` hands the
+    rectangle back as a CURVE spline (auto tangents of the projected corners), `Transform_Level` keeps those
+    tangents, and `GetSplineControlPoints_0` writes each point's `MakeFromXZ(tangent, up)` -- pitch +-0.9 /
+    +-1.4 deg on the demo (t28). `Assign_CitySampleBuildings` reads them (trap 63's kind): without them the
+    footprint is bit for bit and the building's props still differ."""
+    tans = C.auto_tangents(projected, True)
+    return [F.rotator_of(F.make_from_xz(t, (0.0, 0.0, 1.0))) for t in tans]
 
 
 # ---- the whole node ------------------------------------------------------------------------------------
@@ -271,8 +311,8 @@ def geometry(inputs, ops):
     surface = _surface(inputs)
     fp = feet[0]
     ring = [tuple(float(c) for c in p) for p in fp.points]
-    loc, quat = centre(fp)
-    line_paths = lines(loc, quat)
+    loc, quat = centre(fp, ops)
+    line_paths = lines(loc, quat, ops)
     outl = centre_outlines(line_paths, ring, ops)
     out["BorderSegments"] = edge_segments(outl, 0.0)
     parts = pieces(ring, outl, ops)
@@ -300,7 +340,7 @@ def geometry(inputs, ops):
                               len(out["BorderSegments"]), len(parts), len(ring8), len(out["SidewalkSegments"])),
              "drawn %d -> walkpaths %d, path bands %d, areas %d; lakes %d (water z %s); forest %d; Met z %.4f"
              % (len(drawn), len(out["Walkpaths"]), len(bands), len(areas), len(lakes),
-                [round(w.points[0][2], 4) for w in out["Lake"]], len(forest), building[0][2])]
+                [round(w.points[0][2], 4) for w in out["Lake"]], len(forest), building[0][0][2])]
     return out, notes
 
 
@@ -313,7 +353,8 @@ def tagged(raw):
     out["BorderSegments"] = [(_spline_of(s), ["BorderSegments"]) for s in raw["BorderSegments"]]
     out["SidewalkSegments"] = [(_spline_of(s), ["SidewalkSegments"]) for s in raw["SidewalkSegments"]]
     out["Corners"] = [(p, ["Corners"]) for p in raw["Corners"]]
-    out["MetFootprint"] = [(_spline_of(b, closed=True), ["MetFootprint"]) for b in raw["MetFootprint"] if b]
+    out["MetFootprint"] = [(Spline([tuple(p) for p in b], closed=True, linear=True, rotations=list(r)), ["MetFootprint"])
+                           for b, r in raw["MetFootprint"] if b]
     for pin in ("Walkpaths", "LakeEdge", "Lake", "LakeBed", "ForestZone", "ParkAreas", "Exclusions"):
         out[pin] = [(v, [pin]) for v in raw[pin]]
     return out

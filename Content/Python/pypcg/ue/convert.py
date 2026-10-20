@@ -68,6 +68,14 @@ def _rotator(r):
     return unreal.Rotator(pitch=r[0], yaw=r[1], roll=r[2])          # keywords: positional is (roll, pitch, yaw)
 
 
+def _rotator_exact(r):
+    """A rotator whose three angles keep their doubles: `unreal.Rotator(...)` rounds each to float32 (probed
+    2026-10-20, stage 16; trap 73's `unreal.Quat` twin), attribute assignment does not."""
+    out = unreal.Rotator()
+    out.pitch, out.yaw, out.roll = float(r[0]), float(r[1]), float(r[2])
+    return out
+
+
 def _ue(type_name, v):
     if type_name == "Vector":
         return unreal.Vector(*v)
@@ -226,7 +234,7 @@ def _points_of(d):
 
 
 # ---- write ----------------------------------------------------------------------------------------
-def to_pcg(v, registry=None, exact_rotations=False):
+def to_pcg(v, registry=None, exact_rotations=False, exact_spline_rotators=False):
     same = passed_through(v, registry)
     if same is not None:
         return same
@@ -238,7 +246,7 @@ def to_pcg(v, registry=None, exact_rotations=False):
             raise ValueError("MakePolygon2DData refused a polygon with %d outer vertices" % len(v.outer))
         return d
     if isinstance(v, Spline):
-        return _spline_data(v)
+        return _spline_data(v, exact_spline_rotators)
     if isinstance(v, Points):
         return _point_data(v, exact_rotations)
     if isinstance(v, ParamSet):
@@ -246,7 +254,9 @@ def to_pcg(v, registry=None, exact_rotations=False):
     raise TypeError("PyPCG cannot write %r" % (v,))
 
 
-def _spline_data(s):
+def _spline_data(s, exact_rotators=False):
+    """`exact_rotators` (a stage's `EXACT_SPLINE_ROTATORS`, stage 16): the control points' rotations are written
+    with their doubles (`_rotator_exact`); off, through the float32 constructor, as every earlier stage did."""
     T = unreal.SplinePointType
     pts = []
     for i, p in enumerate(s.points):
@@ -262,7 +272,7 @@ def _spline_data(s):
         else:
             sp.set_editor_property("type", T.CURVE)
         if s.rotations:
-            sp.set_editor_property("rotation", _rotator(s.rotations[i]))
+            sp.set_editor_property("rotation", (_rotator_exact if exact_rotators else _rotator)(s.rotations[i]))
         pts.append(sp)
     d = unreal.PCGSplineData()
     d.k2_initialize(pts, bool(s.closed), unreal.Transform(), [])

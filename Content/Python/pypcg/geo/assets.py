@@ -109,6 +109,13 @@ Stage 15's two calls (2026-10-20, `{"assign": {"stage": 15}}`): `AssignTrees` (M
 `IndexAttribute` "" (so the unimplemented index path is untouched), and every setting they use is on a
 MEASURED row above. `Subgraph_20` has its own oracle with the shipped scale: 44 targets, 44 points,
 every field exact (Saved/Reports/v2/s15/assign_oracle_s15_maintower_20_scale1414_uniform_meshbounds.json).
+
+Stage 16's seven calls (2026-10-20, `{"assign": {"stage": 16}}`: 7 calls, 0 failures, `unhonoured_pins` []):
+`Subgraph_33` / `Subgraph_38` (four BlackAlder field trees, ScaleOffset (0.7, 1, 1), RandomScaleRange X 0.2 /
+0.15, RandomRotationRange Z 180) and `Assign_Trees` / `Assign_Trees_2` (nine / ten Megaplants, RandomScaleRange
+0.15 on all axes, RandomRotationRange (0, 0, 180) / (2, 2, 180)) run in Python; the three grass calls
+(`Subgraph_63/64/65`, ScaleOffset 0.6 / 1 / 1, RandomScaleRange 0.15) stay native (Step F, s16.md 3.2). All
+seven are RANDOM; every setting they use is on a MEASURED row above, `UseIndexattribute` false.
 """
 import math
 import struct

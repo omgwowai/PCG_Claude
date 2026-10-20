@@ -38,10 +38,11 @@ def run(stage_name, scope):
     inputs = {pin: convert.read_pin(data_in, pin, registry, splines) for pin in module.INPUTS}
     outputs, ctx = stage_api.execute(module, inputs, params, ue_ops.Ops())
     exact = bool(getattr(module, "EXACT_ROTATIONS", False))       # stage 12: points keep their engine quaternions
+    exact_rot = bool(getattr(module, "EXACT_SPLINE_ROTATORS", False))   # stage 16: spline rotations keep doubles
     count = 0
     for pin, items in outputs.items():
         for value, tags in items:
-            data_out.add_to_collection(convert.to_pcg(value, registry, exact), pin, list(tags))
+            data_out.add_to_collection(convert.to_pcg(value, registry, exact, exact_rot), pin, list(tags))
             count += 1
     registry.clear()
     seconds = time.perf_counter() - t0

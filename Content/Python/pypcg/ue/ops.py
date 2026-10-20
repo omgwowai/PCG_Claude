@@ -41,6 +41,17 @@ class Ops:
         from pypcg.ue import assets as _assets
         return _assets.load(paths)
 
+    def rotator_quat(self, pitch, yaw, roll):
+        """`FRotator::Quaternion()` as the ENGINE computes it (its vectorised path calls SVML's sincos, which
+        differs from Python's `math.sin` / `math.cos` in the last bit). The rotator is built by attribute
+        assignment: `unreal.Rotator(p, y, r)` rounds every component to float32 (probed 2026-10-20, as trap 73
+        found for `unreal.Quat`). Stage 16 first: the park centre's `$Rotation` is set from a rotator
+        (`Place_Point_AtCenter_CoreProcess_Loop`, `CopyAttributes_4`), and the Met building reads the last bit."""
+        r = unreal.Rotator()
+        r.pitch, r.yaw, r.roll = float(pitch), float(yaw), float(roll)
+        q = r.quaternion()
+        return (q.x, q.y, q.z, q.w)
+
     def intersection(self, rings_a, rings_b):
         return _polygons(PL.polygons_intersection(_list(rings_a), _list(rings_b)))
 

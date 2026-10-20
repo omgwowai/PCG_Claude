@@ -8,8 +8,6 @@ upright), and the Met rooftop dropped 10 cm for its rooftop assemblies. The geom
 `s16_park_geometry`; the three grass chains run native on this node's split (Step F, s16.md 3.2).
 `docs/pypcg/stages/s16.md` section 2.2 names the official node behind every step.
 """
-import math
-
 from pypcg import geo
 from pypcg.geo import Points, Polygon, Spline
 from pypcg.geo import areas as A
