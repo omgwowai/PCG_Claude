@@ -167,8 +167,9 @@ def _project(points, surface):
 
 def outer_ring(base, ops):
     """Subgraph_44 -> polygon -> Subgraph_42 (NO surface: a pass-through; projecting would lift the
-    ground layer 2535.83 cm) -> Subgraph_43 Min."""
-    return _polygon_ring(_contract_ring(base, OUTER_CONTRACT_CM, ops))
+    ground layer 2535.83 cm) -> Subgraph_43 Min. In the stored order (`stored_order`): the tapped t04 starts on
+    its lowest vertex, whose first edge is the one the bands are cut along."""
+    return stored_order(_polygon_ring(_contract_ring(base, OUTER_CONTRACT_CM, ops)))
 
 
 def inner_ring(base, shape, ops, surface):
@@ -295,10 +296,22 @@ def hexagons(inner):
 
 
 # ---- 6. the tree ring ------------------------------------------------------------------------------
+def stored_order(ring):
+    """A contract's polygon as the engine stores it: counter-clockwise, starting on its lowest vertex (min y,
+    then min x). Every tapped polygon starts there (t02, u17, u27, u33, ...), and `PlaceTreesOnSpline` walks
+    exactly this ring: from it, `sample_on_spline` reproduces all 44 tapped trees to 0.005 cm, while the start
+    `geo.areas.in_frame` gives puts every tree 337 cm along the ring from its official place."""
+    r = list(ring)
+    if len(r) >= 3 and geo.signed_area([(p[0], p[1]) for p in r]) < 0:
+        r = r[::-1]
+    k = min(range(len(r)), key=lambda i: (round(r[i][1], 6), round(r[i][0], 6))) if r else 0
+    return r[k:] + r[:k]
+
+
 def tree_samples(shape, ops):
     """ContractTreeRing (500, on the UNALIGNED input shape: NamedRerouteDeclaration_1) then
-    `PlaceTreesOnSpline` (Spacing 1000, inward, FitToCurve): `[(x, y, yaw)]` and the ring's z."""
-    ring = _contract_ring(shape, TREE_CONTRACT_CM, ops)
+    `PlaceTreesOnSpline` (Spacing 1000, inward, FitToCurve) on the stored ring: `[(x, y, yaw)]` and its z."""
+    ring = stored_order(_contract_ring(shape, TREE_CONTRACT_CM, ops))
     if len(ring) < 3:
         return [], 0.0
     return F.sample_on_spline([(p[0], p[1]) for p in ring], TREE_SPACING_CM), ring[0][2]

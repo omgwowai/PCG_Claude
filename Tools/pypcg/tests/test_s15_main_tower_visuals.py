@@ -239,6 +239,10 @@ def test_hexagons_are_the_tapped_hexagons_in_order():
 def test_main_node_on_the_demo_shape():
     out, ctx = run_main()
     fx = fixture()
+    for pin, tap in (("Sector90", 2), ("Sector80", 1), ("Sector70", 0)):        # the whole chain, from the shape
+        assert set_dist(ring(out[pin][0][0]), [tuple(p[:2]) for p in fx["rings"]["sectors"][tap]]) <= 1e-9, pin
+    trees = [p for v, _t in out["TreeBases"] for p in v.loc]
+    assert max(math.dist(a[:2], tuple(b[:2])) for a, b in zip(trees, fx["trees"]["points"])) <= 0.005
     assert set_dist(ring(out["InnerRing"][0][0]), [tuple(p[:2]) for p in fx["rings"]["inner32_level"]]) <= 1e-9
     assert out["InnerRing"][0][0].points[0][2] == pytest.approx(2041.2605147304)
     assert len(out["Hexagons"]) == 6 and [len(out[p]) for p in ("Sector90", "Sector80", "Sector70")] == [1, 1, 1]
