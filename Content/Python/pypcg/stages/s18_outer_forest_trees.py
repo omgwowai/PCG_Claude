@@ -108,11 +108,12 @@ def normalise_index(sets):
     to [0, 10] on every set. Measured: all 308 785 official values bit for bit."""
     values = [v for s in sets for v in s.attrs.get(INDEX_ATTR, [])]
     if not values:
-        return
+        return None
     lo, hi = min(values), max(values)
     for s in sets:
         if INDEX_ATTR in s.attrs:
             s.attrs[INDEX_ATTR] = D.remap(s.attrs[INDEX_ATTR], lo, hi, 0.0, INDEX_OUT_MAX)
+    return lo, hi
 
 
 def project(sets, surface):
@@ -159,13 +160,17 @@ def densities(values, noise, rng):
     return out
 
 
-def trees(sets, surface, rng):
+def trees(sets, surface, rng, info=None):
     """Everything from the index jitter to the z cut: one point set per input set (empty ones kept, as the
-    nodes keep empty data), each point carrying its final density and scale."""
+    nodes keep empty data), each point carrying its final density and scale. `info` (a dict), when given,
+    receives each step's count and the index range, which the run notes."""
+    info = {} if info is None else info
     jitter_index(sets, rng)
-    normalise_index(sets)
+    info["index_range"] = normalise_index(sets)
     project(sets, surface)
     water = split_water(sets)
+    info["above"] = sum(len(a) for a, _b in water)
+    info["below"] = sum(len(b) for _a, b in water)
     above = centres(sets, [a for a, _b in water])
     below = centres(sets, [b for _a, b in water])
     shore = D.distance_from([[(p[0], p[1]) for p in s.loc] for s in sets], above, SHORE_MAX_CM, *SHORE_REMAP)
@@ -175,6 +180,7 @@ def trees(sets, surface, rng):
         s.attrs["distance"] = list(values)
         s.types["distance"] = "Double"
         kept.append(s.take([j for j in range(len(s)) if s.density[j] > SHORE_KEEP]))
+    info["near_shore"] = sum(len(s) for s in kept)
     deep = D.distance_from([[(p[0], p[1]) for p in s.loc] for s in kept], below, DEEP_MAX_CM, *DEEP_REMAP)
     slope = (1.0 - SCALE_FLOOR) / (1.0 - 0.0)
     out = []
@@ -184,6 +190,7 @@ def trees(sets, surface, rng):
         s.density = dens
         s.scale = [tuple(c * dens[j] for c in s.scale[j]) for j in range(len(s))]
         out.append(s.take([j for j in range(len(s)) if s.loc[j][2] > CUT_Z_CM]))
+    info["cut"] = sum(len(s) for s in out)
     return out
 
 
@@ -208,10 +215,13 @@ def run(inputs, params, ctx):
         return out
     surface = surface_of(inputs)
     t0 = time.perf_counter()
-    placed = trees(sets, surface, ctx.rng)
-    n_in, n_out = sum(len(s) for s in sets), sum(len(s) for s in placed)
-    ctx.notes.append("trees: %d points in %d sets, %d placed (%.2f s)" % (n_in, len(sets), n_out,
-                                                                        time.perf_counter() - t0))
+    info = {}
+    placed = trees(sets, surface, ctx.rng, info)
+    n_in = sum(len(s) for s in sets)
+    ctx.notes.append("trees: %d points in %d sets; index range %r; above water %d, below %d; near the shore %d; "
+                     "above the cut %d (%.2f s)" % (n_in, len(sets), info.get("index_range"), info.get("above", 0),
+                                                   info.get("below", 0), info.get("near_shore", 0),
+                                                   info.get("cut", 0), time.perf_counter() - t0))
     loader = getattr(ctx.ops, "assets", None)
     if loader is None:
         ctx.notes.append("no asset loader (ctx.ops.assets): no trees assigned")
