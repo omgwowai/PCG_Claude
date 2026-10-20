@@ -24,8 +24,6 @@ The chain (official node names in brackets):
 The roads are NOT subtracted: `Subgraph_4 Get Roads` is read only for its `ArteryWidth`. `Subgraph_13 Get City
 Layout Volume` (the `Terrain` role) is read officially and has no user; the slim graph keeps it unwired.
 """
-import math
-
 from pypcg import geo
 from pypcg.geo import Points, Polygon
 from pypcg.geo import areas as A
@@ -51,7 +49,6 @@ OUTPUTS = ("ForestPoints",)
 
 CITY_EXPAND_DEFAULT_CM = 3400.0        # Subgraph_3's own Expand override, used when the pin gets no value
 POINT_EXTENT_CM = 10.0                 # Fill_Areas_Randomly OutputPointsExtents (default)
-SQRT3 = math.sqrt(3.0)
 
 
 def _first_number(items):
@@ -63,71 +60,16 @@ def _first_number(items):
     return None
 
 
-def _quat(pts, i):
-    if pts.quat:
-        return tuple(pts.quat[i])
-    r = pts.rot[i]
-    return AS.quat_of(*r) if any(r) else (0.0, 0.0, 0.0, 1.0)
-
-
 def _world_box(pts, i):
-    """`FBox::TransformBy(FTransform)` of point i's own box: (min, max) in the world."""
-    q = _quat(pts, i)
-    s, lo, hi, p = pts.scale[i], pts.bounds_min[i], pts.bounds_max[i], pts.loc[i]
-    o = tuple((lo[a] + hi[a]) * 0.5 * s[a] for a in range(3))
-    e = tuple((hi[a] - lo[a]) * 0.5 * s[a] for a in range(3))
-    c = geo.quat_rotate(q, o)
-    axes = [geo.quat_rotate(q, tuple(e[k] if a == k else 0.0 for a in range(3))) for k in range(3)]
-    ext = tuple(sum(abs(v[a]) for v in axes) for a in range(3))
-    centre = tuple(p[a] + c[a] for a in range(3))
-    return tuple(centre[a] - ext[a] for a in range(3)), tuple(centre[a] + ext[a] for a in range(3))
+    """`geo.ground.point_world_box` (moved there for stage 1, Task 24; this name stays for the fixture tool)."""
+    return G.point_world_box(pts, i)
 
 
 def footprint(sets):
-    """`Subgraph_8 Extract_Bounds` (`CombineAllInputsIntoSinglePoint`: every set merged, `CombinePoints` -- the
-    union of every point's own box, rotated and scaled) then `Subgraph_9 Trace_Bound_Footprint` (`CenterPlaneZ`:
-    the box's four corners at its middle height, counter-clockwise). Returns `(x0, y0, x1, y1, z)` or None.
-
-    Only the points that can reach an extreme are transformed: a point's box reaches at most sqrt(3) x its
-    largest half-size from its location, so the others are skipped (measured: the result equals the full
-    union; the demo's 263 364 terrain points are tilted up to ~17 degrees, which is why the footprint is
-    149 415.78 cm out where the points stop at 149 414.06)."""
-    sets = [s for s in sets if isinstance(s, Points) and len(s)]
-    if not sets:
-        return None
-    reach = 0.0
-    for s in sets:
-        for i in range(len(s)):
-            sc, lo, hi = s.scale[i], s.bounds_min[i], s.bounds_max[i]
-            r = max(max(abs(lo[a]), abs(hi[a])) * abs(sc[a]) for a in range(3))
-            if r > reach:
-                reach = r
-    reach *= SQRT3 * 2.0
-    lo_box = [math.inf] * 3
-    hi_box = [-math.inf] * 3
-    for a in range(3):
-        top = max(p[a] for s in sets for p in s.loc)
-        bottom = min(p[a] for s in sets for p in s.loc)
-        for s in sets:
-            for i, p in enumerate(s.loc):
-                if p[a] >= top - reach or p[a] <= bottom + reach:
-                    bmin, bmax = _world_box(s, i)
-                    for k in range(3):
-                        lo_box[k] = min(lo_box[k], bmin[k])
-                        hi_box[k] = max(hi_box[k], bmax[k])
-    # `CombinePoints` (`bCenterPivot`): the point at the box's centre, its bounds relative to it; then each
-    # corner by `ResetPointCenter` (`PCGPointHelpers::ResetPointCenter`: `Lerp(BoundsMin, BoundsMax, ratio)`,
-    # added to the location). In that order of operations all four official corners come out bit for bit.
-    centre = [_lerp(lo_box[k], hi_box[k], 0.5) for k in range(3)]
-    bmin = [lo_box[k] - centre[k] for k in range(3)]
-    bmax = [hi_box[k] - centre[k] for k in range(3)]
-    at = [[centre[k] + _lerp(bmin[k], bmax[k], t) for k in range(3)] for t in (0.0, 0.5, 1.0)]
-    return (at[0][0], at[0][1], at[2][0], at[2][1], at[1][2])
-
-
-def _lerp(a, b, t):
-    """`FMath::Lerp(A, B, Alpha)` = A + Alpha * (B - A)."""
-    return a + t * (b - a)
+    """`Subgraph_8 Extract_Bounds` + `Subgraph_9 Trace_Bound_Footprint` (`CenterPlaneZ`): the box's four corners
+    at its middle height. `geo.ground.bounds_footprint(sets, 0.5)` -- the helper moved there unchanged when stage 1
+    needed it with its `Top` plane (Task 24). `(x0, y0, x1, y1, z)` or None."""
+    return G.bounds_footprint(sets, 0.5)
 
 
 def footprint_polygon(fp):

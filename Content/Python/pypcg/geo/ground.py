@@ -7,11 +7,13 @@ and the engine source they call; the docstring on each function names the nodes 
 `fill_uniform`   `Fill_Areas_Uniformly` -> `Fill_Areas_Uniformly_CoreProcess` (53 nodes)
 `project_tile`   `/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix` (32 nodes)
 `rot_from_xy`    `PCGMetadataMakeRotator(MakeRotFromXY)` = `FRotationMatrix::MakeFromXY(X, Y).Rotator()`
+`bounds_footprint`  `Extract_Bounds` + `Trace_Bound_Footprint` (stage 18 first; moved here for stage 1, Task 24)
 """
 import math
 
 from .assets import _quat_of_matrix, quat_of
 from .plane import quat_rotate
+from .types import Points
 
 TILE_SPACING_FACTOR = 2.0          # the sampler's cell is 2 x PointExtents (Looseness 0)
 
@@ -520,3 +522,79 @@ def extract_open_segments(path, angle_deg):
             cuts.append(i)
     cuts.append(n - 1)
     return [pts[cuts[k]:cuts[k + 1] + 1] for k in range(len(cuts) - 1)]
+
+
+# ---- Extract_Bounds + Trace_Bound_Footprint (stage 18 first, stage 1 since Task 24) --------------
+SQRT3 = math.sqrt(3.0)
+PLANE_BOTTOM, PLANE_CENTER, PLANE_TOP = 0.0, 0.5, 1.0     # `PlanarSurface`: the z ratio `ResetPointCenter` uses
+
+
+def _point_quat(pts, i):
+    if pts.quat:
+        return tuple(pts.quat[i])
+    r = pts.rot[i]
+    return quat_of(*r) if any(r) else (0.0, 0.0, 0.0, 1.0)
+
+
+def point_world_box(pts, i):
+    """`FBox::TransformBy(FTransform)` of point i's own box: (min, max) in the world."""
+    q = _point_quat(pts, i)
+    s, lo, hi, p = pts.scale[i], pts.bounds_min[i], pts.bounds_max[i], pts.loc[i]
+    o = tuple((lo[a] + hi[a]) * 0.5 * s[a] for a in range(3))
+    e = tuple((hi[a] - lo[a]) * 0.5 * s[a] for a in range(3))
+    c = quat_rotate(q, o)
+    axes = [quat_rotate(q, tuple(e[k] if a == k else 0.0 for a in range(3))) for k in range(3)]
+    ext = tuple(sum(abs(v[a]) for v in axes) for a in range(3))
+    centre = tuple(p[a] + c[a] for a in range(3))
+    return tuple(centre[a] - ext[a] for a in range(3)), tuple(centre[a] + ext[a] for a in range(3))
+
+
+def _lerp(a, b, t):
+    """`FMath::Lerp(A, B, Alpha)` = A + Alpha * (B - A)."""
+    return a + t * (b - a)
+
+
+def bounds_footprint(sets, plane_z=PLANE_CENTER):
+    """`Extract_Bounds` (`CombineAllInputsIntoSinglePoint`: every set merged, `CombinePoints` -- the union of
+    every point's own box, rotated and scaled) then `Trace_Bound_Footprint` with `ScaleFactor` 1 and no
+    `PositionOffset`: the box's four corners at the height `plane_z` names (`PlanarSurfacesPointOffsetsTable`:
+    0 Bottom, 0.5 CenterPlaneZ, 1 Top). Returns `(x0, y0, x1, y1, z)` or None.
+
+    Only the points that can reach an extreme are transformed: a point's box reaches at most sqrt(3) x its
+    largest half-size from its location, so the others are skipped (measured: the result equals the full
+    union; stage 18's 263 364 final-terrain points are tilted up to ~17 degrees, which is why its footprint is
+    149 415.78 cm out where the points stop at 149 414.06; stage 1's base-terrain points are flat at -600 with
+    bounds +-1, so its footprint is +-149 415.0625 at the top, z -599). Moved unchanged from stage 18
+    (`s18_outer_forest.footprint`, Task 23) with the plane as a parameter (Task 24)."""
+    sets = [s for s in sets if isinstance(s, Points) and len(s)]
+    if not sets:
+        return None
+    reach = 0.0
+    for s in sets:
+        for i in range(len(s)):
+            sc, lo, hi = s.scale[i], s.bounds_min[i], s.bounds_max[i]
+            r = max(max(abs(lo[a]), abs(hi[a])) * abs(sc[a]) for a in range(3))
+            if r > reach:
+                reach = r
+    reach *= SQRT3 * 2.0
+    lo_box = [math.inf] * 3
+    hi_box = [-math.inf] * 3
+    for a in range(3):
+        top = max(p[a] for s in sets for p in s.loc)
+        bottom = min(p[a] for s in sets for p in s.loc)
+        for s in sets:
+            for i, p in enumerate(s.loc):
+                if p[a] >= top - reach or p[a] <= bottom + reach:
+                    bmin, bmax = point_world_box(s, i)
+                    for k in range(3):
+                        lo_box[k] = min(lo_box[k], bmin[k])
+                        hi_box[k] = max(hi_box[k], bmax[k])
+    # `CombinePoints` (`bCenterPivot`): the point at the box's centre, its bounds relative to it; then each
+    # corner by `ResetPointCenter` (`PCGPointHelpers::ResetPointCenter`: `Lerp(BoundsMin, BoundsMax, ratio)`,
+    # added to the location). In that order of operations all four official corners come out bit for bit.
+    centre = [_lerp(lo_box[k], hi_box[k], 0.5) for k in range(3)]
+    bmin = [lo_box[k] - centre[k] for k in range(3)]
+    bmax = [hi_box[k] - centre[k] for k in range(3)]
+    at = [[centre[k] + _lerp(bmin[k], bmax[k], t) for k in range(3)] for t in (0.0, 1.0)]
+    z = centre[2] + _lerp(bmin[2], bmax[2], plane_z)
+    return (at[0][0], at[0][1], at[1][0], at[1][1], z)
