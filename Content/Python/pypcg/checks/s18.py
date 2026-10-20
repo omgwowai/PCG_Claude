@@ -154,11 +154,22 @@ def scale_bounds(params, mega):
             float(params["ScaleMax"]) * 1.0 * off * (1.0 + r))
 
 
-def check_trees(trees, params, surface=None, mega=False, slack=1e-6):
+def scatter_keys(sets):
+    """The (x, y) of every scattered point, for `check_trees`' "trees are scattered points" (s18.md 5.3)."""
+    return {(p[0], p[1]) for s in sets for p in s.loc}
+
+
+def check_trees(trees, params, surface=None, mega=False, slack=1e-6, scatter=None):
     """The tree invariants on one assigned point set (`Trees`' last item): every `Asset` one of the call's eight
     meshes, the scale uniform and within `scale_bounds`, pitch and roll within +-2 degrees, z above -450 and, with
-    a surface, the terrain height under the tree within `Z_TOL_CM`."""
+    a surface, the terrain height under the tree within `Z_TOL_CM`; with `scatter` (`scatter_keys` of the first
+    node's sets), every tree at a scattered point's (x, y) -- the projection and the assignment move no point in x, y,
+    so the trees are a subset of the scatter (s18.md 5.3)."""
     f = []
+    if scatter is not None:
+        stray = sum(1 for p in trees.loc if (p[0], p[1]) not in scatter)
+        if stray:
+            f.append("%d trees stand where no point was scattered" % stray)
     paths = set(T.T13.MEGA if mega else T.T13.FOREST)
     assets = trees.attrs.get("Asset") or []
     if len(assets) != len(trees) or any(a not in paths for a in assets):

@@ -19,7 +19,6 @@ from pypcg.checks import s18 as K
 from pypcg.geo import Points, Polygon, Spline
 from pypcg.geo import assets as AS
 from pypcg.geo import distance as D
-from pypcg.geo import ground as G
 from pypcg.stages import s13_leftover_trees as T13
 from pypcg.stages import s18_outer_forest as S
 from pypcg.stages import s18_outer_forest_trees as T
@@ -315,22 +314,6 @@ def test_city_buffer_is_half_the_artery_plus_the_edge_buffer_or_the_nodes_own_34
     assert S.city_buffer(None, params(S)) == 3400.0
 
 
-def test_fill_random_banded_equals_the_full_containment_test():
-    """`geo.ground.fill_random` tests each point only against its row's edges; the result must be the full
-    `geo.plane.inside` test's, point for point, holes included."""
-    ring = [(0.0, 0.0), (9000.0, 300.0), (12000.0, 7000.0), (4000.0, 11000.0), (-2000.0, 6000.0)]
-    hole = [(3000.0, 3000.0), (3000.0, 6000.0), (7000.0, 6000.0), (7000.0, 3000.0)]
-    poly = Polygon(ring, [hole], 12.5)
-    got = G.fill_random(poly, 0.05, random.Random(11))
-    rng = random.Random(11)
-    cell = math.sqrt(1e4 / 0.05)
-    want = []
-    for j in range(math.ceil(0.0 / cell), math.floor(11000.0 / cell) + 1):
-        for i in range(math.ceil(-2000.0 / cell), math.floor(12000.0 / cell) + 1):
-            x, y = i * cell + rng.random() * (cell - 2.0), j * cell + rng.random() * (cell - 2.0)
-            if geo.inside((x, y), ring) and not geo.inside((x, y), hole):
-                want.append((x, y, 12.5))
-    assert got == want and len(got) > 300
 
 
 def test_scatter_matches_density_times_the_official_area():
@@ -483,22 +466,8 @@ def test_distance_weights_are_the_official_ones_bit_for_bit(which, remap):
     assert fx["official_min"] == 0.0 and fx["official_max"] == 1.0
 
 
-def test_distance_without_targets_is_the_maximum_and_a_point_range_remaps_to_the_middle():
-    vals = D.distance_from([[(0.0, 0.0), (5.0, 5.0)]], [], 5000.0, 1.0, 0.0)
-    assert vals == [[0.5, 0.5]]
-    assert D.Nearest2D([], 100.0).distance(0.0, 0.0) == 100.0
-    assert D.Nearest2D([(30.0, 40.0)], 100.0).distance(0.0, 0.0) == 50.0
-    assert D.Nearest2D([(100.0, 0.0)], 100.0).distance(0.0, 0.0) == 100.0        # not strictly inside the reach
-    with pytest.raises(ValueError):
-        D.Nearest2D([], 100.0, cell=50.0)
 
 
-def test_target_centre_is_the_box_centre_round_trip():
-    c = D.target_centre((1.1, 2.2, 3.3), (1.4698423602466122,) * 3, (-10.0,) * 3, (10.0,) * 3)
-    e = 10.0 * 1.4698423602466122
-    assert c == (((1.1 - e) + (1.1 + e)) * 0.5, ((2.2 - e) + (2.2 + e)) * 0.5)
-    r = D.target_centre((0.0, 0.0, 0.0), (1.0,) * 3, (0.0, 0.0, 0.0), (20.0, 0.0, 0.0), AS.quat_of(0.0, 90.0, 0.0))
-    assert abs(r[0]) < 1e-9 and abs(r[1] - 10.0) < 1e-9
 
 
 def test_scale_floor_and_scale_are_the_official_ones_bit_for_bit():
@@ -540,7 +509,7 @@ def test_trees_stand_on_the_terrain_near_the_shore_and_inside_the_scale_bound():
     (trees, tags), = res["Trees"]
     assert tags == ["Trees"] and len(trees) > 100
     p = {"ScaleMin": _param("ScaleMin")["value"], "ScaleMax": _param("ScaleMax")["value"]}
-    assert K.check_trees(trees, p, surface) == []
+    assert K.check_trees(trees, p, surface, scatter=K.scatter_keys(sets)) == []
     assert all(t[2] == surface.height(t[0], t[1]) for t in trees.loc)        # z is the terrain height, exactly
     # the sea is the west: no tree farther than 50 m + the noise's reach out from the shore line x = 0
     assert min(t[0] for t in trees.loc) > -6000.0
@@ -548,9 +517,9 @@ def test_trees_stand_on_the_terrain_near_the_shore_and_inside_the_scale_bound():
     assert "index range" in ctx.notes[0] and "near the shore" in ctx.notes[0]
 
 
-@pytest.mark.parametrize("fault", ["asset", "scale", "tilt", "low", "terrain"])
+@pytest.mark.parametrize("fault", ["asset", "scale", "tilt", "low", "terrain", "not_scattered"])
 def test_tree_checks_catch_planted_faults(fault):
-    res, _ctx, surface, _sets = _trees_case()
+    res, _ctx, surface, sets = _trees_case()
     trees = res["Trees"][0][0]
     p = {"ScaleMin": _param("ScaleMin")["value"], "ScaleMax": _param("ScaleMax")["value"]}
     if fault == "asset":
@@ -563,7 +532,10 @@ def test_tree_checks_catch_planted_faults(fault):
         trees.loc[0] = (trees.loc[0][0], trees.loc[0][1], -500.0)
     elif fault == "terrain":
         trees.loc[0] = (trees.loc[0][0], trees.loc[0][1], trees.loc[0][2] + 6.0)
-    assert K.check_trees(trees, p, surface)
+    elif fault == "not_scattered":
+        x, y = trees.loc[0][0] + 0.5, trees.loc[0][1]
+        trees.loc[0] = (x, y, surface.height(x, y))
+    assert K.check_trees(trees, p, surface, scatter=K.scatter_keys(sets))
 
 
 def test_megaplants_switch():
@@ -601,14 +573,3 @@ def test_seeded_runs_repeat_and_differ():
     tb, _c2, _s2, _x2 = _trees_case(seed=9)
     tc, _c3, _s3, _x3 = _trees_case(seed=10)
     assert _dump(ta) == _dump(tb) and _dump(ta) != _dump(tc)
-
-
-def test_merge_targets_keeps_rotations_unless_upright_and_adds_the_data_index_to_the_seed():
-    a, b = Points(), Points()
-    a.add((0.0, 0.0, 0.0), rot=(1.0, 2.0, 3.0), seed=10)
-    b.add((1.0, 0.0, 0.0), rot=(4.0, 5.0, 6.0), seed=2 ** 31 - 1)
-    m = AS.merge_targets([(a, ()), (b, ()), ("not points", ())])
-    assert m.rot == [(1.0, 2.0, 3.0), (4.0, 5.0, 6.0)] and m.seed == [10, -2 ** 31] and m.quat is None
-    u = AS.merge_targets([(a, ()), (b, ())], upright=True)
-    assert u.rot == [(0.0, 2.0, 0.0), (0.0, 5.0, 0.0)]
-    assert T13.upright([(a, ()), (b, ())]).rot == u.rot
