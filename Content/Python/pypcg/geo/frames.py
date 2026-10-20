@@ -488,6 +488,81 @@ def rotate_in_frame(points, yaw_deg, origin):
     return out
 
 
+def copy_shape(source, turn_deg, centre):
+    """`Create_Spline_Shape`'s `CopyPoints_0`: one source ring copied once per point of the PrimaryInput,
+    each copy turned by a fixed angle and moved to the copy's centre.
+
+    Measured on stage 15's taps (2026-10-20, `Saved/t22/tap15_b.json`), index for index against the
+    tapped copies and about each copy's own centroid:
+
+      * the six 7 m squares (`Subgraph_9`, 700) are the `(-350,-350) (-350,350) (350,350) (350,-350)`
+        ring turned by `yaw - 90` -- every one of the 24 tapped vertices, 0 cm;
+      * the six 25 m hexagons (`Subgraph_2`, Width 2500) are stage 4's hexagon (radius Width / 2 = 1250,
+        its `ENGINE_DEG` order) turned by `60 - yaw` -- every one of the 36 tapped vertices, 1.6e-12 cm.
+        A regular hexagon is invariant under a 60 degree turn with an index shift, and all six yaws are
+        multiples of 60, so the SIGN of the yaw term cannot be separated from that shift for this shape:
+        `60 - yaw` is the form that reproduces the tapped order, and it is what the stage uses.
+
+    What decides the copy's POSITION is not the PrimaryInput point itself: the hexagons' centroids are
+    the inner ring's vertices (4247.2233 cm out, its circumradius) while the squares' are the six
+    `Place_Point_AtCenter` points. So `centre` is the copy's centroid, measured from the graph's own
+    output -- a continuation that needs the rule from the point alone must use each shape's own radius
+    (square: the point; hexagon: the point pushed 3598.2032 cm out from the ring centre)."""
+    r = math.radians(turn_deg)
+    c, s = math.cos(r), math.sin(r)
+    return [(source[k][0] * c - source[k][1] * s + centre[0],
+             source[k][0] * s + source[k][1] * c + centre[1]) for k in range(len(source))]
+    r = math.radians(turn_deg)
+    c, s = math.cos(r), math.sin(r)
+    return [(source[k][0] * c - source[k][1] * s + centre[0],
+             source[k][0] * s + source[k][1] * c + centre[1]) for k in range(len(source))]
+
+
+def sample_on_spline(points, spacing, closed=True):
+    """`Place_OnSpline`'s `SplineSampler` in `Distance` mode with `FitToCurve` (stage 15's tree ring).
+
+    Measured 2026-10-20 (`Saved/t22/tap15_b.json`, `u18_tree_pts`): `N = int(L / spacing)` samples at
+    `L / N` apart, the first ON the spline's LAST control point, walking BACKWARDS through the control
+    points (the ring's edge 5 -> 4 -> 3 ...), so each sample's yaw is its edge's direction + 90 degrees.
+    44 samples on a 44 535.898 cm ring, 1012.1795 cm apart, every position within 0.005 cm of the tap.
+
+    Returns `[(x, y, yaw_deg)]`, the yaw normalised to (-180, 180] as the tapped rotators are."""
+    pts = [(float(p[0]), float(p[1])) for p in points]
+    n = len(pts)
+    if n < 2 or spacing <= 0:
+        return []
+    segs = []
+    order = list(range(n - 1, -1, -1)) if closed else list(range(n))
+    total = 0.0
+    for a, b in zip(order, order[1:] + ([order[0]] if closed else [])):
+        p, q = pts[a], pts[b]
+        length = math.dist(p, q)
+        segs.append((p, q, length, total, math.degrees(math.atan2(q[1] - p[1], q[0] - p[0]))))
+        total += length
+    count = int(total / spacing)
+    if count <= 0:
+        return []
+    step = total / count
+    out = []
+    i = 0
+    for k in range(count):
+        d = k * step
+        # The cursor only ever moves forward, and a sample exactly ON a vertex belongs to the NEXT edge:
+        # the sampler walks the spline once (measured -- sample 22 of the tree ring sits on the ring's
+        # first vertex and takes the following edge's direction).
+        while i < len(segs) - 1 and d >= segs[i][3] + segs[i][2] - SMALL:
+            i += 1
+        p, q, length, start, yaw = segs[i]
+        t = 0.0 if length <= 0 else (d - start) / length
+        y = yaw + 90.0
+        while y > 180.0:
+            y -= 360.0
+        while y <= -180.0:
+            y += 360.0
+        out.append((p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1]), y))
+    return out
+
+
 def spline_of(polygon):
     """A ring as the closed linear spline `PrepareOutputs_ClosedSplinesAndSplines` publishes: the polygon's
     outer vertices (its `ToPoint` reads, z included, one z per vertex) at the polygon's own rotation

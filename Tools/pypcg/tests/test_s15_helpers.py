@@ -86,3 +86,92 @@ def test_spline_of_prefers_the_engine_vertices():
     assert F.spline_of(poly) == [(0.0, 0.0, 2.0), (10.0, 0.0, 2.0), (9.0, 10.0, 2.0)]
     assert F.spline_of(Polygon([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)], [], 7.0)) == [
         (0.0, 0.0, 7.0), (10.0, 0.0, 7.0), (10.0, 10.0, 7.0)]
+
+
+# ---- Subgraph_2 / Subgraph_9: Create_Spline_Shape's CopyPoints_0 (blocker 1) -----------------------
+def hexagon(radius=1250.0):
+    """Stage 4's 6-gon about its own origin: the ENGINE_DEG vertex order (s04_main_tower_footprint)."""
+    out = []
+    for k in range(6):
+        a = math.radians(120.0 - 60.0 * k)
+        out.append((-(radius * math.cos(a)), -(radius * math.sin(a))))
+    return out
+
+
+SQUARE = [(-350.0, -350.0), (-350.0, 350.0), (350.0, 350.0), (350.0, -350.0)]
+
+
+def centroid(ring):
+    return (sum(p[0] for p in ring) / len(ring), sum(p[1] for p in ring) / len(ring))
+
+
+def test_copy_shape_reproduces_the_six_squares():
+    """`Subgraph_9` (700, Ngon 4) on the six outline centres: turn `yaw - 90` about the copy's centroid,
+    0 cm on all 24 tapped vertices."""
+    fx = fixture()
+    assert len(fx["copy"]["sq"]) == 6
+    for i, (yaw, tapped) in enumerate(zip(fx["copy"]["centre_yaws"], fx["copy"]["sq"])):
+        got = F.copy_shape(SQUARE, yaw - 90.0, centroid(tapped))
+        assert _maxdiff([(p[0], p[1], 0.0) for p in got], [(p[0], p[1], 0.0) for p in tapped]) <= 1e-9, i
+
+
+def test_copy_shape_reproduces_the_six_hexagons():
+    """`Subgraph_2` (Width 2500, Ngon 6) on the six outline centres: stage 4's hexagon turned by
+    `60 - yaw` about the copy's centroid, every one of the 36 tapped vertices to 1.6e-12 cm."""
+    fx = fixture()
+    assert len(fx["copy"]["hex"]) == 6
+    src = hexagon(fx["copy"]["hex_radius"])
+    for i, (yaw, tapped) in enumerate(zip(fx["copy"]["centre_yaws"], fx["copy"]["hex"])):
+        got = F.copy_shape(src, 60.0 - yaw, centroid(tapped))
+        assert _maxdiff([(p[0], p[1], 0.0) for p in got], [(p[0], p[1], 0.0) for p in tapped]) <= 1e-9, i
+
+
+def test_the_hexagon_copies_sit_on_the_inner_ring():
+    """The copies' centres are not the PrimaryInput points: the hexagons sit on the inner ring's
+    vertices (its circumradius, 4247.2233), to 1e-9 cm."""
+    fx = fixture()
+    inner = fx["copy"]["inner_ring"]
+    for i, tapped in enumerate(fx["copy"]["hex"]):
+        c = centroid(tapped)
+        assert min(math.dist(c, p) for p in inner) <= 1e-9, i
+
+
+def test_the_two_shapes_turn_by_different_shape_constants():
+    """The turns are `yaw - 90` (4-gon) and `60 - yaw` (6-gon). The 6-gon's is only fixed up to an index
+    shift -- a regular hexagon repeats every 60 degrees and every yaw here is a multiple of 60 -- so what
+    this pins is the SQUARE's turn, which no shift can absorb (the square repeats every 90)."""
+    fx = fixture()
+    for i, (yaw, tapped) in enumerate(zip(fx["copy"]["centre_yaws"], fx["copy"]["sq"])):
+        got = F.copy_shape(SQUARE, yaw - 90.0, centroid(tapped))
+        assert _maxdiff([(p[0], p[1], 0.0) for p in got], [(p[0], p[1], 0.0) for p in tapped]) <= 1e-9, i
+
+
+# ---- PlaceTreesOnSpline (blocker 3) -----------------------------------------------------------------
+def test_sample_on_spline_reproduces_the_tree_ring():
+    """`Place_OnSpline` (`Spacing` 1000, `FitToCurve`): 44 samples, the first on the ring's LAST vertex,
+    walking backwards, every position within 0.005 cm and every yaw the edge's direction + 90."""
+    fx = fixture()
+    trees = fx["trees"]
+    got = F.sample_on_spline([(p[0], p[1]) for p in trees["ring"]], trees["spacing"])
+    assert len(got) == trees["n"] == 44
+    assert max(math.dist(p[:2], q[:2]) for p, q in zip(got, trees["points"])) <= 0.005
+    assert [p[2] for p in got] == pytest.approx([r[1] for r in trees["rot"]], abs=1e-9)
+
+
+def test_sample_on_spline_spacing_is_the_length_over_the_count():
+    """`N = int(L / d)` and `L / N` apart -- 44 535.898 / 44 = 1012.1795 cm."""
+    fx = fixture()
+    ring = [(p[0], p[1]) for p in fx["trees"]["ring"]]
+    length = sum(math.dist(ring[i], ring[(i + 1) % 6]) for i in range(6))
+    got = F.sample_on_spline(ring, 1000.0)
+    assert len(got) == int(length / 1000.0)
+    assert math.dist(got[0][:2], got[1][:2]) == pytest.approx(length / 44.0, abs=1e-6)
+
+
+def test_sample_on_spline_of_a_short_spline_is_empty():
+    """`N = int(L / d)` on an OPEN path shorter than one spacing is 0: no sample at all. A CLOSED one
+    walks back along its second edge, so its length is the whole loop and not one side."""
+    assert F.sample_on_spline([(0.0, 0.0), (500.0, 0.0)], 1000.0, closed=False) == []
+    assert F.sample_on_spline([(0.0, 0.0)], 1000.0) == []
+    assert len(F.sample_on_spline([(0.0, 0.0), (500.0, 0.0)], 1000.0)) == 1
+
