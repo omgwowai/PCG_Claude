@@ -10,6 +10,9 @@ Rulings applied over the Task 27 brief (ledger T27a-e):
   T27f  stage 8's box is the union of the city box and the town highway splines' own extent, each plus
         200 m: the layout runs the highway pair past the city on purpose (test_highways_cut_the_north_east_
         corner_30_m_apart); a stage that read the demo's whole city (~-120 000..140 000) still fails.
+  T27i  stage 11 requires a TL mesh only when it published MediumRooftops: TL is one of ~20 styles of the
+        Medium list only (the Small and Large lists carry none), so the rule records TL present / absent as a
+        note and fails only when Medium buildings exist and none of them is TL.
   T27d  the lake bed is written by Write_MeshTerrain as a SimpleWriteModifier component (s16.md section 0;
         Saved/Reports/v2/s16/official.json instances.components: SimpleWriteModifier 1).
 """
@@ -31,7 +34,7 @@ RULES = {
     9: {"tags": ["Lots", "reservedLots", "SmallDistrictsBldgFootprints", "UnderHighway"], "bbox": True,
         "upstream": {"Districts": ["SmallDistricts"], "Roads": ["RoadFootprints"], "Highways": ["Highway"]}},
     10: {"min_instances": 1, "bbox": True, "upstream": {"Lots": ["Lots", "reservedLots"]}},
-    11: {"min_instances": 1, "bbox": True, "meshes_any": ["/Game/Building/TL/"],
+    11: {"min_instances": 1, "bbox": True, "meshes_any_if_tag": {"MediumRooftops": ["/Game/Building/TL/"]},
          "tags": ["SmallRooftops"], "upstream": {"Lots": ["SmallDistrictsBldgFootprints"]}},
     12: {"min_instances": 1, "bbox": True, "upstream": {"Buildings": ["SmallRooftops"]}},
     13: {"min_instances": 1, "bbox": True, "upstream": {"Lots": ["reservedLots"]}},
@@ -128,6 +131,12 @@ def check(stage, rec, upstream, town_bbox):
     meshes = rec.get("instances", {}).get("per_mesh", {})
     if rule.get("meshes_any") and not any(any(s in m for m in meshes) for s in rule["meshes_any"]):
         failures.append("no mesh matching %s" % rule["meshes_any"])
+    for tag, subs in rule.get("meshes_any_if_tag", {}).items():
+        found = any(any(s in m for m in meshes) for s in subs)
+        notes.append("%s %s (%s %s)" % (subs, "present" if found else "absent", tag,
+                                         "published" if tag in tags else "not published"))
+        if tag in tags and not found:
+            failures.append("no mesh matching %s although %s were published" % (subs, tag))
     for s in rule.get("meshes_all", []):
         if not any(s in m for m in meshes):
             failures.append("no mesh matching %s" % s)

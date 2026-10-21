@@ -48,11 +48,31 @@ def test_zero_instances_fail_for_generating_stages():
     assert C.check(12, rec(instances=0), {"Buildings": rec(tags=["SmallRooftops"])}, BOX)["status"] == "fail"
 
 
-def test_buildings_need_tl():
+def test_buildings_need_tl_only_when_medium_buildings_exist():
+    # T27i: TL is one of ~20 styles of the Medium list only, so it is required only with MediumRooftops.
     up = {"Lots": rec(tags=["SmallDistrictsBldgFootprints"])}
-    # (the brief's version omitted the SmallRooftops tag stage 11's own rule requires)
-    assert C.check(11, rec(tags=["SmallRooftops"], meshes={"/Game/Building/CH/Kit_A": 5}), up, BOX)["status"] == "fail"
-    assert C.check(11, rec(tags=["SmallRooftops"], meshes={"/Game/Building/TL/SM_TL_Wall": 5}), up, BOX)["status"] == "ok"
+    ch, tl = {"/Game/Building/CH/Kit_A": 5}, {"/Game/Building/TL/SM_TL_Wall": 5, "/Game/Building/CH/Kit_A": 5}
+    v = C.check(11, rec(tags=["SmallRooftops", "MediumRooftops"], meshes=ch), up, BOX)
+    assert v["status"] == "fail" and any("MediumRooftops" in f for f in v["failures"])
+    v = C.check(11, rec(tags=["SmallRooftops", "MediumRooftops"], meshes=tl), up, BOX)
+    assert v["status"] == "ok" and any("present" in n for n in v["notes"])
+    # no Medium buildings: TL absent is a note, not a failure (the first town districts, all Small)
+    v = C.check(11, rec(tags=["SmallRooftops"], meshes=ch), up, BOX)
+    assert v["status"] == "ok" and any("absent" in n and "not published" in n for n in v["notes"])
+
+
+def test_town_district_thresholds_give_all_three_classes():
+    # T27h: the town's eight measured district areas (stage 6, 2026-10-21) under the town's overrides.
+    from pypcg.profiles import town
+    from pypcg.stages import s06_districts as S6
+    areas = [78156, 85469, 88871, 89316, 100118, 103242, 138532, 140042]
+    params = {n: p.default for n, p in S6.PARAMS.items()}
+    params.update({"Dividable_district_Limit": 77499.317359})          # the template copy's own value
+    params.update(town.COMPONENT_OVERRIDES["PCG_3_1_1_Districts"])
+    classes = [S6.classify(a, params) for a in areas]
+    assert classes.count("SmallDistricts") >= 2 and classes.count("MediumDistricts") >= 2
+    assert classes.count("LargeDistricts") >= 1 and "UndividableDistricts" not in classes
+    assert (classes.count("SmallDistricts"), classes.count("MediumDistricts"), classes.count("LargeDistricts")) == (4, 2, 2)
 
 
 def test_terrain_unmeasured_is_not_a_failure():
