@@ -33,10 +33,12 @@ BINDINGS = os.path.join(_PY, "pypcg", "profiles", "town_bindings.json")
 
 
 def _level_name(les):
-    try:
-        return les.get_current_level().get_name()
-    except AttributeError:
-        return str(les.get_current_level()).rsplit(".", 1)[-1]
+    """The current map's short name ("L_PyTown"). The current ULevel is always named PersistentLevel, so
+    the map name comes from its path (/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel)."""
+    lvl = les.get_current_level()
+    if lvl is None:
+        return ""
+    return lvl.get_path_name().split(":", 1)[0].rsplit(".", 1)[-1]
 
 
 def _on_town(les):
