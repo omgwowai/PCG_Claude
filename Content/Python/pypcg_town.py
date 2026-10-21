@@ -142,15 +142,27 @@ def _component_bounds(actor):
 
 
 def phase_reset(args):
-    """cleanup_local on every volume, or with {"from": s} on stages s..18 only (a restart mid-run)."""
+    """cleanup_local on every volume, or with {"from": s} on stages s..18 only (a restart mid-run).
+
+    Ruling T28b: first turn regenerate_in_editor off on EVERY town volume (not only the cleaned ones).
+    `assign` leaves it on, and then any edit makes the volumes regenerate on their own and out of order."""
     from pypcg import census, stages
+    regen_off = 0
+    for v in census.volumes():
+        pc = v.get_component_by_class(unreal.PCGComponent)
+        if pc.get_editor_property("regenerate_in_editor"):
+            pc.set_editor_property("regenerate_in_editor", False)
+            regen_off += 1
     if "from" in args:
         vols = [census.volume(s[0]) for s in stages.STAGES if s[0] >= int(args["from"])]
     else:
         vols = census.volumes()
     for v in vols:
         v.get_component_by_class(unreal.PCGComponent).cleanup_local(True)
-    return {"cleaned": len(vols), "labels": sorted(str(v.get_actor_label()) for v in vols)}
+    still_on = [str(v.get_actor_label()) for v in census.volumes()
+                if v.get_component_by_class(unreal.PCGComponent).get_editor_property("regenerate_in_editor")]
+    return {"cleaned": len(vols), "labels": sorted(str(v.get_actor_label()) for v in vols),
+            "regenerate_in_editor_turned_off": regen_off, "regenerate_in_editor_still_on": still_on}
 
 
 def phase_gen(args):
@@ -260,8 +272,117 @@ def phase_landed(args):
     return {"promoted": S.promote_variants(), "landed": _landed(S)}
 
 
+def _plausibility():
+    """spec 5.2: compare the town's densities with the official city's, from the V2 records of stages 6
+    and 11 (the official city's area and building count) and 6/7 (its road length).
+
+    Road length is the length of the road SPLINES the two stages publish: stage 6's artery / collector /
+    local road splines (stage 7's items are polygons and the terrain, length 0). Summing stage 7 alone, as
+    first drafted, gives 0 on both sides and the road check silently skips."""
+    from pypcg import town_checks
+    d = os.path.join(_REPO, "Saved", "Reports", "v2")
+
+    def road_m(items):
+        return sum(it["length_m"] for it in items if it.get("kind") == "spline")
+
+    off6 = _load(os.path.join(d, "s06", "official.json"), {"items": []})["items"]
+    off7 = _load(os.path.join(d, "s07", "official.json"), {"items": []})["items"]
+    official_area = sum(it["area_m2"] for it in off6)
+    official_roads = road_m(off6) + road_m(off7)
+    official_bldgs = sum(1 for it in _load(os.path.join(d, "s11", "official.json"), {"items": []})["items"])
+    p1 = _load(_pass_file(1), {})
+    t6 = p1.get("6", {}).get("record", {"items": []})["items"]
+    t7 = p1.get("7", {}).get("record", {"items": []})["items"]
+    town_area = sum(it["area_m2"] for it in t6)
+    town_bldgs = sum(1 for it in p1.get("11", {}).get("record", {"items": []})["items"])
+    town_roads = road_m(t6) + road_m(t7)
+    town = {"area_m2": town_area, "buildings": town_bldgs, "road_m": town_roads}
+    official = {"area_m2": official_area, "buildings": official_bldgs, "road_m": official_roads}
+    dens = {}
+    for key in ("buildings", "road_m"):
+        t, o = town[key] / (town_area / 1e6), official[key] / (official_area / 1e6)
+        dens[key + "_per_km2"] = {"town": t, "official": o, "ratio": t / o if o else None}
+    return {"failures": town_checks.plausibility(town, official), "town": town, "official": official,
+            "density": dens}
+
+
+# Ruling T28a: native nodes recorded as varying run to run. A pass-2 difference in one of these stages,
+# within its band, is "native run-to-run variation" and does not block the save; anything else does.
+#   stage 7   trap 58: three official gens 286 378 / 286 232 / 286 371 (span 146; one mesh 15 apart)
+#   stage 10  trap 77: one gen +11 vehicles each with a twin, one mesh -2 (net 20, per-mesh 24)
+#   stage 11  task-20 report: oracle runs 28 net, 111 per-mesh absolute (NYA_L3_E)
+# band = (max |net total difference|, max sum over meshes of |per-mesh difference|)
+NATIVE_BANDS = {7: (146, 146), 10: (22, 24), 11: (28, 111)}
+
+
+def _mesh_diff(a, b):
+    pa, pb = a["instances"]["per_mesh"], b["instances"]["per_mesh"]
+    diff = {m: [pa.get(m, 0), pb.get(m, 0)] for m in sorted(set(pa) | set(pb)) if pa.get(m, 0) != pb.get(m, 0)}
+    return diff, sum(abs(x - y) for x, y in diff.values())
+
+
+def _items_same(a, b):
+    from pypcg import v2
+    return v2.same({"items": a["items"], "instances": {"per_mesh": {}}},
+                   {"items": b["items"], "instances": {"per_mesh": {}}})
+
+
+def phase_finish(args):
+    from pypcg import stages, v2
+    plaus = _plausibility()
+    p1, p2 = _load(_pass_file(1), {}), _load(_pass_file(2), {})
+    rows, same_all, variation, blocking = [], True, [], []
+    for s in stages.STAGES:
+        a, b = p1.get(str(s[0])), p2.get(str(s[0]))
+        same = bool(a and b and v2.same(a["record"], b["record"]))
+        row_var = None
+        if a and b and not same:
+            diff, absdiff = _mesh_diff(a["record"], b["record"])
+            net = b["record"]["instances"]["total"] - a["record"]["instances"]["total"]
+            band = NATIVE_BANDS.get(s[0])
+            items_same = _items_same(a["record"], b["record"])
+            within = bool(band and items_same and abs(net) <= band[0] and absdiff <= band[1])
+            row_var = {"stage": s[0], "graph": s[1], "pass1": a["record"]["instances"]["total"],
+                       "pass2": b["record"]["instances"]["total"], "net": net, "per_mesh_abs": absdiff,
+                       "items_same": items_same, "band": band, "within_band": within,
+                       "differing_meshes": diff,
+                       "label": "native run-to-run variation" if within else "NOT within a recorded native band"}
+            (variation if within else blocking).append(row_var)
+        elif not (a and b):
+            blocking.append({"stage": s[0], "graph": s[1], "missing": [k for k, v in (("pass1", a), ("pass2", b)) if not v]})
+        same_all = same_all and same
+        rows.append({"stage": s[0], "graph": s[1], "title": s[3],
+                     "instances": a and a["record"]["instances"]["total"],
+                     "instances_pass2": b and b["record"]["instances"]["total"],
+                     "status": a and a["verdict"]["status"], "status_pass2": b and b["verdict"]["status"],
+                     "failures": a and a["verdict"]["failures"],
+                     "notes": a and a["verdict"]["notes"], "params": a and a.get("params"),
+                     "tags": a and sorted({t for it in a["record"]["items"] for t in it["tags"] if ":" not in t}),
+                     "meshes": a and len(a["record"]["instances"]["per_mesh"]), "shot": a and a.get("shot"),
+                     "deterministic": same, "variation": row_var})
+    all_ok = all(r["status"] in ("ok", "unmeasured") and r["status_pass2"] in ("ok", "unmeasured") for r in rows)
+    may_save = all_ok and not blocking and plaus["failures"] == []
+    census = {"_level": "/Game/PyPCG/L_PyTown",
+              "_note": "pass 1 numbers; deterministic = pass 2 per-mesh counts equal pass 1 (v2.same); "
+                       "variation = differences ruled native run-to-run variation (T28a)",
+              "all_ok": all_ok, "deterministic": same_all and plaus["failures"] == [],
+              "deterministic_within_native_bands": not blocking,
+              "native_variation": variation, "blocking": blocking, "plausibility": plaus, "stages": rows}
+    _save(os.path.join(_REPO, "Tools", "data", "pypcg_town_census.json"), census)
+    saved = False
+    if may_save and not args.get("dry_run"):
+        if _current_map() != LEVEL:
+            return {"abort": "current map is %s, not %s; not saving" % (_current_map(), LEVEL)}
+        saved = bool(unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).save_current_level())
+    return {"all_ok": all_ok, "deterministic": census["deterministic"], "may_save": may_save, "saved": saved,
+            "native_variation": variation, "blocking": blocking, "plausibility": plaus,
+            "rows": [{k: r[k] for k in ("stage", "graph", "instances", "instances_pass2", "status", "status_pass2",
+                                        "deterministic")} for r in rows]}
+
+
 PHASES = {"assign": lambda a: phase_assign(), "reset": phase_reset, "gen": phase_gen,
-          "read": phase_read, "shot": phase_shot, "overview": phase_overview, "landed": phase_landed}
+          "read": phase_read, "shot": phase_shot, "overview": phase_overview, "landed": phase_landed,
+          "finish": phase_finish}
 
 
 def run(args):
