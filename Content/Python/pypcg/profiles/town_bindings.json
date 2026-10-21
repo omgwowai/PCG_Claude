@@ -1,0 +1,15 @@
+{
+ "Buildings": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022648621",
+ "CentralParkFootprint": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.1_CentralPark_Footprint_2gania7pfoeg2_UAID_387C764983945CDF02_1296577182",
+ "Districts": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022637616",
+ "HighwaySpline2": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.Spline_UAID_387C76498394C5DE02_1195736599",
+ "HighwaySpline3": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.Spline_UAID_387C76498394C5DE02_1470179601",
+ "Highways": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839447DC02_1377087312",
+ "LandmarkPark": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.Spline_UAID_387C76498394B3DF02_1392886487",
+ "Lots": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022641618",
+ "MainTower": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839439DB02_1290570802",
+ "ParkingFootprint": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022646620",
+ "Parkings": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C76498394A5DF02_1886871024",
+ "Roads": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C76498394DCE702_1944600151",
+ "Terrain": "/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022633615"
+}
