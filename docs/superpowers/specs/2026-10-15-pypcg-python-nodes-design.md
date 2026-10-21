@@ -94,10 +94,16 @@ PARAMS = {"Dividable_district_Limit": 150000.0, "SmallMediumThreshold": 200000.0
 INPUTS = ("City", "Arteries")                    # 输入 pin
 OUTPUTS = ("ArteryRoads", "CollectorRoads", ...) # 输出 pin（= 输出 Tag）
 
-def run(inputs, params, seed):
-    """inputs: {pin: [Polygon | Spline | Points | ParamSet]}，都是纯 Python 结构（pypcg.geo）。
+def run(inputs, params, ctx):
+    """inputs: {pin: [(值, frozenset(tags))]}，值都是纯 Python 结构（pypcg.geo）。
+    params 不含 Seed；ctx.rng = random.Random(f"{Seed}:{STAGE}")，ctx.ops = 引擎布尔等服务。
     返回 {pin: [(数据, [tags])]}。不 import unreal。"""
 ```
+
+> **实施时的定稿（ruling N1，2026-10-15 计划）**：签名是 `run(inputs, params, ctx)`，不是上面初稿里的
+> `run(inputs, params, seed)`。host 构造 `random.Random(f"{Seed}:{STAGE}")` 放进 `ctx.rng`，引擎布尔
+> （GeometryScript）放进 `ctx.ops`（ruling N2），这样阶段文件里没有任何播种代码，离线测试注入 `FakeOps`。
+> 完整契约见 `Content/Python/pypcg/stage_api.py` 的模块说明。
 
 - **单一来源**：图描述（`pypcg/graphs/`）从阶段模块的 `PARAMS` / `INPUTS` / `OUTPUTS` 生成图参数、参数读取节点和 pin，不重复声明。
 - **host shim** `pypcg/host.py`：节点的内联脚本只有两行（见 §2.1），由 `host.run(stage, globals())` 完成：
@@ -126,7 +132,46 @@ def run(inputs, params, seed):
 | `pypcg/stages/sNN_*.py` | 18 个阶段的 `run()` | 大部分是（纯结构输入） |
 | `pypcg/graphs/sNN_*.py` | 18 张瘦身图的 DSL 描述：参数、输入、Python 节点、生成节点、连线 | 是（结构核对） |
 
-### 2.4 逐图替换清单（估计，"之后"含 Python 节点）
+### 2.4 逐图替换清单
+
+#### 实测（2026-10-21，取代下面的估计表）
+
+"官方"各列来自 `docs/pypcg/stages/sNN-brief.md`（`Tools/pypcg/port_brief.py` 按 IR 快照分类，2026-10-15）：
+参数读取、场景读取、carrier（只为保留节点转运数据的 reroute）、引擎生成、丢弃（调试 / 分区 / 死分支）、
+计入 Python。"瘦身图"两列是 18 张 `pypcg/graphs/sNN_*.py` 实际构建出的节点数（`to_ir(official)`，**不含**
+图自带的输入 / 输出节点；`pypcg_build_slim.py` 报告的 `nodes` 含这两个，即每行 +2），全部 `diffs: 0`。
+
+| # | 图 | 官方 | 参数 | 场景读取 | carrier | 生成 | 丢弃 | 计入 Python | 瘦身图节点 | 其中 Python 节点 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | Terrain | 20 | 2 | 4 | 0 | 1 | 0 | 13 | 13 | 2 |
+| 2 | BG_Buildings | 7 | 0 | 0 | 0 | 1 | 0 | 6 | 8 | 1 |
+| 3 | BG_Mountains | 7 | 0 | 1 | 0 | 1 | 0 | 5 | 9 | 1 |
+| 4 | MainTower_Footprint | 6 | 2 | 0 | 0 | 0 | 1 | 3 | 5 | 1 |
+| 5 | CentralPark_Footprint | 3 | 0 | 0 | 0 | 0 | 1 | 2 | 5 | 1 |
+| 6 | Districts | 75 | 10 | 2 | 0 | 0 | 18 | 45 | 13 | 1 |
+| 7 | Roads | 210 | 38 | 7 | 1 | 12 | 16 | 136 | 111 | 1 |
+| 8 | Highways | 34 | 1 | 3 | 0 | 2 | 5 | 23 | 23 | 1 |
+| 9 | Lots | 183 | 11 | 7 | 5 | 2 | 23 | 135 | 25 | 1 |
+| 10 | Ground | 121 | 0 | 9 | 6 | 6 | 24 | 76 | 36 | 1 |
+| 11 | Buildings | 176 | 14 | 4 | 3 | 23 | 35 | 97 | 53 | 3 |
+| 12 | Rooftops | 22 | 0 | 1 | 0 | 5 | 3 | 13 | 9 | 2 |
+| 13 | LeftOverLots | 135 | 3 | 8 | 6 | 8 | 15 | 95 | 24 | 3 |
+| 14 | Parkings | 81 | 0 | 2 | 2 | 3 | 6 | 68 | 8 | 2 |
+| 15 | MainTower_Visuals | 120 | 1 | 3 | 3 | 30 | 0 | 83 | 41 | 6 |
+| 16 | CentralPark_Visuals | 188 | 2 | 9 | 2 | 13 | 19 | 143 | 59 | 2 |
+| 17 | CityEdge | 18 | 0 | 2 | 0 | 1 | 5 | 10 | 7 | 1 |
+| 18 | OuterForest | 67 | 6 | 7 | 2 | 1 | 4 | 47 | 22 | 2 |
+| | **合计** | **1473** | **90** | **69** | **30** | **109** | **175** | **1000** | **471** | **32** |
+
+- **瘦身图 471 个节点** = 82 个参数 getter（每个参数一个，含自动加的 `Seed`）+ 保留的场景读取与生成节点
+  + 32 个 Python 节点 + 按裁决留原生的计算节点（见 `docs/pypcg-guide.md` "哪些留在原生"）+ 少量 reroute。
+- **"计入 Python" 的 1000 个不全进了 Python**：`port_brief.py` 把每个原语子图算作 1 个节点（实际内部可达
+  数百，例如 Roads 经 `Intersection_solving` 170 / `Crosswalks` 75 / 投影器 34），而按裁决留原生的部分
+  （阶段 1 的模糊与 GPU 投影、阶段 7 地形压平、阶段 9/10/16 的语法后点链、贴图读取、`@data` 适配器、阶段 16
+  的草地）仍算在这一列里。每张图实际进 Python 的数目与留原生的理由见各自的 `docs/pypcg/stages/sNN.md`。
+- Python 节点多于 1 个的图（1、11、12、13、14、15、16、18）都是因为引擎生成节点夹在中间（§2.1 末条）。
+
+#### 初稿估计（2026-10-15，保留备查）
 
 | # | 图 | 之前 | 之后 | 保留的引擎节点 | 进 Python | 难度 |
 |---|---|---|---|---|---|---|
@@ -152,7 +197,7 @@ def run(inputs, params, seed):
 
 - **之后的 ~298 个节点** = 89 个参数读取（合并重复后 87 个，加中央公园新增 2 个）+ 69 个输入节点（场景读取与数据资产加载）+ 119 个生成节点 + 约 21 个 Python 节点。
 - **之前的 1473 个节点的去向** = 87 个保留为参数读取 + 69 个输入 + 119 个生成 + 1121 个进 Python + 77 个丢弃（调试与分区分支）。
-- 这些数字都是估计，迁移时如实更新。
+- 这些数字都是估计；实测值见上方"实测"表。
 
 ---
 
@@ -207,6 +252,18 @@ def run(inputs, params, seed):
    - 无随机的步骤只跑 1 次。
 
 不通过时：先怀疑移植（对照官方 IR 的子图内部），再考虑放宽阈值。
+
+**实施时定下的三条比较口径**（计划 rulings，已写进 `pypcg/v2.py` 与 `pypcg_compare_stage.py`）：
+
+- **N3**：名字里含 `:` 的 tag（`Type:…`、`Primitive:…`）是 PCGPrimitives 的簿记，V2 一律忽略。
+- **T7c（取代"官方有的 Tag 都有"的字面读法）**：官方输出里还有大量**不含** `:` 的簿记 tag（`X`、`Y`、`City`、
+  `PCG Generated Component`、`Selected`/`Unselected`、`SubdivideAreasWith*` 等，Districts 的 79 个官方 item 全被覆盖），
+  照 N3 比会让完美的移植 79 处失败。所以 V2 **只比该步的"契约 tag"**：`port_brief.output_tags(ir)` 从官方 IR
+  抽出的、真正到达输出的 `AddTag`/`Write_Tag` 值。输出不带 tag 的步骤（1、4、5、13）整体作为一组 `(all)` 比较。
+- **N10**：官方 item 数 < 5 的 tag 跳过 **item 个数**和**总面积**两项（上表第 4 条的落实），但**总长**和**点数**照比——
+  一个 item 里可以有成千上万个点。
+
+阈值的每次改动（含按 tag 的覆写）都在 `Content/Python/pypcg/v2_thresholds.json` 与 `docs/pypcg-v2-thresholds.md` 里成对记录。
 
 ### 结构核对（取代旧 L1 / L2）
 

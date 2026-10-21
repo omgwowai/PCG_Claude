@@ -241,3 +241,30 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **77** | **阶段 10 的车辆数会偶发跳一次：同一份逐位相同的地形下，一次生成 220 150（`vehCar/vehTruck/vehVan` 多 11 辆、各带 `SM_All_Trans_*` 孪生，`uh4ocfafa` 少 2），之后三次生成读到的都是官方的 220 128（其中两次是同一图同一输入的重跑，ISM 组件对象被复用，无法用对象名证明是新生成）。** 实测 2026-10-20（Task 24 下游）：那次的两次读数（隔 70 s）都是 220 150；历史上官方 s10 记录全是 220 128，Task 17 的 `trial_slim_42` 也出现过一次 veh03 2496。另：探针图同设置重建后**立刻**读，读到的是上一轮输出对象（同名 `PCGMeshPartitionData_879`），要么等 20–30 s，要么比对输出对象名确认是新生成 | 下游出现小幅差异时先在同一输入上重跑该下游 stage（trap 58），并用输出对象路径名确认读到的是新生成；阶段 10 的车辆数差异不能单凭一次读数归给上游 |
 | **78** | **编辑器异常退出（崩溃、卡死被结束）后重启，会弹出「Restore Packages」；点了恢复，就会把 `Saved/Autosaves/` 里 demo 关卡的自动保存版本写回 demo 的真实外部 actor 文件——等于悄悄保存了 demo。** 实测 2026-10-19 11:37 与 2026-10-21 11:15 两次重启：`Plugins/CitySamplePCG/Content/__ExternalActors__/Levels/L_CitySamplePCG_Demo` 里 18 个文件被改写、11 个探针/调试 volume（`PCG_T10bTap`、`PCG_T12_AssignProbe`、`PCG_T24SlimTap` 等）被写成正式 actor；之后用 demo 作模板复制出的关卡也带上了它们。该目录被 `.gitignore` 忽略，git 救不回来；`E:\CitySample 5.8\Plugins\Experimental\CitySamplePCG\Content\` 里有逐字节一致的原件（其余 176 个文件与之完全相同） | 异常退出后**重启前**先把 `Saved/Autosaves/CitySamplePCG` 挪到 `Saved/Autosaves_bak_<日期>/`；重启时若仍弹「Restore Packages」，选不恢复。怀疑已被写回时，逐文件 `cmp` 对照 `E:\CitySample 5.8` 的同名文件，按时间戳找出被改写的，先备份到 `Saved/demo_restore_backup_<日期>/` 再拷回原件 |
 | **79** | **从 Python 先 `new_blank_map` 再 `load_level` 一个刚保存过的大关卡，会在拆掉空白世界时触发引擎断言把编辑器打崩**：`Assertion failed: !LevelList.Contains(TickTaskLevel)`（`TickTaskManager.cpp:1992`），栈在 `UEditorEngine::EditorDestroyWorld` → `IncrementalDestroyGarbage`。实测 2026-10-21 16:09：`L_PyTown`（54 万实例）保存后 `new_blank_map(False)` 成功，紧接着 `load_level("/Game/PyPCG/L_PyTown")` 崩溃；关卡文件已在崩溃前落盘、完好，重启后直接 `load_level` 一次即可、实例数与保存前逐卷一致 | 想验证"保存后能否重新加载"时，别在同一会话里先切空白地图再加载；关掉编辑器重开后直接 `load_level`。崩溃后**重启前**先按 trap 78 把 `Saved/Autosaves/` 下的 CitySamplePCG / Game 挪走 |
+
+## 9. PyPCG 计划实测汇总（2026-10-15 ~ 10-21，18 张图移植 + 18 步小镇）
+
+> 用法见 `docs/pypcg-guide.md`。本计划测出的事实大多已在第 8 节逐条记录（51–79），这里先给索引，再补 80–84 五条第 8 节没有的。
+
+| 主题 | 条目 |
+|---|---|
+| Python 节点本身：报错去哪看、热重载、`to_point_data` 弃用、点写出吞吐 | 54、55、56、57 |
+| 从 Python 读引擎数据：`HitResult` 读法、`k2_sample_point` 命中返回裸 `PCGPoint` / 未命中 `None`、getter 类型不符返回哨兵 | 51、52、36 |
+| 元数据条目：`import_text("(MetadataEntry=%d)")` 读、`set_name_attribute` 写 Name 属性 | 35、82 |
+| 构建瘦身图：IO 节点不能重置、未接线的动态 pin 会剔除整个节点 | 53、80 |
+| 生成与读取的时序：读早了、半新半旧、隔一次空跑、组件 seed、`regenerate_in_editor` 连锁 | 59、65、71、67、81 |
+| 官方图自身的不确定 / 原生节点的波动 | 58、77 |
+| 逐位复现：下游对末位敏感、引擎读回重算坐标、`unreal.Quat` / `unreal.Rotator` 舍成 float32、Clipper 环起点随坐标系、框架不同 | 62、72、73、74、64、68 |
+| 几何要带的"隐藏"属性：样条控制点旋转、建筑节点读足迹旋转、投影器按缩放放角点 | 63、75、69 |
+| 选资产 `Assign_Assets`：`UseIndexattribute` 与随机范围 | 70 |
+| 留原生的依据：GPU 投影复现不了末位、贴图缺失静默产出 0 | 76、66 |
+| V1 / V2 的盲点：surface 输入 `replayed` 恒为 0；份额是百分点、按 item 的比例不是面积比 | 60、84 |
+| 编辑器崩溃与恢复：生成中崩溃、Restore Packages 悄悄保存 demo、切关卡崩溃 | 61、78、79、83、40 |
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **80** | **Python Data Processor 的动态输入 pin 没接线，图编译器会把整个 Python 节点静默剔除**：动态输入 pin 对执行是"必需"的（`UPCGPythonDataProcessorSettings::IsInputPinRequiredByExecution`），缺一条边就整节点不跑、下游全空、不报错。Task 5 评审对照 `PCGGraphCompiler` 源码确认 | 瘦身图的每个 Python 输入 pin 都接线；`dsl.SlimGraph.to_ir` 对未接线的 pin 直接抛 `ValueError`（"an unwired dynamic pin culls the node"），不要绕过它。某个输入确实可能为空时，照样接一个场景读取，让它送空集合进来 |
+| **81** | **`set_graph` 会让开着 `regenerate_in_editor` 的组件立刻自己重新生成——18 个 volume 乱序并发，下游读到上游半成品。** 实测 2026-10-21（Task 27）：`pypcg_town.py assign` 给 18 个 volume 设图后，18 个组件在 05:35 各自跑了一遍，顺序不受控；之后两次 `reset {"from": 6}` 加一遍按序重生成才恢复。关掉之后（T28b，`reset` 把每个 PCG volume 的 `regenerate_in_editor` 设成 False），第二遍的每条 `PyPCG sNN` 日志都落在自己的 `gen` 窗口里。V2 的 `prepare` 与探针脚本也是同样处理 | 任何会 `set_graph` / 改覆写的脚本之后、按序生成之前，先把所有 volume 的 `regenerate_in_editor` 关掉；只用显式 `generate_local` 生成。要保存的关卡顺带检查 `GENERATE_ON_LOAD`（小镇的 `CentralPark_Footprint`、`Roads` 原本带着，已改为按需），否则加载时会自己乱序重生成 |
+| **82** | **`FPCGPoint::MetadataEntry` 在 Python 里不能 `set_editor_property`：它是 `VisibleAnywhere`（`CPF_EditConst`，`PCGPoint.h:63`），直接抛错。** 也不需要写它：对一个新 `PCGPoint` 第一次调用 `set_*_attribute(point, md, name, v)` 就会建条目（`InitializeOnSet`），`UPARAM(ref)` 的点链会把后续属性都写进同一条目。读某个条目的值时，先 `p = unreal.PCGPoint(); p.import_text("(MetadataEntry=%d)" % k)` 再用对应类型的 getter（第 35 条的路线）。Name 型属性用 `set_name_attribute` / `get_name_attribute`（类型不符时返回哨兵 `"None"`，第 36 条） | `pypcg.ue.convert` 的参数写出器不显式设 `metadata_entry`，读多个条目走 `import_text`；写 PCGDataAsset 另见记忆里的"复制后改"路线 |
+| **83** | **离开 demo 关卡的 `load_level` 也会崩：只跑过只读脚本、没有任何脏包，切到 `L_PyTown` 时在拆 demo 世界时触发同一个断言 `!LevelList.Contains(TickTaskLevel)`（`TickTaskManager.cpp:1992`，`FTickTaskManager::FreeTickTaskLevel` ← `ULevel::~ULevel` ← `UEditorEngine::Cleanse` ← `EditorDestroyWorld` ← `Map_Load`）。** 实测 2026-10-21 16:30（Task 29 回归）：`Lvl_ThirdPerson` → `Lvl_TL_Showcase` → demo 三次切换都正常，demo 里只读了 census 与外部 actor 包名，切回 `L_PyTown` 时编辑器退出；切换脚本在 `load_level` 前照 `tl_load_level.py` 的做法清掉了 Python 全局里持有 UObject 的变量，前一次调用确认 `get_dirty_map_packages()` 为空。和第 79 条同一个断言，说明不只是"先切空白地图"才会触发——离开大型 World Partition 关卡（demo 约 220 万实例、`L_PyTown` 54 万）本身就有风险 | 一个会话里尽量少切大关卡；必须验证多个关卡时把 demo 放在**最后**，验证完不切走，交给用户关编辑器。崩溃后**重启前**按第 78 条挪走 `Saved/Autosaves/`；本次没有脏包，`PackageRestoreData.json` 的 `Packages` 为空 |
+| **84** | **V2 里有两种容易被当成"面积比"的比例：** ① 每种 mesh 的份额阈值 `share_pp` 是**百分点**（绝对差：1.2 % → 2.0 % 是 +0.8 pp），不是相对变化；② `Ratio_Plaza_vs_Trees`、`DockRatio`、`PlazaReservationRatio` 这类参数喂的是 `Filter_RandomChoice`（`RandomPerDataset`），**按 item 抽伯努利**（每个地块 / 区域一次），不是按面积分。实测：阶段 13 的官方图换 5 个组件 seed，发布地块面积相对出货记录就是 -77..+57 %（移植 199 个 seed，出货记录在第 37–38 百分位），所以面积阈值放到 0.75；阶段 16 一次森林区随机二分决定 98 % 的实例，官方自己跨 5 个 seed 就是 -4.4..+26.1 %；阶段 9 出货记录的保留抽样是尾部事件（18 块庭院地块里 ≥6 块被保留，超几何概率约 1.7 %） | 判 V2 失败前先看该 tag 的量是不是"少数大 item 的伯努利和"：是的话用官方多 seed + 移植多 seed 的研究定阈值，并在 `docs/pypcg-v2-thresholds.md` 写清百分位；不要用"占比 × 总面积"去估期望 |

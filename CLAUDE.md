@@ -98,6 +98,28 @@ a `.py` file from `Content/Python/` in the editor embedded Python interpreter.
 - If a call returns `Unreal editor not connected on 127.0.0.1:8777`, the editor is not running with
   the plugin loaded — ask the user to launch it rather than retrying. A ghost process can also squat
   the port; check with `netstat -ano | findstr 8777`.
+- **After an editor crash or a killed editor, move `Saved/Autosaves/*` aside before relaunching**, and
+  answer "don't restore" if a *Restore Packages* dialog still appears. Restoring writes the autosaved
+  demo state over the demo level's real (gitignored) external-actor files under
+  `Plugins/CitySamplePCG/Content/__ExternalActors__/`; it happened twice (skill `traps.md` 78). The
+  byte-identical originals are in `E:\CitySample 5.8\Plugins\Experimental\CitySamplePCG\Content\`.
+  Switching away from a large level (the demo, `L_PyTown`) with `load_level` can itself crash the
+  editor, and `new_blank_map` before `load_level` does (traps 79, 83).
+
+**PyPCG** (guide: `docs/pypcg-guide.md`). The 18 City Sample stage graphs, ported so that their
+computation runs in Python Data Processor nodes. `Content/Python/pypcg/` holds the stage modules
+(`stages/sNN_*.py`, pure Python with no `unreal` import, `run(inputs, params, ctx)`), the slim-graph
+descriptions (`graphs/`), the node shim (`host.py`), the PCG-data adapters (`ue/`), the shared geometry
+(`geo/`), the V1 invariants (`checks/`), V2 (`v2.py`, `v2_thresholds.json`) and the census
+(`census.py`). The editor entry points are `Content/Python/pypcg_build_slim.py` (builds the graphs and
+must report `diffs: 0`), `pypcg_compare_stage.py` (V2 against the official graph in the demo level,
+never saved), `pypcg_v1_editor.py` (V1), and `pypcg_town_level.py` / `pypcg_town.py` (the 18-step town
+`/Game/PyPCG/L_PyTown`). `PyPCGTools` is a project plugin (Editor module) with 13 functions that
+Python cannot reach otherwise (graph IR export, parameter and pin writes, `MakePolygon2DData`,
+dynamic pins). `PCGPythonInterop` is an enabled engine plugin (Beta, editor-only), built into
+`E:\UnrealEngine`. The assets under `/Game/PyPCG/Slim`, `/Game/PyPCG/Town` and `/Game/PyPCG/Probe`
+are generated from those `.py` files: edit the `.py` and rebuild, never the asset in the graph
+editor.
 
 ## Build
 
@@ -117,13 +139,22 @@ a `.py` file from `Content/Python/` in the editor embedded Python interpreter.
 
 ## Tests
 
+Three suites:
+
+| Suite | Runs | Baseline |
+|---|---|---|
+| `pypcg` (Python form of the 18 stage graphs, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 752 passed, 18 skipped (the skips are the retired per-node drafts) |
+| `PyPCGTools` C++ automation | `UnrealEditor-Cmd.exe ... -ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
+| MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | |
+
 **C++ automation tests live in the `PyPCGTools` plugin** (`Plugins/PyPCGTools/Source/PyPCGTools/Private/Tests/`).
 Run them headlessly with `-ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); nine tests,
 all must report `Result={Success}`. The game module `PCG_Claude` still registers none, so a
 `PCG_Claude` filter matches nothing and exits **255**.
 
-The `pypcg` package (Python form of the 18 City Sample stage graphs) is tested offline with
-`C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` (system Python 3.14; the MCP venv lacks Pillow).
+The `pypcg` package is tested with system Python 3.14 because the MCP venv lacks Pillow.
+`C:\Python314\python.exe Tools/pypcg/baseline.py check` checks that the official CitySample assets
+under `Plugins/CitySamplePCG/Content` keep their recorded mtime and size.
 
 The MCP server's own tests run against the project venv from the repo root:
 
