@@ -96,14 +96,22 @@ def outline_class(paths, width, ops):
 
 
 def intersection_planes(ribbons, expand, ops):
-    """STEP 3: the `Loop_0` sweep, then `Subgraph_151`'s expansion. `ribbons` is `[Polygon]`."""
-    rings = [p.outer for p in ribbons]
+    """STEP 3: the `Loop_0` sweep, then `Subgraph_151`'s expansion. `ribbons` is `[Polygon]`.
+
+    Each ribbon is intersected as the whole polygon, holes included: `Polygon2DOperation` works on the
+    Polygon2D data, so a closed ring's band (the City outline, `Transform_Outline`'s `ForceClosed`
+    branch) covers its band only, not the disk inside it. The holes go in as their own rings; the
+    booleans fill NonZero and the engine returns holes clockwise, so they subtract (probed 2026-10-21,
+    `pyg_probe_t27_holes.py`). Reading only the outer ring made the town's City band intersect every
+    road inside the city: one 70 ha "intersection" where the official primitive gives 107 planes
+    (Task 27, ruling T27g). With no holed ribbon -- the demo's input -- the rings are the same as before."""
+    rings = [[list(p.outer)] + [list(h) for h in p.holes] for p in ribbons]
     if len(rings) < 2:
         return []
     pieces = []
-    for i, ring in enumerate(rings):
-        others = [list(r) for j, r in enumerate(rings) if j != i]
-        pieces += ops.intersection([list(ring)], others)
+    for i, own in enumerate(rings):
+        others = [r for j, rs in enumerate(rings) if j != i for r in rs]
+        pieces += ops.intersection(own, others)
     if not pieces:
         return []
     if expand <= 0.0:

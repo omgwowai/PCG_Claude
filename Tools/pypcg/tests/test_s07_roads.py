@@ -403,3 +403,28 @@ def test_the_three_width_attributes_reach_the_output_node():
     assert feeds_in[artery["name"]] == {collector["name"]}, "the artery node must take the collector's output"
     assert feeds_in[collector["name"]] == {local["name"]}, "the collector node must take the local one's output"
     assert feeds_in[local["name"]], "the local-width node has no input: the chain does not start at AddTags_1"
+
+
+def test_intersection_planes_intersect_whole_polygons_holes_included():
+    """T27g (Task 27): a closed ring's band (the City outline) is a polygon with a hole. The loop
+    intersects each ribbon as the whole Polygon2D, so the hole must reach the boolean -- on its own
+    side and among the others. Reading only the outer ring turned the town's City band into a disk
+    and every road inside it into one 70 ha intersection."""
+    calls = []
+
+    class Rec:
+        def intersection(self, a, b):
+            calls.append((a, b))
+            return []
+
+    band = Polygon([(0, 0), (1000, 0), (1000, 1000), (0, 1000)], [[(200, 200), (200, 800), (800, 800), (800, 200)]])
+    road = Polygon([(400, -100), (600, -100), (600, 1100), (400, 1100)])
+    SEC.intersection_planes([band, road], 50.0, Rec())
+    own_band, others_band = calls[0]
+    own_road, others_road = calls[1]
+    assert own_band == [list(band.outer), list(band.holes[0])] and others_band == [list(road.outer)]
+    assert own_road == [list(road.outer)] and others_road == [list(band.outer), list(band.holes[0])]
+    # without holes the rings are what they always were
+    calls.clear()
+    SEC.intersection_planes([road, Polygon(list(band.outer))], 50.0, Rec())
+    assert calls[0] == ([list(road.outer)], [list(band.outer)])
