@@ -142,8 +142,12 @@ def _component_bounds(actor):
 
 
 def phase_reset(args):
-    from pypcg import census
-    vols = census.volumes()
+    """cleanup_local on every volume, or with {"from": s} on stages s..18 only (a restart mid-run)."""
+    from pypcg import census, stages
+    if "from" in args:
+        vols = [census.volume(s[0]) for s in stages.STAGES if s[0] >= int(args["from"])]
+    else:
+        vols = census.volumes()
     for v in vols:
         v.get_component_by_class(unreal.PCGComponent).cleanup_local(True)
     return {"cleaned": len(vols), "labels": sorted(str(v.get_actor_label()) for v in vols)}
