@@ -123,7 +123,8 @@ def _union(boxes):
     boxes = [b for b in boxes if b]
     if not boxes:
         return None
-    return [[min(b[0][i] for b in boxes) for i in range(3)], [max(b[1][i] for b in boxes) for i in range(3)]]
+    n = min(len(b[0]) for b in boxes)       # v2 item boxes are 2D, component boxes 3D
+    return [[min(b[0][i] for b in boxes) for i in range(n)], [max(b[1][i] for b in boxes) for i in range(n)]]
 
 
 def _component_bounds(actor):

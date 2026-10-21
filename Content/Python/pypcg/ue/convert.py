@@ -9,7 +9,7 @@ import math
 
 import unreal
 
-from pypcg.geo import ParamSet, Points, Polygon, Spline, drop_closing
+from pypcg.geo import ParamSet, Points, Polygon, Spline, degenerate, drop_closing
 from pypcg import stage_api
 from pypcg.ue.terrain import Terrain
 
@@ -240,8 +240,20 @@ def to_pcg(v, registry=None, exact_rotations=False, exact_spline_rotators=False)
         return same
     if isinstance(v, Polygon):
         zs = v.zs if v.zs is not None and len(v.zs) == len(v.outer) else [v.z] * len(v.outer)
-        d = L.make_polygon2d_data(json.dumps({"outer": [[x, y, z] for (x, y), z in zip(v.outer, zs)],
-                                              "holes": [[[x, y, v.z] for x, y in h] for h in v.holes]}))
+
+        def _make(holes):
+            return L.make_polygon2d_data(json.dumps({"outer": [[x, y, z] for (x, y), z in zip(v.outer, zs)],
+                                                     "holes": [[[x, y, v.z] for x, y in h] for h in holes]}))
+        d = _make(v.holes)
+        if d is None:
+            # Only after a refusal, so every polygon that was accepted before is written unchanged: drop the
+            # holes that enclose nothing (geo.degenerate; Task 27, stage 7's planar union in the town).
+            kept = [h for h in v.holes if not degenerate(h)]
+            if len(kept) < len(v.holes):
+                d = _make(kept)
+                if d is not None:
+                    unreal.log_warning("PyPCG convert: dropped %d degenerate hole(s) of a %d-vertex polygon"
+                                       % (len(v.holes) - len(kept), len(v.outer)))
         if d is None:
             raise ValueError("MakePolygon2DData refused a polygon with %d outer vertices" % len(v.outer))
         return d

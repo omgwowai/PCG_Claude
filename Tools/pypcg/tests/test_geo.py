@@ -159,3 +159,12 @@ def test_enclosing_polygon_wraps_the_padded_box_around_the_path():
 def test_enclosing_polygon_floors_the_padding_at_1_cm_on_a_degenerate_box():
     result = geo.enclosing_polygon([(5000.0, 0.0), (5000.0, 10000.0)], ((0.0, 0.0), (0.0, 0.0)))
     assert abs(geo.signed_area(result)) >= 4.0
+
+
+def test_degenerate_rings_enclose_nothing():
+    # Task 27: stage 7's planar union in the town returned holes like these; MakePolygon2DData refuses them.
+    from pypcg import geo as G
+    assert G.degenerate([(-39987.0, 32572.0), (-39777.3, 32347.6), (-39777.3, 32347.6)])
+    assert G.degenerate([(5.0, 5.0)] * 4)
+    assert G.degenerate([(0.0, 0.0), (1.0, 0.0), (0.0, 1e-7)])
+    assert not G.degenerate([(0.0, 0.0), (100.0, 0.0), (0.0, 100.0)])

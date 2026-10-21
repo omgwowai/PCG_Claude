@@ -12,6 +12,15 @@ def ccw(p):
     return list(p) if signed_area(p) >= 0 else list(reversed(p))
 
 
+def degenerate(ring, min_area_cm2=1.0):
+    """A ring that encloses nothing: fewer than 3 distinct XY vertices, or under `min_area_cm2` of area.
+    The engine's own booleans can hand such slivers back as holes (stage 7's planar union in the town,
+    Task 27: a 3-vertex hole with two coincident points); `FGeneralPolygon2d::AddHole`'s containment check
+    refuses them, though they remove no area."""
+    distinct = {(float(v[0]), float(v[1])) for v in ring}
+    return len(distinct) < 3 or abs(signed_area(ring)) < min_area_cm2
+
+
 def bbox(pts):
     xs, ys = [q[0] for q in pts], [q[1] for q in pts]
     return (min(xs), min(ys)), (max(xs), max(ys))
