@@ -7,9 +7,13 @@ Rulings applied over the Task 27 brief (ledger T27a-e):
         s01.md section 5.1: 4 254 cm). `final = hills + (flat - hills) * (1 - CityFlatness)`, so the core
         keeps CityFlatness of the hills' range; the bound below is that, with the hills' range taken as
         HillsHeight (official: range 7 090 cm for HillsHeight 7 001) times a slack.
+  T27f  stage 8's box is the union of the city box and the town highway splines' own extent, each plus
+        200 m: the layout runs the highway pair past the city on purpose (test_highways_cut_the_north_east_
+        corner_30_m_apart); a stage that read the demo's whole city (~-120 000..140 000) still fails.
   T27d  the lake bed is written by Write_MeshTerrain as a SimpleWriteModifier component (s16.md section 0;
         Saved/Reports/v2/s16/official.json instances.components: SimpleWriteModifier 1).
 """
+from pypcg.profiles import town_layout
 
 LAKE_COMPONENT = "SimpleWriteModifier"     # stage 16's official census (T27d)
 
@@ -22,7 +26,8 @@ RULES = {
     6: {"tags": ["ArteryRoads", "CollectorRoads", "localRoads", "SmallDistricts"], "bbox": True},
     7: {"tags": ["RoadFootprints", "ModifiedTerrain"], "min_instances": 1, "bbox": True,
         "upstream": {"Districts": ["localRoads", "CollectorRoads", "ArteryRoads"]}},
-    8: {"tags": ["Highway"], "min_instances": 1, "bbox": True, "upstream": {"Roads": ["RoadFootprints"]}},
+    8: {"tags": ["Highway"], "min_instances": 1, "bbox": True, "bbox_splines": ["HighWay_2", "HighWay_3"],
+        "upstream": {"Roads": ["RoadFootprints"]}},
     9: {"tags": ["Lots", "reservedLots", "SmallDistrictsBldgFootprints", "UnderHighway"], "bbox": True,
         "upstream": {"Districts": ["SmallDistricts"], "Roads": ["RoadFootprints"], "Highways": ["Highway"]}},
     10: {"min_instances": 1, "bbox": True, "upstream": {"Lots": ["Lots", "reservedLots"]}},
@@ -56,6 +61,19 @@ def inner_spread_limit(params=None):
     flatness = float(params.get("CityFlatness", CITY_FLATNESS_DEFAULT))
     hills = float(params.get("HillsHeight", HILLS_HEIGHT_DEFAULT))
     return max(0.0, flatness) * abs(hills) * HILLS_RANGE_SLACK + FLAT_SURFACE_CM
+
+
+BBOX_MARGIN_CM = 20000    # the +200 m every bbox rule allows
+
+
+def widened_box(town_bbox, spline_names, margin_cm=BBOX_MARGIN_CM):
+    """T27f: the town box grown to cover the named layout splines (plus the margin)."""
+    pts = [p for n in spline_names for p in town_layout.SPLINES[n]["points"]]
+    if not pts:
+        return town_bbox
+    lo = [min([town_bbox[0][i]] + [p[i] - margin_cm for p in pts]) for i in range(2)]
+    hi = [max([town_bbox[1][i]] + [p[i] + margin_cm for p in pts]) for i in range(2)]
+    return [lo + list(town_bbox[0][2:]), hi + list(town_bbox[1][2:])]
 
 
 def _inside(box, town):
@@ -117,6 +135,8 @@ def check(stage, rec, upstream, town_bbox):
                                               for c in rule["components_any"]):
         failures.append("no component of class %s" % rule["components_any"])
     if rule.get("bbox"):
+        if rule.get("bbox_splines"):
+            town_bbox = widened_box(town_bbox, rule["bbox_splines"])
         for it in rec.get("items", []):
             if it["bbox"] and not _inside(it["bbox"], town_bbox):
                 failures.append("output %s outside the town (+200 m): %s" % (it["tags"], it["bbox"]))

@@ -130,3 +130,19 @@ def test_plausibility_compares_densities_with_the_official_city():
 def test_no_unreal_import():
     import inspect
     assert "import unreal" not in inspect.getsource(C)
+
+
+def test_highways_box_covers_the_town_highways_but_not_the_demo():
+    # T27f: the town run's stage-8 bounds (2026-10-21) pass; a demo-sized extent still fails.
+    up = {"Roads": rec(tags=["RoadFootprints"])}
+    town_out = [[-27828.43, -29949.75], [92828.43, 94949.75]]
+    town_comp = [[-25923.0, -28174.5, -501.8], [90840.6, 92930.9, 3386.2]]
+    assert C.check(8, rec(instances=15999, tags=["Highway"], out=town_out, comp=town_comp), up, BOX)["status"] == "ok"
+    demo = [[-120000, -90000, 0], [140000, 100000, 100]]
+    v = C.check(8, rec(instances=1, tags=["Highway"], comp=demo), up, BOX)
+    assert v["status"] == "fail" and any("outside" in f for f in v["failures"])
+    v = C.check(8, rec(instances=1, tags=["Highway"], out=demo), up, BOX)
+    assert v["status"] == "fail"
+    # only stage 8 is widened
+    v = C.check(10, rec(instances=1, comp=town_comp), {"Lots": rec(tags=["Lots", "reservedLots"])}, BOX)
+    assert v["status"] == "fail"
