@@ -304,7 +304,11 @@ def _tag_node(name):
 def _assign_oracle_gen(n, only=None, overrides=None):
     """Build `/Game/PyPCG/Probe/PCG_AssignOracle_sNN` from the official IR snapshot and generate it on
     stage n's own volume (one generation; read with `{"assign": {"stage": n}}` in a later call)."""
-    from pypcg import build as B, census, ir as _ir, stages
+    from pypcg import build as B, census, ir as _ir, level, stages
+    # Final review I2: the oracle graph goes onto stage n's volume -- only the demo's volume may get it.
+    refused = level.require(level.DEMO, "pypcg_v1_editor.py's assign oracle")
+    if refused:
+        return dict(refused, stage=n)
     off = _ir.load(os.path.join(_REPO, "Tools", "pypcg", "official_ir", stages.name(n) + ".json"))
     calls = [x for x in off["nodes"] if ASSIGN_SUBGRAPH in (x.get("subgraph") or "")
              and (not only or x["name"] in only)]

@@ -199,7 +199,10 @@ def read(args):
 
 try:
     _a = mcp_args or {}
-    mcp_result = json.loads(json.dumps(gen(_a) if _a.get("step") == "gen" else read(_a), default=str))
+    from pypcg import level as _level
+    # Final review I2: the tap graph goes onto the stage-12 volume, so only the demo's volume may get it.
+    mcp_result = _level.require(_level.DEMO, "pypcg_s12_measure.py") or \
+        json.loads(json.dumps(gen(_a) if _a.get("step") == "gen" else read(_a), default=str))
 except Exception as _exc:
     import traceback
     mcp_result = {"error": "%s: %s" % (type(_exc).__name__, str(_exc)[:600]), "tb": traceback.format_exc()[-1500:]}

@@ -18,13 +18,15 @@ if _TOOLS not in sys.path:
 
 # pypcg_compare_stage.py -- V2 in the demo level (spec 3). ONE generation per call; read it in the next.
 # NEVER save the level: every change here is in memory and `restore` undoes the graph swaps.
-#   prepare                                 record graphs/overrides/regen flags; turn regen-in-editor off
+#   prepare                                 record graphs/overrides/regen flags and editor autosave; turn
+#                                           regen-in-editor and autosave off (autosave is what wrote the demo, trap 78)
 #   gen {"stage", "variant", "seed"?}       variant "official" | "slim"; slim swaps in /Game/PyPCG/Slim/<graph>
 #   read {"stage", "as", "into"?}           census -> Saved/Reports/v2/s<into>/<as>.json (+ the run record
 #                                           when <as> starts with "slim_"); into defaults to stage
 #   verdict {"stage"}                       pypcg.v2 over the files of that stage -> verdict.json + docs/pypcg/v2/sNN.md
 #   fingerprint {"save" | "compare": name}  which volumes' outputs changed between two calls
-#   restore                                 official graphs, overrides and regen flags back on every volume
+#   restore                                 official graphs, overrides and regen flags back on every volume;
+#                                           editor autosave back to its recorded value
 OUT = os.path.join(_REPO, "Saved", "Reports", "v2")
 STATE = os.path.join(OUT, "_state.json")
 DEMO_OVERRIDES = os.path.join(_REPO, "Tools", "pypcg", "data", "demo_overrides.json")
@@ -44,6 +46,21 @@ def _stage_dir(n):
     return os.path.join(OUT, "s%02d" % n)
 
 
+AUTOSAVE = "_autosave_enable"   # the state key that holds the user's autosave setting, recorded by prepare
+
+
+def _autosave():
+    """The editor's autosave switch: UEditorLoadingSavingSettings::bAutoSaveEnable on the class default object,
+    which is the object FPackageAutoSaver reads."""
+    return unreal.get_default_object(unreal.EditorLoadingSavingSettings)
+
+
+def _set_autosave(value):
+    # In memory only, and on purpose: the default notify mode runs PostEditChangeProperty, which SaveConfig()s
+    # the user's EditorPerProjectUserSettings.ini. NEVER skips that, so a crash leaves the user's setting intact.
+    _autosave().set_editor_property("auto_save_enable", bool(value), unreal.PropertyAccessChangeNotifyMode.NEVER)
+
+
 def phase_prepare(args):
     from pypcg import census, stages
     state = _load(STATE, {})
@@ -55,10 +72,16 @@ def phase_prepare(args):
                             "regen": bool(pc.get_editor_property("regenerate_in_editor")),
                             "seed": int(pc.get_editor_property("seed"))}
         pc.set_editor_property("regenerate_in_editor", False)      # every regeneration is explicit (trap 33)
+    if AUTOSAVE not in state:                                      # first prepare: the user's own setting
+        state[AUTOSAVE] = bool(_autosave().get_editor_property("auto_save_enable"))
+    # Trap 78: an autosave of the dirtied demo, restored after a crash, overwrote its external actors. No
+    # autosave while the demo carries swapped graphs or probe volumes; restore puts the user's value back.
+    _set_autosave(False)
     _save(STATE, state)
     if not os.path.exists(DEMO_OVERRIDES) or args.get("refresh"):
-        _save(DEMO_OVERRIDES, {label: s["overrides"] for label, s in state.items()})
-    return {"volumes": len(state), "regen_off": True, "demo_overrides": DEMO_OVERRIDES}
+        _save(DEMO_OVERRIDES, {label: s["overrides"] for label, s in state.items() if label != AUTOSAVE})
+    return {"volumes": len(state) - 1, "regen_off": True, "autosave_off": True,
+            "autosave_recorded": state[AUTOSAVE], "demo_overrides": DEMO_OVERRIDES}
 
 
 def phase_gen(args):
@@ -200,8 +223,11 @@ def phase_restore(args):
         pc.set_editor_property("seed", int(s["seed"]))
         out[label] = {"graph": pc.get_graph().get_path_name(), "skipped": res["skipped"]}
     os.environ.pop(stage_api.RECORD_ENV, None)
+    autosave = state.get(AUTOSAVE)
+    if autosave is not None:                                       # a state from before the autosave guard has none
+        _set_autosave(autosave)
     os.remove(STATE)
-    return {"restored": len(out), "problems": {k: v for k, v in out.items() if v["skipped"]}}
+    return {"restored": len(out), "autosave": autosave, "problems": {k: v for k, v in out.items() if v["skipped"]}}
 
 
 PHASES = {"prepare": phase_prepare, "gen": phase_gen, "read": phase_read, "verdict": phase_verdict,
@@ -209,8 +235,10 @@ PHASES = {"prepare": phase_prepare, "gen": phase_gen, "read": phase_read, "verdi
 
 
 def run(args):
-    if "L_CitySamplePCG_Demo" not in str(unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).get_current_level()):
-        return {"abort": "V2 runs in /CitySamplePCG/Levels/L_CitySamplePCG_Demo"}
+    from pypcg import level
+    refused = level.require(level.DEMO, "V2 (pypcg_compare_stage.py)")   # the full package path (review M14)
+    if refused:
+        return refused
     return PHASES[args["phase"]](args)
 
 

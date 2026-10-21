@@ -327,7 +327,10 @@ def frame():
 STEPS = {"frame": frame, "gen": gen, "read": read, "tiles": tiles, "pieces": pieces, "nontile": nontile, "corners": corners}
 
 try:
-    mcp_result = json.loads(json.dumps(STEPS[(mcp_args or {}).get("step", "read")](), default=str))
+    from pypcg import level as _level
+    # Final review I2: the tap graph goes onto the stage-10 volume, so only the demo's volume may get it.
+    mcp_result = _level.require(_level.DEMO, "pypcg_s10_measure.py") or \
+        json.loads(json.dumps(STEPS[(mcp_args or {}).get("step", "read")](), default=str))
 except Exception as _exc:
     mcp_result = {"error": "%s: %s" % (type(_exc).__name__, str(_exc)[:600])}
 gc.collect()

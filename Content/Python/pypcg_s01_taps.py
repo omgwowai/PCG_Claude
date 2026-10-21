@@ -225,6 +225,12 @@ def remove(args):
 
 
 def main(args):
+    from pypcg import level
+    # Final review I2: the probe actor is spawned into the current level at the stage-1 volume's transform;
+    # the measurements behind s01.md were taken on the demo, and nowhere else may receive the actor.
+    refused = level.require(level.DEMO, "pypcg_s01_taps.py")
+    if refused:
+        return refused
     if args.get("read"):
         return read(args)
     if args.get("remove"):

@@ -25,7 +25,11 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 
 
 def run(args):
-    from pypcg import census, stages
+    from pypcg import census, level, stages
+    # Final review I2: swaps the stage-13 volume's graph and seed; the demo is the only level it may touch.
+    refused = level.require(level.DEMO, "pypcg_s13_seed_study.py")
+    if refused:
+        return refused
     n = 13
     state = json.load(open(os.path.join(_REPO, "Saved", "Reports", "v2", "_state.json"), encoding="utf-8"))
     shipped = state[stages.name(n)]

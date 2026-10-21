@@ -152,6 +152,12 @@ def remove(args):
 
 
 def main(args):
+    from pypcg import level
+    # Final review I2: the probe actor is spawned into the current level; the demo is the level the s01.md
+    # terrain evidence was read on, and nowhere else may receive the actor.
+    refused = level.require(level.DEMO, "pypcg_s01_terrain_probe.py")
+    if refused:
+        return refused
     if args.get("read"):
         return read(args)
     if args.get("compare"):

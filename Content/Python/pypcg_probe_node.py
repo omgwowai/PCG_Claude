@@ -116,6 +116,12 @@ def phase_remove(args):
 
 
 def run(args):
+    from pypcg import level
+    # Final review I2: spawns a volume into the current level; Task 6 ran it on the demo, and nowhere else
+    # (above all the saved town) may receive it.
+    refused = level.require(level.DEMO, "pypcg_probe_node.py")
+    if refused:
+        return refused
     return {"spawn": phase_spawn, "read": phase_read, "remove": phase_remove}[args.get("phase", "read")](args)
 
 

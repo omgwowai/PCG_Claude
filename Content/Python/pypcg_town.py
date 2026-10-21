@@ -21,8 +21,8 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 #   shot {"stage","pass"}        one screenshot of the town so far                 (Task 27)
 #   overview {"view"}            top / street / wide                               (Task 27)
 #   landed                       list the pt_* screenshots on disk                 (Task 27)
-#   finish                       compare passes, save level, write census          (Task 28)
-LEVEL = "L_PyTown"
+#   finish {"dry_run"?, "allow_unmeasured"?: [stage]}
+#                                compare passes, write census, save level          (Task 28)
 REPORTS = os.path.join(_REPO, "Saved", "Reports")
 OVERRIDES = os.path.join(REPORTS, "pypcg_town_component_overrides.json")
 
@@ -40,17 +40,11 @@ def _save(path, data):
         json.dump(data, fh, indent=1, ensure_ascii=False, sort_keys=True)
 
 
-def _current_map():
-    """The current map's short name; the current ULevel itself is always named PersistentLevel."""
-    lvl = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).get_current_level()
-    return lvl.get_path_name().split(":", 1)[0].rsplit(".", 1)[-1] if lvl else ""
-
-
 def phase_assign():
     from pypcg import census, stages
     from pypcg.profiles import town
     saved = _load(OVERRIDES, {})
-    out = {}
+    out, town_skipped = {}, {}
     for s in stages.STAGES:
         v = census.volume(s[0])
         pc = v.get_component_by_class(unreal.PCGComponent)
@@ -64,8 +58,21 @@ def phase_assign():
         out[s[1]] = {"graph": pc.get_graph().get_path_name(),
                      "overrides_ok": all(back.get(k) == val for k, val in wanted.items() if k not in res["skipped"]),
                      "skipped": res["skipped"], "overrides": back}
+        # Final review I6: skipping the template's own keys (dropped debug / partition / merged seed
+        # parameters, ruling N5) is allowed; skipping one the TOWN asked for is not -- a misspelt key in
+        # town.COMPONENT_OVERRIDES would otherwise fall back to the graph default in silence.
+        mine = {k: res["skipped"][k] for k in town.COMPONENT_OVERRIDES.get(s[1], {}) if k in res["skipped"]}
+        if mine:
+            town_skipped[s[1]] = mine
     _save(OVERRIDES, saved)
-    return out
+    bad = sorted(label for label, r in out.items() if not r["overrides_ok"])
+    result = {"ok": not town_skipped and not bad, "town_overrides_skipped": town_skipped,
+              "overrides_not_ok": bad, "stages": out}
+    if town_skipped:
+        result["abort"] = "town overrides not applied (misspelt or missing parameter): %s" % town_skipped
+    elif bad:
+        result["abort"] = "overrides did not read back on %s" % bad
+    return result
 
 
 SHOT = "pt_stage_%02d_%s_p%d.png"
@@ -78,10 +85,11 @@ def _pass_file(k):
     return os.path.join(REPORTS, "pypcg_town_pass%d.json" % k)
 
 
-def _trace_z(x, y):
+def _trace_z(x, y, errors):
     """Ground height under (x, y): the first visibility hit from above (ruling T27c: 5.8 returns a bare
     HitResult whose fields are protected and has no break_hit_result -- traps.md 51; the pattern of
-    pypcg_probe_node.py)."""
+    pypcg_probe_node.py). None on a miss. An exception is also None, but its text goes to `errors`, which
+    phase_read keeps next to terrain_raw, so a broken trace (an API change) does not read as "no ground"."""
     world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
     try:
         res = unreal.SystemLibrary.line_trace_single(world, unreal.Vector(x, y, 500000.0), unreal.Vector(x, y, -500000.0),
@@ -92,7 +100,8 @@ def _trace_z(x, y):
             return None
         parts = hit.to_tuple()
         return float(parts[4].z) if parts[0] else None
-    except Exception:
+    except Exception as exc:
+        errors.append("(%s, %s) %s: %s" % (x, y, type(exc).__name__, str(exc)[:200]))
         return None
 
 
@@ -190,8 +199,10 @@ def phase_read(args):
     rec["output_bounds"] = _union([it["bbox"] for it in rec["items"]])
     rec["component_bounds"] = _component_bounds(census.volume(stage))
     if stage == 1:
-        z = {key: [_trace_z(x, y) for x, y in pts] for key, pts in TERRAIN_SAMPLES.items()}
+        errors = []
+        z = {key: [_trace_z(x, y, errors) for x, y in pts] for key, pts in TERRAIN_SAMPLES.items()}
         rec["terrain_raw"] = z
+        rec["terrain_errors"] = errors
         if all(v is not None for vals in z.values() for v in vals):
             rec["terrain"] = z
     upstream = {}
@@ -209,6 +220,7 @@ def phase_read(args):
             "since_gen_s": seconds, "tags": sorted({t for it in rec["items"] for t in it["tags"] if ":" not in t}),
             "components": rec["instances"]["components"], "component_bounds": rec["component_bounds"],
             "output_bounds": rec["output_bounds"], "terrain": rec.get("terrain_raw"),
+            "terrain_errors": rec.get("terrain_errors"),
             "log": {kk: log.get(kk) for kk in ("pcg_errors", "not_loaded", "crash", "first_errors")}, **verdict}
 
 
@@ -300,8 +312,10 @@ def _plausibility():
     official = {"area_m2": official_area, "buildings": official_bldgs, "road_m": official_roads}
     dens = {}
     for key in ("buildings", "road_m"):
-        t, o = town[key] / (town_area / 1e6), official[key] / (official_area / 1e6)
-        dens[key + "_per_km2"] = {"town": t, "official": o, "ratio": t / o if o else None}
+        # A zero area (stage 6 or its V2 record empty) has no density; town_checks.plausibility fails it.
+        t = town[key] / (town_area / 1e6) if town_area > 0 else None
+        o = official[key] / (official_area / 1e6) if official_area > 0 else None
+        dens[key + "_per_km2"] = {"town": t, "official": o, "ratio": t / o if t is not None and o else None}
     return {"failures": town_checks.plausibility(town, official), "town": town, "official": official,
             "density": dens}
 
@@ -327,8 +341,21 @@ def _items_same(a, b):
                    {"items": b["items"], "instances": {"per_mesh": {}}})
 
 
+def _save_refusal():
+    """Final review I2: the town is saved only when every PCG volume in it is a stage volume holding a
+    /Game/PyPCG/Town/ graph. A probe graph or probe volume left by a script run on the wrong level must
+    never be persisted into the deliverable."""
+    from pypcg import level, stages
+    problems = level.save_problems(level.pcg_volume_graphs(), stages.names())
+    return {"abort": "not saving L_PyTown: " + "; ".join(problems), "saved": False} if problems else None
+
+
 def phase_finish(args):
     from pypcg import stages, v2
+    # Final review I6: "unmeasured" passes only for the stages listed in args["allow_unmeasured"] (stage 1's
+    # terrain is the only check that can be unmeasured). The town as saved had none: in
+    # Tools/data/pypcg_town_census.json (2026-10-21) all 18 stages are "ok" in both passes.
+    allow = {int(s) for s in args.get("allow_unmeasured", [])}
     plaus = _plausibility()
     p1, p2 = _load(_pass_file(1), {}), _load(_pass_file(2), {})
     rows, same_all, variation, blocking = [], True, [], []
@@ -360,21 +387,29 @@ def phase_finish(args):
                      "tags": a and sorted({t for it in a["record"]["items"] for t in it["tags"] if ":" not in t}),
                      "meshes": a and len(a["record"]["instances"]["per_mesh"]), "shot": a and a.get("shot"),
                      "deterministic": same, "variation": row_var})
-    all_ok = all(r["status"] in ("ok", "unmeasured") and r["status_pass2"] in ("ok", "unmeasured") for r in rows)
-    may_save = all_ok and not blocking and plaus["failures"] == []
+    def passes(status, stage):
+        return status == "ok" or (status == "unmeasured" and stage in allow)
+
+    all_ok = all(passes(r["status"], r["stage"]) and passes(r["status_pass2"], r["stage"]) for r in rows)
+    plausible = plaus["failures"] == []
+    may_save = all_ok and not blocking and plausible
     census = {"_level": "/Game/PyPCG/L_PyTown",
-              "_note": "pass 1 numbers; deterministic = pass 2 per-mesh counts equal pass 1 (v2.same); "
-                       "variation = differences ruled native run-to-run variation (T28a)",
-              "all_ok": all_ok, "deterministic": same_all and plaus["failures"] == [],
-              "deterministic_within_native_bands": not blocking,
+              "_note": "pass 1 numbers; deterministic = pass 2 equals pass 1 in per-mesh instance counts, tag "
+                       "counts and area / length totals (v2.same; positions are not compared); variation = "
+                       "differences ruled native run-to-run variation (T28a); plausible = spec 5.2 densities",
+              "all_ok": all_ok, "deterministic": same_all, "plausible": plausible,
+              "deterministic_within_native_bands": not blocking, "allow_unmeasured": sorted(allow),
               "native_variation": variation, "blocking": blocking, "plausibility": plaus, "stages": rows}
-    _save(os.path.join(_REPO, "Tools", "data", "pypcg_town_census.json"), census)
+    if not args.get("dry_run"):                     # a dry run reports; it never rewrites the committed census
+        _save(os.path.join(_REPO, "Tools", "data", "pypcg_town_census.json"), census)
     saved = False
     if may_save and not args.get("dry_run"):
-        if _current_map() != LEVEL:
-            return {"abort": "current map is %s, not %s; not saving" % (_current_map(), LEVEL)}
+        refused = _save_refusal()
+        if refused:
+            return dict(refused, all_ok=all_ok, deterministic=same_all, plausible=plausible, may_save=may_save)
         saved = bool(unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).save_current_level())
-    return {"all_ok": all_ok, "deterministic": census["deterministic"], "may_save": may_save, "saved": saved,
+    return {"all_ok": all_ok, "deterministic": same_all, "plausible": plausible, "may_save": may_save,
+            "saved": saved, "dry_run": bool(args.get("dry_run")),
             "native_variation": variation, "blocking": blocking, "plausibility": plaus,
             "rows": [{k: r[k] for k in ("stage", "graph", "instances", "instances_pass2", "status", "status_pass2",
                                         "deterministic")} for r in rows]}
@@ -386,8 +421,10 @@ PHASES = {"assign": lambda a: phase_assign(), "reset": phase_reset, "gen": phase
 
 
 def run(args):
-    if _current_map() != LEVEL:
-        return {"abort": "open /Game/PyPCG/%s first (current: %s)" % (LEVEL, _current_map())}
+    from pypcg import level
+    refused = level.require(level.TOWN, "pypcg_town.py")       # the full package path (final review M14)
+    if refused:
+        return refused
     phase = args.get("phase")
     if phase not in PHASES:
         return {"abort": "unknown phase %r; phases: %s" % (phase, sorted(PHASES))}

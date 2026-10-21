@@ -168,6 +168,12 @@ def plausibility(town, official):
     """spec 5.2: the town's building and road densities must sit within [0.5x, 2x] of the official
     city's (both from V2 records: buildings per km2, road metres per km2)."""
     out = []
+    if town["area_m2"] <= 0:                       # stage 6 produced nothing: no density to compare (review M3)
+        return ["town area is %s m2 (stage 6 published no district); densities cannot be compared"
+                % town["area_m2"]]
+    if official["area_m2"] <= 0:
+        return ["official area is %s m2 (no stage-6 V2 record); densities cannot be compared"
+                % official["area_m2"]]
     for what, key in (("buildings per km2", "buildings"), ("road metres per km2", "road_m")):
         t, o = town[key] / (town["area_m2"] / 1e6), official[key] / (official["area_m2"] / 1e6)
         if not o:

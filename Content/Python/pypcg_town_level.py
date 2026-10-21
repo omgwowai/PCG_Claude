@@ -28,25 +28,17 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 LEVEL = "L_PyTown"
 LEVEL_PATH = "/Game/PyPCG/L_PyTown"
 TEMPLATE = "/CitySamplePCG/Levels/L_CitySamplePCG_Demo"
-DEMO_LEVEL = "L_CitySamplePCG_Demo"
 BINDINGS = os.path.join(_PY, "pypcg", "profiles", "town_bindings.json")
 
 
-def _level_name(les):
-    """The current map's short name ("L_PyTown"). The current ULevel is always named PersistentLevel, so
-    the map name comes from its path (/Game/PyPCG/L_PyTown.L_PyTown:PersistentLevel)."""
-    lvl = les.get_current_level()
-    if lvl is None:
-        return ""
-    return lvl.get_path_name().split(":", 1)[0].rsplit(".", 1)[-1]
-
-
 def _on_town(les):
-    """True when L_PyTown is the level being edited. Nothing else may be written."""
-    name = _level_name(les)
-    if name == DEMO_LEVEL:
+    """True when L_PyTown is the level being edited. Nothing else may be written. Compares the full
+    package path, so another map that happens to be called L_PyTown does not pass (final review M14)."""
+    from pypcg import level
+    current = level.current_map()
+    if current == level.DEMO:
         raise RuntimeError("the demo level is current; refusing to touch it")
-    return name == LEVEL
+    return current == level.TOWN
 
 
 def _actor(label):
@@ -123,8 +115,9 @@ def phase_make():
     out["attempts"] = attempts
     out["current_after"] = str(les.get_current_level())
     # The demo must not be the level we edit; a copy that landed on the demo would be a disaster.
-    out["demo_is_current"] = _level_name(les) == DEMO_LEVEL
-    out["on_target"] = _level_name(les) == LEVEL and LEVEL_PATH.split("/")[-1] in out["current_after"]
+    from pypcg import level
+    out["demo_is_current"] = level.current_map() == level.DEMO
+    out["on_target"] = level.current_map() == level.TOWN
     out["gate"] = {"pass": bool(ok and out["on_target"] and not out["demo_is_current"])}
     return out
 
@@ -227,9 +220,20 @@ def phase_bind():
 
 
 def phase_save():
+    """Saves L_PyTown. In the flow this runs after make -> layout -> bind, BEFORE pypcg_town.py's `assign`
+    gives the volumes their /Game/PyPCG/Town/ graphs, so the template's own graphs are legitimate here.
+    The check (final review I2) is therefore: every PCG volume is a stage volume, and either every stage
+    volume holds its template graph (/CitySamplePCG/Levels/PCG/<label>) or every one holds a
+    /Game/PyPCG/Town/ graph (a save after assign). A probe, slim or retired-official copy, a mix of the
+    two states, or a stray probe volume is refused."""
+    from pypcg import level, stages
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     if not _on_town(les):
         return {"abort": "L_PyTown is not the current level; refusing to save", "saved": False}
+    template = {label: stages.OFFICIAL_DIR + label for label in stages.names()}
+    problems = level.save_problems(level.pcg_volume_graphs(), stages.names(), template)
+    if problems:
+        return {"abort": "not saving L_PyTown: " + "; ".join(problems), "saved": False}
     return {"level": LEVEL_PATH, "saved": bool(les.save_current_level())}
 
 

@@ -147,6 +147,14 @@ def test_plausibility_compares_densities_with_the_official_city():
     assert C.plausibility(dict(town, road_m=3000.0), official)            # 0.15x
 
 
+def test_plausibility_fails_a_zero_area_instead_of_dividing_by_it():
+    # Final review M3: stage 6 with no items gave town_area 0 and a ZeroDivisionError in finish.
+    town = {"area_m2": 0.0, "buildings": 0.0, "road_m": 0.0}
+    official = {"area_m2": 1000000.0, "buildings": 50.0, "road_m": 20000.0}
+    assert any("town area" in f for f in C.plausibility(town, official))
+    assert any("official area" in f for f in C.plausibility(official, dict(official, area_m2=0.0)))
+
+
 def test_no_unreal_import():
     import inspect
     assert "import unreal" not in inspect.getsource(C)

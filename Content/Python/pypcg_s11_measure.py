@@ -211,7 +211,10 @@ try:
             os.environ.pop("PYPCG_S11_ORACLE", None)
         mcp_result = {"PYPCG_S11_ORACLE": os.environ.get("PYPCG_S11_ORACLE")}
     else:
-        mcp_result = json.loads(json.dumps(gen(_a) if _a.get("step") == "gen" else read(_a), default=str))
+        from pypcg import level as _level
+        # Final review I2: the tap graph goes onto the stage-11 volume, so only the demo's volume may get it.
+        mcp_result = _level.require(_level.DEMO, "pypcg_s11_measure.py") or \
+            json.loads(json.dumps(gen(_a) if _a.get("step") == "gen" else read(_a), default=str))
 except Exception as _exc:
     import traceback
     mcp_result = {"error": "%s: %s" % (type(_exc).__name__, str(_exc)[:600]), "tb": traceback.format_exc()[-1500:]}
