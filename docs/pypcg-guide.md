@@ -69,7 +69,7 @@ def run(inputs, params, ctx):
    **只改 `.py`，不要在图编辑器里改 `/Game/PyPCG/Slim|Town` 资产——下一次构建会整张覆盖。**
 2. 离线测试：
    ```powershell
-   C:/Python314/python.exe -m pytest Tools/pypcg/tests -q          # 基线 752 passed, 18 skipped
+   C:/Python314/python.exe -m pytest Tools/pypcg/tests -q          # 基线 762 passed, 18 skipped
    C:/Python314/python.exe -m pytest Tools/pypcg/tests/test_s06_districts.py -q
    ```
    18 个 skip 全是 `test_stages_l1.py` 的逐节点草稿（已退役，见 §9）。`test_graphs.py` 对 18 张图都会跑：
@@ -258,7 +258,9 @@ run_unreal_script("pypcg_town.py", {"phase": "shot", "stage": 1, "pass": 1})
 run_unreal_script("pypcg_town.py", {"phase": "overview", "view": "top"})       # top / street / wide
 run_unreal_script("pypcg_town.py", {"phase": "landed"})
 #    第二遍（pass 2）同第 3 步，然后：
-run_unreal_script("pypcg_town.py", {"phase": "finish"})        # 两遍逐 mesh 比较、合理性范围、只存 L_PyTown、写 census
+run_unreal_script("pypcg_town.py", {"phase": "finish"})        # 两遍比较、合理性范围、写 census（dry_run 不写）、只存 L_PyTown
+#    finish 只在每个 PCG volume 都是阶段 volume、图都在 /Game/PyPCG/Town/ 下时才存；"unmeasured" 只对
+#    {"allow_unmeasured": [1]} 列出的阶段放行。assign 遇到 town.COMPONENT_OVERRIDES 里的键被跳过（拼错）就失败。
 C:/Python314/python.exe Tools/pypcg/town_manifest.py --out Saved/Reports/pypcg_town_manifest.json
 C:/Python314/python.exe Tools/build_pcg_stage_report.py --manifest Saved/Reports/pypcg_town_manifest.json --out docs/pypcg-town-report.html
 ```
@@ -267,8 +269,8 @@ C:/Python314/python.exe Tools/build_pcg_stage_report.py --manifest Saved/Reports
 18 个乱序并发（实测 05:35 一次全跑），下游会读到上游半成品。`reset` 会把它关掉；关掉后只有显式的 `gen` 才生成，
 保存的关卡加载时也不会自己连锁重生成（`CentralPark_Footprint` 与 `Roads` 原本带 `GENERATE_ON_LOAD`，已改为按需）。
 
-**结果**（`Tools/data/pypcg_town_census.json`、`docs/pypcg-town-report.html`）：两遍完全确定，18 步逐 mesh 相同，
-共 **545 666** 个实例；保存后重开关卡，每个 volume 与两遍一致。
+**结果**（`Tools/data/pypcg_town_census.json`、`docs/pypcg-town-report.html`）：两遍在 `v2.same` 比较的量上相同：
+18 步每种 mesh 的实例数、各 tag 的 item 数、面积与长度合计（不比位置与包围盒），共 **545 666** 个实例；保存后重开关卡，每个 volume 与两遍一致。
 
 | 步 | 实例 | 说明 |
 |---|---|---|
@@ -389,7 +391,7 @@ V2 = demo 关卡上与官方对照（5 个 seed 的中位数，`docs/pypcg/v2/sN
 | 17 CityEdge | pass：+15.4 %（官方这个 seed 的码头抽得偏少，-1.2 sd）；`Assign_Assets` 逐点精确 | replayed 0，确定，0 失败 |
 | 18 OuterForest | pass 但近乎空检（0 对 0，trap 66）；用替换贴图的 oracle：34 711 对 34 659（+0.15 %），每种 mesh 份额在 2 pp 内 | 0 失败，部分重放复现每个撒点集 |
 
-V3（小镇）见 §7：18 步全过，两遍逐 mesh 相同。
+V3（小镇）见 §7：18 步全过，两遍在 `v2.same` 比较的量上相同（每种 mesh 的实例数、tag 个数、面积与长度合计；不比位置）。阶段 7 的 FAIL 与小镇阶段 18 的 0 棵树尚未经用户裁决接受，见 §11 末行。
 
 ---
 
@@ -419,6 +421,7 @@ V3（小镇）见 §7：18 步全过，两遍逐 mesh 相同。
 | T22b / T22c | 草地：投影 + 选资产按 Step F 留原生；填充 / 噪声 / 过滤为范围裁剪 |
 | T27a–T27i | 小镇验收：阶段 18 接受 0 棵树；阶段 1 用修正后的起伏上限；`_trace_z` 用 `hit.to_tuple()`；湖组件类取自官方 census；阶段 8 包围盒并上高速范围；阶段 7 路口 bug 修复；区分档阈值重调；TL 规则有条件 |
 | T28a–T28c | 第二遍用 `v2.same` 逐 mesh 比较（原生步骤 7/10/11 的已知波动带）；第二遍前关 `regenerate_in_editor`；>95 MB 文件按路径忽略（实际没有） |
+| （待用户确认） | 两条 spec 成功标准未达成、也没有裁决接受（spec 成功标准下的"已知偏差"）：阶段 7 V2 FAIL，实例 -3.8 % 对 1 % 上限，根因是 local 类路段切分粒度（§12 第 5 条）；小镇阶段 18 放 0 棵树，因为项目里没有 `/Game/Textures/Noise/T_CloudNoise_4k`（trap 66，§12 第 10 条） |
 
 ---
 
@@ -443,7 +446,8 @@ V3（小镇）见 §7：18 步全过，两遍逐 mesh 相同。
 4. **`port_brief.py` 把原语子图算 1 个节点**，"计入 Python"的数字因此偏低于真实计算量（Roads 的 `Intersection_solving` 170 个节点等）。
 5. **阶段 7 的地形一半（Task 10c）与 V2 的 -3.8 % 一行**：local 类路段个数 -9.2 %、长度 -5.2 %，collector / artery 个数偏多；
    oracle 的 local 总长比移植的整份输入还多 1 274 m，指向 `Gather_0` 或地标裁切（`s07.md` §6.2、§9.2、§10）。
-   小镇上路口面积比官方在小镇输入上的结果多 32 %（同一类）。
+   这条 FAIL 没有裁决接受，见 §11 末行。小镇路口面积曾比官方在小镇输入上的结果多 32 %（154 054 对 116 358 m²），
+   但那是 T27h 之前的布局；最终布局是 89 片 / 116 216 m²（task-27 报告），官方没有在最终布局上重新探测，差距未知。
 6. **阶段 13 的 density-0 与 steepness**：差集不丢 density 0 的源点，tile 6 元组假定 steepness 1（引擎默认 0.5）。demo 上 0 影响（515 = 515），
    小镇地形上可能不同；要一次阶段 13 的编辑器实测，绿色的 V1 证明不了（trap 60）。
 7. **`convert` 的 Quat / Transform 属性写入器丢精度**（`unreal.Quat(*q)` 舍成 float32，trap 73）；目前没有阶段受影响。
@@ -452,7 +456,9 @@ V3（小镇）见 §7：18 步全过，两遍逐 mesh 相同。
 9. **阶段 16 草地的填充 / 噪声 / 过滤**（9 个节点，范围裁剪 T22c）：扫描线填充估计 25–30 s；投影器 + 选资产（6 个节点）的 ~70 s 也只是估计，
    援引 Step F 之前要先实测计时（T22b）。
 10. **补上 `T_CloudNoise_4k`**：否则阶段 13 / 18 在任何关卡（含小镇）都不放外围树（trap 66）。只在 oracle / tap 图里换贴图，别改出货图。
-11. **同一阶段两个 Python 节点共用 `Seed:NN` 随机流**（阶段 13、18）：应按节点加盐。
+    小镇阶段 18 因此放 0 棵树，没有裁决接受，见 §11 末行。
+11. **同一阶段两个 Python 节点共用 `Seed:NN` 随机流**（阶段 11 的 `s11_buildings` / `s11_buildings_rooftops`、阶段 13、阶段 18；
+    `stage_api.Ctx` 只用 `"%d:%d" % (seed, stage)` 播种，同阶段的节点拿到同一条流）：应按节点加盐（例如模块名）。加盐会改变产出、要重做 V2，所以没改。
 12. **`@data` 读写**：给 `PyPCGTools` 加读写 data 域属性的包装，就能去掉阶段 10 / 11 / 18 的适配器；语法后点链（T17a）要搬进 Python 则需
     `more_modules` 往返语法点的全部属性。
 13. **V2 缺 tag 规则没有稀有度豁免**（T9d）：阶段 6 有 8 / 150 个 seed 不出 `UndividableDistricts`；协议的 5 个 seed 都有，所以没触发。
@@ -461,3 +467,4 @@ V3（小镇）见 §7：18 步全过，两遍逐 mesh 相同。
     `stage_api.record()` 信任调用方带 Seed；`read_params` 的"第一个非 None"其实是"第一个 data item"（trap 36）；`extract._default_seed`
     每次导出都记一条类加载失败；`test_slim_dsl` 有几条断言不会失败；`plane.xy` / `plane.drop_closing` 无直接测试；`MakePolygon2DData`
     的平面 / 质心只用外环（有洞时 `$LocalPosition` 不同，世界几何相同）。
+16. **`geo.plane.clip_path` 给切点用路径首顶点的 z**，不插值：z 变化的 3D 路径上切点高度不对；没在坡上样条上对照引擎的 `ClipPaths`（final review M5）。

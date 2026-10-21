@@ -8,17 +8,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   self-contained gameplay variants (Combat, Platforming, SideScrolling).
 - Engine: **`E:\UnrealEngine`** — a **source build** of UE 5.8.2. `EngineAssociation` in
   `PCG_Claude.uproject` is that build's registry GUID `{4B303DEF-4E44-1DE5-A177-09B23BCA8A5A}`.
-- Game module: `PCG_Claude` (Runtime). Plugins enabled: ModelingToolsEditorMode, StateTree,
-GameplayStateTree, PythonScriptPlugin, PCG, PCGPrimitives, UnrealMcpBridge, PCGPythonInterop.
+- Game module: `PCG_Claude` (Runtime). Plugins enabled (as in `PCG_Claude.uproject`):
+  ModelingToolsEditorMode, StateTree, GameplayStateTree, PythonScriptPlugin, PCG, PCGPrimitives,
+  UnrealMcpBridge, PyPCGTools, CitySamplePCG, GeometryScripting, PCGGeometryScriptInterop,
+  PCGMeshPartitionInterop, PCGPrimitives_MeshPartitionInterop, PCGPythonInterop, MeshPartition,
+  MeshTerrainMode, ToolsetRegistry.
 - Git remote: `https://github.com/omgwowai/PCG_Claude.git` (branch `main`).
-- The **PCG (Procedural Content Generation) framework is enabled** (`PCG` + `PCGPrimitives`, added
-  2026-09-23 so the `city-sample-pcg-city-builder` skill can build procedural cities here), but
-  **no PCG graph or component exists yet** in `Source/` or `Content/` — the project still ships
-  stock Epic template code with no PCG content of its own.
+- The project has **PCG content of its own**: `Content/PyPCG/` (the PyPCG slim and town graphs and the
+  generated town `L_PyTown`) and `Content/PCGArea/` (the small-area levels). The City Sample graphs and
+  art come from the migrated `CitySamplePCG` plugin (`Plugins/CitySamplePCG/`, content gitignored).
 
-Almost all game code is stock Epic template code. The only bespoke addition is the MCP bridge
-toolchain described under "Driving the editor" below; treat the rest as upstream template
-behavior to extend rather than rewrite.
+The gameplay code is stock Epic template code; treat it as upstream behavior to extend rather than
+rewrite. The bespoke additions are the MCP bridge toolchain ("Driving the editor" below), the
+`PyPCGTools` C++ plugin, the `pypcg` Python package (see the **PyPCG** paragraph below), and the
+migrated `CitySamplePCG` plugin.
 
 ## Architecture
 
@@ -103,6 +106,8 @@ a `.py` file from `Content/Python/` in the editor embedded Python interpreter.
   demo state over the demo level's real (gitignored) external-actor files under
   `Plugins/CitySamplePCG/Content/__ExternalActors__/`; it happened twice (skill `traps.md` 78). The
   byte-identical originals are in `E:\CitySample 5.8\Plugins\Experimental\CitySamplePCG\Content\`.
+  V2's `prepare` turns editor autosave off in memory and its `restore` turns it back on, so always
+  end a V2 session with `restore`.
   Switching away from a large level (the demo, `L_PyTown`) with `load_level` can itself crash the
   editor, and `new_blank_map` before `load_level` does (traps 79, 83).
 
@@ -114,7 +119,8 @@ descriptions (`graphs/`), the node shim (`host.py`), the PCG-data adapters (`ue/
 (`census.py`). The editor entry points are `Content/Python/pypcg_build_slim.py` (builds the graphs and
 must report `diffs: 0`), `pypcg_compare_stage.py` (V2 against the official graph in the demo level,
 never saved), `pypcg_v1_editor.py` (V1), and `pypcg_town_level.py` / `pypcg_town.py` (the 18-step town
-`/Game/PyPCG/L_PyTown`). `PyPCGTools` is a project plugin (Editor module) with 13 functions that
+`/Game/PyPCG/L_PyTown`). Every driver that swaps graphs or spawns volumes refuses unless its level
+(the demo, or `L_PyTown`, by full package path) is current (`pypcg/level.py`). `PyPCGTools` is a project plugin (Editor module) with 13 functions that
 Python cannot reach otherwise (graph IR export, parameter and pin writes, `MakePolygon2DData`,
 dynamic pins). `PCGPythonInterop` is an enabled engine plugin (Beta, editor-only), built into
 `E:\UnrealEngine`. The assets under `/Game/PyPCG/Slim`, `/Game/PyPCG/Town` and `/Game/PyPCG/Probe`
@@ -143,38 +149,19 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 752 passed, 18 skipped (the skips are the retired per-node drafts) |
-| `PyPCGTools` C++ automation | `UnrealEditor-Cmd.exe ... -ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
-| MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | |
+| `pypcg` (Python form of the 18 stage graphs, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 762 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
+| MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 
-**C++ automation tests live in the `PyPCGTools` plugin** (`Plugins/PyPCGTools/Source/PyPCGTools/Private/Tests/`).
-Run them headlessly with `-ExecCmds="Automation RunTests PyPCGTools; Quit"` (command below); nine tests,
-all must report `Result={Success}`. The game module `PCG_Claude` still registers none, so a
-`PCG_Claude` filter matches nothing and exits **255**.
+- `pypcg` runs on system Python 3.14 because the MCP venv lacks Pillow.
+  `C:\Python314\python.exe Tools/pypcg/baseline.py check` checks that the official CitySample assets
+  under `Plugins/CitySamplePCG/Content` keep their recorded mtime and size.
+- One MCP test: `... -m pytest mcp_server/tests/test_protocol.py::test_build_run_frame_roundtrips_to_expected_json -q`.
+- The C++ tests live in `Plugins/PyPCGTools/Source/PyPCGTools/Private/Tests/`. The game module
+  `PCG_Claude` registers none, so a `PCG_Claude` filter matches nothing and exits **255**.
 
-The `pypcg` package is tested with system Python 3.14 because the MCP venv lacks Pillow.
-`C:\Python314\python.exe Tools/pypcg/baseline.py check` checks that the official CitySample assets
-under `Plugins/CitySamplePCG/Content` keep their recorded mtime and size.
-
-The MCP server's own tests run against the project venv from the repo root:
-
-```powershell
-# whole suite
-.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q
-
-# one file, or one test
-.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests/test_protocol.py -q
-.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests/test_protocol.py::test_build_run_frame_roundtrips_to_expected_json -q
-```
-
-The UE automation harness itself works and is how you run engine or in-editor tests headlessly.
-Verified against an engine self-test (`System.Core.Algo.Unique` to `Result={Success}`, exit 0):
-
-```powershell
-& "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests System.Core.Algo; Quit" -unattended -nopause -nosplash -nullrhi -log
-```
-
-The `PyPCGTools` plugin's nine tests run the same way:
+The UE automation harness runs engine or in-editor tests headlessly (verified with the engine
+self-test filter `System.Core.Algo`; swap the filter for `PyPCGTools` to run the plugin's tests):
 
 ```powershell
 & "E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "E:\PCG_Claude\PCG_Claude.uproject" -ExecCmds="Automation RunTests PyPCGTools; Quit" -unattended -nopause -nosplash -nullrhi -log
