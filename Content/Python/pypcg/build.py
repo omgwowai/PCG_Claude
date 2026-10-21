@@ -31,7 +31,18 @@ def _pin(node, which, label):
     return None
 
 
+WRITABLE = "/Game/PyPCG/"          # the only tree build() may clear and rewrite (final review M1)
+
+
+def check_target(path):
+    """Refuse any graph path outside /Game/PyPCG/. The C++ write guard (PyPCGToolsLibrary IsProtected)
+    does not see these Python-API writes, and _write CLEARS the asset before writing it."""
+    if not str(path).startswith(WRITABLE):
+        raise RuntimeError("refusing to write %s: pypcg.build writes only under %s" % (path, WRITABLE))
+
+
 def asset(path):
+    check_target(path)
     EAL = unreal.EditorAssetLibrary
     if EAL.does_asset_exist(path):
         return EAL.load_asset(path)
@@ -139,7 +150,12 @@ def _class(name):
 
 def _write(ir, path, fresh_seeds):
     """Clear the asset at path and write ir into it: parameters, nodes, settings, overrides, pin
-    defaults, getter bindings, dynamic pins, titles, comments and edges. Returns (graph, nodes by IR name)."""
+    defaults, getter bindings, dynamic pins, titles, comments and edges. Returns (graph, nodes by IR name).
+
+    A build that reports diffs is not saved, but the asset stays cleared and rewritten IN MEMORY (dirty);
+    a later save-all would persist it. No reload-from-disk is done here: reload_packages on a graph that
+    stage volumes reference was never measured in this project, and the editor cannot be tested offline."""
+    check_target(path)
     g = asset(path)
     unreal.get_editor_subsystem(unreal.AssetEditorSubsystem).close_all_editors_for_asset(g)
     _clear(g)

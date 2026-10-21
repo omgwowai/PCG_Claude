@@ -12,8 +12,12 @@ def contains(polygon, pt):
     return inside(pt, polygon.outer) and not any(inside(pt, h) for h in polygon.holes)
 
 
-def scatter(polygon, per_m2, rng, max_tries_factor=50):
-    """round(area * per_m2) uniform points in the polygon (holes excluded), by rejection."""
+def scatter(polygon, per_m2, rng, max_tries_factor=50, notes=None):
+    """round(area * per_m2) uniform points in the polygon (holes excluded), by rejection.
+
+    When the tries run out first (a thin polygon in a large box) fewer points come back. Pass a stage's
+    `ctx.notes` as `notes` and that shortfall is written there (review M4) instead of passing in silence;
+    the points and the draws are the same either way."""
     n = int(round(area_m2(polygon) * per_m2))
     (x0, y0), (x1, y1) = bbox(polygon.outer)
     out, tries = [], 0
@@ -22,6 +26,8 @@ def scatter(polygon, per_m2, rng, max_tries_factor=50):
         p = (rng.uniform(x0, x1), rng.uniform(y0, y1))
         if contains(polygon, p):
             out.append(p)
+    if notes is not None and len(out) < n:
+        notes.append("scatter under-filled: %d of %d points after %d tries" % (len(out), n, tries))
     return out
 
 

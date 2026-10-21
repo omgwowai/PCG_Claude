@@ -348,7 +348,9 @@ def test_the_stage_reserves_one_minus_the_ratio_of_its_lots_on_average():
 
 
 def test_a_zero_grid_size_still_fails_loudly_outside_subdivision_mode():
-    with pytest.raises(ZeroDivisionError):
+    # Final review M4: loudly, but as the package's StageError rather than a ZeroDivisionError.
+    from pypcg.stage_api import StageError
+    with pytest.raises(StageError, match="grid width"):
         geo.grid_lines(box(0, 0, 10000, 4000).outer, 0.0, 1500.0)
 
 

@@ -3,6 +3,7 @@ and the grid of Subdivide_Areas_withGrid (spike report, 2026-10-15). ops supplie
 from .plane import at, clip_path, frame_box, signed_area, split_frame
 
 SLIVER_CM2 = 1.0e4                # pieces under 1 m2 are boolean noise and never output
+MAX_GRID_LINES = 10000            # per axis and ring: past this a grid spacing is a typo, not a layout (review M4)
 
 
 def auto_split(ring, ratio, ops):
@@ -49,7 +50,19 @@ def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True, 
 
     `clipped=False` returns the whole extended line (once) for every line that crosses the ring:
     that is what the loop's `Polygon2DOperation_2 CutWithPaths` cuts the ring with (`Reroute_6`),
-    while `ClipPaths_1` publishes the clipped pieces. `edge` is `frame_box`'s."""
+    while `ClipPaths_1` publishes the clipped pieces. `edge` is `frame_box`'s.
+
+    A non-positive spacing (size mode) or subdivision count, or a spacing so small that one axis would carry
+    more than MAX_GRID_LINES lines, raises pypcg.stage_api.StageError naming the value (spec V1: extreme
+    parameters give a reasoned result, not a ZeroDivisionError or a hang)."""
+    from pypcg.stage_api import StageError       # imported here: stage_api imports geo
+    if subdiv is None:
+        bad = [(k, v) for k, v in (("grid width", width), ("grid length", length)) if not v > 0]
+    else:
+        bad = [(k, v) for k, v in (("width subdivisions", subdiv[0]), ("length subdivisions", subdiv[1]))
+               if not v > 0]
+    if bad:
+        raise StageError("grid_lines: %s must be positive" % ", ".join("%s %r" % kv for kv in bad))
     o, X, Y, u0, u1, w0, w1 = frame_box(ring, edge)
     out = []
     if subdiv is None:
@@ -61,6 +74,9 @@ def grid_lines(ring, width, length, extend=100000.0, subdiv=None, clipped=True, 
         if subdiv is not None and not step > 0:
             continue                          # a degenerate box in subdivision mode: no line on that axis
         n = int((hi - lo) / step + 2 * margin)   # CreatePointsGrid(CellCorners), extents = half box + margin cells
+        if n > MAX_GRID_LINES:
+            raise StageError("grid_lines: a %.0f cm box at a %r cm spacing gives %d lines on axis %s (limit %d)"
+                             % (hi - lo, step, n, axis, MAX_GRID_LINES))
         for i in range(2, n + 1):             # FilterDataByIndex drops partitions 0 and 1
             c = lo + (i - margin) * step
             line = ([at(o, X, Y, c, w0 - extend), at(o, X, Y, c, w1 + extend)] if axis == "X" else

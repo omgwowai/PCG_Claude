@@ -54,6 +54,21 @@ def test_grid_lines_on_a_rectangle():
     assert all(geo.path_length(seg) == pytest.approx(5000 if axis == "X" else 10000) for axis, seg in lines)
 
 
+def test_grid_lines_refuses_non_positive_and_absurd_spacings():
+    # Final review M4: a user-set grid spacing of 0 or below, or a subdivision count of 0, is a StageError
+    # (not a ZeroDivisionError), and so is a spacing that would lay more than MAX_GRID_LINES lines.
+    from pypcg.geo import subdivide
+    from pypcg.stage_api import StageError
+    for width, length in ((0.0, 1000.0), (1000.0, -5.0)):
+        with pytest.raises(StageError, match="must be positive"):
+            geo.grid_lines(RECT, width, length)
+    with pytest.raises(StageError, match="subdivisions"):
+        geo.grid_lines(RECT, 0.0, 0.0, subdiv=(0, 2))
+    with pytest.raises(StageError, match="limit %d" % subdivide.MAX_GRID_LINES):
+        geo.grid_lines(RECT, 0.5, 1000.0)                    # 100 m at 5 mm: ~20 000 lines
+    assert geo.grid_lines(RECT, 2.0, 1000.0)                 # 5 000 lines: allowed
+
+
 def test_recursive_split_halves_a_rectangle():
     areas, paths = [], []
     geo.recursive_split(RECT, FakeOps(), 1, 1000 * 1e4, lambda ring: 0.5, areas, paths)
@@ -98,6 +113,18 @@ def test_scatter_count_containment_and_determinism():
     a = geo.scatter(poly, 0.01, random.Random("1"))
     assert len(a) == 96 and all(geo.contains(poly, p) for p in a)
     assert a == geo.scatter(poly, 0.01, random.Random("1")) and a != geo.scatter(poly, 0.01, random.Random("2"))
+
+
+def test_scatter_notes_an_under_fill_without_changing_its_points():
+    # Final review M4: a thin sliver in a large bounding box runs out of tries; the shortfall is noted.
+    sliver = Polygon([(0, 0), (100000, 100000), (100000, 100010)])
+    notes = []
+    a = geo.scatter(sliver, 1.0, random.Random("1"), max_tries_factor=1, notes=notes)
+    assert a == geo.scatter(sliver, 1.0, random.Random("1"), max_tries_factor=1)
+    assert len(notes) == 1 and "under-filled" in notes[0] and ("%d of" % len(a)) in notes[0]
+    full = []
+    geo.scatter(Polygon(RECT), 0.0001, random.Random("1"), notes=full)
+    assert full == []
 
 
 def test_choose_keeps_an_exact_share():

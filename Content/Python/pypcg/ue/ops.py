@@ -24,6 +24,17 @@ def _polygons(pl):
     return out
 
 
+def _checked(what, out, ok, rings):
+    """GeometryScript's success flag is not trusted on its own (it is read as advisory throughout this file),
+    but a FALSE flag with an EMPTY result is the silent-zero case: log it, so it is in the editor log
+    (final review M12). The result is returned unchanged."""
+    polys = _polygons(out)
+    if not ok and not polys:
+        unreal.log_warning("PyPCG ops.%s: GeometryScript reported failure and returned no polygon (%d input "
+                           "ring(s)); the stage sees an empty result" % (what, len(rings)))
+    return polys
+
+
 def _closed(path):
     return len(path) > 1 and abs(path[0][0] - path[-1][0]) < 1e-9 and abs(path[0][1] - path[-1][1]) < 1e-9
 
@@ -66,13 +77,14 @@ class Ops:
         positive). The primitive's node is Clipper2's `InflatePaths`; its settings leave the join at
         the default (square, miter limit 2), which is what every PCGPrimitives caller here uses.
         `polygons_offset` returns `(polygon_list, operation_success)` (probed 2026-10-16); the flag is
-        not trusted, matching how the other booleans in this file are read."""
+        not trusted, matching how the other booleans in this file are read, except that a false flag
+        with an empty result is logged (`_checked`)."""
         opts = unreal.GeometryScriptPolygonOffsetOptions()
         opts.set_editor_property("join_type", unreal.GeometryScriptPolyOffsetJoinType.SQUARE
                                  if join == "square" else unreal.GeometryScriptPolyOffsetJoinType.MITER)
         opts.set_editor_property("miter_limit", float(miter_limit))
-        out, _ok = PL.polygons_offset(_list(rings), opts, float(distance), True)
-        return _polygons(out)
+        out, ok = PL.polygons_offset(_list(rings), opts, float(distance), True)
+        return _checked("offset", out, ok, rings)
 
     def path_offset(self, path, distance, end="butt", join="square", miter_limit=2.0):
         """`CreatePolygon2D(ForceOpen, OpenPolygonWidth)`: close an open path into the area within
@@ -89,8 +101,8 @@ class Ops:
                                                      unreal.GeometryScriptPathOffsetEndType.BUTT))
         opts.set_editor_property("miter_limit", float(miter_limit))
         ring = [_v2(p) for p in (path[:-1] if _closed(path) else path)]
-        out, _ok = PL.create_polygons_from_path_offset(ring, opts, float(distance), True)
-        return _polygons(out)
+        out, ok = PL.create_polygons_from_path_offset(ring, opts, float(distance), True)
+        return _checked("path_offset", out, ok, [ring])
 
     def cut_with_paths(self, ring, paths):
         """Polygon2DOperation(CutWithPaths): the booleans run in the subject polygon's own plane frame,
