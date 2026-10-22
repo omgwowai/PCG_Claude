@@ -274,11 +274,29 @@ def _slim_layout(g, ir, made):
     _ok(L.set_graph_comment_boxes(g, json.dumps({"boxes": []})), "comment boxes")
 
 
-def build_slim(ir, path, save=True):
+def banded_layout(positions, titles):
+    """A build_slim layout from an offline positions(ir) -> ({node: (x, y)}, {band: box}) (pypcg.combined),
+    plus one comment box per band titled titles[band]."""
+    def layout(g, ir, made):
+        pos, boxes = positions(ir)
+        for name, (x, y) in pos.items():
+            made[name].set_node_position(int(x), int(y))
+        out = []
+        for b, (x0, y0, x1, y1) in boxes.items():
+            out.append({"CommentColor": {"A": 0.35, "B": 0.25, "G": 0.2, "R": 0.15}, "CommentDepth": -1,
+                        "FontSize": 48, "MoveMode": 0, "NodeComment": titles[b], "NodeDetails": "",
+                        "NodePosX": int(x0), "NodePosY": int(y0), "NodeWidth": int(x1 - x0),
+                        "NodeHeight": int(y1 - y0), "bColorCommentBubble": False, "bCommentBubblePinned": False,
+                        "bCommentBubbleVisible": False, "bCommentBubbleVisible_InDetailsPanel": False})
+        _ok(L.set_graph_comment_boxes(g, json.dumps({"boxes": out})), "comment boxes")
+    return layout
+
+
+def build_slim(ir, path, save=True, layout=None):
     """Write a slim graph and check it against its own description (spec 3, structural check);
-    save only when they agree."""
+    save only when they agree. `layout` replaces the column layout (the merged city graph bands its stages)."""
     g, made = _write(ir, path, {})
-    _slim_layout(g, ir, made)
+    (layout or _slim_layout)(g, ir, made)
     diffs = compare.slim_diff(extract.export(g), ir)
     if not diffs and save:
         if not unreal.EditorAssetLibrary.save_asset(path, only_if_is_dirty=False):

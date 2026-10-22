@@ -468,3 +468,55 @@ V3（小镇）见 §7：18 步全过，两遍在 `v2.same` 比较的量上相同
     每次导出都记一条类加载失败；`test_slim_dsl` 有几条断言不会失败；`plane.xy` / `plane.drop_closing` 无直接测试；`MakePolygon2DData`
     的平面 / 质心只用外环（有洞时 `$LocalPosition` 不同，世界几何相同）。
 16. **`geo.plane.clip_path` 给切点用路径首顶点的 z**，不插值：z 变化的 3D 路径上切点高度不对；没在坡上样条上对照引擎的 `ClipPaths`（final review M5）。
+
+## 13. 单图版：一张 PCG 图生成整座小镇（`/Game/PyPCG/City/PCG_PyCity`）
+
+把 18 张瘦身图合成**一张** PCG 图，挂在**一个** PCG volume 上一次生成整座小镇。核心业务逻辑仍全部在 Python 里（32 个 Python 节点
+运行 `pypcg/stages/` 下的模块，和 18 卷版是同一份代码）；配置和控制区域都还是传统方式。
+
+| | 位置 |
+|---|---|
+| 合并图 | `/Game/PyPCG/City/PCG_PyCity`（473 个节点、82 个参数；`pypcg/combined.py` 描述，结构核对 0 diff） |
+| 关卡 | `/Game/PyPCG/L_PyCity`（L_PyTown 的模板副本，只留 1 个 volume `PCG_PyCity` + 控制 actor） |
+| 驱动 | `Content/Python/pypcg_city.py`（`build` / `make` / `layout` / `bind` / `assign` / `reset` / `gen` / `read` / `overview` / `save`） |
+| 绑定 | `pypcg/profiles/city.py`、`city_bindings.json` |
+| 测试 | `Tools/pypcg/tests/test_combined.py`（离线） |
+
+**配置（传统方式，可手调）。** 每个阶段的参数都是合并图的用户参数，改名为 `SNN_<原名>`（如 `S06_SmallMediumThreshold`、`S07_local_Width`），
+在 Details 面板按 `NN <阶段>` 分类（`06 Districts`、`07 Roads|Road Parameters` ……）。选中 `PCG_PyCity`，在 PCG 组件的 graph instance
+里勾选覆盖、改值、点 Generate 即可，和改官方图的覆盖一样。每个 Python 节点只接自己阶段的参数，host 读参数时去掉 `SNN_` 前缀
+（`stage_api.unprefixed`；收到别的阶段的参数会报错）。
+
+**控制区域（传统方式）。** 全是关卡里的 actor，照旧按 tag 或引用读取：
+- tag：`City`（城市外轮廓）、`Arteries`、`Terrain_shaping_1`、`HighRise`、`USER_SPLINE`、`LAKE`、`FOREST_EXCLUSION`；
+- actor 引用：`MainTowerPark`（主塔小公园样条）、`HighWay_2` / `HighWay_3`（高速样条）——`bind` 把它们绑到本关卡；
+- 主塔、中央公园的位置与朝向：原来的两个 footprint volume 留在关卡里当**控制 actor**（不再挂图），按 tag
+  `PyCity_MainTowerFootprint` / `PyCity_CentralParkFootprint` 读；挪动、旋转它们就是挪主塔 / 公园。尺寸仍是参数（`S04_RectWidth` 等）。
+
+**合并时改了什么（只有这三类）。**
+1. 读**另一个阶段 volume 输出**的 `Get_ActorDataByRef`（31 个）换成 **Gather**，接上游阶段送进 Output 的那些边。tag 随数据走，
+   下游的 tag 过滤原样不动。（不能用 Reroute：PCG 的 Reroute 输入只收一条边。）
+2. 阶段 4 / 5 的"读自身 volume"改成按 tag 读上面的控制 actor（`combined.CONTROL_TAGS`）。
+3. **地形是共享资源**：18 卷版靠"按阶段顺序生成"保证读写次序，单图里没有阶段顺序、只有数据边。所以每个阶段的 `Get_MeshTerrain`
+   都用 `Execution Dependency` 等前面所有阶段的 `Write_MeshTerrain`，每个写入也等前面所有阶段的读取——每次读到的地形与 18 卷版相同。
+
+**流程**（一次一个 phase；长 phase 用 `{"defer": true}`，结果写到 `Saved/Reports/pypcg_city_deferred.json`）：
+
+```
+pypcg_city.py {"phase": "build", "defer": true}     # 描述 → 资产，0 diff 才保存
+pypcg_city.py {"phase": "make"}                      # 新建 / 打开 L_PyCity
+pypcg_city.py {"phase": "layout", "defer": true}     # 删 15 个阶段 volume，留 PCG_PyCity + 2 个控制 actor
+pypcg_city.py {"phase": "bind"}                      # 3 个控制 actor 引用 → city_bindings.json，然后再 build 一次
+pypcg_city.py {"phase": "assign"}                    # 挂图 + 小镇的覆盖（改名后）
+pypcg_city.py {"phase": "reset"} / {"phase": "gen", "pass": 1}   # 生成约 10–17 分钟
+pypcg_city.py {"phase": "read", "pass": 1, "defer": true}        # 逐网格对照 18 卷小镇
+pypcg_city.py {"phase": "save"}                      # 只存 L_PyCity，且只在唯一的图是合并图时
+```
+
+**结果（2026-10-22）。** 32 个 Python 节点全部运行；**545 671** 个实例、1 270 种网格（18 卷小镇 545 666、1 270 种）；两遍逐网格完全相同。
+与小镇不同的只有阶段 12 的 8 种屋顶小件、合计 15 个实例：阶段 11 / 12 的 Python 产出逐条相同，差在原生的屋顶填充节点——
+单图里它们的输入多边形直接来自阶段 11 的节点，而不是经 `Get_ActorDataByRef` 从 volume 输出读回。差异稳定、可复现。
+
+**关卡里不存生成结果。** 生成后整座小镇都在一个 actor 里（149 MB），超过 GitHub 的 100 MB 单文件上限；所以 `L_PyCity` 存的是 cleanup 后的状态
+（这个 actor 30 KB），打开后 Generate（或 `gen`）即可重建，结果确定。注意 `cleanup_local` 之后立刻保存仍会把旧组件写进包（trap 86），
+`save` 因此先 `modify()` 一下 volume。

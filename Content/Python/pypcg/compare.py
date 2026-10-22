@@ -211,9 +211,30 @@ def match(va, vb):
             break
         counter += 1
         _INDIVIDUALISED[0] += 1
-        a0, b0 = sorted(ambiguous["a"])[0], sorted(ambiguous["b"])[0]
-        color[("a", a0)] = color[("b", b0)] = intern(("individualised", counter))
-        refine()
+        a0 = sorted(ambiguous["a"])[0]
+        tag = intern(("individualised", counter))
+
+        def unbalanced():
+            sizes = {}
+            for (s, _name), c in color.items():
+                sizes.setdefault(c, [0, 0])[0 if s == "a" else 1] += 1
+            return sum(1 for x, y in sizes.values() if x != y)
+
+        # Try each partner for a0 and keep the first that leaves every colour class balanced (one node of
+        # a per node of b). Picking blindly by name is right only when the two nodes are truly symmetric;
+        # in a merged graph two look-alike nodes often differ by their edge index into a shared Gather,
+        # and a wrong guess there cascades into dozens of false diffs.
+        saved, best = dict(color), None
+        for b0 in sorted(ambiguous["b"]):
+            color = dict(saved)
+            color[("a", a0)] = color[("b", b0)] = tag
+            refine()
+            score = unbalanced()
+            if best is None or score < best[0]:
+                best = (score, b0, dict(color))
+            if score == 0:
+                break
+        color = best[2]
     # Weak pass: nodes that differ in some field still pair when class, subgraph and title agree
     # (then class + subgraph), so a changed value reports as one field diff, not missing + extra.
     for key in (lambda f: (f["class"], f["subgraph"], f["title"]), lambda f: (f["class"], f["subgraph"])):
