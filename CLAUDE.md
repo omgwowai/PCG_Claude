@@ -138,6 +138,13 @@ regenerate after opening it. `/Game/PyPCG/L_PyCitySmall` runs the same graph on 
 Every control actor is read by tag, so the graph runs in any level that carries the tags; rebuilding
 the graph resets the volume's overrides, so run `assign` after every `build`.
 
+**PyWorld** (guide: `docs/pyworld-guide.md`). The world-building pipeline of the talk "Building Worlds with Houdini"
+(Ubisoft, Ghost Recon) as nine PCG graphs `/Game/PyPCG/World/PCGW_01_Terrain` … `PCGW_09_Surface`, one Python node each,
+run in order in `/Game/PyPCG/L_PyWorld` (a 2 x 2 km valley: terrain, river, roads, bridges, settlements, vegetation, props,
+surface materials). Logic in `Content/Python/pypcg/stages/wNN_*.py` and `pypcg/world/`; driver `Content/Python/pyworld.py`
+(`build / make / layout / assign / reset / gen / read / tops / check / shot / compare / save`, one phase per call);
+offline tests `Tools/pypcg/tests/test_world_*.py`. The level is saved generated (94 MB over 179 files).
+
 ## Build
 
 ```powershell
@@ -160,7 +167,7 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 762 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 839 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 

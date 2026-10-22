@@ -275,3 +275,13 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **89** | **结构核对的 WL 匹配在大图里会"选错对称点"**：两个看似相同的节点（同类同参数）只差在汇入同一 Gather 的边序号，按名字字典序硬配一对会级联出几十条假 diff（合并图 44 / 73 条）。`compare.match` 已改为对歧义组逐个试配、取让所有颜色类平衡的那一个。注意：只要图里还有**真** diff，就没有任何配对能平衡，假 diff 会和真 diff 混在一起出现 | 看到大量 "edge 顺序" 类 diff 时先修掉非边类的真 diff（如结构体只写了一半的设置，trap 90），再看剩下的 |
 | **90** | **写结构体设置（如 `ActorSelector`）时只给部分字段，导出时引擎会补全其余字段**，结构核对把它报成设置差异。 | 描述里写完整结构体：先建一次、用 `extract.export` 读回引擎补全后的样子，抄进描述（`combined._actor_selector`） |
 | **91** | **重写（clear + rewrite）一个 PCG 图资产后，挂它的组件上的 graph instance 覆盖全部回到图的默认值**，组件仍指着同一个资产，看不出变化。实测 2026-10-22：重建 `PCG_PyCity` 后直接生成，地形比例 0.5（覆盖是 0.4）、阶段 6 15 项（应 50）、阶段 9 11 项（应 479），整城几乎没有建筑 | 每次重建图之后重新套覆盖（`pypcg_city.py assign`）；生成前核对组件覆盖（`gen` 已这样做：缺覆盖就拒绝） |
+
+## 10. 2026-10-22 PyWorld（山谷世界，`docs/pyworld-guide.md`）实测
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **92** | **`Get_ActorData`（按 tag）能直接读另一个 PCG volume 的生成输出**：它的 `GetDataFromPCGComponentOrParseComponents` 模式拿到的就是那个组件 Output 节点收到的数据，数据 tag 原样带过来（只删含 `input` 子串的 tag）。PyWorld 的 9 个阶段全靠它串起来 | 跨阶段传数据不必用 actor 引用：给 volume 一个 tag（`PyWorld_W02`），下游按 tag 读；tag 名里别带 `input` |
+| **93** | **`MeshPartition` actor 的地形定义能从 Python 换**：`set_editor_property("mega_mesh_definition", load_asset(MPD_Basic))` 立即生效，`MPD_Basic` 的 6 个材质通道（Grass Rock ForestFloor Dirt Mud Gravel）由 `Write_MeshTerrain(Channels=[...])` 加同名 Float 点属性写入，权重和为 1 时颜色正确 | 需要地表材质时先换成带通道的 MPD；`ModifierLayerPriority` 留默认 `None` 即可 |
+| **94** | **PCGPrimitives 的建筑语法（`SGD_Bldg_B_Advance_Template`）只要一个足迹不合适，整个节点一栋都不生成**：足迹边 < 约 8 m 报 `SubdivideSpline: Grammar does not fit for this spline`；`Size` 450 同样失败；`Size` 2 400 报 `OffsetSpline: Invalid cardinality among pins 'In' and 'Magnitude'`。600 / 750 / 1 050 / 1 950 可用，墙顶高度正好等于 `Size` | 足迹两边都 ≥ 8 m；按层高分组时每组单独一个语法节点，坏一组不连累别组；用实测的 Size |
+| **95** | **同一份足迹输入，建筑语法的实例数偶尔差 1**：三次生成 `SM_Bldg_Wall_L` 2 540 / 2 541 / 2 540（Python 输出逐项相同） | "两遍逐网格相同"对语法生成的网格要容许 ±1，比较时先确认 Python 输出相同再归因 |
+| **96** | **编辑器窗口在后台时 `take_high_res_screenshot` 不落盘**（`bThrottleCPUWhenNotForeground`），而且后发的截图会顶掉还没渲染的那张 | 截图前跑 `tl_editor_no_throttle.py {"throttle": false}`，结束后 `{"throttle": true}`；一次只发一张，等文件出现再发下一张 |
