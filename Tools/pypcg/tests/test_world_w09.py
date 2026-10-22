@@ -39,3 +39,20 @@ def test_channels():
 def test_empty_inputs():
     out, _ = run_stage(S, {})
     assert out["Terrain"] == [] and out["Summary"][0][0].values["channels"] == 0
+
+
+def test_forest_floor_has_no_cell_edges():
+    """Tree density counted per 20 m cell made square ForestFloor patches in the editor; the weight is interpolated
+    between cell centres, so neighbouring vertices (5.86 m apart) differ by at most 0.35."""
+    trees = (WP.mesh_points([((x, y, 1000.0), (0, 0, 0), (1, 1, 1), MESH["BeechA"])        # W7's forest density
+                             for x in range(-12000, 12000, 1200) for y in range(-12000, 12000, 1200)]), frozenset(["Tree"]))
+    out, _ = run_stage(S, {"Terrain": [(terrain(lambda x, y: 1000.0), frozenset())], "Upstream": [trees]})
+    t = out["Terrain"][0][0]
+    ff = {(round(p[0]), round(p[1])): t.attrs["ForestFloor"][i] for i, p in enumerate(t.loc)}
+    s = 585.9375
+    worst = 0.0
+    for (x, y), v in ff.items():
+        n = ff.get((round(x + s), y))
+        if n is not None:
+            worst = max(worst, abs(v - n))
+    assert worst <= 0.35, worst

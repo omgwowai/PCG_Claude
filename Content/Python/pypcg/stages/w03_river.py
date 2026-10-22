@@ -22,7 +22,9 @@ PARAMS = {
     "WidthStart": Param(600.0, "River width at the source (cm)", type="Double"),
     "WidthEnd": Param(2000.0, "River width at the outlet (cm)", type="Double"),
     "Depth": Param(150.0, "Bed depth under the water at the centre line (cm)", type="Double"),
-    "Meander": Param(0.6, "Strength of the noise that makes the river wander", type="Double"),
+    "Meander": Param(4.0, "How strongly the river keeps to its meandering guide line", type="Double"),
+    "MeanderAmplitude": Param(6000.0, "Sideways reach of the meanders (cm)", type="Double"),
+    "MeanderLength": Param(30000.0, "Length of one meander along the river (cm)", type="Double"),
     "TownAvoid": Param(20.0, "Extra cost per cm inside the inner half of a location", type="Double"),
 }
 INPUTS = {"Terrain": "points", "Upstream": "any"}
@@ -78,10 +80,25 @@ def run(inputs, params, ctx):
     zmin = min(z for z in co.z if z is not None)
     seed, meander, avoid = ctx.seed, params["Meander"], params["TownAvoid"]
 
+    # The meander guide: the straight line from source to outlet, swung sideways by a sine of MeanderLength with a
+    # seeded phase and a little noise; the cost grows with the squared distance from it (in amplitudes).
+    sx, sy, ex, ey = src[0], src[1], dst[0], dst[1]
+    chord = math.hypot(ex - sx, ey - sy) or 1.0
+    ux, uy = (ex - sx) / chord, (ey - sy) / chord
+    amp, wave = params["MeanderAmplitude"], params["MeanderLength"]
+    phase = noise.value(0.5, 0.5, seed + 9) * 2.0 * math.pi
+
+    def guide_gap(x, y):
+        along = (x - sx) * ux + (y - sy) * uy
+        side = -(x - sx) * uy + (y - sy) * ux
+        taper = min(1.0, max(0.0, along / wave), max(0.0, (chord - along) / wave))
+        want = amp * taper * (math.sin(2.0 * math.pi * along / wave + phase) + 0.3 * noise.fbm(along / wave, 0.5, seed + 5, 2))
+        return (side - want) / amp
+
     def cost(a, b, length):
         za, zb = co.z[a], co.z[b]
         x, y = co.xy(b)
-        c = length * (1.0 + (zb - zmin) / 800.0 + meander * noise.value(x / 40000.0, y / 40000.0, seed + 5))
+        c = length * (1.0 + (zb - zmin) / 800.0 + meander * guide_gap(x, y) ** 2)
         c += 60.0 * max(0.0, zb - za)
         for lx, ly, lr in locs:
             if math.hypot(x - lx, y - ly) < 0.5 * lr:

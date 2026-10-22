@@ -64,6 +64,22 @@ def run(inputs, params, ctx):
             for x, y, _z in v.loc:
                 key = (int(x // cell), int(y // cell))
                 buckets[key] = buckets.get(key, 0) + 1
+    smooth = {}
+
+    def smoothed(bx, by):
+        # trees per cell averaged over the 3 x 3 cells around (bx, by)
+        if (bx, by) not in smooth:
+            smooth[(bx, by)] = sum(buckets.get((bx + i, by + j), 0) for i in (-1, 0, 1) for j in (-1, 0, 1)) / 9.0
+        return smooth[(bx, by)]
+
+    def density(x, y):
+        # bilinear between the cell centres, so ForestFloor has no square edges
+        fx, fy = x / cell - 0.5, y / cell - 0.5
+        bx, by = int(fx // 1), int(fy // 1)
+        u, v = fx - bx, fy - by
+        a, b = smoothed(bx, by), smoothed(bx + 1, by)
+        c, d = smoothed(bx, by + 1), smoothed(bx + 1, by + 1)
+        return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v
     cache = {}
 
     def weights(k):
@@ -89,8 +105,7 @@ def run(inputs, params, ctx):
                 gravel = 1.0
             else:
                 mud = 1.0 - smoothstep(half, half + 600.0, hit[0])
-        bx, by = int(x // cell), int(y // cell)
-        dens = sum(buckets.get((bx + i, by + j), 0) for i in (-1, 0, 1) for j in (-1, 0, 1)) / 9.0
+        dens = density(x, y)
         ff = smoothstep(1.0, 4.0, dens)
         w = compose({"Rock": rock, "ForestFloor": ff * (1.0 - rock), "Dirt": dirt, "Mud": mud * (1.0 - dirt),
                      "Gravel": gravel})

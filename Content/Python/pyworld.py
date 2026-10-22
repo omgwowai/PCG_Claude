@@ -373,6 +373,11 @@ def phase_shot(args):
         az, elev = float(args.get("az", az)), float(args.get("elev", elev))
     loc, rot = G.orbit_camera(list(centre), radius, az, elev, mult, min_height=centre[2] + 800.0)
     les = _les()
+    from pypcg import world as W
+    for n, _l, _m, _t in W.STAGES:          # the 3 km volume boxes draw an orange wireframe across the sky
+        brush = _volume(n).get_component_by_class(unreal.BrushComponent)
+        if brush is not None:
+            brush.set_visibility(False, False)
     les.set_level_viewport_camera_info(unreal.Vector(*loc), unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
                                        les.get_active_viewport_config_key())
     name = "pyworld_w%02d_%s.png" % (int(args["stage"]), view) if "stage" in args else "pyworld_%s.png" % view
