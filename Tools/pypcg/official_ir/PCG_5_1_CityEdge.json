@@ -1,0 +1,1434 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.4000000059604645,
+    "G": 0.4000000059604645,
+    "R": 0.10000000149011612
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "TERRAIN BOUNDARY SAMPLING",
+   "NodeDetails": "",
+   "NodeHeight": 200,
+   "NodePosX": -2850,
+   "NodePosY": -450,
+   "NodeWidth": 1900,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.550000011920929,
+    "G": 0.25,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "CITY EDGE SPLINE",
+   "NodeDetails": "",
+   "NodeHeight": 200,
+   "NodePosX": -850,
+   "NodePosY": -450,
+   "NodeWidth": 1100,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.10000000149011612,
+    "G": 0.4000000059604645,
+    "R": 0.10000000149011612
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "PIER & WAREHOUSE SPAWNING",
+   "NodeDetails": "",
+   "NodeHeight": 224,
+   "NodePosX": 350,
+   "NodePosY": -450,
+   "NodeWidth": 1568,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": true,
+   "bCommentBubbleVisible": true,
+   "bCommentBubbleVisible_InDetailsPanel": true
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "SPAWNING",
+   "NodeDetails": "",
+   "NodeHeight": 544,
+   "NodePosX": 2032,
+   "NodePosY": -560,
+   "NodeWidth": 1072,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_5_1_CityEdge.PCG_5_1_CityEdge",
+ "graph_props": {
+  "Description": "Generates pier and warehouse structures along the city's waterfront edge.\r\n"
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2800,
+    200
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bEnabled": false,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2400,
+    200
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bEnabled": false,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionBoundSize"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionTarget"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryType"
+    },
+    {
+     "edges": [],
+     "label": "ModifierLayerPriority"
+    },
+    {
+     "edges": [],
+     "label": "ModifierSubPriority"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryInclusive"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Channels"
+    }
+   ],
+   "name": "Subgraph_9",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "MeshPartitionBoundSize": {
+     "X": 300000,
+     "Y": 300000,
+     "Z": 100000
+    },
+    "MeshPartitionQueryType": "Final"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2800,
+    -400
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
+   "title": "Get Mesh Terrain (Final)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Threshold of -72.6 corresponds to the sea surface Z in this level.\nKeeps only terrain points above water to bound the convex hull correctly.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_0",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1600,
+    -400
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": -72.639648,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "Double",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "DebugSettings": {
+     "MaterialOverride": "None",
+     "PointMesh": "/PCG/DebugObjects/PCG_Cube.PCG_Cube",
+     "PointScale": 7.56789493560791,
+     "ScaleMethod": "Absolute"
+    },
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin($Position.Z)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Above Sea Level (Z > -72.6)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_10",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_0",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1968,
+    -352
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Terrain Extract)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_9",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_10",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -2400,
+    -400
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Extract/Extract_MeshTerrainPoints.Extract_MeshTerrainPoints",
+   "title": "Extract Terrain Points"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGConvexHull2DSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_1",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "FindConvexHull2D_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -800,
+    -400
+   ],
+   "settings": {
+    "DebugSettings": {
+     "MaterialOverride": "None",
+     "PointMesh": "/PCG/DebugObjects/PCG_Cube.PCG_Cube",
+     "PointScale": 7.157337188720703,
+     "ScaleMethod": "Absolute"
+    },
+    "Seed": -721562245
+   },
+   "title": "Build Convex Hull Of Terrain Boundary"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_1",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1200,
+    -368
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Pre Convex Hull)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGCreateSplineSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FindConvexHull2D_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Mode"
+    },
+    {
+     "edges": [],
+     "label": "bClosedLoop"
+    },
+    {
+     "edges": [],
+     "label": "bLinear"
+    },
+    {
+     "edges": [],
+     "label": "bApplyCustomTangents"
+    },
+    {
+     "edges": [],
+     "label": "ArriveTangentAttribute"
+    },
+    {
+     "edges": [],
+     "label": "LeaveTangentAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseInterpTypeAttribute"
+    },
+    {
+     "edges": [],
+     "label": "InterpTypeAttribute"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAddOnComponents"
+    },
+    {
+     "edges": [],
+     "label": "TargetActor"
+    }
+   ],
+   "name": "CreateSpline_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -400,
+    -400
+   ],
+   "settings": {
+    "ArriveTangentAttribute": "ArriveTangent",
+    "InterpTypeAttribute": "InterpType",
+    "LeaveTangentAttribute": "LeaveTangent",
+    "Seed": -680163307,
+    "bClosedLoop": true,
+    "bLinear": true
+   },
+   "title": "Create City Edge Spline (Closed Linear)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRandomChoiceSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "GetSplineControlPoints_1",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "bFixedMode"
+    },
+    {
+     "edges": [],
+     "label": "FixedNumber"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "bHasCustomSeedSource"
+    },
+    {
+     "edges": [],
+     "label": "CustomSeedSource"
+    },
+    {
+     "edges": [],
+     "label": "bUseFirstAttributeOnly"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    }
+   ],
+   "name": "RandomChoice_0",
+   "outputs": [
+    "Chosen",
+    "Discarded"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    400,
+    -400
+   ],
+   "settings": {
+    "Ratio": 0.5152000188827515,
+    "Seed": -1017473487,
+    "bFixedMode": false
+   },
+   "title": "Random Selection Of Dock Spawn Points (~51%)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGetSplineControlPointsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "CreateSpline_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "GetSplineControlPoints_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    0,
+    -400
+   ],
+   "settings": {
+    "Seed": -1597445965
+   },
+   "title": "Get Edge Spline Control Points"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "RandomChoice_0",
+       "Chosen"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    800,
+    -400
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Roll)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Roll On Dock Points"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_3",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_4",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    1200,
+    -400
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Pitch)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Pitch On Dock Points"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_0",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    2448,
+    -464
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn Pier & Warehouse Assemblies"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": false,
+   "getter_param": "PartitionGridSize",
+   "inputs": [],
+   "name": "GetGraphParameter_0",
+   "outputs": [
+    "PartitionGridSize"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2448,
+    -176
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "PartitionGridSize"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_0",
+       "Output B"
+      ]
+     ],
+     "label": "Points"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_0",
+       "PartitionGridSize"
+      ]
+     ],
+     "label": "Grid_Size"
+    }
+   ],
+   "name": "Subgraph_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    2464,
+    -336
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGLoopSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_1",
+       "Out"
+      ]
+     ],
+     "label": "Points"
+    },
+    {
+     "edges": [],
+     "label": "optionalInputActors"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorBaseName"
+    },
+    {
+     "edges": [],
+     "label": "EnableCollision"
+    },
+    {
+     "edges": [],
+     "label": "Override_Material"
+    }
+   ],
+   "name": "Loop_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorBaseName": "CityEdge_"
+   },
+   "pin_defaults": [],
+   "pos": [
+    2848,
+    -336
+   ],
+   "settings": {
+    "Seed": 895873474
+   },
+   "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": false,
+   "getter_param": "Partitioned",
+   "inputs": [],
+   "name": "GetGraphParameter_1",
+   "outputs": [
+    "Partitioned"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2128,
+    -80
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Partitioned"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_2",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_1",
+       "Partitioned"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_0",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2096,
+    -400
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_4",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_2",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Piers/Dock_A_PCG.Dock_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Piers/Dock_B_PCG.Dock_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Piers/Warehouse_A_PCG.Warehouse_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Piers/Warehouse_B_PCG.Warehouse_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Piers/Warehouse_C_PCG.Warehouse_C_PCG"
+    ],
+    "PositionOffset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "RotationOffset": {
+     "Pitch": 0,
+     "Roll": 0,
+     "Yaw": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    1600,
+    -400
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Pier & Warehouse Assemblies"
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": ""
+   },
+   "name": "Partitioned",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": ""
+   },
+   "name": "PartitionGridSize",
+   "type": "Float",
+   "type_object": "",
+   "value": 25600
+  }
+ ],
+ "schema": 1
+}

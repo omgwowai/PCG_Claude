@@ -1,0 +1,21 @@
+{
+ "source": "official PCG_3_3_1_Buildings at component seed 42 on the demo level, 2026-10-20: Subgraph_38 Write_Noise output (@data.MaxHeight) per medium complex footprint, in FilterDataByAttribute_0 InsideFilter order (tap graph Saved/t20 PCG_T20Tap_a, generator Content/Python/pypcg_s11_measure.py)",
+ "noise": [
+  4571.949064731598,
+  3764.002799987793,
+  5930.679976940155,
+  4021.509349346161,
+  3829.241096973419,
+  5889.42813873291,
+  4761.574268341064,
+  3911.613881587982,
+  6381.959497928619,
+  2509.0776681900024,
+  6992.590665817261,
+  4653.2076597213745,
+  4124.830186367035,
+  3697.6524591445923,
+  4419.140934944153,
+  5329.8914432525635
+ ]
+}

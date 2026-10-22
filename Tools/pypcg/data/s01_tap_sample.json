@@ -1,0 +1,244 @@
+{
+"missing": [
+[
+"t01_extract",
+"v01_extract",
+false,
+true
+],
+[
+"t03_bounds",
+"v03_bounds",
+false,
+true
+],
+[
+"t04_footprint",
+"v04_footprint",
+false,
+true
+],
+[
+"t05_expand",
+"v05_expand",
+false,
+true
+],
+[
+"t06_square",
+"v06_square",
+false,
+true
+],
+[
+"t07_circle_raw",
+"v07_circle_raw",
+false,
+true
+],
+[
+"t08_circle",
+"v08_circle",
+false,
+true
+],
+[
+"t11_city_raw",
+"v11_city_raw",
+false,
+true
+],
+[
+"t12_city_z0",
+"v12_city_z0",
+false,
+true
+],
+[
+"t15_ratio",
+"v15_ratio",
+false,
+true
+]
+],
+"note": "the FULL taps' comparison is s01_tap_comparison.json; this one lets an offline test repeat the comparison without the 32 MB taps",
+"pairs": {
+"t02_noise": {
+"class": "PCGPointArrayData",
+"kind": "points",
+"loc": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+},
+"n": [
+6533,
+6533
+],
+"plain_attributes": [
+"None"
+],
+"plain_attributes_equal": true,
+"source_positions": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+}
+},
+"t09_annulus": {
+"class": "PCGPolygon2DData",
+"hole_bounds": [
+[
+-167617.42205567064,
+-102003.58194125592,
+146584.62472954902,
+147265.1507227634
+],
+[
+-167617.31447334302,
+-102003.57964479434,
+146584.6255884559,
+147265.15278524483
+]
+],
+"hole_bounds_max_abs": 0.10758232761872932,
+"holes": [
+[
+1185
+],
+[
+1185
+]
+],
+"kind": "polygon",
+"outer_area": [
+175418673607.51562,
+175418673607.51547
+],
+"outer_area_abs_diff": 0.000152587890625,
+"outer_bounds": [
+[
+-209415.0625,
+-209415.06250000012,
+209415.06250000012,
+209415.0625
+],
+[
+-209415.06249999994,
+-209415.06249999994,
+209415.06249999988,
+209415.06249999988
+]
+],
+"outer_bounds_max_abs": 2.3283064365386963e-10,
+"z": [
+-2419.424606,
+-2419.424606
+]
+},
+"t10_flat_annulus": {
+"class": "PCGPointArrayData",
+"kind": "points",
+"loc": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+},
+"n": [
+6533,
+6533
+],
+"plain_attributes": [
+"None"
+],
+"plain_attributes_equal": true,
+"source_positions": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+}
+},
+"t13_city_up": {
+"class": "PCGSplineData",
+"closed_linear_equal": true,
+"kind": "spline",
+"points_equal": true,
+"polyline": {
+"compared": 1032,
+"equal": 527,
+"max_abs": 3.720924723893404e-07
+},
+"tangents_equal": false,
+"tangents_max_abs": 4.999965312890708e-07
+},
+"t14_city_proj": {
+"class": "PCGPointArrayData",
+"kind": "points",
+"loc": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+},
+"n": [
+6533,
+6533
+],
+"plain_attributes": [
+"None"
+],
+"plain_attributes_equal": true,
+"source_positions": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+}
+},
+"t16_lerp": {
+"class": "PCGPointArrayData",
+"kind": "points",
+"loc": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+},
+"n": [
+6533,
+6533
+],
+"plain_attributes": [
+"None"
+],
+"plain_attributes_equal": true,
+"source_positions": {
+"compared": 6533,
+"equal": 6533,
+"max_abs": 0.0
+}
+}
+},
+"source": "every 40-th point of the same taps (Saved/t24/tap_a.json, Saved/t24/slimtap_42.json), 2026-10-20",
+"summary": {
+"contained_in": [
+"t09_annulus",
+"t13_city_up"
+],
+"max_abs_cm": 0.0,
+"official_only": [
+"t01_extract",
+"t03_bounds",
+"t04_footprint",
+"t05_expand",
+"t06_square",
+"t07_circle_raw",
+"t08_circle",
+"t11_city_raw",
+"t12_city_z0",
+"t15_ratio"
+],
+"point_sets": 4,
+"positions_compared": 26132,
+"positions_equal": 26132,
+"source_positions_compared": 26132,
+"source_positions_equal": 26132
+}
+}

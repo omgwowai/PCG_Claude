@@ -1,0 +1,102 @@
+{
+ "PCG_1_1_Terrain": {
+  "CityFlatness": 0.6000000238418579,
+  "HillsHeight": 7001
+ },
+ "PCG_1_2_BG_Buildings": {},
+ "PCG_1_3_BG_Mountains": {},
+ "PCG_2_1_MainTower_Footprint": {},
+ "PCG_2_2_CentralPark_Footprint": {},
+ "PCG_3_1_1_Districts": {
+  "Debug_DistrictCategories": false,
+  "Debug_Roads": true,
+  "Debug_Undividable_districts": false,
+  "Dividable_district_Limit": 77499.317359,
+  "LargeGridLength": 20000,
+  "LargeGridWidth": 28000,
+  "MediumGridLength": 18000,
+  "MediumGridWidth": 15000,
+  "MediumLargeThreshold": 329288.791103,
+  "SmallGridLength": 12000,
+  "SmallGridWidth": 10000,
+  "SmallMediumThreshold": 152961.092137,
+  "SubDistrictSeed": 7
+ },
+ "PCG_3_1_2_Roads": {
+  "Artery_width": 3400,
+  "Crosswalks": true,
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "Road_Profile": "/CitySamplePCG/PCG/DataAssets/Roads/Road_City/SGD_Road_City_HighRes.SGD_Road_City_HighRes",
+  "collector_width": 2600,
+  "local_Width": 1900,
+  "simpleRoads": false
+ },
+ "PCG_3_1_3_Highways": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false
+ },
+ "PCG_3_1_4_Lots": {
+  "BuildableFootprintMinSizeLargeDistrict": 1500,
+  "BuildableFootprintMinSizeMediumDistrict": 500,
+  "BuildableFootprintMinSizeSmallDistrict": 500,
+  "BuildableLotMaxSizeLargeDistrict": 48000,
+  "BuildableLotMaxSizeMediumDistrict": 22000,
+  "BuildableLotMaxSizeSmallDistrict": 15000,
+  "BuildableLotMinSizeLargeDistrict": 2000,
+  "BuildableLotMinSizeMediumDistrict": 2000,
+  "BuildableLotMinSizeSmallDistrict": 1000,
+  "Debug_DistrictCategories": false,
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "PlazaReservationRatio": 0.8999999761581421,
+  "PlazaReservationSeed": 0,
+  "debug": false
+ },
+ "PCG_3_2_1_Ground": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "debug": false
+ },
+ "PCG_3_2_2_LeftOverLots": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "Ratio_Plaza_vs_Trees": 0.5,
+  "UseMegaplantsTrees": false
+ },
+ "PCG_3_2_3_Parkings": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false
+ },
+ "PCG_3_3_1_Buildings": {
+  "ComplexBuildingShapes": true,
+  "Debug": false,
+  "MaxHeightLargeDistrict": 7000,
+  "MaxHeightMediumDistrict": 4000,
+  "MaxHeightSmallDistrict": 2800,
+  "MinHeightLargeDistrict": 3000,
+  "MinHeightMediumDistrict": 1500,
+  "MinHeightSmallDistrict": 1500
+ },
+ "PCG_3_3_2_Rooftops": {
+  "Partitioned": false
+ },
+ "PCG_4_1_MainTower_Visuals": {
+  "UseMegaplantsTrees": false
+ },
+ "PCG_4_2_CentralPark_Visuals": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "UseMegaplantsTrees": false
+ },
+ "PCG_5_1_CityEdge": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false
+ },
+ "PCG_5_2_OuterForest": {
+  "PartitionGridSize": 12800,
+  "Partitioned": false,
+  "TreeDensity": 0.05,
+  "UseMegaPlantsTrees": false
+ }
+}

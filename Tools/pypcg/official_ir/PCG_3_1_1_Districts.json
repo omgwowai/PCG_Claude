@@ -1,0 +1,4510 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.6000000238418579,
+    "G": 0.3499999940395355,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "1 — INPUT  |  City Shape & Arteries",
+   "NodeDetails": "",
+   "NodeHeight": 480,
+   "NodePosX": -2864,
+   "NodePosY": 1264,
+   "NodeWidth": 800,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.25,
+    "G": 0.44999998807907104,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "2 — DISTRICT SUBDIVISION  |  Spline → Sub Districts → Size Filtering",
+   "NodeDetails": "",
+   "NodeHeight": 608,
+   "NodePosX": -1504,
+   "NodePosY": 1280,
+   "NodeWidth": 4032,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.25,
+    "G": 0.44999998807907104,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "3 — BLOCK GRID SUBDIVISION  |  Small / Medium / Large",
+   "NodeDetails": "",
+   "NodeHeight": 1888,
+   "NodePosX": 2784,
+   "NodePosY": 688,
+   "NodeWidth": 1680,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.10000000149011612,
+    "G": 0.30000001192092896,
+    "R": 0.5
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "4 — TAG ASSIGNMENT  |  Roads  (Local · Collector · Artery · Undividable)",
+   "NodeDetails": "",
+   "NodeHeight": 1200,
+   "NodePosX": 5108,
+   "NodePosY": 1488,
+   "NodeWidth": 300,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.10000000149011612,
+    "G": 0.30000001192092896,
+    "R": 0.5
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "5 — TAG ASSIGNMENT  |  District Categories  (Small · Medium · Large)",
+   "NodeDetails": "",
+   "NodeHeight": 704,
+   "NodePosX": 5056,
+   "NodePosY": 536,
+   "NodeWidth": 304,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.44999998807907104,
+    "G": 0.10000000149011612,
+    "R": 0.44999998807907104
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "6 — DEBUG  |  Roads &amp; Undividable Districts",
+   "NodeDetails": "",
+   "NodeHeight": 1344,
+   "NodePosX": 6848,
+   "NodePosY": 368,
+   "NodeWidth": 2144,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.44999998807907104,
+    "G": 0.10000000149011612,
+    "R": 0.44999998807907104
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "7 — DEBUG  |  District Categories  (Red=Small · Green=Medium · Blue=Large)",
+   "NodeDetails": "",
+   "NodeHeight": 864,
+   "NodePosX": 6832,
+   "NodePosY": 2016,
+   "NodeWidth": 2176,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 1,
+    "B": 0.6000000238418579,
+    "G": 0.3499999940395355,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "8 — OUTPUT ",
+   "NodeDetails": "",
+   "NodeHeight": 256,
+   "NodePosX": 5722,
+   "NodePosY": 1158,
+   "NodeWidth": 800,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts",
+ "graph_props": {
+  "Description": "This PCG will define the main city layout. It consumes the city shape and the arteries. And we'll create out of it  districts, sub-districts, City blocks and the first network of roads. There are several parameters that allow you to adjust those districts and blocks. "
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2656,
+    1152
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AddTags_0",
+       "Out"
+      ],
+      [
+       "AddTags_2",
+       "Out"
+      ],
+      [
+       "AddTags_1",
+       "Out"
+      ],
+      [
+       "AddTags_3",
+       "Out"
+      ],
+      [
+       "AddTags_SmallDistricts",
+       "Out"
+      ],
+      [
+       "AddTags_MediumDistricts",
+       "Out"
+      ],
+      [
+       "AddTags_LargeDistricts",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6272,
+    1264
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_0",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_5",
+   "outputs": [
+    "Areas",
+    "Subdividing Splines"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -1454,
+    1410
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withSpline.Subdivide_Areas_withSpline",
+   "title": "Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_6",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_MediumGridWidth",
+       "Out"
+      ]
+     ],
+     "label": "GridWidth"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_MediumGridLength",
+       "Out"
+      ]
+     ],
+     "label": "GridLength"
+    },
+    {
+     "edges": [],
+     "label": "SubdivWidth"
+    },
+    {
+     "edges": [],
+     "label": "SubdivLength"
+    },
+    {
+     "edges": [],
+     "label": "AngleJitter"
+    },
+    {
+     "edges": [],
+     "label": "UseSubdivisionInsteadOfSizes"
+    },
+    {
+     "edges": [],
+     "label": "AllowDisturbance"
+    },
+    {
+     "edges": [],
+     "label": "Disturbance"
+    },
+    {
+     "edges": [],
+     "label": "DisturbanceSubdivisionsDistance"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_6",
+   "outputs": [
+    "Areas",
+    "Subdividing_splines"
+   ],
+   "overrides": {
+    "GridLength": 6000,
+    "GridWidth": 12000
+   },
+   "pin_defaults": [],
+   "pos": [
+    3216,
+    1360
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
+   "title": "Medium District Blocks"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Areas"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Iterations"
+    },
+    {
+     "edges": [],
+     "label": "MaxSplitDistancFromCenter"
+    },
+    {
+     "edges": [],
+     "label": "MinAreaSize"
+    },
+    {
+     "edges": [],
+     "label": "AngleJitter"
+    },
+    {
+     "edges": [],
+     "label": "AllowDisturbance"
+    },
+    {
+     "edges": [],
+     "label": "Disturbance"
+    },
+    {
+     "edges": [],
+     "label": "DisturbanceSubdivisionsDistance"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_SubDistrictSeed",
+       "Out"
+      ]
+     ],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_7",
+   "outputs": [
+    "Areas",
+    "Subdivide Splines"
+   ],
+   "overrides": {
+    "Iterations": 1,
+    "MaxSplitDistancFromCenter": 0.2,
+    "MinAreaSize": 1000,
+    "Seed": 7
+   },
+   "pin_defaults": [],
+   "pos": [
+    -752,
+    1408
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_WithRecursiveSplit.Subdivide_Areas_WithRecursiveSplit",
+   "title": "Sub_districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_7",
+       "Areas"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetGenericGraphParameter_0",
+       "Out"
+      ]
+     ],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_8",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Operator": "Greater",
+    "Size": 50000
+   },
+   "pin_defaults": [],
+   "pos": [
+    -80,
+    1408
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Dividable districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorTag"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorTag": "City"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2814,
+    1394
+   ],
+   "settings": {
+    "Seed": -1644386363
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
+   "title": "Get City Shape Spline"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorTag"
+    }
+   ],
+   "name": "Subgraph_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorTag": "Arteries"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2814,
+    1594
+   ],
+   "settings": {
+    "Seed": -1644386363
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorData.Get_ActorData",
+   "title": "Get Arteries"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_SubDistrictSeed",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -752,
+    1568
+   ],
+   "settings": {
+    "OutputAttributeName": "SubDistrictSeed",
+    "PropertyPath": "SubDistrictSeed",
+    "Seed": -1618447870
+   },
+   "title": "Get Sub District Seed"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetGenericGraphParameter_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -80,
+    1552
+   ],
+   "settings": {
+    "PropertyPath": "Dividable_district_Limit",
+    "Seed": -1618447870
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "LOCAL ROADS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_13",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5184,
+    1632
+   ],
+   "settings": {
+    "Seed": -1617982074,
+    "TagsToAdd": "localRoads"
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "COLLECTOR ROADS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_2",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5158,
+    2288
+   ],
+   "settings": {
+    "Seed": -1617982074,
+    "TagsToAdd": "CollectorRoads"
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "ARTERY ROADS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_0",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_1",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5158,
+    2538
+   ],
+   "settings": {
+    "Seed": -1617982074,
+    "TagsToAdd": "ArteryRoads"
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "Undividable Districts",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_3",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5158,
+    2038
+   ],
+   "settings": {
+    "Seed": -1617982074,
+    "TagsToAdd": "UndividableDistricts"
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_14",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_15",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_16",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_18",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_1",
+       "Debug_Roads"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_0",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7608,
+    1248
+   ],
+   "settings": {
+    "Seed": -1618154696
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Offset_RoadDebug_50m",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteExtents"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsSize"
+    },
+    {
+     "edges": [],
+     "label": "RandomColorPerData"
+    }
+   ],
+   "name": "Subgraph_9",
+   "outputs": [],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    8608,
+    1248
+   ],
+   "settings": {
+    "Seed": -1618237129
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Debug/Debug_PrimitiveData.Debug_PrimitiveData",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Debug_Roads",
+   "inputs": [],
+   "name": "GetGraphParameter_1",
+   "outputs": [
+    "Debug_Roads"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7600,
+    1392
+   ],
+   "settings": {
+    "Seed": -1618446397
+   },
+   "title": "Debug_Roads"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_19",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_2",
+       "Debug_Undividable_districts"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_1",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7568,
+    656
+   ],
+   "settings": {
+    "Seed": -1618154696
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Debug_Undividable_districts",
+   "inputs": [],
+   "name": "GetGraphParameter_2",
+   "outputs": [
+    "Debug_Undividable_districts"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6896,
+    842
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Debug_Undividable_districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Offset_DistrictDebug_50m",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "DynamicMesh"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshName"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshPath"
+    },
+    {
+     "edges": [],
+     "label": "Material"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_4",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    8608,
+    672
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_0",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Offset_RoadDebug_50m",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AbsoluteOffset": true,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 10000
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    8108,
+    1248
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift +100m for Debug"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Offset_DistrictDebug_50m",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AbsoluteOffset": true,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 9500
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    8108,
+    672
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift + 95m For Debug"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_8",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_SmallMediumThreshold",
+       "Out"
+      ]
+     ],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Filter_SmallMedium",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    592,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Filter: Small | Medium-or-Large"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Filter_SmallMedium",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_MediumLargeThreshold",
+       "Out"
+      ]
+     ],
+     "label": "Size"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Filter_MediumLarge",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    1488,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Areas_BySize.Filter_Areas_BySize",
+   "title": "Filter: Medium | Large"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_4",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_SmallGridWidth",
+       "Out"
+      ]
+     ],
+     "label": "GridWidth"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_SmallGridLength",
+       "Out"
+      ]
+     ],
+     "label": "GridLength"
+    },
+    {
+     "edges": [],
+     "label": "SubdivWidth"
+    },
+    {
+     "edges": [],
+     "label": "SubdivLength"
+    },
+    {
+     "edges": [],
+     "label": "AngleJitter"
+    },
+    {
+     "edges": [],
+     "label": "UseSubdivisionInsteadOfSizes"
+    },
+    {
+     "edges": [],
+     "label": "AllowDisturbance"
+    },
+    {
+     "edges": [],
+     "label": "disturbance"
+    },
+    {
+     "edges": [],
+     "label": "DisturbanceSubdivisionsDistance"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Grid_Small",
+   "outputs": [
+    "Areas",
+    "Subdividing_splines"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    3214,
+    906
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
+   "title": "Small District Blocks"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_7",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_LargeGridWidth",
+       "Out"
+      ]
+     ],
+     "label": "GridWidth"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_LargeGridLength",
+       "Out"
+      ]
+     ],
+     "label": "GridLength"
+    },
+    {
+     "edges": [],
+     "label": "SubdivWidth"
+    },
+    {
+     "edges": [],
+     "label": "SubdivLength"
+    },
+    {
+     "edges": [],
+     "label": "AngleJitter"
+    },
+    {
+     "edges": [],
+     "label": "UseSubdivisionInsteadOfSizes"
+    },
+    {
+     "edges": [],
+     "label": "AllowDisturbance"
+    },
+    {
+     "edges": [],
+     "label": "disturbance"
+    },
+    {
+     "edges": [],
+     "label": "DisturbanceSubdivisionsDistance"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Grid_Large",
+   "outputs": [
+    "Areas",
+    "Subdividing_splines"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    3248,
+    1920
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Subdivide/Subdivide_Areas_withGrid.Subdivide_Areas_withGrid",
+   "title": "Large District Blocks"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "SMALL DISTRICTS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_5",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_SmallDistricts",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5110,
+    690
+   ],
+   "settings": {
+    "Seed": 2078803931,
+    "TagsToAdd": "SmallDistricts"
+   },
+   "title": "Add Tags"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "MEDIUM DISTRICTS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_8",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_MediumDistricts",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5110,
+    890
+   ],
+   "settings": {
+    "Seed": 2078803931,
+    "TagsToAdd": "MediumDistricts"
+   },
+   "title": "Add Tags"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAddTagSettings",
+   "comment": "LARGE DISTRICTS",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_9",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "TagsToAdd"
+    },
+    {
+     "edges": [],
+     "label": "Prefix"
+    },
+    {
+     "edges": [],
+     "label": "Suffix"
+    },
+    {
+     "edges": [],
+     "label": "bIgnoreTagValueParsing"
+    }
+   ],
+   "name": "AddTags_LargeDistricts",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5110,
+    1090
+   ],
+   "settings": {
+    "Seed": 2078803931,
+    "TagsToAdd": "LargeDistricts"
+   },
+   "title": "Add Tags"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_SmallMediumThreshold",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    592,
+    1608
+   ],
+   "settings": {
+    "OutputAttributeName": "SmallMediumThreshold",
+    "PropertyPath": "SmallMediumThreshold",
+    "Seed": -1365531043
+   },
+   "title": "Small/Medium Threshold"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_MediumLargeThreshold",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1522,
+    1610
+   ],
+   "settings": {
+    "OutputAttributeName": "MediumLargeThreshold",
+    "PropertyPath": "MediumLargeThreshold",
+    "Seed": -1365531043
+   },
+   "title": "Medium/Large Threshold"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_SmallGridWidth",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2834,
+    1098
+   ],
+   "settings": {
+    "OutputAttributeName": "SmallGridWidth",
+    "PropertyPath": "SmallGridWidth",
+    "Seed": -1365531043
+   },
+   "title": "Small Grid Width"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_SmallGridLength",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2834,
+    1248
+   ],
+   "settings": {
+    "OutputAttributeName": "SmallGridLength",
+    "PropertyPath": "SmallGridLength",
+    "Seed": -1365531043
+   },
+   "title": "Small Grid Length"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_LargeGridWidth",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2848,
+    2112
+   ],
+   "settings": {
+    "OutputAttributeName": "LargeGridWidth",
+    "PropertyPath": "LargeGridWidth",
+    "Seed": -1365531043
+   },
+   "title": "Large Grid Width"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_LargeGridLength",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2848,
+    2262
+   ],
+   "settings": {
+    "OutputAttributeName": "LargeGridLength",
+    "PropertyPath": "LargeGridLength",
+    "Seed": -1365531043
+   },
+   "title": "Large Grid Length"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_DebugDistrictCategories",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6904,
+    2710
+   ],
+   "settings": {
+    "OutputAttributeName": "Debug_DistrictCategories",
+    "PropertyPath": "Debug_DistrictCategories",
+    "Seed": -1365531043
+   },
+   "title": "Debug District Categories"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_10",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_DebugDistrictCategories",
+       "Out"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_SmallDebug",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7408,
+    2118
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": "Branch"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_11",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_DebugDistrictCategories",
+       "Out"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_MediumDebug",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7408,
+    2318
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": "Branch"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_12",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetParam_DebugDistrictCategories",
+       "Out"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_LargeDebug",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7408,
+    2518
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": "Branch"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Offset_SmallDebug_95m",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "dynamicMesh"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshName"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshPath"
+    },
+    {
+     "edges": [],
+     "label": "material"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Mesh_SmallDebug",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Material": "/PCGPrimitives/Materials/PCG_DebugRed0.PCG_DebugRed0"
+   },
+   "pin_defaults": [],
+   "pos": [
+    8408,
+    2118
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
+   "title": "Small Debug Mesh (Red)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Offset_MediumDebug_95m",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "dynamicMesh"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshName"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshPath"
+    },
+    {
+     "edges": [],
+     "label": "material"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Mesh_MediumDebug",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Material": "/PCGPrimitives/Materials/PCG_DebugGreen1.PCG_DebugGreen1"
+   },
+   "pin_defaults": [],
+   "pos": [
+    8408,
+    2318
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
+   "title": "Medium Debug Mesh (Green)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Offset_LargeDebug_95m",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "dynamicMesh"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshName"
+    },
+    {
+     "edges": [],
+     "label": "OutMeshPath"
+    },
+    {
+     "edges": [],
+     "label": "material"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Mesh_LargeDebug",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Material": "/PCGPrimitives/Materials/PCG_DebugBlue1.PCG_DebugBlue1"
+   },
+   "pin_defaults": [],
+   "pos": [
+    8408,
+    2518
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Create/Create_Mesh_Planar.Create_Mesh_Planar",
+   "title": "Large Debug Mesh (Blue)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_MediumGridWidth",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2824,
+    1600
+   ],
+   "settings": {
+    "OutputAttributeName": "MediumGridWidth",
+    "PropertyPath": "MediumGridWidth",
+    "Seed": -1365531043
+   },
+   "title": "Medium Grid Width"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGenericUserParameterGetSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "PropertyPath"
+    },
+    {
+     "edges": [],
+     "label": "OutputAttributeName"
+    }
+   ],
+   "name": "GetParam_MediumGridLength",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2824,
+    1750
+   ],
+   "settings": {
+    "OutputAttributeName": "MediumGridLength",
+    "PropertyPath": "MediumGridLength",
+    "Seed": -1365531043
+   },
+   "title": "Medium Grid Length"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_SmallDebug",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Offset_SmallDebug_95m",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AbsoluteOffset": true,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 9500
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    7908,
+    2118
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift +95m for Debug"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_MediumDebug",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Offset_MediumDebug_95m",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AbsoluteOffset": true,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 9500
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    7908,
+    2318
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift +95m for Debug"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_LargeDebug",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Offset_LargeDebug_95m",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "AbsoluteOffset": true,
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 9500
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    7908,
+    2518
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift +95m for Debug"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "set to the ground level, regardless of the actor position in Z",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_1",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    -2314,
+    1594
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "set to the ground level, regardless of the actor position in Z",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    -2314,
+    1394
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_1",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_0",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1904,
+    1424
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "City Shape"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4850,
+    2602
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "City Shape"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Subdividing Splines"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_1",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1104,
+    1536
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Districts Subdividing Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_7",
+       "Subdivide Splines"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_2",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -432,
+    1536
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Sub Districts Subdivide Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_1",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4738,
+    2522
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_2'",
+    "Seed": 2014642815
+   },
+   "title": "Districts Subdividing Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_2",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4722,
+    2314
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_3'",
+    "Seed": 2014642815
+   },
+   "title": "Sub Districts Subdivide Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_8",
+       "Unselected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_3",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    240,
+    1536
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "UnDividable Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_3",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4818,
+    2058
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_4'",
+    "Seed": 2014642815
+   },
+   "title": "UnDividable Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Filter_SmallMedium",
+       "Unselected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_4",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    944,
+    1536
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Small Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_4",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_4",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2848,
+    944
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
+    "Seed": 2014642815
+   },
+   "title": "Small Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_4",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_5",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4818,
+    710
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
+    "Seed": 2014642815
+   },
+   "title": "Small Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Filter_MediumLarge",
+       "Unselected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_5",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    1952,
+    1584
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Medium Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_5",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_6",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2816,
+    1424
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
+    "Seed": 2014642815
+   },
+   "title": "Medium Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Filter_MediumLarge",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_6",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2096,
+    1440
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Large Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_6",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_7",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2800,
+    1984
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
+    "Seed": 2014642815
+   },
+   "title": "Large Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_5",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_8",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4786,
+    902
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
+    "Seed": 2014642815
+   },
+   "title": "Medium Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_6",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_9",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4802,
+    1110
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
+    "Seed": 2014642815
+   },
+   "title": "Large Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_4",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_10",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6936,
+    2150
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_5'",
+    "Seed": 2014642815
+   },
+   "title": "Small Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_5",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_11",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6904,
+    2342
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_6'",
+    "Seed": 2014642815
+   },
+   "title": "Medium Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_6",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_12",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6920,
+    2550
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_7'",
+    "Seed": 2014642815
+   },
+   "title": "Large Sub-Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGatherSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Grid_Small",
+       "Subdividing_splines"
+      ],
+      [
+       "Subgraph_6",
+       "Subdividing_splines"
+      ],
+      [
+       "Grid_Large",
+       "Subdividing_splines"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "Gather_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3952,
+    1408
+   ],
+   "settings": {
+    "Seed": -1096471958
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Gather_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_10",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4208,
+    1440
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Blocks Roads"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_10",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_13",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4816,
+    1664
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_11'",
+    "Seed": 2014642815
+   },
+   "title": "Blocks Roads"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_14",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7072,
+    1456
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "City Shape"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_1",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_15",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6960,
+    1376
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_1.PCGNamedRerouteDeclarationSettings_2'",
+    "Seed": 2014642815
+   },
+   "title": "Districts Subdividing Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_2",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_16",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6944,
+    1296
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_3'",
+    "Seed": 2014642815
+   },
+   "title": "Sub Districts Subdivide Splines"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_10",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_18",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7056,
+    1232
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_11'",
+    "Seed": 2014642815
+   },
+   "title": "Blocks Roads"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_3",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_19",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6928,
+    688
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_1_1_Districts.PCG_3_1_1_Districts:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_4'",
+    "Seed": 2014642815
+   },
+   "title": "UnDividable Districts"
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Seed for recursive sub-district split"
+   },
+   "name": "SubDistrictSeed",
+   "type": "Int32",
+   "type_object": "",
+   "value": 7
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "Dividable_district_Limit",
+   "type": "Double",
+   "type_object": "",
+   "value": 150000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "Debug_Roads",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "Debug_Undividable_districts",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Area threshold (cm^2). Below this -> Small district."
+   },
+   "name": "SmallMediumThreshold",
+   "type": "Double",
+   "type_object": "",
+   "value": 200000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Area threshold (cm^2). Below this -> Medium; Above -> Large."
+   },
+   "name": "MediumLargeThreshold",
+   "type": "Double",
+   "type_object": "",
+   "value": 500000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid width for Small districts (cm)."
+   },
+   "name": "SmallGridWidth",
+   "type": "Double",
+   "type_object": "",
+   "value": 6000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid length for Small districts (cm)."
+   },
+   "name": "SmallGridLength",
+   "type": "Double",
+   "type_object": "",
+   "value": 3000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid width for Large districts (cm)."
+   },
+   "name": "LargeGridWidth",
+   "type": "Double",
+   "type_object": "",
+   "value": 24000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid length for Large districts (cm)."
+   },
+   "name": "LargeGridLength",
+   "type": "Double",
+   "type_object": "",
+   "value": 12000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "When true, spawn colored planar debug meshes for Small/Medium/Large districts."
+   },
+   "name": "Debug_DistrictCategories",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid width for Medium districts (cm)."
+   },
+   "name": "MediumGridWidth",
+   "type": "Double",
+   "type_object": "",
+   "value": 12000
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "Tooltip": "Block grid length for Medium districts (cm)."
+   },
+   "name": "MediumGridLength",
+   "type": "Double",
+   "type_object": "",
+   "value": 6000
+  }
+ ],
+ "schema": 1
+}

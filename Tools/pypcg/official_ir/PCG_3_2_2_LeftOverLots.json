@@ -1,0 +1,9739 @@
+{
+ "comment_boxes": [
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Plaza",
+   "NodeDetails": "",
+   "NodeHeight": 240,
+   "NodePosX": 2448,
+   "NodePosY": 192,
+   "NodeWidth": 1312,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.26217401027679443,
+    "G": 0.22094100713729858,
+    "R": 0.71875
+   },
+   "CommentDepth": -1,
+   "FontSize": 70,
+   "MoveMode": 0,
+   "NodeComment": "INPUTS",
+   "NodeDetails": "",
+   "NodeHeight": 2560,
+   "NodePosX": -2976,
+   "NodePosY": -944,
+   "NodeWidth": 2416,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Keep only Yaw rotation",
+   "NodeDetails": "",
+   "NodeHeight": 272,
+   "NodePosX": 6022,
+   "NodePosY": -962,
+   "NodeWidth": 640,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Large Plaza",
+   "NodeDetails": "",
+   "NodeHeight": 240,
+   "NodePosX": 2432,
+   "NodePosY": -400,
+   "NodeWidth": 1312,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Small Plaza",
+   "NodeDetails": "",
+   "NodeHeight": 240,
+   "NodePosX": 2432,
+   "NodePosY": -768,
+   "NodeWidth": 1312,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Under HighWay",
+   "NodeDetails": "",
+   "NodeHeight": 240,
+   "NodePosX": 2432,
+   "NodePosY": -1056,
+   "NodeWidth": 1312,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "keep only Yaw rotation",
+   "NodeDetails": "",
+   "NodeHeight": 272,
+   "NodePosX": 5002,
+   "NodePosY": 2680,
+   "NodeWidth": 624,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Keep only Yaw rotation",
+   "NodeDetails": "",
+   "NodeHeight": 272,
+   "NodePosX": 7552,
+   "NodePosY": 192,
+   "NodeWidth": 640,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -2,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "Replacing old plaza trees, at the time Matrix demo was build, no Nanite foliage existe in Unreal, so trees were leaf less, we can now replace them with proper nanite trees.",
+   "NodeDetails": "",
+   "NodeHeight": 720,
+   "NodePosX": 5963,
+   "NodePosY": -1012,
+   "NodeWidth": 2384,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.16787099838256836,
+    "G": 0.8333330154418945,
+    "R": 0.3475309908390045
+   },
+   "CommentDepth": -2,
+   "FontSize": 50,
+   "MoveMode": 0,
+   "NodeComment": "TREES",
+   "NodeDetails": "",
+   "NodeHeight": 576,
+   "NodePosX": 2112,
+   "NodePosY": 2576,
+   "NodeWidth": 5056,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "OUT FOR PARKING SPACES",
+   "NodeDetails": "",
+   "NodeHeight": 272,
+   "NodePosX": 5776,
+   "NodePosY": 2176,
+   "NodeWidth": 336,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.578125,
+    "G": 0.38664400577545166,
+    "R": 0.3901979923248291
+   },
+   "CommentDepth": -2,
+   "FontSize": 50,
+   "MoveMode": 0,
+   "NodeComment": "GROUND",
+   "NodeDetails": "",
+   "NodeHeight": 1104,
+   "NodePosX": 2112,
+   "NodePosY": 768,
+   "NodeWidth": 6256,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -3,
+   "FontSize": 50,
+   "MoveMode": 0,
+   "NodeComment": "SPAWNING and FILTERING for slope",
+   "NodeDetails": "",
+   "NodeHeight": 1728,
+   "NodePosX": 4672,
+   "NodePosY": -1200,
+   "NodeWidth": 5216,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.1112620010972023,
+    "G": 0.33045199513435364,
+    "R": 0.7395830154418945
+   },
+   "CommentDepth": -2,
+   "FontSize": 50,
+   "MoveMode": 0,
+   "NodeComment": "PLAZA",
+   "NodeDetails": "",
+   "NodeHeight": 1648,
+   "NodePosX": 2212,
+   "NodePosY": -1180,
+   "NodeWidth": 1584,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 18,
+   "MoveMode": 0,
+   "NodeComment": "7 types of tiles",
+   "NodeDetails": "",
+   "NodeHeight": 656,
+   "NodePosX": 3968,
+   "NodePosY": 960,
+   "NodeWidth": 3152,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 60,
+   "MoveMode": 0,
+   "NodeComment": "PARTITION",
+   "NodeDetails": "",
+   "NodeHeight": 640,
+   "NodePosX": 9696,
+   "NodePosY": 720,
+   "NodeWidth": 1472,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  },
+  {
+   "CommentColor": {
+    "A": 0.5,
+    "B": 0.15000000596046448,
+    "G": 0.15000000596046448,
+    "R": 0.15000000596046448
+   },
+   "CommentDepth": -1,
+   "FontSize": 50,
+   "MoveMode": 0,
+   "NodeComment": "Large Building skirt",
+   "NodeDetails": "",
+   "NodeHeight": 336,
+   "NodePosX": 2226,
+   "NodePosY": -1688,
+   "NodeWidth": 1568,
+   "bColorCommentBubble": false,
+   "bCommentBubblePinned": false,
+   "bCommentBubbleVisible": false,
+   "bCommentBubbleVisible_InDetailsPanel": false
+  }
+ ],
+ "graph": "/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots",
+ "graph_props": {
+  "Description": "his PCG graph will populate the leftover space that regular building placement skips. Placing plazas or vegetation."
+ },
+ "nodes": [
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "In"
+    }
+   ],
+   "name": "DefaultInputNode",
+   "outputs": [
+    "In"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -640,
+    -1040
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "In",
+      "PinStatus": "Advanced",
+      "Tooltip": "Default input pin.",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGraphInputOutputSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_4",
+       "Out"
+      ]
+     ],
+     "label": "Out"
+    }
+   ],
+   "name": "DefaultOutputNode",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5840,
+    2288
+   ],
+   "settings": {
+    "Pins": [
+     {
+      "AllowedTypes": {
+       "CustomSubtype": -1,
+       "Ids": [
+        {
+         "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfo'"
+        }
+       ]
+      },
+      "Label": "Out",
+      "PinStatus": "Advanced",
+      "Tooltip": "",
+      "Usage": "Normal",
+      "bAllowMultipleConnections": true,
+      "bAllowMultipleData": true,
+      "bInvisiblePin": false
+     }
+    ],
+    "Seed": 1533108465,
+    "bHasAddedDefaultPin": true
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_24",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_12",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PointsPerSquaredMeter"
+    },
+    {
+     "edges": [],
+     "label": "SamplingPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "Uniformity"
+    },
+    {
+     "edges": [],
+     "label": "SamplingSeed"
+    },
+    {
+     "edges": [],
+     "label": "FinalCount"
+    },
+    {
+     "edges": [],
+     "label": "OutputPointsExtents"
+    },
+    {
+     "edges": [],
+     "label": "SurfaceRotation"
+    },
+    {
+     "edges": [],
+     "label": "PositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RotationRange"
+    },
+    {
+     "edges": [],
+     "label": "ScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PointsPerSquaredMeter": 0.02
+   },
+   "pin_defaults": [],
+   "pos": [
+    3313,
+    2792
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Randomly.Fill_Areas_Randomly",
+   "title": "Scatter Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_3",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022641618"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2909,
+    -421
+   ],
+   "settings": {
+    "Seed": -1612011054
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_4",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "reservedLots"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2093,
+    -517
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Only reserved lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_5",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "unbuildableLots, UnbuildableFootprints"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2093,
+    -325
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Only unbuildable lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_6",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C7649839438DB02_2022637616"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2893,
+    91
+   ],
+   "settings": {
+    "Seed": -1612011054
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_6",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_7",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "UndividableDistricts"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2237,
+    91
+   ],
+   "settings": {
+    "Seed": -1484934690
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Only Undividable districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Removes road footprints from undividable district polygons so trees\nare not scattered on road surfaces. Also excludes landmarks and highway\nvia the Subgraph_17 chain feeding into this node.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_17",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Reroute_1",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_8",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -1421,
+    91
+   ],
+   "settings": {
+    "Seed": -1484934690
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
+   "title": "Exclude Roads From Undividable Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Contracts reserved lot polygons inward by ~323 units before plaza fitting.\nSetback prevents plaza assets from placing right at the lot edge.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Contract"
+    },
+    {
+     "edges": [],
+     "label": "UnionBeforeOutputting"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_13",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Contract": 322.886339,
+    "UnionBeforeOutputting": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    2528,
+    272
+   ],
+   "settings": {
+    "Seed": -1514098683
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
+   "title": "Contract Reserved Lots (Plaza Setback ~323)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Splits reserved lots by the Ratio_Plaza_vs_Trees parameter.\nSelected lots receive plazas; unselected lots receive tree scatter.\nSeed is fixed at 10 for deterministic results.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_9",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_0",
+       "Ratio_Plaza_vs_Trees"
+      ]
+     ],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_10",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "RandomPerDataset": true,
+    "Ratio": 0.5,
+    "Seed": 10
+   },
+   "pin_defaults": [],
+   "pos": [
+    288,
+    1088
+   ],
+   "settings": {
+    "Seed": -1618237129
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Split: Plaza Fraction vs Tree Fraction"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Ratio_Plaza_vs_Trees",
+   "inputs": [],
+   "name": "GetGraphParameter_0",
+   "outputs": [
+    "Ratio_Plaza_vs_Trees"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    288,
+    1232
+   ],
+   "settings": {
+    "Seed": -1618446397
+   },
+   "title": "Ratio_Plaza_vs_Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_11",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C76498394DCE702_1944600151"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2893,
+    571
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Roads"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_13",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_9",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 30
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2848,
+    272
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Reserved Lot Points +30 (Pre-Projection)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Identifies points where the asset name contains 'Tree_Birch'.\r\nBirch variants are handled separately from Black Alder — they are\r\nfiltered out here before the Alder spawn node.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_3",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_0",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5211,
+    -148
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "Tree_Birch",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "String",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Operator": "Substring",
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin(AssetString)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Birch Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeCastSettings",
+   "comment": "Casts the Asset soft object path attribute to a String (AssetString)\nso that substring filters can identify prop types by asset name.\nSame pattern as in PCG_3_2_1_Ground for street prop yaw correction.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_20",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource"
+    },
+    {
+     "edges": [],
+     "label": "OutputType"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeCast_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4768,
+    -150
+   ],
+   "settings": {
+    "InputSource": "PCGBegin(Asset)PCGEnd",
+    "OutputTarget": "PCGBegin(AssetString)PCGEnd",
+    "OutputType": "String",
+    "Seed": 1494067853
+   },
+   "title": "Cast Asset To String"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_16",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C7649839439DB02_1290570802"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2893,
+    315
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Landmark"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Removes the landmark and central park footprints from the undividable\ndistrict areas before they are used for outer forest tree scattering.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_7",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Reroute_2",
+       "Out"
+      ],
+      [
+       "Reroute_3",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_17",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -1821,
+    91
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
+   "title": "Exclude Landmarks From Undividable Districts"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionBoundSize"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionTarget"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryType"
+    },
+    {
+     "edges": [],
+     "label": "ModifierLayerPriority"
+    },
+    {
+     "edges": [],
+     "label": "ModifierSubPriority"
+    },
+    {
+     "edges": [],
+     "label": "MeshPartitionQueryInclusive"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Channels"
+    }
+   ],
+   "name": "Subgraph_15",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "MeshPartitionBoundSize": {
+     "X": 300000,
+     "Y": 300000,
+     "Z": 300000
+    },
+    "MeshPartitionQueryType": "Final",
+    "ModifierSubPriority": 3
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2909,
+    -725
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives_MeshPartitionInterop/Primitives/Get/Get_MeshTerrain.Get_MeshTerrain",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_15",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_0",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -909,
+    -688
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Mesh_Terrain_Final"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_1",
+       "Out"
+      ]
+     ],
+     "label": "In Points"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_0",
+       "Out"
+      ]
+     ],
+     "label": "Surface"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "Z_offset_for_proj"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPosition"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotation"
+    },
+    {
+     "edges": [],
+     "label": "ProjecScale"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RestoreOrigZPos"
+    }
+   ],
+   "name": "Subgraph_19",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    3697,
+    2792
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
+   "title": "Project Tree Points Onto Terrain"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3697,
+    2936
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Mesh_Terrain_Final"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_2",
+       "Out"
+      ],
+      [
+       "Subgraph_23",
+       "Out"
+      ],
+      [
+       "Subgraph_31",
+       "Out"
+      ],
+      [
+       "Subgraph_53",
+       "Out"
+      ],
+      [
+       "Subgraph_38",
+       "Out"
+      ]
+     ],
+     "label": "In Points"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_1",
+       "Out"
+      ]
+     ],
+     "label": "Surface"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "Z_offset_for_proj"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPosition"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotation"
+    },
+    {
+     "edges": [],
+     "label": "ProjecScale"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RestoreOrigZPos"
+    }
+   ],
+   "name": "Subgraph_20",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    4326,
+    -162
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
+   "title": "Project Plaza Points Onto Terrain"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeCast_0",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_3",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5019,
+    -116
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Asset Cast)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    4006,
+    62
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Mesh_Terrain_Final"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_22",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.PCGVolume_UAID_387C7649839447DC02_1377087312"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2877,
+    955
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Get Highway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Gathers unbuildable lots, undividable district areas (cleaned), and the\nunselected plaza fraction from the reservation split, then excludes the\nhighway footprint. The result is every area in the city that should\nreceive scattered trees rather than buildings or plazas.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_10",
+       "Unselected"
+      ],
+      [
+       "NamedRerouteUsage_8",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_11",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_10",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_24",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    2785,
+    2792
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Exclusion.Compose_Areas_Exclusion",
+   "title": "Combine Tree areas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Sets $Rotation.Roll to 0 on matched plaza prop points.\nCorrects roll tilt introduced by grammar spline alignment.\nMatches the same correction applied to street props in PCG_3_2_1_Ground.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    6091,
+    -852
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Roll)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Roll On Plaza Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Sets $Rotation.Pitch to 0 after roll correction.\nProps then have only Yaw rotation so they stand upright.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_1",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    6427,
+    -852
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Pitch)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Pitch On Plaza Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_3",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2358,
+    -378
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_3",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_18",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "Medium Courtyards"
+   },
+   "pin_defaults": [],
+   "pos": [
+    304,
+    -304
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Medium_courtyards"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_18",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Contract"
+    },
+    {
+     "edges": [],
+     "label": "UnionBeforeOutputting"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_21",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Contract": 322.886339,
+    "UnionBeforeOutputting": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    2480,
+    -320
+   ],
+   "settings": {
+    "Seed": -1514098683
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
+   "title": "Contract Medium Courtyards (Plaza Setback ~323)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_21",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_25",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 30
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2832,
+    -320
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Medium Courtyard Points +30 (Pre-Projection)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_3",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_29",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "Small Courtyards"
+   },
+   "pin_defaults": [],
+   "pos": [
+    304,
+    -672
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Small Courtyards"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_29",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Contract"
+    },
+    {
+     "edges": [],
+     "label": "UnionBeforeOutputting"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_30",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Contract": 322.886339,
+    "UnionBeforeOutputting": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    2480,
+    -688
+   ],
+   "settings": {
+    "Seed": -1514098683
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
+   "title": "Contract Small Courtyards (Plaza Setback ~323)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_30",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_32",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 30
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2832,
+    -688
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Small Courtyard Points +30 (Pre-Projection)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Samples T_CloudNoise_4k (G channel) at each tree point and remaps\nthe value to a scale range of 0.6–2.0. Larger noise scale (250k units)\nproduces gradual city-wide scale variation rather than high-frequency noise.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_19",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Attribute"
+    },
+    {
+     "edges": [],
+     "label": "Normalize"
+    },
+    {
+     "edges": [],
+     "label": "Mask"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueInLow"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueInHigh"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueOutLow"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueOutHigh"
+    },
+    {
+     "edges": [],
+     "label": "TextureTransform"
+    },
+    {
+     "edges": [],
+     "label": "Texture"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_27",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Attribute": "$scale",
+    "Mask": "G",
+    "Normalize": true,
+    "RemapValueInHigh": 1,
+    "RemapValueInLow": 0,
+    "RemapValueOutHigh": 2,
+    "RemapValueOutLow": 0.6,
+    "Texture": "/Game/Textures/Noise/T_CloudNoise_4k.T_CloudNoise_4k",
+    "TextureTransform": {
+     "Rotation": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "Scale3D": {
+      "X": 250000,
+      "Y": 250000,
+      "Z": 250000
+     },
+     "Translation": {
+      "X": 24373029.697519,
+      "Y": 0,
+      "Z": 0
+     }
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    4033,
+    2792
+   ],
+   "settings": {
+    "DebugSettings": {
+     "MaterialOverride": "None",
+     "PointMesh": "/PCG/DebugObjects/PCG_Cube.PCG_Cube",
+     "PointScale": 5,
+     "ScaleMethod": "Relative"
+    },
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
+   "title": "Write Tree Scale From Noise Texture"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Samples T_CloudNoise_4k (G channel) at a finer scale (25k units)\nand remaps to integer index 1–9 to select tree species variants.\nFiner scale creates visible species clustering within the forest.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_27",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Attribute"
+    },
+    {
+     "edges": [],
+     "label": "Normalize"
+    },
+    {
+     "edges": [],
+     "label": "Mask"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueInLow"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueInHigh"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueOutLow"
+    },
+    {
+     "edges": [],
+     "label": "RemapValueOutHigh"
+    },
+    {
+     "edges": [],
+     "label": "TextureTransform"
+    },
+    {
+     "edges": [],
+     "label": "Texture"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_28",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Attribute": "index",
+    "Mask": "G",
+    "Normalize": true,
+    "RemapValueInHigh": 1,
+    "RemapValueInLow": 0,
+    "RemapValueOutHigh": 9,
+    "RemapValueOutLow": 1,
+    "Texture": "/Game/Textures/Noise/T_CloudNoise_4k.T_CloudNoise_4k",
+    "TextureTransform": {
+     "Rotation": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "Scale3D": {
+      "X": 25000,
+      "Y": 25000,
+      "Z": 250000
+     },
+     "Translation": {
+      "X": 24373029.697519,
+      "Y": 0,
+      "Z": 0
+     }
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    4593,
+    2792
+   ],
+   "settings": {
+    "DebugSettings": {
+     "MaterialOverride": "None",
+     "PointMesh": "/PCG/DebugObjects/PCG_Cube.PCG_Cube",
+     "PointScale": 5,
+     "ScaleMethod": "Relative"
+    },
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Write/Write_Attribute_fromTexture.Write_Attribute_fromTexture",
+   "title": "Write Tree Species Index From Noise Texture"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_33",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.1_CentralPark_Footprint_2gania7pfoeg2_UAID_387C764983945CDF02_1296577182"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2893,
+    443
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Central Park"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_5",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_5",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    7584,
+    272
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Roll)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Roll On Plaza Props (Pass 2)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_5",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_6",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    7840,
+    272
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Pitch)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Pitch On Plaza Props (Pass 2)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Identifies plaza grammar props whose asset name contains 'plane'.\nThese flat surface props need yaw-only placement correction.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_0",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_1",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5795,
+    -129
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "plane",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "String",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Operator": "Substring",
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin(AssetString)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Plane Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_0",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_0",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5611,
+    -84
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Plane Filter)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Identifies plaza grammar props whose asset name contains 'sidewalk'.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_1",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_2",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6224,
+    -128
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "sidewalk",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "String",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Operator": "Substring",
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin(AssetString)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Sidewalk Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_1",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_1",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6064,
+    -90
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Sidewalk Filter)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Identifies plaza grammar props whose asset name contains 'border'.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_5",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_4",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6619,
+    76
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "border",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "String",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Operator": "Substring",
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin(AssetString)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Border Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_2",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_5",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6459,
+    124
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Border Filter)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGAttributeFilteringSettings",
+   "comment": "Identifies plaza grammar props whose asset name contains 'cone'.\r\nCone props are the last in the filter chain — those that pass OutsideFilter\r\ngo through Roll/Pitch zeroing before spawning.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "FilterDataByType_6",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "Operator"
+    },
+    {
+     "edges": [],
+     "label": "TargetAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseConstantThreshold"
+    },
+    {
+     "edges": [],
+     "label": "ThresholdAttribute"
+    },
+    {
+     "edges": [],
+     "label": "bUseSpatialQuery"
+    }
+   ],
+   "name": "AttributeFilter_5",
+   "outputs": [
+    "InsideFilter",
+    "OutsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7104,
+    176
+   ],
+   "settings": {
+    "AttributeTypes": {
+     "BoolValue": false,
+     "DoubleValue": 0,
+     "FloatValue": 0,
+     "Int32Value": 0,
+     "IntValue": 0,
+     "NameValue": "None",
+     "QuatValue": {
+      "W": 1,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "RotatorValue": {
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+     },
+     "SoftClassPathValue": "None",
+     "SoftObjectPathValue": "None",
+     "StringValue": "cone",
+     "TransformValue": {
+      "Rotation": {
+       "W": 1,
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      },
+      "Scale3D": {
+       "X": 1,
+       "Y": 1,
+       "Z": 1
+      },
+      "Translation": {
+       "X": 0,
+       "Y": 0,
+       "Z": 0
+      }
+     },
+     "Type": "String",
+     "Vector2Value": {
+      "X": 0,
+      "Y": 0
+     },
+     "Vector4Value": {
+      "W": 0,
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "VectorValue": {
+      "X": 0,
+      "Y": 0,
+      "Z": 0
+     },
+     "bAllowsTypeChange": true
+    },
+    "Operator": "Substring",
+    "Seed": -1825272837,
+    "TargetAttribute": "PCGBegin(AssetString)PCGEnd",
+    "ThresholdAttribute": "PCGBegin(@Last)PCGEnd",
+    "bUseConstantThreshold": true,
+    "bUseSpatialQuery": false
+   },
+   "title": "Filter: Cone Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGFilterByTypeSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeFilter_4",
+       "OutsideFilter"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "FilterDataByType_6",
+   "outputs": [
+    "InsideFilter"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6912,
+    224
+   ],
+   "settings": {
+    "Seed": -756616903,
+    "TargetType": {
+     "CustomSubtype": -1,
+     "Ids": [
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoPoint'"
+      },
+      {
+       "Struct": "/Script/CoreUObject.ScriptStruct'/Script/PCG.PCGDataTypeInfoParam'"
+      }
+     ]
+    }
+   },
+   "title": "Filter Point Data (Post Cone Filter)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Secondary cull on the plaza to branch out for Parkings. ",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_10",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_0",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.3
+   },
+   "pin_defaults": [],
+   "pos": [
+    752,
+    1088
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Cull Plaza Lots (Debug Split)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "matching the tile density\r\nused in PCG_3_2_1_Ground.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PointExtents"
+    },
+    {
+     "edges": [],
+     "label": "Asset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_34",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PointExtents": 150
+   },
+   "pin_defaults": [],
+   "pos": [
+    2172,
+    1132
+   ],
+   "settings": {
+    "Seed": 1387288479
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
+   "title": "Place Ground Tiles On Remaining Reserved Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Matches the same lift in PCG_3_2_1_Ground.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_34",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_48",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 15
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2540,
+    1132
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Ground Tile Points +15 (Pre-Projection)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_48",
+       "Out"
+      ]
+     ],
+     "label": "In Points"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_2",
+       "Out"
+      ]
+     ],
+     "label": "Surface"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "Z_offset_for_proj"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPosition"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotation"
+    },
+    {
+     "edges": [],
+     "label": "ProjecScale"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RestoreOrigZPos"
+    }
+   ],
+   "name": "Subgraph_49",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    3148,
+    1132
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
+   "title": "Project Ground Tile Points Onto Terrain"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3148,
+    1276
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Mesh_Terrain_Final"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_3",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_50",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "UnderHighway"
+   },
+   "pin_defaults": [],
+   "pos": [
+    304,
+    -960
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Under Highway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_1",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Contract"
+    },
+    {
+     "edges": [],
+     "label": "UnionBeforeOutputting"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_52",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Contract": 322.886339,
+    "UnionBeforeOutputting": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    2480,
+    -976
+   ],
+   "settings": {
+    "Seed": -1514098683
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Areas_Contract.Transform_Areas_Contract",
+   "title": "Contract Under-Highway Lots (Plaza Setback ~323)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_52",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_54",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 30
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2832,
+    -976
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Under-Highway Points +30 (Pre-Projection)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_50",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_1",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    656,
+    -928
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "underHighway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "Places ground tile points uniformly across the highway footprint\nat 300-unit extents. These are then projected and differenced against\nplaza spawn points so tiles don't overlap placed plaza assets.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_5",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PointExtents"
+    },
+    {
+     "edges": [],
+     "label": "asset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_55",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "PointExtents": 300
+   },
+   "pin_defaults": [],
+   "pos": [
+    6774,
+    -514
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Fill/Fill_Areas_Uniformly.Fill_Areas_Uniformly",
+   "title": "Fill Highway Area With Ground Tile Points"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Removes tree points that coincide with Highway\r\npositions penetration",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_2",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "Subgraph_57",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_56",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    7478,
+    -850
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Points_Difference.Compose_Points_Difference",
+   "title": "Subtract Plaza Points From Highway Ground Tiles"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_55",
+       "Out"
+      ]
+     ],
+     "label": "In Points"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_4",
+       "Out"
+      ]
+     ],
+     "label": "Surface"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "Z_offset_for_proj"
+    },
+    {
+     "edges": [],
+     "label": "ProjectPosition"
+    },
+    {
+     "edges": [],
+     "label": "ProjectRotation"
+    },
+    {
+     "edges": [],
+     "label": "ProjecScale"
+    },
+    {
+     "edges": [],
+     "label": "ProjectAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RestoreOrigZPos"
+    }
+   ],
+   "name": "Subgraph_57",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    7115,
+    -516
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Custom_Projector_with_rotation_fix.Custom_Projector_with_rotation_fix",
+   "title": "Project Highway Fill Points Onto Terrain"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_0",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_4",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7115,
+    -372
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_0.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Mesh_Terrain_Final"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_22",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_2",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -865,
+    1008
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Highway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_2",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_5",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6619,
+    -484
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
+    "Seed": 2014642815
+   },
+   "title": "Highway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorReferences"
+    }
+   ],
+   "name": "Subgraph_51",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorReferences": [
+     "/CitySamplePCG/Levels/L_CitySamplePCG_Demo.L_CitySamplePCG_Demo:PersistentLevel.Spline_UAID_387C76498394B3DF02_1392886487"
+    ]
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2877,
+    1307
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Get/Get_ActorDataByRef.Get_ActorDataByRef",
+   "title": "Landmark Small Park"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Intersects the landmark small park spline area with the lot data\nto produce the exact polygon within the park where trees can be scattered.\nFeeds into the main tree scatter pipeline.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_6",
+       "Out"
+      ]
+     ],
+     "label": "SecondaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_58",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    -1789,
+    1307
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Compose/Compose_Areas_Intersection.Compose_Areas_Intersection",
+   "title": "Intersect Small Park With Lots (Park Tree Zone)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Sets $Position.Z from the terrain projection result so tree base\npositions are locked to the terrain surface before spawning.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_51",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_0",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    -2493,
+    1307
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Position.Z)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Snap Tree Z To Terrain Height"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Sets $Rotation.Roll to 0 on outer forest prop points after noise write.\nEnsures trees stand upright on sloped terrain.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_28",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    5025,
+    2792
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Roll)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Roll On Outer Forest Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGMetadataMathsSettings",
+   "comment": "Sets $Rotation.Pitch to 0 after roll correction on outer forest props.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_3",
+       "Out"
+      ]
+     ],
+     "label": "InA"
+    },
+    {
+     "edges": [],
+     "label": "InB"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource1"
+    },
+    {
+     "edges": [],
+     "label": "InputSource2"
+    },
+    {
+     "edges": [],
+     "label": "InputSource3"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeMathsOp_4",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [
+    {
+     "activated": true,
+     "index": 1,
+     "prop": "DefaultValue2",
+     "type": null,
+     "value": null
+    }
+   ],
+   "pos": [
+    5329,
+    2792
+   ],
+   "settings": {
+    "InputSource1": "PCGBegin($Rotation.Pitch)PCGEnd",
+    "Operation": "Set",
+    "Seed": -603003822
+   },
+   "title": "Zero Pitch On Outer Forest Props"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_3",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_3",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2538,
+    -382
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_3",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -112,
+    -640
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_10'",
+    "Seed": 2014642815
+   },
+   "title": "Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_3",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_6",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1901,
+    1451
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_3.PCGNamedRerouteDeclarationSettings_10'",
+    "Seed": 2014642815
+   },
+   "title": "Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_4",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_5",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -891,
+    -464
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Reserved Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_5",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_6",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -901,
+    -272
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Unbuildable Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_6",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_8",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2273,
+    2840
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_6.PCGNamedRerouteDeclarationSettings_12'",
+    "Seed": 2014642815
+   },
+   "title": "Unbuildable Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_5",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_9",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -16,
+    1120
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_5.PCGNamedRerouteDeclarationSettings_11'",
+    "Seed": 2014642815
+   },
+   "title": "Reserved Lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_11",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1773,
+    619
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_33",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -1981,
+    491
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_16",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -2109,
+    363
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_2",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_10",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2433,
+    2984
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_2.PCGNamedRerouteDeclarationSettings_2'",
+    "Seed": 2014642815
+   },
+   "title": "Highway"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_8",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_7",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -964,
+    139
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Undividable districts cleaned up"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_7",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_11",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2177,
+    2904
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_7.PCGNamedRerouteDeclarationSettings_13'",
+    "Seed": 2014642815
+   },
+   "title": "Undividable districts cleaned up"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_58",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_8",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -872,
+    1360
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "SmallPark"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_8",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_12",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    3073,
+    2968
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_8.PCGNamedRerouteDeclarationSettings_14'",
+    "Seed": 2014642815
+   },
+   "title": "SmallPark"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGRerouteSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_0",
+       "Unselected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "Reroute_4",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2320,
+    2352
+   ],
+   "settings": {
+    "Seed": 1719617987
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_9",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_2",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_PlayerStart_PCG.Plaza_PlayerStart_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_H_PCG.Plaza_Medium_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_G_PCG.Plaza_Medium_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_F_PCG.Plaza_Medium_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_E_PCG.Plaza_Medium_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_D_PCG.Plaza_Medium_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_C_PCG.Plaza_Medium_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_B_PCG.Plaza_Medium_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Medium_A_PCG.Plaza_Medium_A_PCG"
+    ],
+    "Overlap": 0.6,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3232,
+    272
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Fill Reserved Lots with Medium Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\r\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\r\n\r\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\r\nThis bug is fixed after UE 5.8.2.\r\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\r\nlocated in /PCGPrimitives/Primitives/Fill/\r\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\r\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_25",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_23",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_I_PCG.Plaza_Large_I_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_H_PCG.Plaza_Large_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_G_PCG.Plaza_Large_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_F_PCG.Plaza_Large_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_E_PCG.Plaza_Large_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_D_PCG.Plaza_Large_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_C_PCG.Plaza_Large_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_B_PCG.Plaza_Large_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Large_A_PCG.Plaza_Large_A_PCG"
+    ],
+    "Overlap": 0.6,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3184,
+    -320
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Fill Medium Courtyards with Large Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_32",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_31",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_A_PCG.Plaza_Small_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_B_PCG.Plaza_Small_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_C_PCG.Plaza_Small_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_D_PCG.Plaza_Small_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_E_PCG.Plaza_Small_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_F_PCG.Plaza_Small_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_G_PCG.Plaza_Small_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_H_PCG.Plaza_Small_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_I_PCG.Plaza_Small_I_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_J_PCG.Plaza_Small_J_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_K_PCG.Plaza_Small_K_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_L_PCG.Plaza_Small_L_PCG"
+    ],
+    "BaseFillPointExtents": 80,
+    "BaseFillPointsPerSquareMeters": 0.8,
+    "Overlap": 0.608,
+    "Seed": 10,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3184,
+    -688
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Fill Small Courtyards with Small Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\r\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\r\n\r\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\r\nThis bug is fixed after UE 5.8.2.\r\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\r\nlocated in /PCGPrimitives/Primitives/Fill/\r\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\r\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_54",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_53",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Storage_B_PCG.Storage_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Storage_A_PCG.Storage_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Storage_C_PCG.Storage_C_PCG"
+    ],
+    "BaseFillPointExtents": 80,
+    "BaseFillPointsPerSquareMeters": 0.8,
+    "Overlap": 1,
+    "Seed": 10,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3168,
+    -976
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Fill Under- Highway Lots with Storage Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "First of a 7-way sequential random cull chain — equal 1/7 share per tile variant.\r\nSame distribution logic as PCG_3_2_1_Ground. See that graph for full ratio breakdown.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_49",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_59",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.142857,
+    "Seed": 1000
+   },
+   "pin_defaults": [],
+   "pos": [
+    4032,
+    1136
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 1/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_59",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_60",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.166667,
+    "Seed": 1017
+   },
+   "pin_defaults": [],
+   "pos": [
+    4464,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 2/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_60",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_61",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.2,
+    "Seed": 1034
+   },
+   "pin_defaults": [],
+   "pos": [
+    4928,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 3/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_61",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_62",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.25,
+    "Seed": 1051
+   },
+   "pin_defaults": [],
+   "pos": [
+    5376,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 4/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_62",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_63",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.333333,
+    "Seed": 1068
+   },
+   "pin_defaults": [],
+   "pos": [
+    5824,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 5/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_63",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Ratio"
+    },
+    {
+     "edges": [],
+     "label": "UseCountInsteadOfRatio"
+    },
+    {
+     "edges": [],
+     "label": "CountToKeep"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "RandomPerDataset"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_64",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "Ratio": 0.5,
+    "Seed": 1085
+   },
+   "pin_defaults": [],
+   "pos": [
+    6288,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_RandomChoice.Filter_RandomChoice",
+   "title": "Random Choice 6/7"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "Debug path only — fed by Branch_2 Output B when the debug parameter is enabled.\nAssigns SM_Plaza_Square_A across all ground points rather than the randomised split.",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_59",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_65",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_A.SM_Plaza_Square_A"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    4496,
+    1440
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles A (Debug)"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_60",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_66",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_B.SM_Plaza_Square_B"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    4944,
+    1424
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles B"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_61",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_67",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_C.SM_Plaza_Square_C"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    5376,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles C"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_62",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_68",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_D.SM_Plaza_Square_D"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    5824,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles D"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_63",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_69",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_E.SM_Plaza_Square_E"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    6288,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles E"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_64",
+       "Selected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_70",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_F.SM_Plaza_Square_F"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    6736,
+    1152
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles F"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_64",
+       "Unselected"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_71",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/Game/Road/Kit_Sidewalk_A/Mesh/SM_Plaza_Square_G.SM_Plaza_Square_G"
+    ],
+    "PositionOffset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    6736,
+    1408
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Ground Tiles G"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGatherSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_65",
+       "Out"
+      ],
+      [
+       "Subgraph_66",
+       "Out"
+      ],
+      [
+       "Subgraph_67",
+       "Out"
+      ],
+      [
+       "Subgraph_68",
+       "Out"
+      ],
+      [
+       "Subgraph_69",
+       "Out"
+      ],
+      [
+       "Subgraph_70",
+       "Out"
+      ],
+      [
+       "Subgraph_71",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "Gather_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7392,
+    1600
+   ],
+   "settings": {
+    "Seed": -1096471958
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_0",
+       "Output B"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_4",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    8000,
+    1760
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Tiles Assets"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_0",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_72",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    8000,
+    1584
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn ground tiles"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Gather_1",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_4",
+       "Partitioned"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_0",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7632,
+    1600
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_3",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_73",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP"
+    ],
+    "ExtentsScale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "RandomScaleRange": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    8096,
+    -848
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGatherSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_6",
+       "Out"
+      ],
+      [
+       "AttributeFilter_2",
+       "InsideFilter"
+      ],
+      [
+       "AttributeFilter_4",
+       "InsideFilter"
+      ],
+      [
+       "AttributeFilter_5",
+       "InsideFilter"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "Gather_2",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    8288,
+    -128
+   ],
+   "settings": {
+    "Seed": -1096471958
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGAttributeCastSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Gather_2",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "InputSource"
+    },
+    {
+     "edges": [],
+     "label": "OutputType"
+    },
+    {
+     "edges": [],
+     "label": "OutputTarget"
+    }
+   ],
+   "name": "AttributeCast_1",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    8592,
+    -144
+   ],
+   "settings": {
+    "InputSource": "PCGBegin(Asset)PCGEnd",
+    "OutputType": "SoftObjectPath",
+    "Seed": 1494067853
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGatherSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeCast_1",
+       "Out"
+      ],
+      [
+       "Subgraph_73",
+       "Out"
+      ],
+      [
+       "Subgraph_12",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "Gather_3",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    8976,
+    -656
+   ],
+   "settings": {
+    "Seed": -1096471958
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output B"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_9",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9568,
+    -496
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_1",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_74",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    9568,
+    -672
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn Plaza"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Gather_3",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_3",
+       "Partitioned"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_1",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9200,
+    -656
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_2",
+       "Output B"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_10",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6784,
+    2976
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "OuterTreeForest"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_2",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "seed"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "UseAssetIndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MaterialOverride"
+    },
+    {
+     "edges": [],
+     "label": "Collision"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_76",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    6784,
+    2800
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Spawn/Spawn_Assets.Spawn_Assets",
+   "title": "Spawn Outer Forest Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_26",
+       "Out"
+      ],
+      [
+       "Subgraph_14",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_5",
+       "Partitioned"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_2",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6416,
+    2816
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Gather_5",
+       "Out"
+      ]
+     ],
+     "label": "Points"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "Grid_Size"
+    }
+   ],
+   "name": "Subgraph_77",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {},
+   "pin_defaults": [],
+   "pos": [
+    10480,
+    992
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/GridPartition.GridPartition",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGLoopSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_77",
+       "Out"
+      ]
+     ],
+     "label": "Points"
+    },
+    {
+     "edges": [],
+     "label": "optionalInputActors"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "ActorBaseName"
+    },
+    {
+     "edges": [],
+     "label": "EnableCollision"
+    },
+    {
+     "edges": [],
+     "label": "Override_Material"
+    }
+   ],
+   "name": "Loop_1",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "ActorBaseName": "LeftOverLots_",
+    "EnableCollision": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    10864,
+    992
+   ],
+   "settings": {
+    "Seed": 895873474
+   },
+   "subgraph": "/CitySamplePCG/PCG/LoopSpawnActorPerData.LoopSpawnActorPerData",
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGGatherSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_15",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_16",
+       "Out"
+      ],
+      [
+       "NamedRerouteUsage_17",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    }
+   ],
+   "name": "Gather_5",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9936,
+    1008
+   ],
+   "settings": {
+    "Seed": -1096471958
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_9",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_15",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9757,
+    935
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_9.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Plazas"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_10",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_16",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9728,
+    1040
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_10.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "OuterTreeForest"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_4",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_17",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9744,
+    1136
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_4.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Tiles Assets"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_3",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_12",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_A.SM_Black_Alder_01_A",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_B.SM_Black_Alder_01_B",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_C.SM_Black_Alder_01_C",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_D.SM_Black_Alder_01_D"
+    ],
+    "RandomScaleRange": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    8096,
+    -720
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Megaplant Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_56",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_1",
+       "UseMegaplantsTrees"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_3",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7856,
+    -832
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "UseMegaplantsTrees",
+   "inputs": [],
+   "name": "GetGraphParameter_1",
+   "outputs": [
+    "UseMegaplantsTrees"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7856,
+    -672
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "UseMegaplantsTrees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_4",
+       "Output B"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_14",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/Megaplants/Tree_Common_Hazel/Tree_Common_Hazel_01/SM_Common_Hazel_01_B.SM_Common_Hazel_01_B",
+     "/CitySamplePCG/Megaplants/Tree_Common_Hazel/Tree_Common_Hazel_01/SM_Common_Hazel_01_A.SM_Common_Hazel_01_A",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_D.SM_Black_Alder_01_D",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_B.SM_Black_Alder_01_B",
+     "/CitySamplePCG/Megaplants/Tree_Black_Alder/Tree_Black_Alder_01/SM_Black_Alder_01_A.SM_Black_Alder_01_A",
+     "/CitySamplePCG/Megaplants/Tree_European_Beech/Tree_European_Beech_01/SM_European_Beech_01_A.SM_European_Beech_01_A",
+     "/CitySamplePCG/Megaplants/Tree_European_Beech/Tree_European_Beech_01/SM_European_Beech_01_B.SM_European_Beech_01_B",
+     "/CitySamplePCG/Megaplants/Tree_European_Beech/Tree_European_Beech_01/SM_European_Beech_01_C.SM_European_Beech_01_C"
+    ],
+    "IndexAttribute": "Index",
+    "RandomRotationRange": {
+     "X": 2,
+     "Y": 2,
+     "Z": 180
+    },
+    "RandomScaleRange": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "UseIndexattribute": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    6016,
+    2896
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Outer Forest Megaplants Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGBranchSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "AttributeMathsOp_4",
+       "Out"
+      ]
+     ],
+     "label": "In"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [
+      [
+       "GetGraphParameter_2",
+       "UseMegaPlantsTrees"
+      ]
+     ],
+     "label": "bOutputToB"
+    }
+   ],
+   "name": "Branch_4",
+   "outputs": [
+    "Output A",
+    "Output B"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5776,
+    2800
+   ],
+   "settings": {
+    "Seed": 774982565
+   },
+   "title": ""
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": false,
+   "getter_param": "UseMegaPlantsTrees",
+   "inputs": [],
+   "name": "GetGraphParameter_2",
+   "outputs": [
+    "UseMegaPlantsTrees"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    5760,
+    2960
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "UseMegaPlantsTrees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Branch_4",
+       "Output A"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "PositionOffset"
+    },
+    {
+     "edges": [],
+     "label": "RotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "ScaleOffset"
+    },
+    {
+     "edges": [],
+     "label": "ExtentsScale"
+    },
+    {
+     "edges": [],
+     "label": "UniformScale"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshBounds"
+    },
+    {
+     "edges": [],
+     "label": "MatchScaleToInputBounds"
+    },
+    {
+     "edges": [],
+     "label": "UseMeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "MeshAttribute"
+    },
+    {
+     "edges": [],
+     "label": "RandomPositionRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomRotationRange"
+    },
+    {
+     "edges": [],
+     "label": "RandomScaleRange"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "UseIndexattribute"
+    },
+    {
+     "edges": [],
+     "label": "IndexAttribute"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_26",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_05_PP.SM_BlackAlder_Field_05_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP",
+     "/CitySamplePCG/BlackAlder/Geometry/PivotPainter/SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP"
+    ],
+    "IndexAttribute": "Index",
+    "RandomRotationRange": {
+     "X": 2,
+     "Y": 2,
+     "Z": 180
+    },
+    "RandomScaleRange": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "ScaleOffset": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "UseIndexattribute": true
+   },
+   "pin_defaults": [],
+   "pos": [
+    6016,
+    2784
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Assign/Assign_Assets.Assign_Assets",
+   "title": "Assign Outer Forest Black Alder Trees"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Partitioned",
+   "inputs": [],
+   "name": "GetGraphParameter_3",
+   "outputs": [
+    "Partitioned"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    9200,
+    -480
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Partitioned"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Partitioned",
+   "inputs": [],
+   "name": "GetGraphParameter_4",
+   "outputs": [
+    "Partitioned"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    7626,
+    1792
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Partitioned"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGUserParameterGetSettings",
+   "comment": "",
+   "getter_bound": true,
+   "getter_param": "Partitioned",
+   "inputs": [],
+   "name": "GetGraphParameter_5",
+   "outputs": [
+    "Partitioned"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    6468,
+    3065
+   ],
+   "settings": {
+    "Seed": 1296285799
+   },
+   "title": "Partitioned"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Reroute_0",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "FilteredInputTags"
+    },
+    {
+     "edges": [],
+     "label": "InvertFilter"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_36",
+   "outputs": [
+    "Selected",
+    "Unselected"
+   ],
+   "overrides": {
+    "FilteredInputTags": "LargeBuildingSkirt"
+   },
+   "pin_defaults": [],
+   "pos": [
+    -2080,
+    -128
+   ],
+   "settings": {
+    "Seed": -1599296864
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Filter/Filter_Tags.Filter_Tags",
+   "title": "Only unbuildable lots"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteDeclarationSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_36",
+       "Selected"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteDeclaration_11",
+   "outputs": [
+    "Out",
+    "InvisiblePin"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    -896,
+    -80
+   ],
+   "settings": {
+    "Seed": 187164237
+   },
+   "title": "Large Building Skirt"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGNamedRerouteUsageSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteDeclaration_11",
+       "InvisiblePin"
+      ]
+     ],
+     "label": "In"
+    }
+   ],
+   "name": "NamedRerouteUsage_7",
+   "outputs": [
+    "Out"
+   ],
+   "pin_defaults": [],
+   "pos": [
+    2384,
+    -1504
+   ],
+   "settings": {
+    "Declaration": "/Script/PCG.PCGNamedRerouteDeclarationSettings'/CitySamplePCG/Levels/PCG/PCG_3_2_2_LeftOverLots.PCG_3_2_2_LeftOverLots:NamedRerouteDeclaration_11.PCGNamedRerouteDeclarationSettings_1'",
+    "Seed": 2014642815
+   },
+   "title": "Large Building Skirt"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": false,
+   "class": "PCGSubgraphSettings",
+   "comment": "",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "NamedRerouteUsage_7",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "offset"
+    },
+    {
+     "edges": [],
+     "label": "rotationOffset"
+    },
+    {
+     "edges": [],
+     "label": "AbsoluteOffset"
+    },
+    {
+     "edges": [],
+     "label": "Scale"
+    },
+    {
+     "edges": [],
+     "label": "PerPoints"
+    },
+    {
+     "edges": [],
+     "label": "UseAttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "AttributeMask"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    }
+   ],
+   "name": "Subgraph_37",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 30
+    }
+   },
+   "pin_defaults": [],
+   "pos": [
+    2672,
+    -1552
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/PCGPrimitives/Primitives/Transform/Transform_Offset.Transform_Offset",
+   "title": "Lift Small Buidling skirt"
+  },
+  {
+   "bubble_pinned": false,
+   "bubble_visible": true,
+   "class": "PCGSubgraphSettings",
+   "comment": "TEMP FIX: pointing to Fill_Areas_WithFittingAssets_with_Corrective, a corrective primitive\npatched to work around a known bug in the original Fill_Areas_WithFittingAssets.\n\nNOTE FOR LLM AGENTS: check the Unreal Engine version before choosing which primitive to use.\nThis bug is fixed after UE 5.8.2.\nIf engine version > 5.8.2, repoint to the original: Fill_Areas_WithFittingAssets\nlocated in /PCGPrimitives/Primitives/Fill/\nIf engine version <= 5.8.2, keep using: Fill_Areas_WithFittingAssets_with_Corrective\nlocated in /CitySamplePCG/PCG/Primitives/",
+   "getter_param": "",
+   "inputs": [
+    {
+     "edges": [
+      [
+       "Subgraph_37",
+       "Out"
+      ]
+     ],
+     "label": "PrimaryInput"
+    },
+    {
+     "edges": [],
+     "label": "Execution Dependency"
+    },
+    {
+     "edges": [],
+     "label": "Overrides"
+    },
+    {
+     "edges": [],
+     "label": "SubgraphOverride"
+    },
+    {
+     "edges": [],
+     "label": "InputsProcessingGraph"
+    },
+    {
+     "edges": [],
+     "label": "InputsFallbackGraph"
+    },
+    {
+     "edges": [],
+     "label": "CoreProcessGraph"
+    },
+    {
+     "edges": [],
+     "label": "Seed"
+    },
+    {
+     "edges": [],
+     "label": "Overlap"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointsPerSquareMeters"
+    },
+    {
+     "edges": [],
+     "label": "BaseFillPointExtents"
+    },
+    {
+     "edges": [],
+     "label": "SpawnAssets"
+    },
+    {
+     "edges": [],
+     "label": "Random90DegRotation"
+    },
+    {
+     "edges": [],
+     "label": "KeepAssembliesRoot"
+    },
+    {
+     "edges": [],
+     "label": "PrepareOutputsGraph"
+    },
+    {
+     "edges": [],
+     "label": "Assets"
+    }
+   ],
+   "name": "Subgraph_38",
+   "outputs": [
+    "Out"
+   ],
+   "overrides": {
+    "Assets": [
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_A_PCG.Plaza_Small_A_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_B_PCG.Plaza_Small_B_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_C_PCG.Plaza_Small_C_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_D_PCG.Plaza_Small_D_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_E_PCG.Plaza_Small_E_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_F_PCG.Plaza_Small_F_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_G_PCG.Plaza_Small_G_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_H_PCG.Plaza_Small_H_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_I_PCG.Plaza_Small_I_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_J_PCG.Plaza_Small_J_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_K_PCG.Plaza_Small_K_PCG",
+     "/CitySamplePCG/PCG/DataAssets/Plazas/Plaza_Small_L_PCG.Plaza_Small_L_PCG"
+    ],
+    "BaseFillPointExtents": 80,
+    "BaseFillPointsPerSquareMeters": 0.8,
+    "Overlap": 1,
+    "Seed": 10,
+    "SpawnAssets": false
+   },
+   "pin_defaults": [],
+   "pos": [
+    3120,
+    -1552
+   ],
+   "settings": {
+    "Seed": 532343038
+   },
+   "subgraph": "/CitySamplePCG/PCG/Primitives/Fill_Areas_WithFittingAssets_with_Corrective.Fill_Areas_WithFittingAssets_with_Corrective",
+   "title": "Fill Building skirt With Small Plazas"
+  }
+ ],
+ "params": [
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "Ratio_Plaza_vs_Trees",
+   "type": "Double",
+   "type_object": "",
+   "value": 0.5
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": ""
+   },
+   "name": "Partitioned",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     },
+     {
+      "ClampMax": 10,
+      "ClampMin": 0,
+      "UIMax": 10,
+      "UIMin": 0,
+      "Unit": "Unspecified",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Numeric",
+      "bUseClampMax": false,
+      "bUseClampMin": false,
+      "bUseUIMax": false,
+      "bUseUIMin": false,
+      "bUseUnit": false
+     }
+    ]
+   },
+   "meta": {
+    "ToolTip": ""
+   },
+   "name": "PartitionGridSize",
+   "type": "Float",
+   "type_object": "",
+   "value": 25600
+  },
+  {
+   "category": "",
+   "container": "None",
+   "hier_meta": {
+    "Values": [
+     {
+      "Tooltip": "",
+      "_structType": "/Script/StructUtilsEditor.PropertyBagPropertyMetadata_Common",
+      "bAdvanced": false
+     }
+    ]
+   },
+   "meta": {},
+   "name": "UseMegaplantsTrees",
+   "type": "Bool",
+   "type_object": "",
+   "value": false
+  }
+ ],
+ "schema": 1
+}

@@ -1,0 +1,979 @@
+{
+ "what": "Assign_Assets oracle rows: the official primitive's tapped output against pypcg.geo.assets.expand_items on the same targets with the same kit picks (pypcg_v1_editor.py {'assign': {'stage': n, 'label': ...}}), Task 15 fix round 2, 2026-10-19. max_diff: loc in cm, quat per component (sign-agnostic), scale, bounds (min and max together). bit_exact / equal count points.",
+ "rows": [
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_4",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": true,
+   "settings": {
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 90,
+     "Roll": 0
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 5
+    }
+   },
+   "targets": 312,
+   "items": [
+    312
+   ],
+   "python_items": [
+    312
+   ],
+   "points": 312,
+   "compared": "sizes, order, Asset",
+   "equal": {
+    "items": true,
+    "Asset": true
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_5",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": -90,
+     "Roll": 0
+    },
+    "random_position_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 276,
+   "items": [
+    276
+   ],
+   "python_items": [
+    276
+   ],
+   "points": 276,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 2.220446049250313e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 276,
+    "quat": 21,
+    "scale": 276,
+    "bounds": 276
+   },
+   "equal": {
+    "Asset": 276,
+    "seed": 276
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_7",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 3
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 0,
+     "Roll": 0
+    },
+    "scale_offset": {
+     "X": 1,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 1.2,
+     "Y": 1,
+     "Z": 1
+    },
+    "uniform_scale": false,
+    "use_mesh_bounds": false
+   },
+   "targets": 834,
+   "items": [
+    834
+   ],
+   "python_items": [
+    834
+   ],
+   "points": 834,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 834,
+    "quat": 834,
+    "scale": 834,
+    "bounds": 834
+   },
+   "equal": {
+    "Asset": 834,
+    "seed": 834
+   }
+  },
+  {
+   "run": "s14_parkings_4_5_7_8",
+   "stage": 14,
+   "call": "Subgraph_8",
+   "what": "stage 14 Parkings as shipped, Subgraph_5's random ranges zeroed by the oracle; 7 and 8 are static meshes (no copy item); 8 runs the defaults (UseMeshBounds true on a static mesh)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": 0,
+     "Z": 40
+    }
+   },
+   "targets": 40,
+   "items": [
+    40
+   ],
+   "python_items": [
+    40
+   ],
+   "points": 40,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 40,
+    "quat": 40,
+    "scale": 40,
+    "bounds": 40
+   },
+   "equal": {
+    "Asset": 40,
+    "seed": 40
+   }
+  },
+  {
+   "run": "s15_maintower_20_scale1414_uniform_meshbounds",
+   "stage": 15,
+   "call": "Subgraph_20",
+   "what": "stage 15 MainTower Subgraph_20 (static meshes, ExtentsScale 0.7), oracle set ScaleOffset (1.414055, 1, 1), UniformScale true, UseMeshBounds true, RandomScaleRange 0",
+   "random": false,
+   "settings": {
+    "scale_offset": {
+     "X": 1.414055,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "uniform_scale": true,
+    "use_mesh_bounds": true,
+    "random_scale_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 44,
+   "items": [
+    44
+   ],
+   "python_items": [
+    44
+   ],
+   "points": 44,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 44,
+    "quat": 44,
+    "scale": 44,
+    "bounds": 44
+   },
+   "equal": {
+    "Asset": 44,
+    "seed": 44
+   }
+  },
+  {
+   "run": "s17_A_rot0_90_0_scale02_ext07",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "run A: oracle set RotationOffset (0, 90, 0), ScaleOffset (0.2, 1, 1) under the default UniformScale, ExtentsScale (0.7, 1, 1)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 90,
+     "Roll": 0
+    },
+    "scale_offset": {
+     "X": 0.2,
+     "Y": 1,
+     "Z": 1
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 2.9103830456733704e-11,
+    "quat": 3.3306690738754696e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 8877,
+    "quat": 846,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  },
+  {
+   "run": "s17_D_rot10_m90_m20_scale_nonuniform_ext",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "run D: oracle set RotationOffset (pitch 10, yaw -90, roll -20), ScaleOffset (1.414055, 0.6, 0.7), ExtentsScale (1.2, 0.5, 2), UniformScale false, UseMeshBounds false",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 10,
+     "Yaw": -90,
+     "Roll": -20
+    },
+    "scale_offset": {
+     "X": 1.414055,
+     "Y": 0.6,
+     "Z": 0.7
+    },
+    "extents_scale": {
+     "X": 1.2,
+     "Y": 0.5,
+     "Z": 2
+    },
+    "uniform_scale": false,
+    "use_mesh_bounds": false
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 2.9103830456733704e-11,
+    "quat": 3.885780586188048e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 322,
+    "quat": 0,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  },
+  {
+   "run": "s17_default_shipped",
+   "stage": 17,
+   "call": "Subgraph_2",
+   "what": "stage 17 as shipped: PositionOffset Y -492.541261 on 30 yaw-rotated docks, five kits (the mirrored props take the matrix path)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": 0,
+     "Y": -492.541261,
+     "Z": 0
+    },
+    "rotation_offset": {
+     "Pitch": 0,
+     "Yaw": 0,
+     "Roll": 0
+    }
+   },
+   "targets": 30,
+   "items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "python_items": [
+    1480,
+    1155,
+    1220,
+    1650,
+    4338,
+    30
+   ],
+   "points": 9873,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 1.1102230246251565e-16,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 9873,
+    "quat": 9857,
+    "scale": 9873,
+    "bounds": 9873
+   },
+   "equal": {
+    "Asset": 9873,
+    "seed": 9873
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_A",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 28031,
+   "items": [
+    28031
+   ],
+   "python_items": [
+    28031
+   ],
+   "points": 28031,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 28031,
+    "quat": 28031,
+    "scale": 28031,
+    "bounds": 28031
+   },
+   "equal": {
+    "Asset": 28031,
+    "seed": 28031
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_B",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 18641,
+   "items": [
+    18641
+   ],
+   "python_items": [
+    18641
+   ],
+   "points": 18641,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 18641,
+    "quat": 18641,
+    "scale": 18641,
+    "bounds": 18641
+   },
+   "equal": {
+    "Asset": 18641,
+    "seed": 18641
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_C",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 18976,
+   "items": [
+    18976
+   ],
+   "python_items": [
+    18976
+   ],
+   "points": 18976,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 18976,
+    "quat": 18976,
+    "scale": 18976,
+    "bounds": 18976
+   },
+   "equal": {
+    "Asset": 18976,
+    "seed": 18976
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_D",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 21068,
+   "items": [
+    21068
+   ],
+   "python_items": [
+    21068
+   ],
+   "points": 21068,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 21068,
+    "quat": 21068,
+    "scale": 21068,
+    "bounds": 21068
+   },
+   "equal": {
+    "Asset": 21068,
+    "seed": 21068
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_E",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 17305,
+   "items": [
+    17305
+   ],
+   "python_items": [
+    17305
+   ],
+   "points": 17305,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 17305,
+    "quat": 17305,
+    "scale": 17305,
+    "bounds": 17305
+   },
+   "equal": {
+    "Asset": 17305,
+    "seed": 17305
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_F",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 30369,
+   "items": [
+    30369
+   ],
+   "python_items": [
+    30369
+   ],
+   "points": 30369,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 30369,
+    "quat": 30369,
+    "scale": 30369,
+    "bounds": 30369
+   },
+   "equal": {
+    "Asset": 30369,
+    "seed": 30369
+   }
+  },
+  {
+   "run": "s10_ground_tiles_shipped",
+   "stage": 10,
+   "call": "AssignGroundTiles_G",
+   "what": "stage 10 Ground as shipped: one static mesh (SM_Plaza_Square_A..G) per call, PositionOffset (-150, -150, 0) -- an XY offset on targets the terrain fit tilts (pitch/roll up to 21 deg on this run); static mesh, so no copy item and the targets take the mesh's box (UseMeshBounds and UniformScale at the primitive's defaults)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 21469,
+   "items": [
+    21469
+   ],
+   "python_items": [
+    21469
+   ],
+   "points": 21469,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 21469,
+    "quat": 21469,
+    "scale": 21469,
+    "bounds": 21469
+   },
+   "equal": {
+    "Asset": 21469,
+    "seed": 21469
+   }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_65",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 265,
+   "items": [
+    265
+   ],
+   "python_items": [
+    265
+   ],
+   "points": 265,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 265,
+    "quat": 265,
+    "scale": 265,
+    "bounds": 265
+   },
+   "equal": {
+    "Asset": 265,
+    "seed": 265
+   }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_71",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": false,
+   "settings": {
+    "position_offset": {
+     "X": -150,
+     "Y": -150,
+     "Z": 0
+    }
+   },
+   "targets": 2364,
+   "items": [
+    2364
+   ],
+   "python_items": [
+    2364
+   ],
+   "points": 2364,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 2364,
+    "quat": 2364,
+    "scale": 2364,
+    "bounds": 2364
+   },
+   "equal": {
+    "Asset": 2364,
+    "seed": 2364
+   }
+  },
+  {
+   "run": "s13_shipped",
+   "stage": 13,
+   "call": "Subgraph_73",
+   "what": "stage 13 LeftOverLots as shipped (component seed 42): the seven ground-tile calls (one static mesh each, PositionOffset (-150, -150, 0)); only A and G get lots on this draw, B..F tap nothing. Subgraph_73 is random (pick + scale); Subgraph_12/14/26 get nothing (the official texture is missing)",
+   "random": true,
+   "settings": {
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    }
+   },
+   "targets": 515,
+   "items": [
+    515
+   ],
+   "python_items": [
+    515
+   ],
+   "points": 515,
+   "compared": "sizes, order, Asset",
+   "equal": {
+    "items": true,
+    "Asset": true
+   }
+  },
+  {
+   "run": "s13_index_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_26",
+   "what": "stage 13 Subgraph_26 (UseIndexattribute on Index, ScaleOffset (0.7, 1, 1)) with /Game/Textures/Noise/T_Noises_Clouds_4k_ on Subgraph_27/28 (the official T_CloudNoise_4k is not in the project) and its random ranges zeroed: index 1..7 -> entries 1..7, index 0, 8, 9 -> entry 0 (unmatched, kept, the attribute default)",
+   "random": false,
+   "settings": {
+    "scale_offset": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "random_rotation_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "random_scale_range": {
+     "X": 0,
+     "Y": 0,
+     "Z": 0
+    },
+    "use_index_attribute": true,
+    "index_attribute": "Index"
+   },
+   "targets": 6518,
+   "items": [
+    6518
+   ],
+   "python_items": [
+    6518
+   ],
+   "points": 6518,
+   "max_diff": {
+    "loc": 0.0,
+    "quat": 0.0,
+    "scale": 0.0,
+    "bounds": 0.0
+   },
+   "bit_exact": {
+    "loc": 6518,
+    "quat": 6518,
+    "scale": 6518,
+    "bounds": 6518
+   },
+   "equal": {
+    "Asset": 6518,
+    "seed": 6518
+   }
+  },
+  {
+   "run": "s13_random_ranges_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_26",
+   "what": "the call's random ranges ON (substitute texture on Subgraph_27/28): the drawn ranges against the CoreProcess reading of the pins (geo.assets._pin_range: scale 1 +- v, rotation +-v with X/Y/Z = Roll/Pitch/Yaw); 6518 draws",
+   "random": true,
+   "settings": {
+    "random_rotation_range": {
+     "X": 2,
+     "Y": 2,
+     "Z": 180
+    },
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "scale_offset": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    },
+    "use_index_attribute": true,
+    "index_attribute": "Index"
+   },
+   "targets": 6518,
+   "points": 6518,
+   "compared": "drawn ranges",
+   "measured": {
+    "scale_factor": [
+     0.8001,
+     1.1997
+    ],
+    "scale_uniform": true,
+    "pitch": [
+     -2.0,
+     1.999
+    ],
+    "yaw": [
+     -179.99,
+     179.928
+    ],
+    "roll": [
+     -2.0,
+     2.0
+    ],
+    "location_moved_cm": 0.0,
+    "assets": {
+     "SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP": 2076,
+     "SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP": 1777,
+     "SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP": 1220,
+     "SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP": 1052,
+     "SM_BlackAlder_Field_05_PP.SM_BlackAlder_Field_05_PP": 393
+    }
+   },
+   "expected": {
+    "scale_factor": [
+     0.8,
+     1.2
+    ],
+    "pitch": [
+     -2.0,
+     2.0
+    ],
+    "yaw": [
+     -180.0,
+     180.0
+    ],
+    "roll": [
+     -2.0,
+     2.0
+    ]
+   },
+   "equal": {
+    "inside_expected_range": true
+   }
+  },
+  {
+   "run": "s13_random_ranges_texture_substitute",
+   "stage": 13,
+   "call": "Subgraph_73",
+   "what": "the call's random ranges ON (substitute texture on Subgraph_27/28): the drawn ranges against the CoreProcess reading of the pins (geo.assets._pin_range: scale 1 +- v, rotation +-v with X/Y/Z = Roll/Pitch/Yaw); 515 draws",
+   "random": true,
+   "settings": {
+    "random_scale_range": {
+     "X": 0.2,
+     "Y": 0,
+     "Z": 0
+    },
+    "extents_scale": {
+     "X": 0.7,
+     "Y": 1,
+     "Z": 1
+    }
+   },
+   "targets": 515,
+   "points": 515,
+   "compared": "drawn ranges",
+   "measured": {
+    "scale_factor": [
+     0.8002,
+     1.1996
+    ],
+    "scale_uniform": true,
+    "pitch": [
+     -0.0,
+     0.0
+    ],
+    "yaw": [
+     -0.0,
+     0.0
+    ],
+    "roll": [
+     -0.0,
+     0.0
+    ],
+    "location_moved_cm": 0.0,
+    "assets": {
+     "SM_BlackAlder_Field_03_PP.SM_BlackAlder_Field_03_PP": 128,
+     "SM_BlackAlder_Field_02_PP.SM_BlackAlder_Field_02_PP": 135,
+     "SM_BlackAlder_Field_01_PP.SM_BlackAlder_Field_01_PP": 127,
+     "SM_BlackAlder_Field_04_PP.SM_BlackAlder_Field_04_PP": 125
+    }
+   },
+   "expected": {
+    "scale_factor": [
+     0.8,
+     1.2
+    ],
+    "pitch": [
+     0.0,
+     0.0
+    ],
+    "yaw": [
+     0.0,
+     0.0
+    ],
+    "roll": [
+     0.0,
+     0.0
+    ]
+   },
+   "equal": {
+    "inside_expected_range": true
+   }
+  }
+ ]
+}

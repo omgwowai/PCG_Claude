@@ -1,0 +1,445 @@
+{
+ "_level": "/Game/PyPCG/L_PyTown",
+ "_note": "pass 1 numbers; deterministic = pass 2 per-mesh counts equal pass 1 (v2.same); variation = differences ruled native run-to-run variation (T28a)",
+ "all_ok": true,
+ "blocking": [],
+ "deterministic": true,
+ "deterministic_within_native_bands": true,
+ "native_variation": [],
+ "plausibility": {
+  "density": {
+   "buildings_per_km2": {
+    "official": 186.41917642895058,
+    "ratio": 1.4000864400725104,
+    "town": 261.00296108765866
+   },
+   "road_m_per_km2": {
+    "official": 15603.843635375426,
+    "ratio": 1.2050156862228474,
+    "town": 18802.87634599593
+   }
+  },
+  "failures": [],
+  "official": {
+   "area_m2": 2360272.2017586855,
+   "buildings": 440,
+   "road_m": 36829.31837316581
+  },
+  "town": {
+   "area_m2": 823745.4437453359,
+   "buildings": 215,
+   "road_m": 15488.783719321096
+  }
+ },
+ "stages": [
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_1_1_Terrain",
+   "instances": 0,
+   "instances_pass2": 0,
+   "meshes": 0,
+   "notes": [
+    "core spread 1630 cm, limit 4413 cm (CityFlatness x hills range, T27b)",
+    "outer relief 5102 cm from the core mean 2683 cm"
+   ],
+   "params": {
+    "CityFlatness": 0.6000000238418579,
+    "HillsHeight": 7001
+   },
+   "shot": "pt_stage_01_PCG_1_1_Terrain_p1.png",
+   "stage": 1,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "地形底座",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_1_2_BG_Buildings",
+   "instances": 373,
+   "instances_pass2": 373,
+   "meshes": 3,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_02_PCG_1_2_BG_Buildings_p1.png",
+   "stage": 2,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "远景天际线",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_1_3_BG_Mountains",
+   "instances": 59,
+   "instances_pass2": 59,
+   "meshes": 1,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_03_PCG_1_3_BG_Mountains_p1.png",
+   "stage": 3,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "Points"
+   ],
+   "title": "远景山体",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_2_1_MainTower_Footprint",
+   "instances": 0,
+   "instances_pass2": 0,
+   "meshes": 0,
+   "notes": [],
+   "params": {
+    "RectLength": 11000,
+    "RectWidth": 11000
+   },
+   "shot": "pt_stage_04_PCG_2_1_MainTower_Footprint_p1.png",
+   "stage": 4,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "Footprint"
+   ],
+   "title": "主塔占位",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_2_2_CentralPark_Footprint",
+   "instances": 0,
+   "instances_pass2": 0,
+   "meshes": 0,
+   "notes": [],
+   "params": {
+    "RectLength": 9000,
+    "RectWidth": 26000
+   },
+   "shot": "pt_stage_05_PCG_2_2_CentralPark_Footprint_p1.png",
+   "stage": 5,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "Footprint"
+   ],
+   "title": "中央公园范围",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_1_1_Districts",
+   "instances": 0,
+   "instances_pass2": 0,
+   "meshes": 0,
+   "notes": [],
+   "params": {
+    "Dividable_district_Limit": 77499.317359,
+    "LargeGridLength": 20000,
+    "LargeGridWidth": 28000,
+    "MediumGridLength": 18000,
+    "MediumGridWidth": 15000,
+    "MediumLargeThreshold": 120000,
+    "SmallGridLength": 12000,
+    "SmallGridWidth": 10000,
+    "SmallMediumThreshold": 95000
+   },
+   "shot": "pt_stage_06_PCG_3_1_1_Districts_p1_r2.png",
+   "stage": 6,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "ArteryRoads",
+    "CollectorRoads",
+    "LargeDistricts",
+    "MediumDistricts",
+    "SmallDistricts",
+    "localRoads"
+   ],
+   "title": "街区骨架",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_1_2_Roads",
+   "instances": 127631,
+   "instances_pass2": 127631,
+   "meshes": 28,
+   "notes": [],
+   "params": {
+    "Artery_width": 3400,
+    "Crosswalks": true,
+    "Partitioned": false,
+    "Road_Profile": "/CitySamplePCG/PCG/DataAssets/Roads/Road_City/SGD_Road_City_HighRes.SGD_Road_City_HighRes",
+    "collector_width": 2600,
+    "local_Width": 1900,
+    "simpleRoads": false
+   },
+   "shot": "pt_stage_07_PCG_3_1_2_Roads_p1_r3.png",
+   "stage": 7,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "ModifiedTerrain",
+    "RoadFootprints"
+   ],
+   "title": "道路",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_1_3_Highways",
+   "instances": 15999,
+   "instances_pass2": 15999,
+   "meshes": 10,
+   "notes": [],
+   "params": {
+    "Partitioned": false
+   },
+   "shot": "pt_stage_08_PCG_3_1_3_Highways_p1_r3.png",
+   "stage": 8,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "Highway"
+   ],
+   "title": "高速",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_1_4_Lots",
+   "instances": 3110,
+   "instances_pass2": 3110,
+   "meshes": 3,
+   "notes": [],
+   "params": {
+    "BuildableFootprintMinSizeLargeDistrict": 1500,
+    "BuildableFootprintMinSizeMediumDistrict": 500,
+    "BuildableFootprintMinSizeSmallDistrict": 500,
+    "BuildableLotMaxSizeLargeDistrict": 48000,
+    "BuildableLotMaxSizeMediumDistrict": 22000,
+    "BuildableLotMaxSizeSmallDistrict": 15000,
+    "BuildableLotMinSizeLargeDistrict": 2000,
+    "BuildableLotMinSizeMediumDistrict": 2000,
+    "BuildableLotMinSizeSmallDistrict": 1000,
+    "PlazaReservationRatio": 0.8999999761581421
+   },
+   "shot": "pt_stage_09_PCG_3_1_4_Lots_p1_r2.png",
+   "stage": 9,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "LargeBuildingSkirt",
+    "LargeDistrictsBldgFootprints",
+    "Lots",
+    "Medium Courtyards",
+    "MediumDistrictsBldgFootprints",
+    "Small Courtyards",
+    "SmallDistrictsBldgFootprints",
+    "UnbuildableFootprints",
+    "UnderHighway",
+    "reservedLots",
+    "unbuildableLots"
+   ],
+   "title": "地块",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_2_1_Ground",
+   "instances": 76017,
+   "instances_pass2": 76017,
+   "meshes": 58,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_10_PCG_3_2_1_Ground_p1_r2.png",
+   "stage": 10,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "地面与人行道",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_3_1_Buildings",
+   "instances": 164244,
+   "instances_pass2": 164244,
+   "meshes": 924,
+   "notes": [
+    "['/Game/Building/TL/'] present (MediumRooftops published)"
+   ],
+   "params": {
+    "ComplexBuildingShapes": true,
+    "MaxHeightLargeDistrict": 7000,
+    "MaxHeightMediumDistrict": 4000,
+    "MaxHeightSmallDistrict": 2800,
+    "MinHeightLargeDistrict": 3000,
+    "MinHeightMediumDistrict": 1500,
+    "MinHeightSmallDistrict": 1500
+   },
+   "shot": "pt_stage_11_PCG_3_3_1_Buildings_p1_r2.png",
+   "stage": 11,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "LargeRooftops",
+    "MediumRooftops",
+    "SmallRooftops"
+   ],
+   "title": "建筑",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_3_2_Rooftops",
+   "instances": 12453,
+   "instances_pass2": 12453,
+   "meshes": 43,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_12_PCG_3_3_2_Rooftops_p1.png",
+   "stage": 12,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "屋顶设备",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_2_2_LeftOverLots",
+   "instances": 17242,
+   "instances_pass2": 17242,
+   "meshes": 124,
+   "notes": [],
+   "params": {
+    "Ratio_Plaza_vs_Trees": 0.5,
+    "UseMegaplantsTrees": false
+   },
+   "shot": "pt_stage_13_PCG_3_2_2_LeftOverLots_p1.png",
+   "stage": 13,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "reservedLots"
+   ],
+   "title": "余地广场与植被",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_3_2_3_Parkings",
+   "instances": 8370,
+   "instances_pass2": 8370,
+   "meshes": 27,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_14_PCG_3_2_3_Parkings_p1.png",
+   "stage": 14,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "停车场",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_4_1_MainTower_Visuals",
+   "instances": 11710,
+   "instances_pass2": 11710,
+   "meshes": 86,
+   "notes": [],
+   "params": {
+    "UseMegaplantsTrees": false
+   },
+   "shot": "pt_stage_15_PCG_4_1_MainTower_Visuals_p1.png",
+   "stage": 15,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "主塔视觉",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_4_2_CentralPark_Visuals",
+   "instances": 85324,
+   "instances_pass2": 85324,
+   "meshes": 134,
+   "notes": [],
+   "params": {
+    "UseMegaplantsTrees": false
+   },
+   "shot": "pt_stage_16_PCG_4_2_CentralPark_Visuals_p1.png",
+   "stage": 16,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "中央公园视觉",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_5_1_CityEdge",
+   "instances": 23134,
+   "instances_pass2": 23134,
+   "meshes": 106,
+   "notes": [],
+   "params": {},
+   "shot": "pt_stage_17_PCG_5_1_CityEdge_p1.png",
+   "stage": 17,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [
+    "Docks"
+   ],
+   "title": "滨水设施",
+   "variation": null
+  },
+  {
+   "deterministic": true,
+   "failures": [],
+   "graph": "PCG_5_2_OuterForest",
+   "instances": 0,
+   "instances_pass2": 0,
+   "meshes": 0,
+   "notes": [
+    "0 trees expected: T_CloudNoise_4k is missing (traps.md 66, ruling T27a)"
+   ],
+   "params": {
+    "TreeDensity": 0.05,
+    "UseMegaPlantsTrees": false
+   },
+   "shot": "pt_stage_18_PCG_5_2_OuterForest_p1.png",
+   "stage": 18,
+   "status": "ok",
+   "status_pass2": "ok",
+   "tags": [],
+   "title": "外围林地",
+   "variation": null
+  }
+ ]
+}

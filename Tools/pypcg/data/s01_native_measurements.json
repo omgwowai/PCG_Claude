@@ -1,0 +1,28 @@
+{
+ "blur": {
+  "neighbours_per_point": 1261.481,
+  "note": "positions of the official hills output; the official blur runs on the DISTORTED positions (+-33000 cm), whose neighbourhoods are as large",
+  "seconds_two_iterations": 445.4779296150729,
+  "us_per_point": 852.3870499921031
+ },
+ "lerp": {
+  "bit_exact": 783936,
+  "components": 783936,
+  "ratio": 0.3999999761581421
+ },
+ "project": {
+  "band_targets": 5856,
+  "bit_exact": 247241,
+  "in_circle": 146217,
+  "max_abs_cm": 0.0011723549250746146,
+  "points": 261312,
+  "python_seconds_per_projection": 36.142715992212295,
+  "python_us_per_point": 138.31249997019768,
+  "ulp_offsets_of_the_rest": {
+   "-1": 11424,
+   "-2": 5,
+   "1": 2642
+  }
+ },
+ "source": "Saved/t24/tap_a.json (official taps, 2026-10-20)"
+}

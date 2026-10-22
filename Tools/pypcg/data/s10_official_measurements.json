@@ -1,0 +1,162 @@
+{
+ "what": "Stage 10 Ground against the official graph on the demo level's stage-10 volume (seed 42, 2026-10-19, Task 17). Taps: Content/Python/pypcg_s10_measure.py; distilled by Tools/pypcg/s10_measurements.py. Lengths in cm.",
+ "fill_and_fit": {
+  "pieces": 107,
+  "fill": {
+   "pieces_equal": 107,
+   "pieces_differ": 0,
+   "points": 155859,
+   "loc_exact": 11689,
+   "loc_max": 3.1141098588705063e-09,
+   "yaw_max": 2.8421709430404007e-12,
+   "box_and_steepness_exact": 155859
+  },
+  "project": {
+   "points": 20000,
+   "loc_exact": 20000,
+   "z_max": 0.0,
+   "xy_max": 0.0,
+   "quat_max": 1.297873031269603e-09,
+   "rot_max_deg": 1.672431721999601e-07,
+   "seconds": 1.37
+  },
+  "official_tilt_max_deg": 20.969477627646988
+ },
+ "buildable_pieces": {
+  "port_pieces": 129,
+  "official_pieces": 107,
+  "port_area_m2": 1339722.6813367568,
+  "official_area_m2": 1339722.6813367566,
+  "port_degenerate": 34,
+  "official_degenerate": 12,
+  "port_tiles": 156197,
+  "official_tiles": 155859,
+  "port_tiles_on_degenerate": 585,
+  "official_tiles_on_degenerate": 247,
+  "port_fill_on_official_ground": 155859
+ },
+ "buildable_pieces_in_subject_frame": {
+  "official_pieces": 107,
+  "frame_pieces": 130,
+  "frame_degenerate": 35,
+  "frame_tiles": 156164,
+  "frame_area_m2": 1339722.6813367577
+ },
+ "sidewalk_segments": {
+  "port": 469,
+  "official": 469,
+  "matched": 469,
+  "bit_exact": 315,
+  "worst_cm": 0.0033138395301648416,
+  "same_index": 469,
+  "unmatched": 0
+ },
+ "corner_shapes": {
+  "port": 118,
+  "official": 118,
+  "matched": 118,
+  "bit_exact": 115,
+  "worst_cm": 0.0033138395301648416,
+  "same_index": 118,
+  "unmatched": 0
+ },
+ "railing_zones": {
+  "port": 2,
+  "official": 2,
+  "matched": 2,
+  "bit_exact": 0,
+  "worst_cm": 5.820766091346741e-11,
+  "same_index": 2,
+  "unmatched": 0
+ },
+ "corner_instances": {
+  "official": 1228,
+  "port": 1228,
+  "official_missing_in_port": 0,
+  "worst_cm": 0.004582575686263734,
+  "without_control_point_rotations": {
+   "port": 1116,
+   "official_missing_in_port": 112,
+   "what": "the same run with the boundary pieces' control points at identity rotation"
+  }
+ },
+ "instances": {
+  "official_total": 220128,
+  "official_reads": {
+   "official": 220128,
+   "official_after": 220128,
+   "official_after_reread": 220128,
+   "official_final": 220128
+  },
+  "slim_totals": {
+   "7": 220466,
+   "13": 220466,
+   "101": 220466,
+   "977": 220466,
+   "42": 220466
+  },
+  "non_tile_equal_per_mesh": {
+   "7": true,
+   "13": true,
+   "101": true,
+   "977": true,
+   "42": true
+  },
+  "official_tiles": {
+   "SM_Plaza_Square_A": 28031,
+   "SM_Plaza_Square_B": 18641,
+   "SM_Plaza_Square_C": 18976,
+   "SM_Plaza_Square_D": 21068,
+   "SM_Plaza_Square_E": 17305,
+   "SM_Plaza_Square_F": 30369,
+   "SM_Plaza_Square_G": 21469
+  },
+  "slim_tiles": {
+   "7": {
+    "SM_Plaza_Square_A": 27502,
+    "SM_Plaza_Square_B": 18897,
+    "SM_Plaza_Square_C": 20016,
+    "SM_Plaza_Square_D": 23185,
+    "SM_Plaza_Square_E": 10709,
+    "SM_Plaza_Square_F": 23446,
+    "SM_Plaza_Square_G": 32442
+   },
+   "13": {
+    "SM_Plaza_Square_A": 27954,
+    "SM_Plaza_Square_B": 25938,
+    "SM_Plaza_Square_C": 15623,
+    "SM_Plaza_Square_D": 32044,
+    "SM_Plaza_Square_E": 21657,
+    "SM_Plaza_Square_F": 15148,
+    "SM_Plaza_Square_G": 17833
+   },
+   "101": {
+    "SM_Plaza_Square_A": 23800,
+    "SM_Plaza_Square_B": 29005,
+    "SM_Plaza_Square_C": 12929,
+    "SM_Plaza_Square_D": 30139,
+    "SM_Plaza_Square_E": 13693,
+    "SM_Plaza_Square_F": 23576,
+    "SM_Plaza_Square_G": 23055
+   },
+   "977": {
+    "SM_Plaza_Square_A": 20366,
+    "SM_Plaza_Square_B": 9252,
+    "SM_Plaza_Square_C": 18355,
+    "SM_Plaza_Square_D": 26605,
+    "SM_Plaza_Square_E": 19238,
+    "SM_Plaza_Square_F": 31181,
+    "SM_Plaza_Square_G": 31200
+   },
+   "42": {
+    "SM_Plaza_Square_A": 7332,
+    "SM_Plaza_Square_B": 29302,
+    "SM_Plaza_Square_C": 37962,
+    "SM_Plaza_Square_D": 21777,
+    "SM_Plaza_Square_E": 22806,
+    "SM_Plaza_Square_F": 15858,
+    "SM_Plaza_Square_G": 21160
+   }
+  }
+ }
+}

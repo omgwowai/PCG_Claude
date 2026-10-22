@@ -1,0 +1,19 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "PyPCG Tools",
+	"Description": "Editor-only helpers that let Python read and write the PCG graph fields its reflection layer cannot reach.",
+	"Category": "Scripting",
+	"CreatedBy": "",
+	"EnabledByDefault": true,
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+		{ "Name": "PyPCGTools", "Type": "Editor", "LoadingPhase": "Default" }
+	],
+	"Plugins": [
+		{ "Name": "PCG", "Enabled": true }
+	]
+}

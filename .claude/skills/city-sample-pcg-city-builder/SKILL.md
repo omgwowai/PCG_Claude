@@ -88,7 +88,7 @@ digraph city {
 7. **保存** — 脚本不会自动落盘。用
    `unreal.EditorAssetLibrary.save_asset(path)` / `save_directory(path)` 显式保存。
 
-## 两条路线
+## 四条路线
 
 **路线 A —— 复用 PCGPrimitives 原语库（推荐起点）**
 
@@ -126,6 +126,18 @@ Get / Override / Place / Shared / Spawn / Subdivide / Trace / Transform / Write`
    → `set_graph` → `activate(True)` → `generate_local`。
 
 **只要有一张现成图或一个现成样式资产能满足需求，就不要走路线 A/B 自建。**
+
+**路线 D —— PyPCG：18 张阶段图的 Python 版（改算法、改参数、搭小镇时走这条）**
+
+18 张官方阶段图的计算已移植成纯 Python 阶段（`Content/Python/pypcg/stages/sNN_*.py`），每张图对应一张
+"瘦身图"（`/Game/PyPCG/Slim|Town/PCG_*`，由 `pypcg/graphs/sNN_*.py` 描述、`pypcg_build_slim.py` 生成），
+1 km 小镇 `/Game/PyPCG/L_PyTown` 就是用它们按 18 步搭的。**动手前读 `docs/pypcg-guide.md`**（流程、DSL、V2/V1、
+小镇命令、哪些计算留在原生、已知限制）。
+
+- **改阶段图只改它的 `.py`，绝不在图编辑器里改 `/Game/PyPCG/Slim|Town` 资产**——资产每次构建都整张重新生成，
+  手改会被覆盖；改完跑 `pytest Tools/pypcg/tests -q`，必要时 `pypcg_build_slim.py {"stages": [N]}` 要 `diffs: 0`。
+- 官方图 `/CitySamplePCG/...` 仍然只读；demo 关卡只用于 V2 对照，**从不保存**。
+- 编辑器崩溃后重启前先挪走 `Saved/Autosaves/`（trap 78），否则「Restore Packages」会悄悄改写 demo。
 
 **无论走哪条路线，都优先复用而不是从零建节点。**
 
@@ -207,7 +219,8 @@ for c in comp.get_owner().get_components_by_class(unreal.PrimitiveComponent):
 - `references/pipeline-map.md` — City Sample 的 18 阶段流水线、关卡装配、手绘样条、各阶段内部结构、形状语法、建筑样式码、World Partition 注意事项，以及**可搬迁 / 不可搬迁**的清单。**规划前必读。**
 - `references/node-classes.md` — **PCG 节点类名表**：常用节点的确切类名与 `/Script/...` 加载路径、子图节点唯一正确的 `SetSubgraph()` 接法、从标题猜类名会失败的陷阱表，以及「动态输入 pin 加不了」这一硬限制。**写 `add_node_of_type` 前必读。**
 - `references/tooling.md` — `run_unreal_script` 的调用形态与脚本契约、六大反直觉之处、拒绝时的确切报错串，以及**「CitySample 侧工具 → 本项目怎么写」的对照表**。**写调用前必读。**
-- `references/traps.md` — 静默零点与实测坑（40 条）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
+- `references/traps.md` — 静默零点与实测坑（84 条；51–84 是 PyPCG 计划实测的，第 9 节有按主题的索引）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
+- `docs/pypcg-guide.md`（仓库文档，不在本目录）— **路线 D 的完整指南**：阶段模块与瘦身图、改图 / 加参数 / 移植新图的流程、DSL 速查、V2 阈值、小镇命令、`PyPCGTools` 的 13 个函数、留原生的计算与后续工作。
 - `references/stage-run-playbook.md` — **把 18 阶段跑一遍并逐阶段截图的操作手册**：
   自带的 11 个电影机位对照表、「PCG debug 没有全局开关」与限量理由、
   「一次调用只发一张截图」的落盘节奏、以及重载关卡会崩编辑器这条硬约束。
