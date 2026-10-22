@@ -9,6 +9,8 @@ STREET_HW = 200.0
 STREET_STEP = 500.0
 SETBACK = {"street": 250.0, "road": 700.0}       # a road's flat corridor reaches half width + 600 (ROAD_INNER)
 GAP = (300.0, 600.0)
+# (bearing offset, extra distance) a landmark tries, in order
+LANDMARK_TRIES = [(da, extra) for extra in (0.0, 800.0, 1600.0) for da in (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0)]
 
 
 def angle_gap(a, b):
@@ -154,15 +156,22 @@ def layout(loc, rng, site):
 
     if plaza:
         specs = [spec for spec in rules.LANDMARKS if kind in spec["settlements"]]
-        for spec, a in zip(specs, landmark_dirs):
-            ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
-            off = PLAZA_R + 300.0 + 0.5 * spec["w"]
-            b = place(spec, cx + ux * off, cy + uy * off, spec["w"], spec["d"], a, 300.0, spec["kind"])
+        for spec, a0 in zip(specs, landmark_dirs):
+            # The widest gap first, then directions and distances around it: a river or a street may block the gap.
+            for da, extra in LANDMARK_TRIES:
+                a = (a0 + da) % 360.0
+                ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
+                off = PLAZA_R + 300.0 + extra + 0.5 * spec["w"]
+                b = place(spec, cx + ux * off, cy + uy * off, spec["w"], spec["d"], a, 300.0, spec["kind"])
+                if b is not None:
+                    break
             if b is not None and spec.get("tower"):
                 px, py = -uy, ux
-                tx = cx + ux * (PLAZA_R + 600.0) + px * (0.5 * spec["d"] + 350.0)
-                ty = cy + uy * (PLAZA_R + 600.0) + py * (0.5 * spec["d"] + 350.0)
-                place(rules.TOWER, tx, ty, 600.0, 600.0, a, 100.0, "BellTower")
+                for side in (1.0, -1.0):
+                    tx = cx + ux * (PLAZA_R + 300.0 + 0.5 * rules.TOWER["w"] + extra) + side * px * (0.5 * spec["d"] + 0.5 * rules.TOWER["d"] + 200.0)
+                    ty = cy + uy * (PLAZA_R + 300.0 + 0.5 * rules.TOWER["w"] + extra) + side * py * (0.5 * spec["d"] + 0.5 * rules.TOWER["d"] + 200.0)
+                    if place(rules.TOWER, tx, ty, rules.TOWER["w"], rules.TOWER["d"], a, 100.0, "BellTower") is not None:
+                        break
     fronts = [(st, STREET_HW, "street") for st in streets]
     for rd in site.roads:
         fronts += [(run, rd["hw"], "road") for run in runs_within(rd["pts"], cx, cy, r)]

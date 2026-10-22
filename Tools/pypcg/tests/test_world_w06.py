@@ -50,3 +50,34 @@ def test_same_seed_same_layout():
 def test_empty_inputs():
     out, _ = run_stage(S, {})
     assert out["Summary"][0][0].values["buildings"] == 0
+
+
+def test_landmarks_find_room_when_the_widest_gap_is_blocked():
+    """A river along the widest gap must not leave the town without its church and town hall: the landmark
+    tries the directions and distances around the gap."""
+    import random
+    from pypcg.world import settle
+    road = {"pts": [(x, 0.0, 1000.0) for x in range(-23000, 23001, 500)], "hw": 400.0}
+    river = [(0.0, y, 900.0, 1200.0) for y in range(-30000, 30001, 1000)]
+    site = settle.Site([road], river, geom.RingIndex())
+    plan = settle.layout({"id": 0, "kind": "Town", "x": 0.0, "y": 0.0, "radius": 22000.0}, random.Random(1), site)
+    kinds = [b["kind"] for b in plan["buildings"]]
+    assert kinds.count("Church") == 1 and kinds.count("TownHall") == 1
+
+
+def test_every_footprint_fits_the_building_grammar():
+    """The grammar fails a whole node ("Grammar does not fit for this spline") when one footprint edge is shorter than
+    its modules (measured in the editor: the 5-7 m sheds and the 6 m bell tower). Every building type stays at or
+    above rules.MIN_EDGE on both sides."""
+    from pypcg.world import rules
+    for b in rules.BUILDINGS:
+        assert min(b["w"][0], b["d"][0]) >= rules.MIN_EDGE, b["kind"]
+    for b in rules.LANDMARKS:
+        assert min(b["w"], b["d"]) >= rules.MIN_EDGE, b["kind"]
+    assert min(rules.TOWER["w"], rules.TOWER["d"]) >= rules.MIN_EDGE
+
+
+def test_every_church_gets_its_bell_tower():
+    out = _run([(0.0, 3000.0, "Village", 14000.0)])
+    kinds = [k for v, _t in out["Buildings"] for k in v.attrs["Kind"]]
+    assert kinds.count("Church") == 1 and kinds.count("BellTower") == 1

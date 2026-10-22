@@ -29,16 +29,17 @@ BUILDINGS = [
      "weights": {"outskirts": 3.0}, "cap": {"Town": 10, "Village": 6, "Hamlet": 3}, "field": True},
     {"kind": "Barn", "w": (1400.0, 1800.0), "d": (1000.0, 1400.0), "height": ("Mid",),
      "weights": {"outskirts": 1.5}, "cap": {"Town": 6, "Village": 4, "Hamlet": 2}},
-    {"kind": "Shed", "w": (500.0, 700.0), "d": (500.0, 700.0), "height": ("Low",),
+    {"kind": "Shed", "w": (800.0, 950.0), "d": (800.0, 950.0), "height": ("Low",),
      "weights": {"outskirts": 2.0, "residential": 0.3}, "cap": {"Town": 12, "Village": 6, "Hamlet": 4}},
 ]
 LANDMARKS = [   # placed first, facing the plaza, in the widest gaps between roads and streets (w is the radial length)
     {"kind": "Church", "settlements": ("Town", "Village"), "w": 2500.0, "d": 1400.0, "height": ("High",), "tower": True},
     {"kind": "TownHall", "settlements": ("Town",), "w": 1800.0, "d": 1300.0, "height": ("High",)},
 ]
-TOWER = {"kind": "BellTower", "height": ("Tower",)}
+TOWER = {"kind": "BellTower", "height": ("Tower",), "w": 900.0, "d": 900.0}
+MIN_EDGE = 800.0     # shortest footprint edge the building grammar fits (W6 in the editor, 2026-10-22)
 GROUPS = ("Low", "Mid", "High", "Tower")
-HEIGHT = {"Low": 450.0, "Mid": 750.0, "High": 1050.0, "Tower": 2400.0}   # the grammar's Size per group (cm)
+HEIGHT = {"Low": 600.0, "Mid": 750.0, "High": 1050.0, "Tower": 1950.0}   # the grammar's Size per group (cm)
 WALL_TOP = dict(HEIGHT)          # top of the grammar's walls per group; Task 18 replaces it with the measured tops
 
 
