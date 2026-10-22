@@ -54,3 +54,58 @@ def pick(zone, kind, counts, rng):
         if x <= 0.0:
             return b
     return cands[-1][0]
+
+
+from . import MESH, SEA_Z
+
+
+def _m(*keys):
+    return tuple(MESH[k] for k in keys)
+
+
+BIOMES = {   # density = probability per 7 m cell; clump mixes in low-frequency noise (0: none, 1: all)
+    "rock": {"kind": "Rock", "density": 0.10, "clump": 0.0, "sink": 25.0,
+             "species": [(_m("Boulder"), 1.0, (0.6, 1.5)), (_m("MossyRock"), 2.0, (2.0, 5.0))]},
+    "riparian": {"kind": "Tree", "density": 0.30, "clump": 0.3, "sink": 15.0,
+                 "species": [(_m(*("Alder" + v for v in "ABCD")), 3.0, (0.7, 1.05)),
+                             (_m(*("Hazel" + v for v in "ABCD")), 2.0, (0.8, 1.2))]},
+    "alpine": {"kind": "Tree", "density": 0.22, "clump": 0.4, "sink": 15.0,
+               "species": [(_m("Pine"), 3.0, (0.8, 1.2)), (_m("Spruce"), 3.0, (2.2, 3.2)), (_m("YoungTree"), 1.0, (0.9, 1.3))]},
+    "forest": {"kind": "Tree", "density": 0.35, "clump": 0.6, "sink": 15.0,
+               "species": [(_m(*("Beech" + v for v in "ABCD")), 3.0, (0.6, 0.9)),
+                           (_m(*("Maple" + v for v in "ABCD")), 2.0, (0.8, 1.1)),
+                           (_m(*("Aspen" + v for v in "ABCD")), 2.0, (0.8, 1.1)),
+                           (_m(*("Hazel" + v for v in "ABCD")), 1.0, (0.8, 1.2))]},
+    "meadow": {"kind": "Tree", "density": 0.06, "clump": 1.0, "sink": 15.0,
+               "species": [(_m(*("Birch" + v for v in "abcdefgh")), 2.0, (0.9, 1.2)),
+                           (_m(*("Beech" + v for v in "ABCD")), 1.0, (0.5, 0.7)),
+                           (_m(*("Aspen" + v for v in "ABCD")), 1.0, (0.8, 1.0))]},
+}
+GRASS = {"meshes": _m(*("Grass" + v for v in "ABDEFG")), "density": 0.35, "scale": (0.8, 1.3), "sink": 3.0}
+ALDERS = frozenset(_m(*("Alder" + v for v in "ABCD")))
+
+
+def biome_of(s):
+    """The biome at a sample: sea, rock (> 34 deg), riparian (25 m from the bank or a gully), alpine (120 m above the
+    valley floor), forest (slopes over 7 deg or 25 m up), else meadow."""
+    if s["z"] < SEA_Z + 100.0:
+        return None
+    if s["slope"] >= 34.0:
+        return "rock"
+    if (s["river"] < 2500.0 and s["slope"] < 22.0) or (s["acc"] >= 300 and s["slope"] < 25.0):
+        return "riparian"
+    if s["rel"] >= 12000.0:
+        return "alpine"
+    if s["slope"] >= 7.0 or s["rel"] >= 2500.0:
+        return "forest"
+    return "meadow"
+
+
+def pick_species(spec, rng):
+    x = rng.uniform(0.0, sum(w for _m_, w, _s in spec["species"]))
+    for meshes, w, (lo, hi) in spec["species"]:
+        x -= w
+        if x <= 0.0:
+            return rng.choice(meshes), rng.uniform(lo, hi)
+    meshes, _w, (lo, hi) = spec["species"][-1]
+    return rng.choice(meshes), rng.uniform(lo, hi)
