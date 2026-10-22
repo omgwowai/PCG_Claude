@@ -120,7 +120,7 @@ descriptions (`graphs/`), the node shim (`host.py`), the PCG-data adapters (`ue/
 must report `diffs: 0`), `pypcg_compare_stage.py` (V2 against the official graph in the demo level,
 never saved), `pypcg_v1_editor.py` (V1), and `pypcg_town_level.py` / `pypcg_town.py` (the 18-step town
 `/Game/PyPCG/L_PyTown`). Every driver that swaps graphs or spawns volumes refuses unless its level
-(the demo, `L_PyTown` or `L_PyCity`, by full package path) is current (`pypcg/level.py`). `PyPCGTools` is a project plugin (Editor module) with 13 functions that
+(the demo, `L_PyTown`, `L_PyCity` or `L_PyCitySmall`, by full package path) is current (`pypcg/level.py`). `PyPCGTools` is a project plugin (Editor module) with 13 functions that
 Python cannot reach otherwise (graph IR export, parameter and pin writes, `MakePolygon2DData`,
 dynamic pins). `PCGPythonInterop` is an enabled engine plugin (Beta, editor-only), built into
 `E:\UnrealEngine`. The assets under `/Game/PyPCG/Slim`, `/Game/PyPCG/Town`, `/Game/PyPCG/City` and
@@ -133,7 +133,10 @@ the graph editor.
 footprint volumes as tagged control actors. Driver: `pypcg_city.py` (one phase per call; long phases
 take `{"defer": true}` and write `Saved/Reports/pypcg_city_deferred.json`, because a long bridge call
 loses its reply). `L_PyCity` is saved without its generated output (one 149 MB actor otherwise):
-regenerate after opening it.
+regenerate after opening it. `/Game/PyPCG/L_PyCitySmall` runs the same graph on a ~560 x 440 m layout
+(`{"profile": "small"}`, `pypcg/profiles/small.py` + `small_layout.py`) and is saved generated (85 MB).
+Every control actor is read by tag, so the graph runs in any level that carries the tags; rebuilding
+the graph resets the volume's overrides, so run `assign` after every `build`.
 
 ## Build
 

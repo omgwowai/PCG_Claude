@@ -3,16 +3,18 @@
 Every stage keeps its own nodes -- the Python Data Processor node(s) that hold the stage's logic, the scene
 reads and the native generation nodes -- and its own parameters, renamed `SNN_<name>` and grouped under the
 category `NN <Stage>`, so the component's Details panel adjusts any stage the traditional way (graph
-instance overrides). The control regions stay level actors read the traditional way: tag reads (City,
-Arteries, Terrain_shaping_1, HighRise, USER_SPLINE, LAKE, FOREST_EXCLUSION), actor references (the landmark
-park spline and the two highway splines) and, for stages 4 and 5, the tower and park footprint volumes,
-which become plain control actors read by tag instead of being the volume the graph runs on.
+instance overrides). The control regions stay level actors read the traditional way, all by tag (City,
+Arteries, Terrain_shaping_1, HighRise, USER_SPLINE, LAKE, FOREST_EXCLUSION, LandmarkPark, Highway), so the
+graph works in any level that carries the tags; for stages 4 and 5 the tower and park footprint volumes
+become plain control actors read by tag instead of being the volume the graph runs on.
 
 What merging changes, and nothing else:
   - A `Get_ActorDataByRef` that read another STAGE volume's generated output becomes a Gather fed by that
     stage's output edges (what the volume's Output node received). Tags travel with the data, so the
     downstream tag filters are untouched.
   - Stages 4 and 5's `Get Self` reads the footprint control actor by tag (`CONTROL_TAGS`).
+  - The three actor references to control splines (the landmark park, the two highways) become tag reads
+    (`ROLE_TAGS`): an actor reference names one level's actor, so the graph would read nothing elsewhere.
   - The mesh terrain is one shared resource that the 18 volumes used in stage order. One graph has no stage
     order, only data edges, so every terrain query of stage N waits (Execution Dependency) on every terrain
     write of the stages before N, and every write of stage N waits on every query of the stages before N:
@@ -33,12 +35,13 @@ TERRAIN_WRITE = "Write_MeshTerrain"
 DEP_PIN = "Execution Dependency"
 
 # role -> the stage whose volume it names; the remaining roles (LandmarkPark, HighwaySpline2/3) are
-# control actors and stay actor references.
+# control actors, read by tag (ROLE_TAGS).
 STAGE_ROLES = {role: next(s[0] for s in stages.STAGES if s[1] == label)
                for role, label in official.ROLE_LABELS.items() if label in stages.names()}
 
 # Stages 4 and 5 read their own volume's transform (stage_api.volume_point). Merged, the graph runs on
 # one volume, so the footprint volumes stay in the level as control actors carrying these tags.
+ROLE_TAGS = {"LandmarkPark": "LandmarkPark", "HighwaySpline2": "Highway", "HighwaySpline3": "Highway"}
 CONTROL_TAGS = {4: "PyCity_MainTowerFootprint", 5: "PyCity_CentralParkFootprint"}
 
 
@@ -85,7 +88,7 @@ def build(stage_numbers=None):
     g = dsl.Graph(NAME, params=params, description=__doc__.strip().split("\n\n")[0])
     outputs = {}                  # stage -> [[node, pin], ...] its Output node received
     terrain = {"get": {}, "write": {}}
-    report = {"refs_rewired": [], "refs_kept": [], "self_reads": [], "dropped": []}
+    report = {"refs_rewired": [], "refs_tagged": [], "self_reads": [], "dropped": []}
     for n in numbers:
         part = parts[n]
         prefix = "s%02d_" % n
@@ -134,7 +137,12 @@ def build(stage_numbers=None):
                 elif any(r in STAGE_ROLES for r in roles):
                     raise ValueError("stage %d: %s mixes stage and control roles %s" % (n, rec["title"], roles))
                 else:
-                    report["refs_kept"].append([n, rec["title"], roles])
+                    tags = sorted({ROLE_TAGS[r] for r in roles})
+                    if len(tags) != 1:
+                        raise ValueError("stage %d: %s reads roles %s that map to tags %s" % (n, rec["title"], roles, tags))
+                    new["subgraph"] = dsl.library()["subgraphs"]["Get_ActorData"]["path"]
+                    new["overrides"] = {"ActorTag": tags[0]}
+                    report["refs_tagged"].append([n, rec["title"], roles, tags[0]])
             if rec["class"] == _ir.SELF_NODE:
                 if n not in CONTROL_TAGS:
                     raise ValueError("stage %d reads its own volume; give it a control tag in CONTROL_TAGS" % n)

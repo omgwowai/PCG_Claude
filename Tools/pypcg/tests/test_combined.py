@@ -35,17 +35,18 @@ def test_parameters_are_prefixed_and_grouped(g):
             assert rec["getter_param"].lower() in declared
 
 
-def test_no_stage_volume_reference_is_left(g):
-    """Reads of another stage's volume become Gathers fed by that stage's output; only control actors stay
-    actor references."""
+def test_no_actor_reference_is_left(g):
+    """Reads of another stage's volume become Gathers fed by that stage's output; the control-actor references
+    become tag reads, so the graph names no actor of any level and runs in every level carrying the tags."""
     ir = g.to_ir(official)
-    stage_paths = {official.ROLES[r] for r in combined.STAGE_ROLES}
+    assert ir["sites"] == []
     for n in ir["nodes"]:
-        refs = (n.get("overrides") or {}).get("ActorReferences")
-        if refs is not None:
-            assert not stage_paths & set(refs), n["title"]
-    kept = {tuple(sorted(x[2])) for x in g.report["refs_kept"]}
-    assert kept == {("HighwaySpline2", "HighwaySpline3"), ("LandmarkPark",)}
+        assert "ActorReferences" not in (n.get("overrides") or {}), n["title"]
+    tagged = {(x[0], x[3]) for x in g.report["refs_tagged"]}
+    assert tagged == {(8, "Highway"), (9, "LandmarkPark"), (10, "LandmarkPark"), (13, "LandmarkPark")}
+    for rec in g._nodes:
+        if rec.get("subgraph") and rec["subgraph"].endswith("Get_ActorData.Get_ActorData"):
+            assert set(rec["overrides"]) == {"ActorTag"}
 
 
 def test_rewired_reads_carry_their_stage_outputs(g):
