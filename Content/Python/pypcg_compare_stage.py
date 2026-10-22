@@ -47,18 +47,21 @@ def _stage_dir(n):
 
 
 AUTOSAVE = "_autosave_enable"   # the state key that holds the user's autosave setting, recorded by prepare
+AUTOSAVE_PROPERTY = "bAutoSaveEnable"   # raw name: the class has no Python wrapper, so no snake_case alias
 
 
 def _autosave():
     """The editor's autosave switch: UEditorLoadingSavingSettings::bAutoSaveEnable on the class default object,
-    which is the object FPackageAutoSaver reads."""
-    return unreal.get_default_object(unreal.EditorLoadingSavingSettings)
+    which is the object FPackageAutoSaver reads. 5.8 exports no Python wrapper for this class (there is no
+    unreal.EditorLoadingSavingSettings), so it is loaded by path and its property is named by its raw C++ name
+    (traps.md 85)."""
+    return unreal.get_default_object(unreal.load_class(None, "/Script/UnrealEd.EditorLoadingSavingSettings"))
 
 
 def _set_autosave(value):
     # In memory only, and on purpose: the default notify mode runs PostEditChangeProperty, which SaveConfig()s
     # the user's EditorPerProjectUserSettings.ini. NEVER skips that, so a crash leaves the user's setting intact.
-    _autosave().set_editor_property("auto_save_enable", bool(value), unreal.PropertyAccessChangeNotifyMode.NEVER)
+    _autosave().set_editor_property(AUTOSAVE_PROPERTY, bool(value), unreal.PropertyAccessChangeNotifyMode.NEVER)
 
 
 def phase_prepare(args):
@@ -73,7 +76,7 @@ def phase_prepare(args):
                             "seed": int(pc.get_editor_property("seed"))}
         pc.set_editor_property("regenerate_in_editor", False)      # every regeneration is explicit (trap 33)
     if AUTOSAVE not in state:                                      # first prepare: the user's own setting
-        state[AUTOSAVE] = bool(_autosave().get_editor_property("auto_save_enable"))
+        state[AUTOSAVE] = bool(_autosave().get_editor_property(AUTOSAVE_PROPERTY))
     # Trap 78: an autosave of the dirtied demo, restored after a crash, overwrote its external actors. No
     # autosave while the demo carries swapped graphs or probe volumes; restore puts the user's value back.
     _set_autosave(False)
