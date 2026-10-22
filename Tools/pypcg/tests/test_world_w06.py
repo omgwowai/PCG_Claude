@@ -81,3 +81,43 @@ def test_every_church_gets_its_bell_tower():
     out = _run([(0.0, 3000.0, "Village", 14000.0)])
     kinds = [k for v, _t in out["Buildings"] for k in v.attrs["Kind"]]
     assert kinds.count("Church") == 1 and kinds.count("BellTower") == 1
+
+
+def test_overlapping_settlements_streets_avoid_earlier_buildings():
+    """Final review: when two radii overlap, the later settlement's streets used to run through the earlier one's
+    buildings while the Summary said on_road 0. Streets stop short of placed buildings, and on_road counts streets
+    and the river too."""
+    from pypcg.stages.w03_river import river_rows
+    from pypcg.world import settle
+    for seed in (1, 2, 3, 42):
+        out = _run([(0.0, 0.0, "Town", 22000.0), (14000.0, 9000.0, "Village", 14000.0)], seed)
+        s = out["Summary"][0][0].values
+        assert s["on_road"] == 0 and s["overlaps"] == 0, (seed, s)
+        streets = [[p[:2] for p in v.loc] for v, t in out["Streets"]]
+        idx = geom.SegmentIndex(2000.0)
+        for st in streets:
+            idx.add_polyline(st, settle.STREET_HW)
+        for v, t in out["Areas"]:
+            if "Footprint" in t:
+                for x, y in geom.probe_points(v.outer, 400.0):
+                    hit = idx.nearest(x, y, 1000.0)
+                    assert hit is None or hit[0] >= settle.STREET_HW, (seed, x, y)
+
+
+def test_road_facing_buildings_are_not_buried_by_the_corridor_restore():
+    """Final review: the road corridor restore ran after the pads and pulled road-facing pads back towards the road
+    (59 cm on a 2.5 % cross slope). Every building's ground stays within 25 cm of its pad: what remains is the vertex
+    grid itself (5.86 m; a corner is interpolated from vertices up to 8.3 m away, 2.5 % x 8.3 m = 21 cm)."""
+    from pypcg.world import VERTEX_CM
+    from pypcg.world.grid import Lattice
+    out, _ = run_stage(S, {"Terrain": [(terrain(lambda x, y: 1000.0 + 0.025 * y), frozenset())],
+                           "Upstream": [_locs([(0.0, 3000.0, "Town", 22000.0)]), _road()]})
+    lat, _ks = Lattice.from_locs(out["Terrain"][0][0].loc, VERTEX_CM)
+    worst = 0.0
+    for v, t in out["Areas"]:
+        if "Footprint" in t:
+            for x, y in v.outer:
+                h = lat.height(x, y)
+                if h is not None:
+                    worst = max(worst, abs(h - v.z))
+    assert worst <= 25.0, worst

@@ -34,3 +34,17 @@ def test_rails_where_the_road_is_on_an_embankment():
 def test_empty_inputs():
     out, _ = run_stage(S, {})
     assert out["Props"] == [] and out["Summary"][0][0].values["poles"] == 0
+
+
+def test_rails_on_an_embankment_beyond_the_flattened_corridor():
+    """Final review: W4 flattens the corridor to the road height out to half width + 6 m (blending to 16 m), so a
+    probe 3 m beside the road never saw the embankment and no rail was ever placed. The probe looks past the corridor."""
+    def surface(x, y):
+        d = abs(y) - 400.0
+        if d <= 600.0:
+            return 1000.0
+        if d >= 1600.0:
+            return 600.0
+        return 1000.0 - 400.0 * (d - 600.0) / 1000.0
+    out, _ = run_stage(S, {"Surface": [(Surface(surface), frozenset())], "Upstream": [_road()]})
+    assert out["Summary"][0][0].values["rails"] > 150

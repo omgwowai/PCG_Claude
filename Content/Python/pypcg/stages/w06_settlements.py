@@ -116,6 +116,10 @@ def run(inputs, params, ctx):
     if lat.n:
         for rd in sorted(roads, key=lambda r: r["cls"] != "Secondary"):
             T.flatten_corridor(lat, [(p[0], p[1], p[2], 0.5 * rd["width"], br) for p, br in zip(rd["pts"], rd["bridge"])])
+        # Lock every footprint (+1 m) at its pad height last: a neighbour's pad blend or a street would otherwise tilt it.
+        for plan in plans:
+            for b in plan["buildings"]:
+                T.pad(lat, b["ring"], b["z"], 100.0, 0.0)
     feet = {g: [] for g in rules.GROUPS}
     rows, areas, check = [], [], geom.RingIndex()
     per, overlaps, on_road = {}, 0, 0
@@ -138,8 +142,8 @@ def run(inputs, params, ctx):
                          "Height": rules.HEIGHT[b["group"]]})
             overlaps += check.overlaps(b["ring"])
             check.add(b["ring"])
-            on_road += any(road_idx.nearest(x, y, 3000.0) is not None and
-                           road_idx.nearest(x, y, 3000.0)[0] < road_idx.payload(road_idx.nearest(x, y, 3000.0)[1])
+            # on a road, a street (any settlement's) or in the river
+            on_road += any(site.near_line(x, y, 0.0) or site.near_river(x, y, 0.0)
                            for x, y in geom.probe_points(b["ring"], 400.0))
         if plan["plaza"]:
             areas.append((Polygon(geom.circle(plan["x"], plan["y"], settle.PLAZA_R, 32), [], plan["plaza_z"]), ["Plaza"]))

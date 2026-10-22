@@ -2,12 +2,12 @@
 Pure and 2D; the terrain work (platform, pads) is W6's."""
 import math
 
-from . import geom, rules
+from . import ROAD_BLEND, ROAD_INNER, geom, rules
 
 PLAZA_R = 1800.0
 STREET_HW = 200.0
 STREET_STEP = 500.0
-SETBACK = {"street": 250.0, "road": 700.0}       # a road's flat corridor reaches half width + 600 (ROAD_INNER)
+SETBACK = {"street": 250.0, "road": ROAD_INNER + ROAD_BLEND + 50.0}   # beyond the road corridor W6 restores last
 GAP = (300.0, 600.0)
 # (bearing offset, extra distance) a landmark tries, in order
 LANDMARK_TRIES = [(da, extra) for extra in (0.0, 800.0, 1600.0) for da in (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0)]
@@ -66,8 +66,10 @@ class Site:
     def __init__(self, roads, river, taken):
         self.roads = roads
         self.lines = geom.SegmentIndex(2000.0)
+        self.road_lines = geom.SegmentIndex(2000.0)          # roads only: their corridor is restored after the pads
         for rd in roads:
             self.lines.add_polyline([p[:2] for p in rd["pts"]], rd["hw"])
+            self.road_lines.add_polyline([p[:2] for p in rd["pts"]], rd["hw"])
         self.river = geom.SegmentIndex(2000.0)
         for a, b in zip(river, river[1:]):
             self.river.add(a[:2], b[:2], 0.5 * (a[3] + b[3]))
@@ -88,6 +90,9 @@ class Site:
         for x, y in geom.probe_points(ring, 400.0):
             if math.hypot(x - cx, y - cy) > limit or self.near_line(x, y, 150.0) or self.near_river(x, y, 1000.0):
                 return False
+            hit = self.road_lines.nearest(x, y, 3000.0 + ROAD_INNER + ROAD_BLEND)
+            if hit is not None and hit[0] < self.road_lines.payload(hit[1]) + ROAD_INNER + ROAD_BLEND:
+                return False                   # inside a road corridor, which W6 flattens again after the pads
         return not self.taken.overlaps(grown)
 
 
@@ -120,8 +125,8 @@ def layout(loc, rng, site):
         pts, d = [], start
         while d <= 0.9 * r:
             x, y = cx + ux * d, cy + uy * d
-            if site.near_river(x, y, 800.0):
-                break
+            if site.near_river(x, y, 800.0) or site.taken.near(x, y, STREET_HW + 150.0):
+                break                          # the river, or a building of a settlement laid out before
             pts.append((x, y))
             d += STREET_STEP
         if len(pts) >= 2:
@@ -131,7 +136,7 @@ def layout(loc, rng, site):
         for q in range(49):
             x = cx + 0.55 * r * math.cos(2.0 * math.pi * q / 48)
             y = cy + 0.55 * r * math.sin(2.0 * math.pi * q / 48)
-            if site.near_river(x, y, 800.0):
+            if site.near_river(x, y, 800.0) or site.taken.near(x, y, STREET_HW + 150.0):
                 if len(run) >= 2:
                     streets.append(run)
                 run = []

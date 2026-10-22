@@ -2,7 +2,7 @@
 
 The road polylines are reused: a power pole every PoleSpacing on the right of every road outside settlements and off
 bridges, two wires sagging between consecutive poles (a parabola, a thin box every 2.5 m), guard rails where the
-ground 3 m beside the road drops or rises more than RailDrop, street lamps along settlement streets and benches
+ground just past the road's flattened corridor (16 m beside it) drops or rises more than RailDrop, street lamps along settlement streets and benches
 around the plazas."""
 import bisect
 import math
@@ -10,7 +10,7 @@ import math
 from pypcg.geo import Points, Polygon
 from pypcg.stage_api import Param
 from pypcg.stages.w04_roads import road_rows
-from pypcg.world import MESH, geom, points as WP
+from pypcg.world import MESH, ROAD_BLEND, ROAD_INNER, geom, points as WP
 
 STAGE = 108
 RECORD = "w08"
@@ -27,6 +27,7 @@ POLE_H = 900.0
 ARM = 70.0
 WIRE_STEP = 250.0
 RAIL_CM = 400.0
+RAIL_PROBE = ROAD_INNER + ROAD_BLEND + 300.0   # past the corridor W4 flattens, where cut or fill shows
 
 
 def z_at(pts, cum, s):
@@ -107,7 +108,7 @@ def run(inputs, params, ctx):
                 nx, ny = -math.sin(math.radians(yaw)), math.cos(math.radians(yaw))
                 pitch = math.degrees(math.atan2(pts[i + 1][2] - pts[i][2], max(cum[i + 1] - cum[i], 1e-6)))
                 for side in (1.0, -1.0):
-                    g = ground(x + nx * side * (hw + 300.0), y + ny * side * (hw + 300.0), zr)
+                    g = ground(x + nx * side * (hw + RAIL_PROBE), y + ny * side * (hw + RAIL_PROBE), zr)
                     if abs(g - zr) > params["RailDrop"]:
                         rows.append(((x + nx * side * (hw + 50.0), y + ny * side * (hw + 50.0), zr), (pitch, yaw, 0.0),
                                      (1.0, 1.0, 1.0), MESH["Rail"]))
