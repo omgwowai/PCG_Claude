@@ -35,3 +35,16 @@ def test_unreachable_outlet():
 def test_empty_inputs():
     out, _ = run_stage(S, {})
     assert out["Terrain"] == [] and out["Summary"][0][0].values["length_m"] == 0.0
+
+
+def test_water_planes_follow_the_falling_water_line():
+    """Flat planes on a falling river make a staircase; each plane tilts with the water line under it."""
+    import math
+    src = terrain(valley)
+    out, _ = run_stage(S, {"Terrain": [(src, frozenset())], "Upstream": [_ends(2000.0, 20000.0, -2000.0, -20000.0)]})
+    rows = S.river_rows(out["River"])
+    water = out["Water"][0][0]
+    for i, rot in enumerate(water.rot):
+        a, b = rows[i], rows[i + 1]
+        want = math.degrees(math.atan2(b[2] - a[2], math.hypot(b[0] - a[0], b[1] - a[1])))
+        assert abs(rot[0] - want) < 1e-9

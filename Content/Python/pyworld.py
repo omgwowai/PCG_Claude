@@ -368,11 +368,16 @@ def phase_shot(args):
         return refused
     view = args.get("view", "wide")
     centre, radius, az, elev, mult = VIEWS[view]
+    if "centre" in args:                       # a close-up: {"view": "street", "centre": [x, y, z], "radius": cm}
+        centre, radius = tuple(args["centre"]), float(args.get("radius", radius))
+        az, elev = float(args.get("az", az)), float(args.get("elev", elev))
     loc, rot = G.orbit_camera(list(centre), radius, az, elev, mult, min_height=centre[2] + 800.0)
     les = _les()
     les.set_level_viewport_camera_info(unreal.Vector(*loc), unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
                                        les.get_active_viewport_config_key())
     name = "pyworld_w%02d_%s.png" % (int(args["stage"]), view) if "stage" in args else "pyworld_%s.png" % view
+    if args.get("tag"):
+        name = name.replace(".png", "_%s.png" % args["tag"])
     return {"fired": S.fire(name, les)}
 
 

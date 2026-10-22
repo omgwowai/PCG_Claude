@@ -36,6 +36,7 @@ GRID_HALF = 100000.0
 STEP = 500.0
 BRIDGE_CLEAR = 250.0
 BRIDGE_REACH = 400.0
+LANE_LIFT = 8.0                  # lane meshes (0..20 cm thick) sit this far above the written terrain
 TYPES = {"RoadId": "Int32", "Class": "String", "Width": "Double", "Bridge": "Bool", "S": "Double"}
 
 
@@ -109,7 +110,9 @@ def max_grade(pts, z):
     return g
 
 
-def modules(pts, z, cls, width):
+def modules(pts, z, cls, width, bridge=None, ground=None):
+    """Lane meshes every segment. Off bridges each lane module takes the ground under its own two ends (`ground(x, y)`,
+    the terrain as written) so it shows wherever corridors meet; on a bridge span it takes the profile `z`."""
     rows = []
     for i in range(len(pts) - 1):
         a, b = pts[i], pts[i + 1]
@@ -117,15 +120,30 @@ def modules(pts, z, cls, width):
         if length <= 0.0:
             continue
         yaw = geom.yaw_deg(a, b)
-        rot = (math.degrees(math.atan2(z[i + 1] - z[i], length)), yaw, 0.0)
-        mx, my, mz = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (z[i] + z[i + 1]) / 2 + 2.0
         nx, ny = -math.sin(math.radians(yaw)), math.cos(math.radians(yaw))
+        on_bridge = bridge is not None and (bridge[i] or bridge[i + 1])
+
+        def lane(off):
+            za, zb = z[i], z[i + 1]
+            if ground is not None and not on_bridge:
+                ha = ground(a[0] + nx * off, a[1] + ny * off)
+                hb = ground(b[0] + nx * off, b[1] + ny * off)
+                hm = ground((a[0] + b[0]) / 2 + nx * off, (a[1] + b[1]) / 2 + ny * off)
+                if ha is not None and hb is not None:
+                    za, zb = ha, hb
+                    if hm is not None and hm > (za + zb) / 2:      # the ground bulges between the ends: lift
+                        za, zb = za + hm - (za + zb) / 2, zb + hm - (za + zb) / 2
+            return (((a[0] + b[0]) / 2 + nx * off, (a[1] + b[1]) / 2 + ny * off, (za + zb) / 2 + LANE_LIFT),
+                    (math.degrees(math.atan2(zb - za, length)), yaw, 0.0))
         if cls == "Main":
             for off in (-200.0, 200.0):
-                rows.append(((mx + nx * off, my + ny * off, mz), rot, (length / 500.0 * 1.02, 1.0, 1.0), MESH["LaneCar"]))
-            rows.append(((mx, my, mz + 1.0), rot, (length / 500.0 * 1.02, 1.0, 1.0), MESH["Divider"]))
+                loc, rot = lane(off)
+                rows.append((loc, rot, (length / 500.0 * 1.02, 1.0, 1.0), MESH["LaneCar"]))
+            loc, rot = lane(0.0)
+            rows.append(((loc[0], loc[1], loc[2] + 1.0), rot, (length / 500.0 * 1.02, 1.0, 1.0), MESH["Divider"]))
         else:
-            rows.append(((mx, my, mz), rot, (length / 160.0 * 1.02, width / 300.0, 1.0), MESH["Path"]))
+            loc, rot = lane(0.0)
+            rows.append((loc, rot, (length / 160.0 * 1.02, width / 300.0, 1.0), MESH["Path"]))
     return rows
 
 
@@ -217,7 +235,7 @@ def run(inputs, params, ctx):
         rows = [{"loc": (x, y, z), "RoadId": rd["id"], "Class": rd["cls"], "Width": rd["width"], "Bridge": br, "S": s}
                 for (x, y), z, br, s in zip(rd["pts"], rd["z"], rd["bridge"], cum)]
         out_roads.append((WP.table_points(rows, TYPES), ["Road", rd["cls"]]))
-        mods.extend(modules(rd["pts"], rd["z"], rd["cls"], rd["width"]))
+        mods.extend(modules(rd["pts"], rd["z"], rd["cls"], rd["width"], rd["bridge"], lat.height if lat.n else None))
     summary = {"roads": len(roads), "main_roads": sum(r["cls"] == "Main" for r in roads),
                "secondary_roads": sum(r["cls"] == "Secondary" for r in roads), "length_m": length / 100.0,
                "max_grade_main": grades["Main"], "max_grade_secondary": grades["Secondary"],

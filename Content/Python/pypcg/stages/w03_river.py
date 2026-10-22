@@ -115,7 +115,7 @@ def run(inputs, params, ctx):
         a, b = pts[i], pts[i + 1]
         length = geom.dist2d(a, b)
         planes.append((((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (water[i] + water[i + 1]) / 2 + 5.0),
-                       (0.0, geom.yaw_deg(a, b), 0.0),
+                       (math.degrees(math.atan2(water[i + 1] - water[i], length)), geom.yaw_deg(a, b), 0.0),
                        (length * 1.15 / 100.0, (width[i] + width[i + 1]) / 200.0, 1.0), MESH["Plane"]))
     types = {"Width": "Double", "WaterZ": "Double", "BedZ": "Double", "S": "Double"}
     ctx.notes.append("river %.0f m, %d vertices carved" % (total / 100.0, carved))
