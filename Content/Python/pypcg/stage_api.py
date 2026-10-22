@@ -131,6 +131,20 @@ def defaults(module):
     return {s[0]: s[2] for s in param_specs(module)}
 
 
+def unprefixed(params, stage):
+    """The merged city graph (pypcg.combined) names stage N's parameters `SNN_<name>`; a stage module
+    reads `<name>`. Names of another stage's prefix are an error (a mis-wired getter)."""
+    own = "S%02d_" % stage
+    out = {}
+    for name, value in params.items():
+        if len(name) > 4 and name[0] == "S" and name[1:3].isdigit() and name[3] == "_":
+            if not name.startswith(own):
+                raise StageError("stage %d received %s, another stage's parameter" % (stage, name))
+            name = name[len(own):]
+        out.setdefault(name, value)
+    return out
+
+
 class Ctx:
     def __init__(self, stage, seed, ops):
         self.stage = stage

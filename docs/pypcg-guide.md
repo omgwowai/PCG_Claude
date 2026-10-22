@@ -468,3 +468,88 @@ V3（小镇）见 §7：18 步全过，两遍在 `v2.same` 比较的量上相同
     每次导出都记一条类加载失败；`test_slim_dsl` 有几条断言不会失败；`plane.xy` / `plane.drop_closing` 无直接测试；`MakePolygon2DData`
     的平面 / 质心只用外环（有洞时 `$LocalPosition` 不同，世界几何相同）。
 16. **`geo.plane.clip_path` 给切点用路径首顶点的 z**，不插值：z 变化的 3D 路径上切点高度不对；没在坡上样条上对照引擎的 `ClipPaths`（final review M5）。
+
+## 13. 单图版：一张 PCG 图生成整座小镇（`/Game/PyPCG/City/PCG_PyCity`）
+
+把 18 张瘦身图合成**一张** PCG 图，挂在**一个** PCG volume 上一次生成整座小镇。核心业务逻辑仍全部在 Python 里（32 个 Python 节点
+运行 `pypcg/stages/` 下的模块，和 18 卷版是同一份代码）；配置和控制区域都还是传统方式。
+
+| | 位置 |
+|---|---|
+| 合并图 | `/Game/PyPCG/City/PCG_PyCity`（473 个节点、82 个参数；`pypcg/combined.py` 描述，结构核对 0 diff） |
+| 关卡 | `/Game/PyPCG/L_PyCity`（L_PyTown 的模板副本，只留 1 个 volume `PCG_PyCity` + 控制 actor） |
+| 驱动 | `Content/Python/pypcg_city.py`（`build` / `make` / `layout` / `bind` / `assign` / `reset` / `gen` / `read` / `overview` / `save`） |
+| 绑定 | `pypcg/profiles/city.py`、`city_bindings.json` |
+| 测试 | `Tools/pypcg/tests/test_combined.py`（离线） |
+
+**配置（传统方式，可手调）。** 每个阶段的参数都是合并图的用户参数，改名为 `SNN_<原名>`（如 `S06_SmallMediumThreshold`、`S07_local_Width`），
+在 Details 面板按 `NN <阶段>` 分类（`06 Districts`、`07 Roads|Road Parameters` ……）。选中 `PCG_PyCity`，在 PCG 组件的 graph instance
+里勾选覆盖、改值、点 Generate 即可，和改官方图的覆盖一样。每个 Python 节点只接自己阶段的参数，host 读参数时去掉 `SNN_` 前缀
+（`stage_api.unprefixed`；收到别的阶段的参数会报错）。
+
+**控制区域（传统方式）。** 全是关卡里的 actor，照旧按 tag 或引用读取：
+- tag：`City`（城市外轮廓）、`Arteries`、`Terrain_shaping_1`、`HighRise`、`USER_SPLINE`、`LAKE`、`FOREST_EXCLUSION`；
+- `LandmarkPark`（主塔小公园样条 `MainTowerPark`）、`Highway`（高速样条 `HighWay_2` / `HighWay_3`）：官方图对这三个用 actor 引用，
+  合并图改成按 tag 读（`combined.ROLE_TAGS`）——actor 引用写死某个关卡里的 actor，换个关卡就读空；按 tag 读，合并图在任何带这些 tag 的关卡里都能用；
+- 主塔、中央公园的位置与朝向：原来的两个 footprint volume 留在关卡里当**控制 actor**（不再挂图），按 tag
+  `PyCity_MainTowerFootprint` / `PyCity_CentralParkFootprint` 读；挪动、旋转它们就是挪主塔 / 公园。尺寸仍是参数（`S04_RectWidth` 等）。
+
+**合并时改了什么（只有这四类）。**
+1. 读**另一个阶段 volume 输出**的 `Get_ActorDataByRef`（31 个）换成 **Gather**，接上游阶段送进 Output 的那些边。tag 随数据走，
+   下游的 tag 过滤原样不动。（不能用 Reroute：PCG 的 Reroute 输入只收一条边。）
+2. 阶段 4 / 5 的"读自身 volume"改成按 tag 读上面的控制 actor（`combined.CONTROL_TAGS`）。
+3. **地形是共享资源**：18 卷版靠"按阶段顺序生成"保证读写次序，单图里没有阶段顺序、只有数据边。所以每个阶段的 `Get_MeshTerrain`
+   都用 `Execution Dependency` 等前面所有阶段的 `Write_MeshTerrain`，每个写入也等前面所有阶段的读取——每次读到的地形与 18 卷版相同。
+4. 读控制样条的 3 处 actor 引用（阶段 8、9、10、13 共 4 个节点）改成按 tag 读（见上）。在 L_PyCity 上实测与引用版逐网格相同。
+
+**流程**（一次一个 phase；长 phase 用 `{"defer": true}`，结果写到 `Saved/Reports/pypcg_city_deferred.json`）：
+
+```
+pypcg_city.py {"phase": "build", "defer": true}     # 描述 → 资产，0 diff 才保存
+pypcg_city.py {"phase": "make"}                      # 新建 / 打开 L_PyCity
+pypcg_city.py {"phase": "layout", "defer": true}     # 删 15 个阶段 volume，留 PCG_PyCity + 2 个控制 actor
+pypcg_city.py {"phase": "assign"}                    # 挂图 + 小镇的覆盖（改名后）；每次 build 之后都要重做（trap 91）
+pypcg_city.py {"phase": "reset"} / {"phase": "gen", "pass": 1}   # 生成约 10–17 分钟
+pypcg_city.py {"phase": "read", "pass": 1, "defer": true}        # 逐网格对照 18 卷小镇
+pypcg_city.py {"phase": "save"}                      # 只存 L_PyCity，且只在唯一的图是合并图时
+```
+
+**结果（2026-10-22）。** 32 个 Python 节点全部运行；**545 671** 个实例、1 270 种网格（18 卷小镇 545 666、1 270 种）；两遍逐网格完全相同。
+与小镇不同的只有阶段 12 的 8 种屋顶小件、合计 15 个实例：阶段 11 / 12 的 Python 产出逐条相同，差在原生的屋顶填充节点——
+单图里它们的输入多边形直接来自阶段 11 的节点，而不是经 `Get_ActorDataByRef` 从 volume 输出读回。差异稳定、可复现。
+
+**关卡里不存生成结果。** 生成后整座小镇都在一个 actor 里（149 MB），超过 GitHub 的 100 MB 单文件上限；所以 `L_PyCity` 存的是 cleanup 后的状态
+（这个 actor 30 KB），打开后 Generate（或 `gen`）即可重建，结果确定。注意 `cleanup_local` 之后立刻保存仍会把旧组件写进包（trap 86），
+`save` 因此先 `modify()` 一下 volume。
+
+**重建图会清掉组件上的覆盖（trap 91）。** `build` 重写 `PCG_PyCity` 资产后，volume 的 graph instance 覆盖全部回到图的默认值
+（实测：地形比例 0.5 代替 0.4，阶段 9 只出 11 个而不是 479 个）。所以 build 之后先 `assign` 再生成；`gen` 会检查 profile 的覆盖
+是否都在，不在就拒绝。`save` 也会拒绝在生成组件还没清掉时保存（清理要过几帧才完成）。
+
+### 13.1 小区域 `/Game/PyPCG/L_PyCitySmall`
+
+同一张 `PCG_PyCity`，换一个关卡、换控制区域和覆盖，不改图——这正是"配置和控制区域用传统方式"的意思。
+
+| | |
+|---|---|
+| 关卡 | `/Game/PyPCG/L_PyCitySmall`（`L_PyCity` 的模板副本） |
+| 控制布局 | `pypcg/profiles/small_layout.py`：约 560 × 440 m 的城市轮廓、两条干道切成四块、东北角一对高速、东北区主塔 + 高层区 + 小公园、西南区中央公园（湖、两条小径、林地排除区） |
+| 覆盖 | `pypcg/profiles/small.py`：主塔 110 m（`S04_RectWidth/Length` 11000）、公园 120 × 50 m（`S05_*` 12000 / 5000）、`S06_Dividable_district_Limit` 20000、`S06_SmallMediumThreshold` 24000、`S06_MediumLargeThreshold` 30000 |
+| 测试 | `Tools/pypcg/tests/test_small_layout.py`（地标在城内、离干道 / 水边够远，tag 覆盖合并图读的每个 tag） |
+
+```
+pypcg_city.py {"phase": "make",   "profile": "small"}    # 复制 L_PyCity
+pypcg_city.py {"phase": "layout", "profile": "small"}    # 写控制样条、挪主塔 / 公园控制 actor、核对 tag
+pypcg_city.py {"phase": "assign", "profile": "small"}
+pypcg_city.py {"phase": "reset",  "profile": "small"} / {"phase": "gen", "pass": 1, "profile": "small"}   # 约 4–5 分钟
+pypcg_city.py {"phase": "read",   "pass": 1, "profile": "small", "defer": true}
+```
+
+**分区阈值按面积定。** 阶段 6 在这个布局上切出 8 个街区：20 116、21 567、22 098、22 426、25 438、26 239、35 043、35 586 m²。
+小镇的 95 000 / 120 000 会让它们全是 Small（第一次实测：55 栋全是 Small）；24 000 / 30 000 得到和小镇一样的 4 Small / 2 Medium / 2 Large。
+主塔用 80 m 时阶段 15 只建出底层（没有 CHJ 环、没有上两层），所以保留小镇的 110 m。
+
+**结果（2026-10-22）。** 162 574 个实例、1 027 种网格；23 Small / 15 Medium / 6 Large 栋建筑，1 个停车场（120 个车位、93 辆车），
+三层主塔，中央公园、21 个码头、高速。外围林地仍是 0（`T_CloudNoise_4k`，trap 66）。两遍逐网格相同。
+生成结果**存进了关卡**（`save` 加 `{"keep_generated": true}`）：那个 actor 85.4 MB，在 GitHub 的 100 MB 上限以内，打开就能看；
+整座小镇的 149 MB 超限，所以 `L_PyCity` 只存清理后的状态。

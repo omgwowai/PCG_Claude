@@ -30,7 +30,7 @@ def run(stage_name, scope):
     module = importlib.import_module("pypcg.stages." + stage_name)
     data_in, data_out = scope["data_in"], scope["data_out"]
     t0 = time.perf_counter()
-    params = convert.read_params(data_in, stage_api.PARAMS_PIN)
+    params = stage_api.unprefixed(convert.read_params(data_in, stage_api.PARAMS_PIN), module.STAGE)
     # The input polygons' own data objects, for this run only (traps.md 25): a polygon the stage hands
     # back unchanged is forwarded as the engine's object, frame and local coordinates included (Task 18).
     registry = {}
