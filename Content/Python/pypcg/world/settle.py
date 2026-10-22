@@ -10,7 +10,7 @@ STREET_STEP = 500.0
 SETBACK = {"street": 250.0, "road": ROAD_INNER + ROAD_BLEND + 50.0}   # beyond the road corridor W6 restores last
 GAP = (300.0, 600.0)
 # (bearing offset, extra distance) a landmark tries, in order
-LANDMARK_TRIES = [(da, extra) for extra in (0.0, 800.0, 1600.0) for da in (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0)]
+LANDMARK_TRIES = [(da, extra) for extra in (0.0, 800.0, 1600.0, 2400.0, 3200.0, 4000.0) for da in (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0)]
 
 
 def angle_gap(a, b):

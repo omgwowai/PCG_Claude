@@ -121,3 +121,16 @@ def test_road_facing_buildings_are_not_buried_by_the_corridor_restore():
                 if h is not None:
                     worst = max(worst, abs(h - v.z))
     assert worst <= 25.0, worst
+
+
+def test_church_at_a_crossroads():
+    """Final-review regression: with plots kept out of road corridors (16 m), a town whose two roads cross at its
+    centre had no room for the church within 1.6 m of its first spot; the landmark tries further out."""
+    import random
+    from pypcg.world import settle
+    roads = [{"pts": [(x, 0.0, 1000.0) for x in range(-23000, 23001, 500)], "hw": 400.0},
+             {"pts": [(0.0, y, 1000.0) for y in range(-23000, 23001, 500)], "hw": 400.0}]
+    site = settle.Site(roads, [], geom.RingIndex())
+    plan = settle.layout({"id": 0, "kind": "Town", "x": 0.0, "y": 0.0, "radius": 22000.0}, random.Random(3), site)
+    kinds = [b["kind"] for b in plan["buildings"]]
+    assert kinds.count("Church") == 1 and kinds.count("TownHall") == 1
