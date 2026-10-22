@@ -167,7 +167,7 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 839 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 843 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 
