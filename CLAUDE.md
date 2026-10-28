@@ -138,12 +138,31 @@ regenerate after opening it. `/Game/PyPCG/L_PyCitySmall` runs the same graph on 
 Every control actor is read by tag, so the graph runs in any level that carries the tags; rebuilding
 the graph resets the volume's overrides, so run `assign` after every `build`.
 
-**PyWorld** (guide: `docs/pyworld-guide.md`). The world-building pipeline of the talk "Building Worlds with Houdini"
+**PyWorld** (guide: `docs/pyworld-guide.md`; **workflow skill: `.claude/skills/pyworld-scene-builder/`** - read it before changing
+the terrain material, vegetation, towns or buildings). The world-building pipeline of the talk "Building Worlds with Houdini"
 (Ubisoft, Ghost Recon) as nine PCG graphs `/Game/PyPCG/World/PCGW_01_Terrain` … `PCGW_09_Surface`, one Python node each,
 run in order in `/Game/PyPCG/L_PyWorld` (a 2 x 2 km valley: terrain, river, roads, bridges, settlements, vegetation, props,
 surface materials). Logic in `Content/Python/pypcg/stages/wNN_*.py` and `pypcg/world/`; driver `Content/Python/pyworld.py`
-(`build / make / layout / assign / reset / gen / read / tops / check / shot / compare / save`, one phase per call);
-offline tests `Tools/pypcg/tests/test_world_*.py`. The level is saved generated (94 MB over 179 files).
+(`build / make / layout / assign / reset / gen / read / check / shot / compare / save`, one phase per call);
+offline tests `Tools/pypcg/tests/test_world_*.py`. W7 is a layered vegetation ecology (guide §6: `pypcg/world/flora.py`,
+`ecology.py`, `grow.py`; 48 species, ~2.8 M instances) on Electric Dreams Megascans copied into `/Game` by
+`Tools/pyworld/ed_closure.py --copy` (9.75 GB, not in git) and summer copies of the Megaplants trees
+(`/Game/PyPCG/World/Trees`); their leaves need `r.Nanite.Foliage=1` (Config/DefaultEngine.ini, traps 97-101). Shapes
+(guide §7): W3 walks Kinoshita meanders along an A* base line and emits ONE continuous water mesh (`geo.Mesh` ->
+PCGDynamicMeshData -> native Spawn Dynamic Mesh, material `M_PyWorldStream` from `pyworld_water_material.py`); W4 roads
+wander on a preference field and join the network at junctions; W6 streets grow organically (`pypcg/world/settle.py`);
+`pypcg/world/shape.py` measures straightness / kinks (traps 102-106). Towns (guide §8): W6 assembles every building
+from the Megascans Modular_Building kits by a City-Sample-style style database -- `pypcg/world/grammar.py` (facade
+grammar), `kit.py` (modules, tints, street kit), `bdf.py` (7 style codes), `building.py` (walls, corners, doors, props,
+hip roofs), `rules.py` (archetypes, zones, storeys from height noise and settlement rank) -- as `Modules` points (Mesh,
+Mat0) for the native mesh spawner; the 70 tinted material instances in `/Game/PyPCG/World/Town` come from
+`pyworld_town_materials.py`, and `pyworld_town_preview.py` lays sample buildings over the sea, never saved (traps
+107-113). Offline loop: `pyworld.py gen {"stage": 3, "capture": true}` pickles the node's inputs, then
+`C:\Python314\python.exe Tools/pyworld/offline.py --tag <t>` runs W3->W6 on them and draws
+`Saved/Reports/pyworld_plan_<t>.png` (~10 s; `--town` adds the town's plan by style). `L_PyWorld` is saved
+**without its generated output** (10 MB; generated it is 449 MB over 179 files, and the W7 actor alone is 361 MB, over
+GitHub's 100 MB file limit): after opening it, run `gen` / `read` for W1..W9 in order (about 10 minutes), and to commit a
+level change, `reset {"from": 1}` before `save`.
 
 ## Build
 
@@ -167,7 +186,7 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 843 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 1027 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 

@@ -141,7 +141,7 @@ Get / Override / Place / Shared / Spawn / Subdivide / Trace / Transform / Write`
 
 **路线 E —— PyWorld：视频《Building Worlds with Houdini》的世界管线（地形 → 河 → 路 → 桥 → 聚落 → 植被 → 道具 → 地表）**
 
-9 张图（`/Game/PyPCG/World/PCGW_*`，每张一个 Python 节点）在 `/Game/PyPCG/L_PyWorld` 按序生成一个 2×2 km 山谷；逻辑在 `Content/Python/pypcg/stages/wNN_*.py` 与 `pypcg/world/`，驱动 `pyworld.py`。**动手前读 `docs/pyworld-guide.md`。**
+9 张图（`/Game/PyPCG/World/PCGW_*`，每张一个 Python 节点）在 `/Game/PyPCG/L_PyWorld` 按序生成一个 2×2 km 山谷；逻辑在 `Content/Python/pypcg/stages/wNN_*.py` 与 `pypcg/world/`，驱动 `pyworld.py`。**改 PyWorld 用 pyworld-scene-builder skill**（地形材质、植被生态群落、城镇布局、建筑模块的规则、改动流程与坑），整体说明在 `docs/pyworld-guide.md`。
 
 **无论走哪条路线，都优先复用而不是从零建节点。**
 
@@ -223,7 +223,7 @@ for c in comp.get_owner().get_components_by_class(unreal.PrimitiveComponent):
 - `references/pipeline-map.md` — City Sample 的 18 阶段流水线、关卡装配、手绘样条、各阶段内部结构、形状语法、建筑样式码、World Partition 注意事项，以及**可搬迁 / 不可搬迁**的清单。**规划前必读。**
 - `references/node-classes.md` — **PCG 节点类名表**：常用节点的确切类名与 `/Script/...` 加载路径、子图节点唯一正确的 `SetSubgraph()` 接法、从标题猜类名会失败的陷阱表，以及「动态输入 pin 加不了」这一硬限制。**写 `add_node_of_type` 前必读。**
 - `references/tooling.md` — `run_unreal_script` 的调用形态与脚本契约、六大反直觉之处、拒绝时的确切报错串，以及**「CitySample 侧工具 → 本项目怎么写」的对照表**。**写调用前必读。**
-- `references/traps.md` — 静默零点与实测坑（96 条；51–91 是 PyPCG 计划实测的，第 9 节有按主题的索引；92–96 是 PyWorld 山谷世界实测的，第 10 节）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
+- `references/traps.md` — 静默零点与实测坑（113 条；51–91 是 PyPCG 计划实测的，第 9 节有按主题的索引；92–113 是 PyWorld 实测的：山谷世界第 10 节、道路与水系形状第 11 节、城镇模块化建筑第 12 节）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
 - `docs/pypcg-guide.md`（仓库文档，不在本目录）— **路线 D 的完整指南**：阶段模块与瘦身图、改图 / 加参数 / 移植新图的流程、DSL 速查、V2 阈值、小镇命令、`PyPCGTools` 的 13 个函数、留原生的计算与后续工作。
 - `references/stage-run-playbook.md` — **把 18 阶段跑一遍并逐阶段截图的操作手册**：
   自带的 11 个电影机位对照表、「PCG debug 没有全局开关」与限量理由、
