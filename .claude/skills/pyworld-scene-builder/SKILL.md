@@ -20,7 +20,8 @@ PyWorld 是 9 张 PCG 图（`/Game/PyPCG/World/PCGW_01..09`），每张一个 Py
 ## 每次会话先确认
 
 - 编辑器在跑、桥在 `127.0.0.1:8777`，当前关卡是 `/Game/PyPCG/L_PyWorld`（不是就拒绝执行）。`pyworld_status.py`（只读）一次看全：当前关卡、脏包、9 步是否已生成和实例数。
-  仓库里的关卡不带生成结果：刚打开时 9 步都是 `generated: false`，先 1..9 依次 gen / read（约 10 分钟）再动手。
+  仓库里的关卡不带生成结果：刚打开时 9 步都是 `generated: false`，先 1..9 依次 gen / read（约 10 分钟）再动手。图和 volume 的挂接都在仓库里，不用 build / assign；
+  新克隆还要先把不进 git 的美术拷进来：City Sample 的（`Tools/sync-citysample-assets.ps1`）和 Electric Dreams 的（`Tools/pyworld/ed_closure.py --copy`），否则建筑和植被生成不出来。
 - 本机还开着**另一个项目**的编辑器（`E:\PCG_Codex`，另一个 AI 在用）。两个进程都叫 `UnrealEditor.exe`：杀进程前看命令行里的 `.uproject`，**永远不要关它**。它和本项目不共享文件，不用"等它空闲"。
 - 同一时间只让一个会话驱动本项目的编辑器：`pyworld.py` 的报告文件（`pyworld_deferred.json`、`pyworld_pass<k>.json`、captures）是共用的，会互相覆盖。
 - 编辑器崩溃或被杀后，重启前先把 `Saved/Autosaves/*` 挪走；出现 Restore Packages 选不恢复。
@@ -61,6 +62,7 @@ PyWorld 是 9 张 PCG 图（`/Game/PyPCG/World/PCGW_01..09`），每张一个 Py
 5. **看截图**（下一节）。
 6. **存盘**：先清掉预览和探针（`pyworld_town_preview.py {"clear": true}`、`pyworld_kit_test.py {"clear": true}`），再 `{"phase": "save", "defer": true}`，轮询 `pyworld_deferred.json` 直到 `state: done`、`saved: true`。关卡约 450 MB，不 defer 的话桥会丢回复。
    **提交进 git 的关卡不带生成结果**：生成后 W7 一个文件 361 MB，超过 GitHub 的 100 MB 上限，push 会被拒。要提交关卡改动，先 `{"phase": "reset", "from": 1, "defer": true}`，status 里 9 步都 `generated: false` 后再 save（这时约 10 MB）；生成后存的盘只留在本地，不提交。
+   只改了 Python（规则、表）时关卡本身没变，不用存也不用提交它；改了控制点、volume、参数覆写、layout，或者 build + assign 过，才提交关卡文件（`Content/PyPCG/L_PyWorld.umap`、`Content/__ExternalActors__/PyPCG/L_PyWorld/`、`Content/__ExternalObjects__/PyPCG/L_PyWorld/`）。提交后要接着看场景，就再 1..9 gen / read，不存盘。
 
 记录在 `Saved/PyPCG/runs/wNN.json`（节点的 Summary 与 notes）、`Saved/Reports/pyworld_pass<k>.json`（read 结果）、`Saved/Logs/PCG_Claude.log`。
 
