@@ -84,6 +84,53 @@ def moving_average(vals, half):
     return out
 
 
+def gaussian(vals, sigma_n):
+    """vals smoothed with a Gaussian of sigma_n samples (3 sigma wide). The ends are padded by odd reflection
+    (v[-k] = 2 v[0] - v[k]), so both end values stay exactly where they are and a straight ramp stays straight."""
+    n = len(vals)
+    if n < 3 or sigma_n <= 0.0:
+        return list(vals)
+    r = max(1, int(math.ceil(3.0 * sigma_n)))
+    w = [math.exp(-0.5 * (k / sigma_n) ** 2) for k in range(-r, r + 1)]
+    tw = sum(w)
+
+    def at(i):
+        if i < 0:
+            return 2.0 * vals[0] - vals[min(-i, n - 1)]
+        if i >= n:
+            return 2.0 * vals[-1] - vals[max(2 * (n - 1) - i, 0)]
+        return vals[i]
+    return [sum(wk * at(i + k - r) for k, wk in enumerate(w)) / tw for i in range(n)]
+
+
+def smooth_polyline(pts, sigma, step):
+    """The polyline resampled every `step` (cm) and smoothed with a Gaussian of `sigma` (cm) along it: a right-angle
+    corner becomes a curve of radius ~ sigma (shallower kinks much wider); both end points stay put."""
+    rs = resample([p[:2] for p in pts], step)
+    if len(rs) < 3:
+        return rs
+    sn = sigma / max(dist2d(rs[0], rs[1]), 1e-9)
+    xs, ys = gaussian([p[0] for p in rs], sn), gaussian([p[1] for p in rs], sn)
+    out = list(zip(xs, ys))
+    out[0], out[-1] = rs[0], rs[-1]
+    return out
+
+
+def self_intersects(pts):
+    """True when two non-adjacent segments of the polyline cross."""
+    idx = SegmentIndex(2000.0)
+    for i in range(len(pts) - 1):
+        idx.add(pts[i], pts[i + 1], i)
+    for i in range(len(pts) - 1):
+        a, b = pts[i], pts[i + 1]
+        for j in idx.candidates(min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])):
+            if abs(idx.payload(j) - i) > 1:
+                c, d = idx.segment(j)
+                if seg_intersect(a, b, c, d) is not None:
+                    return True
+    return False
+
+
 def seg_point(px, py, ax, ay, bx, by):
     """(distance, t) from (px, py) to the segment a-b, t the parameter of the closest point."""
     dx, dy = bx - ax, by - ay
@@ -275,3 +322,11 @@ class RingIndex:
     def overlaps(self, ring):
         x0, y0, x1, y1 = _bbox(ring)
         return any(rings_overlap(ring, self.rings[i]) for i in self._cands(x0, y0, x1, y1))
+
+    def touching(self, i, margin, step=100.0):
+        """Whether ring i comes within `margin` of another ring of the index (its boundary sampled every `step`)."""
+        ring = self.rings[i]
+        x0, y0, x1, y1 = _bbox(ring)
+        pts = probe_points(ring, step)
+        return any(j != i and any(ring_distance(x, y, self.rings[j]) <= margin for x, y in pts)
+                   for j in self._cands(x0 - margin, y0 - margin, x1 + margin, y1 + margin))

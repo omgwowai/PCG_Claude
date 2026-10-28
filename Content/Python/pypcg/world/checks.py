@@ -31,7 +31,10 @@ def accept(n, s, extra=None):
         need(s["length_m"] >= 1500.0, "river only %.0f m" % s["length_m"])
         need(s["monotone"], "water line rises somewhere")
         need(s["carved"] > 0, "nothing carved")
-        need(inst > 0, "no water surface instances")
+        # 用户：水的形状应该更圆润，不应该有那么多直线 (2026-10-27): round bends, no straight reach, no kink
+        need(s.get("straight_share", 1.0) < 0.15, "river %.0f %% straight" % (100.0 * s.get("straight_share", 1.0)))
+        need(s.get("max_turn_deg", 99.0) < 15.0, "river kinks %.1f deg per 5 m" % s.get("max_turn_deg", 99.0))
+        need(extra.get("dynamic_meshes", 0) > 0, "no water surface mesh")
     elif n == 4:
         need(s["connected"] and s["unreachable"] == 0, "network not connected (%d unreachable)" % s["unreachable"])
         need(s["max_grade_main"] <= 0.10 + 1e-6 and s["max_grade_secondary"] <= 0.14 + 1e-6,
@@ -45,10 +48,21 @@ def accept(n, s, extra=None):
             need(s[key] == -1 or s[key] >= rules.MIN_BUILDINGS[kind], "%s %d < %d" % (key, s[key], rules.MIN_BUILDINGS[kind]))
         need(s["churches_min"] >= 1, "a town or village without its church")
         need(s["overlaps"] == 0 and s["on_road"] == 0, "overlaps %d, on roads %d" % (s["overlaps"], s["on_road"]))
+        # 建筑模块 (2026-10-27): the style database at work -- several style codes, a door on every street side,
+        # bays within their scale range, terraces in the cores
+        need(s.get("styles", 0) >= 5, "only %d style codes" % s.get("styles", 0))
+        need(s.get("doors_front", -1) == s["buildings"], "%d of %d buildings have their door on the street"
+             % (s.get("doors_front", -1), s["buildings"]))
+        need(0.8 <= s.get("bay_scale_min", 0.0) and s.get("bay_scale_max", 9.0) <= 1.25,
+             "bays scaled %.2f..%.2f" % (s.get("bay_scale_min", 0.0), s.get("bay_scale_max", 9.0)))
+        need(s.get("attached", 0) > 0, "no terraces")
         need(inst > 0, "no settlement instances")
     elif n == 7:
         need(s["trees"] >= 20000, "only %d trees" % s["trees"])
         need(s["alder_share_riparian"] > s["alder_share_all"], "alders not concentrated by the river")
+        need(s["species_used"] >= 30, "only %d species" % s["species_used"])
+        need(min(s["shrubs"], s["grass"], s["ground"], s["debris"], s["rocks"]) > 0, "a layer is empty")
+        need(all(s["comm_" + c] > 0 for c in ("forest", "edge", "meadow", "riparian")), "a community is missing")
         need(inst > 0, "no vegetation instances")
     elif n == 8:
         need(s["poles"] > 0 and s["wire_segments"] > 0, "no poles or wires")

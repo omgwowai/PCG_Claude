@@ -49,6 +49,50 @@ def carve_river(lat, samples, depth=150.0, bank_slope=0.5, reach=2000.0):
     return changed
 
 
+def carve_channel(lat, samples, depth=150.0, reach=2000.0):
+    """A meander's cross sections (视频 + Peytavie 2019 河道断面：弯道外侧深切、内侧点沙坝). samples [(x, y, water_z, width,
+    bend, bar)]: `bend` in -1..1 is the signed tightness of the bend (> 0: its centre lies to the left of the flow),
+    `bar` the point bar's width (cm) on the inner bank. Inside the channel the bed is a parabola whose deepest point
+    moves 0.4 x the half width towards the outer bank, 0.8 x depth deep on a straight riffle, 1.4 x in a tight bend's
+    pool. Outside, the outer bank rises at 0.5 + 0.6 |bend|, the inner bank first as a bar 6 cm per m above the water,
+    then at 0.5 - 0.4 |bend|. A vertex only ever goes down."""
+    if len(samples) < 2:
+        return 0
+    idx = _index(samples)
+    far = 0.5 * max(s[3] for s in samples) + reach
+    changed = 0
+    for k in list(lat.cells_in_box(*_box(samples, far))):
+        x, y = lat.xy(k)
+        hit = idx.nearest(x, y, far)
+        if hit is None:
+            continue
+        d, a, t = hit
+        s0, s1 = samples[a], samples[a + 1]
+        water = s0[2] + (s1[2] - s0[2]) * t
+        half = 0.5 * (s0[3] + (s1[3] - s0[3]) * t)
+        bend = s0[4] + (s1[4] - s0[4]) * t
+        bar = s0[5] + (s1[5] - s0[5]) * t
+        if d > half + reach:
+            continue
+        left = (s1[0] - s0[0]) * (y - s0[1]) - (s1[1] - s0[1]) * (x - s0[0]) > 0.0
+        lat_off = d if left else -d                       # signed: + to the left of the flow
+        if d <= half:
+            th = -0.4 * bend * half                       # the thalweg, towards the outer bank
+            u = (lat_off - th) / (half - th) if lat_off >= th else (lat_off - th) / (half + th)
+            target = water - depth * (0.8 + 0.6 * abs(bend)) * (1.0 - u * u)
+        else:
+            out = d - half
+            inner = bend != 0.0 and (lat_off > 0.0) == (bend > 0.0)
+            if inner:
+                target = water + 0.06 * out if out <= bar else water + 0.06 * bar + (0.5 - 0.4 * abs(bend)) * (out - bar)
+            else:
+                target = water + (0.5 + 0.6 * abs(bend)) * out
+        if target < lat.z[k]:
+            lat.z[k] = target
+            changed += 1
+    return changed
+
+
 def flatten_corridor(lat, samples, inner=ROAD_INNER, blend=ROAD_BLEND):
     """samples [(x, y, z, half_width, skip)] along one road: flat at the road's height to half width + inner, eased
     back to the ground over `blend`; a segment with a skipped end (a bridge span) leaves the ground alone."""
@@ -133,5 +177,24 @@ def pad(lat, ring, z, margin=200.0, blend=400.0):
         if w <= 0.0:
             continue
         lat.z[k] = lat.z[k] + (z - lat.z[k]) * w
+        changed += 1
+    return changed
+
+
+def cut(lat, ring, z, reach, keep=None):
+    """Bring every vertex within `reach` of a footprint ring (inside included) that stands above z down to z -- a level
+    cut round a building so no corner of it is buried (the terrain is interpolated from vertices up to a cell diagonal
+    away); lower ground stays (the plinth covers it), and so does ground where keep(x, y) is False (streets, roads)."""
+    xs, ys = [p[0] for p in ring], [p[1] for p in ring]
+    changed = 0
+    for k in list(lat.cells_in_box(min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach)):
+        if lat.z[k] <= z:
+            continue
+        x, y = lat.xy(k)
+        if not geom.point_in_ring(x, y, ring) and geom.ring_distance(x, y, ring) > reach:
+            continue
+        if keep is not None and not keep(x, y):
+            continue
+        lat.z[k] = z
         changed += 1
     return changed

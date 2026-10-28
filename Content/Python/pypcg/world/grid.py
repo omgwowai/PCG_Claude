@@ -49,6 +49,17 @@ class Lattice:
         k = j * self.n + i
         return k if self.z[k] is not None else None
 
+    def vertices_in(self, x0, y0, x1, y1):
+        """[(x, y, z)] of the vertices inside the box [x0, x1] x [y0, y1]."""
+        s, n = self.s, self.n
+        out = []
+        for j in range(max(0, math.ceil((y0 - self.y0) / s)), min(n - 1, math.floor((y1 - self.y0) / s)) + 1):
+            for i in range(max(0, math.ceil((x0 - self.x0) / s)), min(n - 1, math.floor((x1 - self.x0) / s)) + 1):
+                z = self.z[j * n + i]
+                if z is not None:
+                    out.append((self.x0 + i * s, self.y0 + j * s, z))
+        return out
+
     def nearest_valid(self, x, y, reach=4):
         """The closest cell with a vertex within `reach` cells of (x, y), or None (a point off the lattice)."""
         i0, j0 = self.ij(x, y)
@@ -74,6 +85,50 @@ class Lattice:
                 return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v
         k = self.nearest(x, y)
         return self.z[k] if k is not None else None
+
+    def _corners(self, x, y):
+        fx, fy = (x - self.x0) / self.s, (y - self.y0) / self.s
+        i, j = math.floor(fx), math.floor(fy)
+        n = self.n
+        if i == n - 1 and fx == i:
+            i -= 1
+        if j == n - 1 and fy == j:
+            j -= 1
+        if 0 <= i < n - 1 and 0 <= j < n - 1:
+            z = self.z
+            a, b, c, d = z[j * n + i], z[j * n + i + 1], z[(j + 1) * n + i], z[(j + 1) * n + i + 1]
+            if a is not None and b is not None and c is not None and d is not None:
+                return a, b, c, d, fx - i, fy - j
+        return None
+
+    def tri_height(self, x, y):
+        """The terrain's own height: the engine splits each vertex cell along (i, j)-(i+1, j+1)
+        (pyworld_tri_probe.py, 0.04 cm); the nearest vertex's where a corner is missing, None off the lattice."""
+        c = self._corners(x, y)
+        if c is None:
+            k = self.nearest(x, y)
+            return self.z[k] if k is not None else None
+        a, b, cc, d, u, v = c
+        return a + (b - a) * u + (d - b) * v if u >= v else a + (cc - a) * v + (d - cc) * u
+
+    def gradient(self, x, y):
+        """(dz/dx, dz/dy) of the triangle under (x, y); (0, 0) off the lattice."""
+        c = self._corners(x, y)
+        if c is None:
+            return 0.0, 0.0
+        a, b, cc, d, u, v = c
+        return ((b - a) / self.s, (d - b) / self.s) if u >= v else ((d - cc) / self.s, (cc - a) / self.s)
+
+    def surface(self, x, y):
+        """(z, dz/dx, dz/dy) of the triangle under (x, y) in one lookup; None where a corner is missing."""
+        c = self._corners(x, y)
+        if c is None:
+            return None
+        a, b, cc, d, u, v = c
+        s = self.s
+        if u >= v:
+            return a + (b - a) * u + (d - b) * v, (b - a) / s, (d - b) / s
+        return a + (cc - a) * v + (d - cc) * u, (d - cc) / s, (cc - a) / s
 
     def _at(self, i, j):
         return self.z[j * self.n + i] if self.inside(i, j) else None

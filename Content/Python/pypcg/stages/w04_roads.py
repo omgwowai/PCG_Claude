@@ -1,26 +1,30 @@
-"""PyWorld W4 -- the road network (视频步骤 3).
+"""PyWorld W4 -- the road network (视频步骤 3；路网按 Galin 2010/2011 与育碧 Wildlands 的做法：代价场 + 复用并入路网).
 
 A* on every second terrain vertex with 16 directions (the video's "look in more directions" trick, so roads follow
-the terrain instead of zigzagging): a step costs its length x (1 + 6 (grade / MainGrade)^2), steps steeper than
-HardGrade are blocked, river cells cost WaterPenalty times more (short, square crossings) and cells already on a
-road cost ReuseFactor times less (new roads join the network). The trunk joins the south exit, the towns and
-villages by y and the north exit; every hamlet then joins the nearest road (multi-goal Dijkstra). Each road is
-smoothed and resampled every 5 m; its profile is the ground averaged over 60 m, cut and filled to the class's grade,
-raised to the water + 2.5 m on bridges (ramps keep the grade). The corridor is flattened to the profile except on
-bridge spans, and lane meshes are laid every 5 m."""
+the terrain instead of zigzagging): a step costs its length x (1 + 6 (grade / MainGrade)^2) x a low-frequency
+preference field (Wander: soil, fields, property lines -- over flat ground it is what bends a country road), steps
+steeper than HardGrade are blocked, river cells cost WaterPenalty times more (short, square crossings), the 20 m beside
+the river RiverShy more (roads keep off the riverside), and cells already on a road cost ReuseFactor times less (new
+roads join the network). The trunk joins the south exit, the towns and villages by y and the north exit; every hamlet
+then joins the nearest road (multi-goal Dijkstra). A route that meets the network is cut into the pieces off it: it
+ends at a T or Y junction instead of running along the road it found. Each piece's junction ends are moved onto the
+road it joins, then the piece is smoothed (Gaussian, 25 m main / 15 m secondary, ends pinned) and resampled every 5 m;
+its profile is the ground averaged over 60 m, cut and filled to the class's grade with its junction ends at the joined
+road's height, raised to the water + 2.5 m on bridges (ramps keep the grade). The corridor is flattened to the profile
+except on bridge spans, and lane meshes are laid every 5 m."""
 import math
 
 from pypcg.geo import Points
 from pypcg.stage_api import Param
 from pypcg.stages.w03_river import river_rows, terrain_sets
-from pypcg.world import MESH, astar, geom, points as WP, terraform as T
+from pypcg.world import MESH, astar, geom, noise, points as WP, terraform as T
 
 STAGE = 104
 RECORD = "w04"
 DOC = """PyWorld W4 Roads (道路): 16-direction A* with grade, water and reuse costs; trunk through the exits, towns
 and villages, hamlets joined to the network; graded profiles with bridges over the river; flattened corridors and
 lane meshes."""
-RANDOM = False
+RANDOM = True                    # the preference field is drawn from the seed
 PARAMS = {
     "MainWidth": Param(800.0, "Main road width (cm)", type="Double"),
     "SecondaryWidth": Param(550.0, "Secondary road width (cm)", type="Double"),
@@ -29,6 +33,9 @@ PARAMS = {
     "HardGrade": Param(0.22, "Steps steeper than this are impassable", type="Double"),
     "WaterPenalty": Param(6.0, "Cost multiplier of a step into the river", type="Double"),
     "ReuseFactor": Param(0.35, "Cost multiplier of a step along an existing road", type="Double"),
+    "Wander": Param(0.5, "Strength of the low-frequency preference field that bends roads over flat ground (0: "
+                         "straight)", type="Double"),
+    "RiverShy": Param(2.0, "Cost multiplier of a step within 20 m of the river bank", type="Double"),
 }
 INPUTS = {"Terrain": "points", "Upstream": "any"}
 OUTPUTS = ("Terrain", "Roads", "Modules", "Summary")
@@ -36,6 +43,9 @@ GRID_HALF = 100000.0
 STEP = 500.0
 BRIDGE_CLEAR = 250.0
 BRIDGE_REACH = 400.0
+WANDER_CM = 30000.0              # the preference field's scale
+MERGE_TURN = 75.0                # degrees: the trunk runs on through a place unless it turns more
+SMOOTH_CM = {"Main": 6000.0, "Secondary": 3000.0}   # Gaussian sigma: a right angle becomes a ~sigma radius curve
 LANE_LIFT = 8.0                  # lane meshes (0..20 cm thick) sit this far above the written terrain
 TYPES = {"RoadId": "Int32", "Class": "String", "Width": "Double", "Bridge": "Bool", "S": "Double"}
 
@@ -81,9 +91,9 @@ def _raise(z, ds, g):
         z[i] = max(z[i], z[i + 1] - g * ds[i])
 
 
-def profile(pts, lat, grade, waters, anchor=None):
+def profile(pts, lat, grade, waters, anchor=None, start=None):
     """The road's z: ground averaged over +-30 m, cut/filled to `grade`, bridges raised to water + BRIDGE_CLEAR with
-    graded ramps; `anchor` pins the last point (a branch meeting the trunk)."""
+    graded ramps; `anchor` pins the last point and `start` the first (junctions with the roads they join)."""
     ground, last = [], None
     for x, y in pts:
         h = lat.height(x, y)
@@ -93,6 +103,8 @@ def profile(pts, lat, grade, waters, anchor=None):
     ds = [geom.dist2d(pts[i], pts[i + 1]) for i in range(len(pts) - 1)]
     if anchor is not None:
         z[-1] = anchor
+    if start is not None:
+        z[0] = start
     _clamp(z, ds, grade)
     for i, w in enumerate(waters):
         if w is not None:
@@ -147,6 +159,22 @@ def modules(pts, z, cls, width, bridge=None, ground=None):
     return rows
 
 
+def off_network(path, network):
+    """The pieces of an A* path that are off the existing network, each with the network cell it touches at either
+    end: a route that meets a road joins it there (a T or Y junction) instead of running along it."""
+    pieces, cur = [], []
+    for k in path:
+        if k in network:
+            if cur:
+                pieces.append(cur + [k])
+            cur = [k]
+        else:
+            cur.append(k)
+    if len(cur) > 1 or (cur and cur[0] not in network):
+        pieces.append(cur)
+    return [q for q in pieces if len(q) >= 2 and not all(k in network for k in q)]
+
+
 def run(inputs, params, ctx):
     lat, sets = terrain_sets(inputs.get("Terrain", []))
     locs = [r for v in WP.values_tagged(inputs, "Upstream", "Location") for r in WP.rows_of(v)]
@@ -161,39 +189,65 @@ def run(inputs, params, ctx):
     co = lat.coarse(2, GRID_HALF)
     ridx = river_index(river)
     water_cells = {k for k in range(len(co.z)) if co.z[k] is not None and water_at(ridx, *co.xy(k), 500.0) is not None}
+    shy_cells = {k for k in range(len(co.z)) if co.z[k] is not None and k not in water_cells
+                 and water_at(ridx, *co.xy(k), 2500.0) is not None}
     road_cells = set()
     p = params
+    wander = p["Wander"]
+    pref = [None if z is None else math.exp(wander * noise.fbm(co.xy(k)[0] / WANDER_CM, co.xy(k)[1] / WANDER_CM,
+                                                               ctx.seed + 71, 2)) for k, z in enumerate(co.z)]
+    h_min = math.exp(-wander)                          # the cheapest cost per cm: the admissible heuristic's scale
 
     def cost(a, b, length):
         g = abs(co.z[b] - co.z[a]) / length
         if g > p["HardGrade"]:
             return None
         c = length * (1.0 + 6.0 * (g / p["MainGrade"]) ** 2)
+        if b in road_cells:                            # the network is the network: no preference along it
+            return c * p["ReuseFactor"]
+        c *= pref[b]
         if b in water_cells:
             c *= p["WaterPenalty"]
-        if b in road_cells:
-            c *= p["ReuseFactor"]
+        elif b in shy_cells:
+            c *= p["RiverShy"]
         return c
     trunk = [exits[0]] if exits else []
     trunk += [r["loc"] for r in sorted(locs, key=lambda r: r["loc"][1]) if r["Kind"] != "Hamlet"]
     trunk += [exits[-1]] if len(exits) > 1 else []
     routes, unreachable = [], 0
+    legs = []
     for a, b in zip(trunk, trunk[1:]):
         ka, kb = co.nearest_valid(a[0], a[1]), co.nearest_valid(b[0], b[1])
-        path = astar.search(co, {ka: 0.0}, {kb}, cost, astar.MOVES16, h_scale=p["ReuseFactor"]) if ka is not None and kb is not None else None
+        path = astar.search(co, {ka: 0.0}, {kb}, cost, astar.MOVES16, h_scale=min(h_min, p["ReuseFactor"])) if ka is not None and kb is not None else None
         if path is None:
             unreachable += 1
-            continue
-        road_cells.update(path)
-        routes.append(("Main", path))
+        else:
+            road_cells.update(path)                    # a later leg may run along this one (then joins it there)
+        legs.append(path)
+    # consecutive legs are one road through the places they link (smoothed as a whole: no corner at a town centre),
+    # unless the trunk doubles back there (a turn over MERGE_TURN would smooth into a hairpin)
+    def heading(a, b):
+        (ax, ay), (bx, by) = co.xy(a), co.xy(b)
+        return math.atan2(by - ay, bx - ax)
+    chain, flushed = [], set()
+    for path in legs + [None]:
+        if path is not None and chain and chain[-1] == path[0] and len(chain) > 4 and len(path) > 4:
+            turn = abs((heading(path[0], path[4]) - heading(chain[-5], chain[-1]) + math.pi) % (2.0 * math.pi) - math.pi)
+            if turn < math.radians(MERGE_TURN):
+                chain += path[1:]
+                continue
+        if chain:
+            routes.extend(("Main", piece) for piece in off_network(chain, flushed))
+            flushed.update(chain)
+        chain = list(path) if path is not None else []
     for r in sorted((r for r in locs if r["Kind"] == "Hamlet"), key=lambda r: -r["Radius"]):
         ka = co.nearest_valid(r["loc"][0], r["loc"][1])
         path = astar.search(co, {ka: 0.0}, road_cells, cost, astar.MOVES16, h_scale=0.0) if ka is not None and road_cells else None
         if path is None:
             unreachable += 1
             continue
+        routes.extend(("Secondary", piece) for piece in off_network(path, road_cells))
         road_cells.update(path)
-        routes.append(("Secondary", path))
     # connectivity: routes sharing a cell are joined
     parent = list(range(len(routes)))
 
@@ -209,20 +263,31 @@ def run(inputs, params, ctx):
                 parent[find(i)] = find(owner[k])
             owner[k] = i
     connected = unreachable == 0 and len({find(i) for i in range(len(routes))}) <= 1
-    roads, built = [], geom.SegmentIndex(2000.0)
+    roads, built, junction_cells = [], geom.SegmentIndex(2000.0), set()
     for rid, (cls, path) in enumerate(routes):
         if len(path) < 2:
             continue
-        pts = geom.resample(geom.chaikin([co.xy(k) for k in path], 2), STEP)
+        raw = [co.xy(k) for k in path]
+        # a junction end (a cell already on an earlier piece) moves onto that road's built centre line, at its height
+        ends = [None, None]
+        for e, k in ((0, path[0]), (1, path[-1])):
+            if k in junction_cells:
+                hit = built.nearest(raw[-e][0], raw[-e][1], 3000.0)
+                if hit is not None:
+                    (ax, ay), (bx, by) = built.segment(hit[1])
+                    za, zb = built.payload(hit[1])
+                    t = hit[2]
+                    raw[-e] = (ax + (bx - ax) * t, ay + (by - ay) * t)
+                    ends[e] = za + (zb - za) * t
+        pts = geom.smooth_polyline(raw, SMOOTH_CM[cls], STEP)
+        if len(pts) < 2:
+            continue
         waters = [water_at(ridx, x, y, BRIDGE_REACH) for x, y in pts]
-        anchor = None
-        if cls == "Secondary":
-            hit = built.nearest(pts[-1][0], pts[-1][1], 5000.0)
-            anchor = built.payload(hit[1]) if hit else None
         grade = p["MainGrade"] if cls == "Main" else p["SecondaryGrade"]
-        z = profile(pts, lat, grade, waters, anchor)
+        z = profile(pts, lat, grade, waters, ends[1], ends[0])
         for i in range(len(pts) - 1):
-            built.add(pts[i], pts[i + 1], 0.5 * (z[i] + z[i + 1]))
+            built.add(pts[i], pts[i + 1], (z[i], z[i + 1]))
+        junction_cells.update(path)
         width = p["MainWidth"] if cls == "Main" else p["SecondaryWidth"]
         roads.append({"id": rid, "cls": cls, "width": width, "pts": pts, "z": z, "bridge": [w is not None for w in waters]})
     for rd in sorted(roads, key=lambda r: r["cls"] != "Secondary"):        # secondaries first, the trunk on top

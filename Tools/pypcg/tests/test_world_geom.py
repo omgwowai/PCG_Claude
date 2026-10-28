@@ -50,3 +50,35 @@ def test_astar_prefers_cheap_and_reaches_any_goal():
     multi = astar.search(lat, {lat.k(0, 0): 0.0}, {lat.k(2, 0), lat.k(0, 7)}, cost, astar.MOVES16, h_scale=0.0)
     assert multi[-1] == lat.k(2, 0)
     assert astar.search(lat, {lat.k(0, 0): 0.0}, {lat.k(8, 0)}, lambda a, b, L: None) is None
+
+
+def test_smooth_polyline_keeps_its_ends_and_rounds_corners():
+    from pypcg.world import shape
+    corner = [(0.0, 0.0), (20000.0, 0.0), (20000.0, 20000.0)]
+    sm = geom.smooth_polyline(corner, 3000.0, 500.0)
+    assert sm[0] == (0.0, 0.0) and sm[-1] == (20000.0, 20000.0)
+    s = shape.stats(sm)
+    assert s["max_turn_deg"] < 12.0 and s["min_radius_m"] > 24.0, s      # the 90 degree corner: radius ~ sigma
+    straight = geom.smooth_polyline([(0.0, 0.0), (30000.0, 0.0)], 3000.0, 500.0)
+    assert max(abs(p[1]) for p in straight) < 1e-9
+
+
+def test_gaussian_preserves_a_constant_and_a_ramp():
+    assert all(abs(v - 3.0) < 1e-12 for v in geom.gaussian([3.0] * 50, 4.0))
+    ramp = [float(i) for i in range(60)]
+    out = geom.gaussian(ramp, 5.0)
+    assert all(abs(a - b) < 1e-9 for a, b in zip(out[15:45], ramp[15:45]))
+
+
+def test_self_intersections():
+    assert not geom.self_intersects([(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)])
+    assert geom.self_intersects([(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (50.0, -50.0)])
+
+
+def test_ring_index_finds_touching_neighbours():
+    """A terrace: two lots sharing a wall touch; a lot 3 m away and the ring itself do not count."""
+    idx = geom.RingIndex()
+    idx.add(geom.rect(0.0, 0.0, 800.0, 1000.0, 0.0))
+    idx.add(geom.rect(800.0, 0.0, 800.0, 1000.0, 0.0))            # shares the x = 400 wall
+    idx.add(geom.rect(2000.0, 0.0, 800.0, 1000.0, 3.0))           # 3 m on
+    assert idx.touching(0, 20.0) and idx.touching(1, 20.0) and not idx.touching(2, 20.0)

@@ -25,9 +25,11 @@ SEED = "Seed"
 SEED_DEFAULT = 42                  # the official components' seed in the demo level
 PARAMS_PIN = "Params"
 RECORD_ENV = "PYPCG_RECORD"
+CAPTURE_ENV = "PYPCG_CAPTURE"      # set: the node also pickles its full inputs (capture()), for offline runs
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 RUNS_DIR = os.path.join(REPO, "Saved", "PyPCG", "runs")
-VALUE_TYPES = (geo.Polygon, geo.Spline, geo.Points, geo.ParamSet)
+CAPTURES_DIR = os.path.join(REPO, "Saved", "PyPCG", "captures")
+VALUE_TYPES = (geo.Polygon, geo.Spline, geo.Points, geo.ParamSet, geo.Mesh)
 
 
 def volume_point(inputs, pin="Volume"):
@@ -182,7 +184,7 @@ def _check_outputs(module, outputs):
                   and isinstance(item[1], (list, tuple))
                   and all(isinstance(t, str) for t in item[1]))
             if not ok:
-                raise StageError("%s: output %s holds %r; expected (Polygon | Spline | Points | ParamSet, [tags])"
+                raise StageError("%s: output %s holds %r; expected (Polygon | Spline | Points | ParamSet | Mesh, [tags])"
                                  % (module.__name__, pin, item))
 
 
@@ -199,3 +201,33 @@ def record(module, inputs, params, outputs, seconds, ctx):
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(doc, fh)
     return path
+
+
+def capture(module, inputs, params):
+    """Pickle the run's inputs and parameters to Saved/PyPCG/captures/<record>.pkl: the run record truncates point
+    sets over MAX_RECORDED_POINTS (the terrain), a capture keeps them whole, so the stage can be re-run offline on the
+    editor's own data (`load_capture`). A value that cannot be pickled (a terrain surface wrapping engine objects) is
+    dropped from its pin."""
+    import pickle
+    os.makedirs(CAPTURES_DIR, exist_ok=True)
+    kept = {}
+    for pin, items in inputs.items():
+        kept[pin] = []
+        for v, tags in items:
+            try:
+                pickle.dumps(v)
+            except Exception:
+                continue
+            kept[pin].append((v, frozenset(tags)))
+    path = os.path.join(CAPTURES_DIR, "%s.pkl" % (getattr(module, "RECORD", None) or "s%02d" % module.STAGE))
+    with open(path, "wb") as fh:
+        pickle.dump({"stage": module.STAGE, "inputs": kept, "params": dict(params)}, fh, protocol=4)
+    return path
+
+
+def load_capture(name):
+    """(inputs, params) of a capture written by `capture` (name: the record's name, e.g. "w03")."""
+    import pickle
+    with open(os.path.join(CAPTURES_DIR, "%s.pkl" % name), "rb") as fh:
+        doc = pickle.load(fh)
+    return doc["inputs"], doc["params"]

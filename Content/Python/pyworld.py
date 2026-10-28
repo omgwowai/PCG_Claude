@@ -22,9 +22,9 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 #                                 spawn the control points and the nine volumes
 #   assign                        graphs on the volumes, on-demand generation, seed 42
 #   reset {"from": n}             cleanup_local on W9 .. Wn
-#   gen {"stage": n, "pass": k}   generate one stage (refuses if an earlier one is not generated)
+#   gen {"stage": n, "pass": k}   generate one stage (refuses if an earlier one is not generated); "capture": true
+#                                 also pickles the node's inputs to Saved/PyPCG/captures/wNN.pkl (offline runs)
 #   read {"stage": n, "pass": k}  run record Summary + instances + log -> acceptance (pypcg.world.checks)
-#   tops                          grammar wall tops per height group, from W6's instances
 #   shot {"stage": n}|{"view"}    one screenshot (top / wide / valley / street)
 #   check                         W10: intrusions, crossings, connectivity, grades, grounding
 #   compare                       pass 1 against pass 2, instances per mesh per stage
@@ -190,7 +190,8 @@ def phase_layout(args):
     if mp is not None and args.get("mpd", True):
         try:
             before = mp.get_editor_property("mega_mesh_definition")
-            mp.set_editor_property("mega_mesh_definition", unreal.EditorAssetLibrary.load_asset(W.MPD_BASIC))
+            mpd = W.MPD_WORLD if unreal.EditorAssetLibrary.does_asset_exist(W.MPD_WORLD) else W.MPD_BASIC
+            mp.set_editor_property("mega_mesh_definition", unreal.EditorAssetLibrary.load_asset(mpd))
             after = mp.get_editor_property("mega_mesh_definition")
             out["mpd"] = {"before": before.get_path_name() if before else None, "after": after.get_path_name() if after else None}
         except Exception as ex:
@@ -278,10 +279,41 @@ def phase_gen(args):
     if missing and not args.get("force"):
         return {"abort": "earlier stages not generated: %s" % missing}
     os.environ[stage_api.RECORD_ENV] = "1"
-    _save(_report("w%02d_gen" % n), {"gen_at": time.time(), "log_offset": _log_size(), "pass": k})
+    if args.get("capture"):            # also pickle the node's whole inputs (Saved/PyPCG/captures/wNN.pkl)
+        os.environ[stage_api.CAPTURE_ENV] = "1"
+    else:
+        os.environ.pop(stage_api.CAPTURE_ENV, None)
+    guard = _quiet_editor()
+    _save(_report("w%02d_gen" % n), {"gen_at": time.time(), "log_offset": _log_size(), "pass": k, "guard": guard})
     pc.activate(True)
     pc.generate_local(True)
     return {"stage": n, "pass": k, "graph": g.get_path_name()}
+
+
+GC_CVAR = "gc.TimeBetweenPurgingPendingKillObjects"
+
+
+def _settings_cdo():
+    return unreal.get_default_object(unreal.load_class(None, "/Script/UnrealEd.EditorLoadingSavingSettings"))
+
+
+def _quiet_editor():
+    """No autosave and no timed garbage collection while a generation runs: W7's 1.4 M instances keep the PCG
+    workers busy for minutes, and a collection then can crash the editor (trap 61); autosave writes the level
+    (trap 78). In memory only (NEVER notify: a crash leaves the user's ini as it was); `read` puts both back."""
+    prev = {"autosave": bool(_settings_cdo().get_editor_property("bAutoSaveEnable")),
+            "gc": float(unreal.SystemLibrary.get_console_variable_float_value(GC_CVAR))}
+    _settings_cdo().set_editor_property("bAutoSaveEnable", False, unreal.PropertyAccessChangeNotifyMode.NEVER)
+    unreal.SystemLibrary.execute_console_command(None, "%s 3600" % GC_CVAR)
+    return prev
+
+
+def _restore_editor(guard):
+    if not guard:
+        return
+    _settings_cdo().set_editor_property("bAutoSaveEnable", bool(guard["autosave"]),
+                                        unreal.PropertyAccessChangeNotifyMode.NEVER)
+    unreal.SystemLibrary.execute_console_command(None, "%s %s" % (GC_CVAR, guard["gc"]))
 
 
 def phase_read(args):
@@ -292,6 +324,8 @@ def phase_read(args):
         return refused
     n, k = int(args["stage"]), int(args.get("pass", 1))
     gen = _load(_report("w%02d_gen" % n), {})
+    if _pc(n).get_editor_property("generated"):
+        _restore_editor(gen.get("guard"))
     path = os.path.join(RUNS, "w%02d.json" % n)
     rec = _load(path, {})
     fresh = os.path.exists(path) and os.path.getmtime(path) >= gen.get("gen_at", 0)
@@ -299,7 +333,7 @@ def phase_read(args):
     for item in (rec.get("outputs") or {}).get("Summary", []):
         summary = item[0].get("values")
     inst = census.instances(_volume(n))
-    extra = {"instances": inst["total"]}
+    extra = {"instances": inst["total"], "dynamic_meshes": inst["components"].get("DynamicMeshComponent", 0)}
     if n == 1:
         errs = []
         for y in range(-90000, 90001, 30000):
@@ -320,44 +354,6 @@ def phase_read(args):
     return out
 
 
-def phase_tops(args):
-    """Wall top above the pad per height group: each grammar instance's top (mesh bounds x scale) is given to the
-    nearest W6 building; the median per group is what rules.WALL_TOP should hold."""
-    from pypcg import census
-    from pypcg.ue import convert
-    refused = _require("tops")
-    if refused:
-        return refused
-    pc = _pc(6)
-    buildings = []
-    for td in pc.get_generated_graph_output().get_editor_property("tagged_data"):
-        if "Building" in [str(t) for t in td.get_editor_property("tags")]:
-            v = convert.from_pcg(td.get_editor_property("data").get_editor_property("data"))
-            for i in range(len(v)):
-                buildings.append((v.loc[i], v.attrs["Group"][i]))
-    tops = {}
-    for c in _volume(6).get_components_by_class(unreal.InstancedStaticMeshComponent):
-        sm = c.get_editor_property("static_mesh")
-        if sm is None or "/PCGPrimitives/Meshes/" not in sm.get_path_name():
-            continue
-        zmax = sm.get_bounding_box().max.z
-        for i in range(c.get_instance_count()):
-            t = c.get_instance_transform(i, True)
-            x, y, z = t.translation.x, t.translation.y, t.translation.z + zmax * t.scale3d.z
-            if not buildings:
-                break
-            loc, group = min(buildings, key=lambda b: (b[0][0] - x) ** 2 + (b[0][1] - y) ** 2)
-            key = (round(loc[0]), round(loc[1]))
-            tops.setdefault(group, {}).setdefault(key, []).append(z - loc[2])
-    out = {}
-    for group, per in tops.items():
-        vals = sorted(max(v) for v in per.values())
-        out[group] = {"buildings": len(vals), "median_top_cm": vals[len(vals) // 2] if vals else None,
-                      "min": vals[0] if vals else None, "max": vals[-1] if vals else None}
-    _save(_report("tops"), out)
-    return out
-
-
 def phase_shot(args):
     for m in ("pcg_sa_shots", "pcg_sa_geom"):
         sys.modules.pop(m, None)
@@ -370,14 +366,30 @@ def phase_shot(args):
     centre, radius, az, elev, mult = VIEWS[view]
     if "centre" in args:                       # a close-up: {"view": "street", "centre": [x, y, z], "radius": cm}
         centre, radius = tuple(args["centre"]), float(args.get("radius", radius))
+        if len(centre) == 2:                   # [x, y]: stand on the ground there
+            centre = (centre[0], centre[1], (_trace_z(centre[0], centre[1]) or 0.0) + float(args.get("lift", 150.0)))
         az, elev = float(args.get("az", az)), float(args.get("elev", elev))
-    loc, rot = G.orbit_camera(list(centre), radius, az, elev, mult, min_height=centre[2] + 800.0)
+    loc, rot = G.orbit_camera(list(centre), radius, az, elev, mult,
+                              min_height=centre[2] + float(args.get("min_h", 800.0)))
+    if "eye" in args:                          # a pedestrian's view: {"eye": [x, y(, z)], "look": [x, y(, z)]}
+        ex, ey = args["eye"][:2]               # without z the ground is traced (first hit: a tree or roof counts)
+        lx, ly = args["look"][:2]
+        ez = (args["eye"][2] if len(args["eye"]) > 2 else (_trace_z(ex, ey) or 0.0)) + float(args.get("eye_h", 170.0))
+        lz = (args["look"][2] if len(args["look"]) > 2 else (_trace_z(lx, ly) or 0.0)) + float(args.get("look_h", 400.0))
+        import math
+        loc = [ex, ey, ez]
+        rot = [math.degrees(math.atan2(lz - ez, math.hypot(lx - ex, ly - ey))), math.degrees(math.atan2(ly - ey, lx - ex)),
+               0.0]
     les = _les()
     from pypcg import world as W
     for n, _l, _m, _t in W.STAGES:          # the 3 km volume boxes draw an orange wireframe across the sky
         brush = _volume(n).get_component_by_class(unreal.BrushComponent)
         if brush is not None:
             brush.set_visibility(False, False)
+    from pypcg.world import layout as L
+    for a in _eas().get_all_level_actors():   # the valley axis spline draws a white line down the valley
+        if L.TAG_VALLEY in _tags(a):
+            a.set_is_temporarily_hidden_in_editor(True)
     les.set_level_viewport_camera_info(unreal.Vector(*loc), unreal.Rotator(pitch=rot[0], yaw=rot[1], roll=rot[2]),
                                        les.get_active_viewport_config_key())
     name = "pyworld_w%02d_%s.png" % (int(args["stage"]), view) if "stage" in args else "pyworld_%s.png" % view
@@ -415,8 +427,8 @@ def phase_check(args):
     out = {"intrusions": checks.intrusions(trees, scatter.upstream_exclusions(up)),
            "crossings": checks.crossings(roads, river), "bridges": len(bridge_rows(up)),
            "connected": checks.roads_connected(roads, nodes), "grades": checks.max_grades(roads)}
-    tree_meshes = {m for spec in rules.BIOMES.values() if spec["kind"] == "Tree" for ms, _w, _s in spec["species"] for m in ms}
-    sink = {m: spec["sink"] for spec in rules.BIOMES.values() for ms, _w, _s in spec["species"] for m in ms}
+    from pypcg.world import flora
+    tree_meshes, sink = flora.TREE_MESHES, flora.TREE_SINK
     from pypcg import world as W
     lamp = W.MESH["Lamp"].split(".")[0]
     errors, sampled = [], 0
@@ -483,7 +495,7 @@ def phase_save(args):
 
 
 PHASES = {"build": phase_build, "make": phase_make, "layout": phase_layout, "assign": phase_assign,
-          "reset": phase_reset, "gen": phase_gen, "read": phase_read, "tops": phase_tops, "shot": phase_shot,
+          "reset": phase_reset, "gen": phase_gen, "read": phase_read, "shot": phase_shot,
           "check": phase_check, "compare": phase_compare, "save": phase_save}
 DEFERRED = _report("deferred")
 

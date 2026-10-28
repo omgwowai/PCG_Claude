@@ -27,6 +27,8 @@ TERRAIN = {1: ("Base", 0, 1), 3: ("Intermediate", 2, 3), 4: ("Intermediate", 4, 
            9: ("Intermediate", 8, 9)}
 CHANNELS = ("Grass", "Rock", "ForestFloor", "Dirt", "Mud", "Gravel")      # MPD_Basic's material channels
 MPD_BASIC = "/PCGPrimitives_MeshPartitionInterop/Assets/MeshPartitionDefinitions/MPD_Basic"
+# MPD_Basic with Megascans surfaces on its 6 channels (pyworld_terrain_material.py builds it; layout uses it when present)
+MPD_WORLD = "/Game/PyPCG/World/MPD_PyWorld"
 
 
 def _p(pkg):
@@ -61,7 +63,6 @@ for _v in "abcdefgh":
 for _v in "ABDEFG":
     MESH["Grass" + _v] = _p("/CitySamplePCG/Megascans/Plants/Wild_Grass/Medium/StaticMeshes/SM_Grass_Var" + _v)
 WATER_MATERIAL = "/Game/Prop/kit_ocean/Material/MI_ocean.MI_ocean"
-GRAMMAR = _p("/PCGPrimitives/Grammar/DataAsset/Bldg_Advanced_Template/SGD_Bldg_B_Advance_Template")
 
 
 def entry(n):

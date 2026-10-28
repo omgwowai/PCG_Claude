@@ -44,3 +44,24 @@ def test_min_filter_and_flow():
     assert m[k] == min(lat.z[lat.nearest(x, y)] for x in (100.0, 200.0, 300.0) for y in (-100.0, 0.0, 100.0))
     acc = hydro.flow_accumulation(lat)
     assert acc.index(max(acc)) == lat.nearest(0.0, -500.0)
+
+
+def test_tri_height_follows_the_engine_split():
+    # the mesh terrain splits each vertex cell along (i, j)-(i+1, j+1) (pyworld_tri_probe.py, 2026-10-23)
+    locs = [(0.0, 0.0, 0.0), (100.0, 0.0, 10.0), (0.0, 100.0, 20.0), (100.0, 100.0, 0.0)]
+    lat, _ = Lattice.from_locs(locs, 100.0)
+    assert lat.tri_height(75.0, 25.0) == 0.0 + 10.0 * 0.75 + (0.0 - 10.0) * 0.25        # lower-right triangle
+    assert lat.tri_height(25.0, 75.0) == 0.0 + 20.0 * 0.75 + (0.0 - 20.0) * 0.25        # upper-left triangle
+    assert lat.tri_height(100.0, 100.0) == 0.0 and lat.tri_height(300.0, 0.0) is None
+    gx, gy = lat.gradient(75.0, 25.0)
+    assert abs(gx - 0.1) < 1e-12 and abs(gy + 0.1) < 1e-12
+
+
+def test_vertices_in_a_box():
+    """The vertices (x, y, z) inside a box: where a piecewise-linear terrain can peak under a slab."""
+    locs = [(x * 100.0, y * 100.0, float(x + 10 * y)) for x in range(5) for y in range(5)]
+    lat, _ = Lattice.from_locs(locs, 100.0)
+    lat.z[lat.k(2, 2)] = None
+    got = sorted(lat.vertices_in(50.0, 50.0, 250.0, 300.0))
+    assert got == sorted((x * 100.0, y * 100.0, float(x + 10 * y)) for x in (1, 2) for y in (1, 2, 3) if (x, y) != (2, 2))
+    assert lat.vertices_in(-500.0, -500.0, -100.0, -100.0) == []

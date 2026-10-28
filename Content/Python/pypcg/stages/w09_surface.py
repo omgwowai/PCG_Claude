@@ -2,7 +2,7 @@
 
 One weight per material channel of the mesh terrain (MPD_Basic: Grass, Rock, ForestFloor, Dirt, Mud, Gravel) for
 every vertex: Rock with slope (RockSlopeStart..RockSlopeFull), ForestFloor where W7's trees stand dense, Dirt on roads,
-streets, plazas and fields, Mud on the river banks, Gravel in the river bed and on the main roads' shoulders, Grass
+streets, plazas and fields, Mud on the river banks, Gravel in the river bed, on the point bars inside its bends and on the main roads' shoulders, Grass
 for the rest; the weights sum to 1. The native writer paints them (Write_MeshTerrain, Channels)."""
 from pypcg.geo import Points, Polygon
 from pypcg.stage_api import Param
@@ -16,8 +16,8 @@ RECORD = "w09"
 DOC = """PyWorld W9 Surface (地表材质): Grass, Rock, ForestFloor, Dirt, Mud and Gravel weights per vertex from the
 slope, the trees, the roads, streets, plazas, fields and the river."""
 RANDOM = False
-PARAMS = {"RockSlopeStart": Param(28.0, "Slope where rock starts showing (degrees)", type="Double"),
-          "RockSlopeFull": Param(40.0, "Slope that is all rock (degrees)", type="Double"),
+PARAMS = {"RockSlopeStart": Param(34.0, "Slope where rock starts showing (degrees)", type="Double"),
+          "RockSlopeFull": Param(46.0, "Slope that is all rock (degrees)", type="Double"),
           "ForestCell": Param(2000.0, "Cell over which tree density is counted (cm)", type="Double")}
 INPUTS = {"Terrain": "points", "Upstream": "any"}
 OUTPUTS = ("Terrain", "Summary")
@@ -45,11 +45,15 @@ def run(inputs, params, ctx):
         lines.add_polyline([p[:2] for p in rd["pts"]], (0.5 * rd["width"], rd["cls"] == "Main"))
     for v, tags in up:
         if isinstance(v, Points) and "Street" in tags and len(v) > 1:
-            lines.add_polyline([p[:2] for p in v.loc], (0.5 * v.attrs["Width"][0], False))
+            paved = v.attrs.get("Paved") or v.attrs["Width"]                # carriageway + sidewalks
+            for i in range(len(v) - 1):
+                lines.add(v.loc[i][:2], v.loc[i + 1][:2], (0.5 * max(paved[i], paved[i + 1]), False))
     river = geom.SegmentIndex(2000.0)
     rr = river_rows(up)
-    for a, b in zip(rr, rr[1:]):
-        river.add(a[:2], b[:2], 0.5 * (a[3] + b[3]))
+    for a, b in zip(rr, rr[1:]):                  # HALF width (it was the full width: gravel spilled a
+                                                  # half width onto each bank), bend sign (+: centre on the
+                                                  # left), point-bar width
+        river.add(a[:2], b[:2], (0.25 * (a[3] + b[3]), a[6] + b[6], 0.5 * (a[7] + b[7])))
     plazas, fields = geom.RingIndex(), geom.RingIndex()
     for v, tags in up:
         if isinstance(v, Polygon):
@@ -100,9 +104,13 @@ def run(inputs, params, ctx):
             dirt = max(dirt, 0.8)
         hit = river.nearest(x, y, 4000.0)
         if hit is not None:
-            half = river.payload(hit[1])
+            half, bend, bar = river.payload(hit[1])
+            (ax, ay), (bx, by) = river.segment(hit[1])
+            left = (bx - ax) * (y - ay) - (by - ay) * (x - ax) > 0.0
             if hit[0] < half:
                 gravel = 1.0
+            elif bar > 0.0 and bend != 0.0 and left == (bend > 0.0) and hit[0] < half + bar:
+                gravel = 1.0                      # the point bar: a gravel beach on the inner bank of a bend
             else:
                 mud = 1.0 - smoothstep(half, half + 600.0, hit[0])
         dens = density(x, y)

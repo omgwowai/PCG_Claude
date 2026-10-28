@@ -25,3 +25,14 @@ def test_actor_points_node():
     sel = rec["settings"]["ActorSelector"]
     assert rec["settings"]["Mode"] == "GetSinglePoint"
     assert sel["ActorSelectionTag"] == "PyWorld_Location" and sel["bSelectMultiple"] is True
+
+
+def test_a_mesh_is_a_stage_value_and_records_as_a_summary():
+    import json
+    from pypcg import geo, stage_api
+    m = geo.Mesh([(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (0.0, 100.0, 0.0)], [(0, 2, 1)], material="/Game/M.M")
+    assert isinstance(m, stage_api.VALUE_TYPES)
+    d = geo.to_json(m)
+    assert d == {"kind": "mesh", "vertices": 3, "triangles": 1, "material": "/Game/M.M",
+                 "bbox": [[0.0, 0.0, 0.0], [100.0, 100.0, 0.0]]}
+    json.dumps(d)

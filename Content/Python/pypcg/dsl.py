@@ -19,6 +19,8 @@ _LIBRARY = {}
 EXTRA_CLASSES = {
     _ir.PYTHON_NODE: {"inputs": [], "outputs": []},             # pins are per node (dynamic_pins)
     _ir.SELF_NODE: {"inputs": [], "outputs": ["Out"]},
+    # PCGGeometryScriptInterop's spawner (PyWorld W3's water surface): one dynamic mesh component per input mesh
+    "PCGSpawnDynamicMeshSettings": {"inputs": ["In"], "outputs": ["Out"]},
 }
 
 

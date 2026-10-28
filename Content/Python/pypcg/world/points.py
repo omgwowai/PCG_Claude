@@ -35,6 +35,18 @@ def mesh_points(rows):
     return p
 
 
+def module_points(instances):
+    """building.assemble's instances -> Points carrying each module's mesh and its slot-0 material ("" keeps the
+    mesh's own) for the native spawner (MaterialOverrideAttributes ["Mat0"])."""
+    p = Points()
+    p.declare(MESH_ATTR, "SoftObjectPath")
+    p.declare("Mat0", "SoftObjectPath")
+    for m in instances:
+        p.add(tuple(float(v) for v in m["loc"]), rot=tuple(float(v) for v in m["rot"]),
+              scale=tuple(float(v) for v in m["scale"]), **{MESH_ATTR: m["mesh"], "Mat0": m["mat"]})
+    return p
+
+
 def table_points(rows, types):
     """rows [{"loc": (x, y, z), name: value, ...}] -> one point per row with the attributes `types` declares."""
     p = Points()

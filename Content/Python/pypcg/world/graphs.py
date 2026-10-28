@@ -1,10 +1,13 @@
 """The nine PyWorld graphs (spec 2.2): parameter getters -> scene reads -> one Python node -> native terrain writers,
 grammars and spawners. pyworld.py build writes them to /Game/PyPCG/World/ (pypcg.build.build_slim, 0 diffs)."""
+import json
+import os
+
 from pypcg import dsl
 from pypcg import world as W
 from pypcg.stages import (w01_terrain, w02_locations, w03_river, w04_roads, w05_bridges, w06_settlements,
                           w07_vegetation, w08_props, w09_surface)
-from pypcg.world import layout as L, rules
+from pypcg.world import layout as L
 
 
 def _graph(module):
@@ -44,6 +47,30 @@ def _spawn(g, srcs, title, material=None):
     return g.sub("Spawn_Assets", title, set=s, PrimaryInput=srcs)
 
 
+def _descriptor():
+    """The spawner's component descriptor with every field (no collision, shadows on, no culling), as the editor
+    exports it (ism_descriptor.json, from pyworld_probe_descriptor.py)."""
+    with open(os.path.join(os.path.dirname(__file__), "ism_descriptor.json")) as fh:
+        return json.load(fh)
+
+
+def _mesh_spawner(g, src, title, cull=0.0, shadow=True, wpo_off=0.0, materials=()):
+    """The native spawner, mesh by the `Mesh` attribute, no collision; `cull` (cm) fades small plants out
+    (W7: 1.4 M instances; Spawn_Assets' GetClassFromAttribute can race the garbage collector on that many, trap 61);
+    `materials` names the attributes holding each point's material overrides, slot by slot (W6's building kit)."""
+    td = _descriptor()          # the full struct: the build compares nested settings whole
+    td["bCastShadow"] = bool(shadow)
+    if cull:
+        td.update({"InstanceStartCullDistance": int(0.8 * cull), "InstanceEndCullDistance": int(cull)})
+    if wpo_off:
+        td["WorldPositionOffsetDisableDistance"] = int(wpo_off)
+    return g.node("PCGStaticMeshSpawnerSettings", title, set={
+        "MeshSelectorType": "/Script/CoreUObject.Class'/Script/PCG.PCGMeshSelectorByAttribute'",
+        "MeshSelectorParameters": {"_ClassName": "/Script/PCG.PCGMeshSelectorByAttribute", "AttributeName": "Mesh",
+                                   "TemplateDescriptor": td, "bUseAttributeMaterialOverrides": bool(materials),
+                                   "MaterialOverrideAttributes": list(materials)}}, In=src)
+
+
 def _upstream(g, stages):
     return [g.actor_by_tag(W.volume_tag(m), "Get W%02d Output (%s)" % (m, W.entry(m)[3])) for m in stages]
 
@@ -75,7 +102,8 @@ def build_w03():
     g.connect(_points(g, _terrain(g, 3)), g.py, "Terrain")
     g.connect(_upstream(g, [2]), g.py, "Upstream")
     _write(g, 3, g.py["Terrain"])
-    _spawn(g, g.py["Water"], "Spawn Water Surface", W.WATER_MATERIAL)
+    # one continuous water surface (a geo.Mesh -> PCGDynamicMeshData; its material travels with the data)
+    g.node("PCGSpawnDynamicMeshSettings", "Spawn Water Surface (Dynamic Mesh)", In=g.py["Water"])
     g.out(g.py["River"], g.py["Summary"])
     return g
 
@@ -103,22 +131,22 @@ def build_w06():
     g.connect(_points(g, _terrain(g, 6)), g.py, "Terrain")
     g.connect(_upstream(g, [2, 3, 4]), g.py, "Upstream")
     _write(g, 6, g.py["Terrain"])
-    for group in rules.GROUPS:
-        g.sub("Assign_ShapeGrammarDefinition", "Buildings (%s)" % group,
-              set={"ShapeGrammarDefinition": W.GRAMMAR, "Size": rules.HEIGHT[group]},
-              PrimaryInput=g.py["Footprints" + group])
-    _spawn(g, g.py["Parts"], "Spawn Foundations, Roofs, Streets and Plazas")
+    # the buildings: Megascans kit modules, each point's mesh and slot-0 material (a facade or roof colour) by attribute
+    _mesh_spawner(g, g.py["Modules"], "Spawn Building Modules", materials=("Mat0",))
+    _spawn(g, g.py["Parts"], "Spawn Street Paths and Plaza Tiles")
     g.out(g.py["Buildings"], g.py["Streets"], g.py["Areas"], g.py["Summary"])
     return g
 
 
 def build_w07():
     g = _graph(w07_vegetation)
-    terrain = _terrain(g, final=True)
-    g.connect(_points(g, terrain), g.py, "Terrain")
-    g.connect(terrain, g.py, "Surface")
+    g.connect(_points(g, _terrain(g, final=True)), g.py, "Terrain")
     g.connect(_upstream(g, [3, 4, 5, 6]), g.py, "Upstream")
-    _spawn(g, [g.py["Trees"], g.py["Rocks"], g.py["Grass"]], "Spawn Trees, Rocks and Grass")
+    for pin, title, cull, shadow, wpo in (("Trees", "Trees", 0, True, 0), ("Shrubs", "Shrubs", 40000, True, 15000),
+                                          ("Grass", "Grass", 12000, True, 6000),
+                                          ("Ground", "Ground Plants", 9000, False, 5000),
+                                          ("Debris", "Dead Wood", 20000, True, 0), ("Rocks", "Rocks", 0, True, 0)):
+        _mesh_spawner(g, g.py[pin], "Spawn " + title, cull, shadow, wpo)
     g.out(g.py["Trees"], g.py["Summary"])
     return g
 

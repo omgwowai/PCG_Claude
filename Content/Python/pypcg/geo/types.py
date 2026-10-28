@@ -134,6 +134,20 @@ class Points:
         return self
 
 
+@dataclass
+class Mesh:
+    """A triangle mesh in world cm for the native Spawn Dynamic Mesh node (convert writes a PCGDynamicMeshData).
+    vertices [(x, y, z)], triangles [(a, b, c)] wound so that (b - a) x (c - a) has a NEGATIVE z for a face seen from
+    above (the order the engine draws; measured 2026-10-26 with pyworld_probe_riverribbon.py), optional per-vertex
+    normals, uvs (u, v) and colors (r, g, b, a), and the material's object path. Recorded as a summary only."""
+    vertices: list
+    triangles: list
+    normals: list = None
+    uvs: list = None
+    colors: list = None
+    material: str = ""
+
+
 def values(items):
     """The values of a list of (value, tags) items."""
     return [v for v, _ in items]
@@ -179,6 +193,10 @@ def to_json(v):
         if v.quat:                       # only when set, so older records still compare equal
             d["quat"] = [list(q) for q in v.quat]
         return d
+    if isinstance(v, Mesh):
+        xs, ys, zs = zip(*v.vertices) if v.vertices else ((0.0,), (0.0,), (0.0,))
+        return {"kind": "mesh", "vertices": len(v.vertices), "triangles": len(v.triangles), "material": v.material,
+                "bbox": [[min(xs), min(ys), min(zs)], [max(xs), max(ys), max(zs)]]}
     return {"kind": type(v).__name__}              # e.g. a terrain surface: not recordable
 
 

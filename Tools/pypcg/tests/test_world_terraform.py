@@ -62,3 +62,38 @@ def test_layout_is_inside_the_world():
     for _n, x, y, r in L.LOCATIONS:
         assert abs(x) + r < WORLD_HALF_CM and abs(y) + r < WORLD_HALF_CM
     assert len(L.LOCATIONS) == 5 and len(L.RIVER_ENDS) == 2 and len(L.ROAD_EXITS) == 2
+
+
+def test_channel_carve_is_asymmetric_in_a_bend():
+    """A bend whose centre lies on the left (+y here): the deepest bed moves towards the outer (right) bank, the inner
+    bank is a low gravel bar just above the water, the outer bank stays a steep cut. A straight reach is symmetric."""
+    lat = _flat()
+    T.carve_channel(lat, [(-2000.0, 0.0, 900.0, 600.0, 1.0, 300.0), (2000.0, 0.0, 900.0, 600.0, 1.0, 300.0)], 150.0)
+    z = lambda x, y: lat.z[lat.nearest(x, y)]
+    assert z(0.0, -100.0) < z(0.0, 100.0) - 40.0
+    assert 900.0 < z(0.0, 500.0) < 925.0 and z(0.0, -500.0) == 1000.0
+    assert max(lat.z) == 1000.0
+    flat = _flat()
+    T.carve_channel(flat, [(-2000.0, 0.0, 900.0, 600.0, 0.0, 0.0), (2000.0, 0.0, 900.0, 600.0, 0.0, 0.0)], 150.0)
+    assert abs(flat.z[flat.nearest(0.0, 200.0)] - flat.z[flat.nearest(0.0, -200.0)]) < 1e-9
+    assert abs(flat.z[flat.nearest(0.0, 0.0)] - (900.0 - 0.8 * 150.0)) < 1e-9
+
+
+def test_cut_levels_the_ground_above_a_floor_and_leaves_the_rest():
+    """台地切挖: a building's floor is never buried -- every vertex within `reach` of its footprint that stands above the
+    floor comes down to it; lower ground (the plinth hides it), ground beyond the reach and protected ground (a street)
+    stay as they were."""
+    from pypcg.world import geom
+    n, s = 41, 100.0
+    lat = Lattice(n, s, -2000.0, -2000.0, [1000.0 + 0.2 * (-2000.0 + (k // n) * s) for k in range(n * n)])   # 20 % up +y
+    before = list(lat.z)
+    ring = geom.rect(0.0, 0.0, 800.0, 600.0, 0.0)
+    keep = lambda x, y: not (x > 900.0)                         # a street along x > 9 m
+    T.cut(lat, ring, 1000.0, 500.0, keep)
+    for k in range(n * n):
+        x, y = lat.xy(k)
+        d = 0.0 if geom.point_in_ring(x, y, ring) else geom.ring_distance(x, y, ring)
+        if d <= 500.0 and keep(x, y):
+            assert lat.z[k] == min(before[k], 1000.0)
+        else:
+            assert lat.z[k] == before[k]

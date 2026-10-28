@@ -74,6 +74,9 @@ __pycache__/
 /Content/Material/
 /Content/Megascans/
 /Content/MSPresets/
+# Electric Dreams vegetation (Tools/pyworld/ed_closure.py --copy re-copies it)
+/Content/Custom/
+/Content/PhysicalMaterials/
 /Content/Prop/
 /Content/Road/
 /Content/Splash/

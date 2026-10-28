@@ -1,14 +1,28 @@
-"""Settlement layout (视频步骤 6): the plaza, radial and ring streets, zones, plots and fields of one location.
-Pure and 2D; the terrain work (platform, pads) is W6's."""
+"""Settlement layout (视频步骤 6): the plaza, organic streets, zones, plots and fields of one location, and each
+building's dressing (style, storeys, colours, the edge on the street: rules.dress). Pure and 2D; the terrain work
+(platform, pads) and the module assembly (building.assemble) are W6's."""
 import math
+import random
 
-from . import ROAD_BLEND, ROAD_INNER, geom, rules
+from . import ROAD_BLEND, ROAD_INNER, geom, noise, rules
 
 PLAZA_R = 1800.0
 STREET_HW = 200.0
+SIDEWALK = 230.0       # a raised sidewalk from the carriageway's edge to 20 cm short of the facades (rules.SIDEWALKS)
 STREET_STEP = 500.0
+# kind -> (lanes from the plaza, spacing of the lanes off a road through the place, total street length, longest lane,
+#          branching depth): the organic growth of `layout` (cm)
+GROWTH = {"Town": (3, 8000.0, 190000.0, 26000.0, 2), "Village": (2, 11000.0, 75000.0, 17000.0, 1),
+          "Hamlet": (0, 6000.0, 20000.0, 9000.0, 0)}
+GROW_STEP = 1000.0                   # a lane grows 10 m at a time ...
+TURN_SD, TURN_MAX = math.radians(4.0), math.radians(8.0)     # ... its heading drifting (damped random walk)
+SNAP = 1500.0                        # a lane within 15 m of another street or road ends on it
+BRANCH_P = 0.15                      # chance per step of a side lane
+ORIGIN_CLEAR = 2500.0                # a lane never ends on what it started from: its snap point is this far from its start
 SETBACK = {"street": 250.0, "road": ROAD_INNER + ROAD_BLEND + 50.0}   # beyond the road corridor W6 restores last
-GAP = (300.0, 600.0)
+TOUCH = 10.0           # a terrace's lots are tested shrunk by this, so neighbours may share a wall
+LANDMARK_CLEAR = 120.0 # free ground round a landmark (the bell tower, grown by 50, stands 200 from its church)
+RETRY = {"core": 100.0, "residential": 400.0, "outskirts": 400.0}       # step along the front after a refused lot
 # (bearing offset, extra distance) a landmark tries, in order
 LANDMARK_TRIES = [(da, extra) for extra in (0.0, 800.0, 1600.0, 2400.0, 3200.0, 4000.0) for da in (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0)]
 
@@ -106,68 +120,84 @@ def road_bearings(cx, cy, r, roads):
     return out
 
 
+def _clear(site, x0, y0, x1, y1, step=250.0):
+    """No building within a street's half width + 1.5 m anywhere along the segment (a 10 m step can clip a corner)."""
+    n = max(1, int(math.ceil(math.hypot(x1 - x0, y1 - y0) / step)))
+    return not any(site.taken.near(x0 + (x1 - x0) * q / n, y0 + (y1 - y0) * q / n, STREET_HW + 150.0)
+                   for q in range(1, n + 1))
+
+
+def grow(site, cx, cy, limit, x, y, heading, rng, max_len):
+    """One street from (x, y): GROW_STEP steps, the heading drifting as a damped random walk (a lane follows plots and
+    fences, not a ruler). It stops outside `limit(bearing)`, at the river or a building, or when it comes within SNAP
+    of another street or road -- it then ends on it, a T junction. Returns (points, branch points)."""
+    pts, turn, length, branches = [(x, y)], 0.0, 0.0, []
+    while length < max_len:
+        turn = max(-TURN_MAX, min(TURN_MAX, 0.6 * turn + rng.gauss(0.0, TURN_SD)))
+        heading += turn
+        nx, ny = x + GROW_STEP * math.cos(heading), y + GROW_STEP * math.sin(heading)
+        if math.hypot(nx - cx, ny - cy) > limit(math.atan2(ny - cy, nx - cx)):
+            break
+        if site.near_river(nx, ny, 800.0) or not _clear(site, x, y, nx, ny):
+            break                                     # the river, or a building (a landmark, an earlier settlement)
+        if len(pts) >= 3:                             # clear of where it started: it joins what it reaches
+            hit = site.lines.nearest(nx, ny, SNAP)
+            if hit is not None:
+                (ax, ay), (bx, by) = site.lines.segment(hit[1])
+                jx, jy = ax + (bx - ax) * hit[2], ay + (by - ay) * hit[2]
+                if math.hypot(jx - pts[0][0], jy - pts[0][1]) > ORIGIN_CLEAR:
+                    if _clear(site, x, y, jx, jy):
+                        pts.append((jx, jy))
+                    return pts, branches
+        pts.append((nx, ny))
+        x, y, length = nx, ny, length + GROW_STEP
+        if len(pts) >= 4 and rng.random() < BRANCH_P:
+            branches.append((x, y, heading))
+    return pts, branches
+
+
 def layout(loc, rng, site):
     cx, cy, r, kind, sid = loc["x"], loc["y"], loc["radius"], loc["kind"], loc["id"]
-    n_streets, ring_street = rules.STREETS[kind]
+    n_plaza, spacing, budget, longest, depth_max = GROWTH[kind]
     plaza = (cx, cy, PLAZA_R) if kind != "Hamlet" else None
-    start = PLAZA_R if plaza else 600.0
     taken_bearings = road_bearings(cx, cy, r, site.roads)
-    # The landmarks take the widest gaps between the roads first; the streets then keep out of their way.
-    landmark_dirs = []
-    if plaza:
-        for spec in rules.LANDMARKS:
-            if kind in spec["settlements"]:
-                landmark_dirs.append(widest_gap(taken_bearings + landmark_dirs, rng))
-    bearings = pick_bearings(n_streets, taken_bearings + landmark_dirs, rng)
-    streets = []
-    for a in bearings:
-        ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
-        pts, d = [], start
-        while d <= 0.9 * r:
-            x, y = cx + ux * d, cy + uy * d
-            if site.near_river(x, y, 800.0) or site.taken.near(x, y, STREET_HW + 150.0):
-                break                          # the river, or a building of a settlement laid out before
-            pts.append((x, y))
-            d += STREET_STEP
-        if len(pts) >= 2:
-            streets.append(pts)
-    if ring_street:
-        run = []
-        for q in range(49):
-            x = cx + 0.55 * r * math.cos(2.0 * math.pi * q / 48)
-            y = cy + 0.55 * r * math.sin(2.0 * math.pi * q / 48)
-            if site.near_river(x, y, 800.0) or site.taken.near(x, y, STREET_HW + 150.0):
-                if len(run) >= 2:
-                    streets.append(run)
-                run = []
-            else:
-                run.append((x, y))
-        if len(run) >= 2:
-            streets.append(run)
-    for st in streets:
-        site.add_street(st)
     buildings, fields, counts = [], [], {}
 
-    def place(spec, bx, by, w, d, yaw, gap, special=None):
+    def place(spec, bx, by, w, d, yaw, gap, special=None, front=2, zone=None, avoid_tint=None, street=None,
+              front_kind=None):
+        """`front` is the edge on the street or the plaza (building.py's edge numbering); `street` the point of the
+        street (or plaza) it faces, whose height W6 gives its ground floor (front_kind "street" / "plaza")."""
         ring = geom.rect(bx, by, w, d, yaw)
-        if not site.free(ring, geom.rect(bx, by, w + gap, d + gap, yaw), cx, cy, 0.97 * r):
+        grow = gap if gap > 0.0 else -TOUCH
+        if not site.free(ring, geom.rect(bx, by, w + grow, d + grow, yaw), cx, cy, 0.97 * r):
             return None
-        site.taken.add(ring)
-        b = {"kind": spec["kind"], "group": rng.choice(spec["height"]), "ring": ring, "x": bx, "y": by, "w": w, "d": d,
-             "yaw": yaw, "special": special, "settlement": sid}
+        # a landmark keeps LANDMARK_CLEAR round it: core terraces would otherwise lean on it and their pads tilt it
+        site.taken.add(geom.rect(bx, by, w + 2.0 * LANDMARK_CLEAR, d + 2.0 * LANDMARK_CLEAR, yaw) if special else ring)
+        zone = zone or rules.zone_of(math.hypot(bx - cx, by - cy) / r)
+        near = plaza is not None and math.hypot(bx - cx, by - cy) < PLAZA_R + 0.5 * max(w, d) + 1500.0
+        b = {"kind": spec["kind"], "ring": ring, "x": bx, "y": by, "w": w, "d": d, "yaw": yaw, "special": special,
+             "settlement": sid, "zone": zone, "front": front, "street": street, "front_kind": front_kind}
+        # dressing draws from its own generator, seeded by the lot: the layout's draws (streets, lots) stay as they were
+        drng = random.Random((sid * 1000003 + int(round(bx)) * 7919 + int(round(by))) & 0xFFFFFFFF)
+        b.update(rules.dress(spec["kind"], zone, kind, bx, by, sid, w, d, drng, near, avoid_tint))
         buildings.append(b)
         counts[spec["kind"]] = counts.get(spec["kind"], 0) + 1
         return b
 
+    # The landmarks first, facing the plaza in the widest gaps between the roads; the streets then grow round them.
+    landmark_dirs = []
     if plaza:
-        specs = [spec for spec in rules.LANDMARKS if kind in spec["settlements"]]
-        for spec, a0 in zip(specs, landmark_dirs):
-            # The widest gap first, then directions and distances around it: a river or a street may block the gap.
+        for spec in [spec for spec in rules.LANDMARKS if kind in spec["settlements"]]:
+            a0 = widest_gap(taken_bearings + landmark_dirs, rng)
+            landmark_dirs.append(a0)
+            # The widest gap first, then directions and distances around it: a river may block the gap.
+            b = None
             for da, extra in LANDMARK_TRIES:
                 a = (a0 + da) % 360.0
                 ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
                 off = PLAZA_R + 300.0 + extra + 0.5 * spec["w"]
-                b = place(spec, cx + ux * off, cy + uy * off, spec["w"], spec["d"], a, 300.0, spec["kind"])
+                b = place(spec, cx + ux * off, cy + uy * off, spec["w"], spec["d"], a, 300.0, spec["kind"], front=3,
+                          zone="core", street=(cx, cy), front_kind="plaza")
                 if b is not None:
                     break
             if b is not None and spec.get("tower"):
@@ -175,8 +205,49 @@ def layout(loc, rng, site):
                 for side in (1.0, -1.0):
                     tx = cx + ux * (PLAZA_R + 300.0 + 0.5 * rules.TOWER["w"] + extra) + side * px * (0.5 * spec["d"] + 0.5 * rules.TOWER["d"] + 200.0)
                     ty = cy + uy * (PLAZA_R + 300.0 + 0.5 * rules.TOWER["w"] + extra) + side * py * (0.5 * spec["d"] + 0.5 * rules.TOWER["d"] + 200.0)
-                    if place(rules.TOWER, tx, ty, rules.TOWER["w"], rules.TOWER["d"], a, 100.0, "BellTower") is not None:
+                    if place(rules.TOWER, tx, ty, rules.TOWER["w"], rules.TOWER["d"], a, 100.0, "BellTower", front=3,
+                             zone="core", street=(cx, cy), front_kind="plaza") is not None:
                         break
+    # Streets grow (视频：内部路网连到最近道路；有机生长而不是放射 + 环路): lanes leave the plaza and branch off the roads
+    # through the place at irregular intervals; every lane wanders, may sprout side lanes, and ends on the first
+    # street or road it meets. The settlement's edge is a noisy circle, so lanes stop at different distances.
+    phase = rng.uniform(0.0, 100.0)
+
+    def limit(bearing):
+        return r * (0.72 + 0.22 * noise.value(1.4 * math.cos(bearing) + phase, 1.4 * math.sin(bearing) + phase, sid + 17))
+    seeds = []
+    if plaza:
+        for a in pick_bearings(n_plaza, taken_bearings + landmark_dirs, rng, 50.0):
+            a = math.radians(a + rng.uniform(-20.0, 20.0))
+            seeds.append((cx + PLAZA_R * math.cos(a), cy + PLAZA_R * math.sin(a), a, 0, longest))
+    for rd in site.roads:
+        for run in runs_within(rd["pts"], cx, cy, 0.85 * r):
+            cum = geom.cumulative(run)
+            s, side = rng.uniform(0.2, 0.8) * spacing, rng.choice((1.0, -1.0))
+            while spacing and s < cum[-1] - 1500.0:
+                (x, y), yaw = geom.at_distance(run, cum, s)
+                if math.hypot(x - cx, y - cy) > PLAZA_R + 1500.0:
+                    seeds.append((x, y, math.radians(yaw + 90.0 * side + rng.uniform(-30.0, 30.0)), 0, longest))
+                s += spacing * rng.uniform(0.6, 1.4)
+                side = -side if rng.random() < 0.75 else side
+    if not seeds:                                     # a hamlet off the road's end: lanes from its centre
+        for a in pick_bearings(2, taken_bearings, rng, 70.0):
+            seeds.append((cx, cy, math.radians(a), 0, longest))
+    seeds.sort(key=lambda q: math.hypot(q[0] - cx, q[1] - cy))
+    streets, used, queue = [], 0.0, list(seeds)
+    while queue and used < budget:
+        x, y, heading, depth, most = queue.pop(0)
+        pts, branches = grow(site, cx, cy, limit, x, y, heading, rng, min(most, budget - used))
+        if len(pts) < 3:
+            continue
+        pts = geom.resample(pts, STREET_STEP)
+        streets.append(pts)
+        site.add_street(pts)
+        used += geom.length(pts)
+        if depth < depth_max:
+            for bx, by, bh in branches:
+                queue.append((bx, by, bh + math.radians(rng.choice((1.0, -1.0)) * rng.uniform(70.0, 110.0)),
+                              depth + 1, 0.6 * most))
     fronts = [(st, STREET_HW, "street") for st in streets]
     for rd in site.roads:
         fronts += [(run, rd["hw"], "road") for run in runs_within(rd["pts"], cx, cy, r)]
@@ -184,21 +255,31 @@ def layout(loc, rng, site):
         cum = geom.cumulative(pts)
         total = cum[-1]
         for side in (1.0, -1.0):
-            s = 300.0
+            s, last_tint = 300.0, None
             while s < total - 300.0:
                 (x, y), _yaw = geom.at_distance(pts, cum, s)
-                spec = rules.pick(rules.zone_of(math.hypot(x - cx, y - cy) / r), kind, counts, rng)
+                zone = rules.zone_of(math.hypot(x - cx, y - cy) / r)
+                spec = rules.pick(zone, kind, counts, rng)
                 if spec is None:
                     s += 400.0
                     continue
-                w, d, gap = rng.uniform(*spec["w"]), rng.uniform(*spec["d"]), rng.uniform(*GAP)
+                w, d = rng.uniform(*rules.frontage(spec, zone)), rng.uniform(*spec["d"])
+                gap = 0.0 if rng.random() < rules.TERRACE_P[zone] else rng.uniform(*rules.GAPS[zone])
                 (mx, my), yaw = geom.at_distance(pts, cum, min(total, s + 0.5 * w))
                 nx, ny = -math.sin(math.radians(yaw)) * side, math.cos(math.radians(yaw)) * side
-                off = hw + SETBACK[what] + 0.5 * d
-                b = place(spec, mx + nx * off, my + ny * off, w, d, yaw, gap)
+                # the street is behind the lot's -d side when it stands on the left (+n), behind +d on the right;
+                # a terrace lot on the inside of a bend is made shallower before it gives up (its back would overlap)
+                for depth in ((d, 0.85 * d, 0.7 * d) if gap == 0.0 else (d,)):
+                    off = hw + SETBACK[what] + 0.5 * depth
+                    b = place(spec, mx + nx * off, my + ny * off, w, depth, yaw, gap, front=2 if side > 0 else 0,
+                              zone=zone, avoid_tint=last_tint, street=(mx, my), front_kind=what)
+                    if b is not None:
+                        d = depth
+                        break
                 if b is None:
-                    s += 400.0
+                    s += RETRY[zone]
                     continue
+                last_tint = b["tint"]
                 if spec.get("field"):
                     fw, fd = rng.uniform(2500.0, 4000.0), rng.uniform(3000.0, 5000.0)
                     o2 = off + 0.5 * d + 400.0 + 0.5 * fd
@@ -207,5 +288,27 @@ def layout(loc, rng, site):
                         site.taken.add(fr)
                         fields.append(fr)
                 s += w + gap
+    # Leftover lots (City Sample stage 13): behind a street house, by its zone's odds, an outbuilding facing the
+    # house and a kitchen garden beyond it -- where the ground behind is free.
+    gardens = []
+    for b in [b for b in buildings if b["kind"] in ("House", "Shop") and b["front"] in (0, 2)]:
+        p_out, p_garden = rules.BACKYARD[b["zone"]]
+        back = 1.0 if b["front"] == 2 else -1.0                    # the street side's opposite, along the lot's +d
+        ux, uy = -math.sin(math.radians(b["yaw"])) * back, math.cos(math.radians(b["yaw"])) * back
+        reach = 0.5 * b["d"]
+        if rng.random() < p_out:
+            ow, od = rng.uniform(*rules.OUTBUILDING["w"]), rng.uniform(*rules.OUTBUILDING["d"])
+            c = reach + rng.uniform(150.0, 400.0) + 0.5 * od
+            ob = place(rules.OUTBUILDING, b["x"] + ux * c, b["y"] + uy * c, min(ow, b["w"]), od, b["yaw"], 100.0,
+                       front=b["front"], zone=b["zone"])
+            if ob is not None:
+                reach = c + 0.5 * od
+        if rng.random() < p_garden:
+            gw, gd = b["w"] * rng.uniform(0.7, 1.0), rng.uniform(600.0, 1200.0)
+            c = reach + 200.0 + 0.5 * gd
+            gr = geom.rect(b["x"] + ux * c, b["y"] + uy * c, gw, gd, b["yaw"])
+            if site.free(gr, gr, cx, cy, 1.05 * r):
+                site.taken.add(gr)
+                gardens.append(gr)
     return {"id": sid, "kind": kind, "x": cx, "y": cy, "r": r, "plaza": plaza, "streets": streets,
-            "buildings": buildings, "fields": fields}
+            "buildings": buildings, "fields": fields, "gardens": gardens}

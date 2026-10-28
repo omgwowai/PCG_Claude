@@ -56,3 +56,21 @@ def test_forest_floor_has_no_cell_edges():
         if n is not None:
             worst = max(worst, abs(v - n))
     assert worst <= 0.35, worst
+
+
+def test_point_bars_are_gravel_on_the_inner_bank_only():
+    """W3's River table marks each row's point bar (BarW, on the inner bank: the side the bend's centre is on, Curv > 0
+    = left of the flow). The bar is a gravel beach; the outer bank at the same distance is not."""
+    rt = dict(WT, Curv="Double", BarW="Double")
+    river = table([{"loc": (0.0, y, 950.0), "Width": 1200.0, "WaterZ": 950.0, "BedZ": 800.0, "S": 23000.0 - y,
+                    "Curv": 1.0 / 3000.0, "BarW": 800.0} for y in range(23000, -23001, -1000)], rt, ["River"])
+    out, _ = run_stage(S, {"Terrain": [(terrain(lambda x, y: 1000.0), frozenset())], "Upstream": [river]})
+    t = out["Terrain"][0][0]
+    at = {(round(p[0]), round(p[1])): i for i, p in enumerate(t.loc)}
+
+    def w(x, y):
+        i = at[(round(x), round(y))]
+        return {c: t.attrs[c][i] for c in CHANNELS}
+    # the flow runs towards -y, so its left (the bend's centre, the inner bank) is +x; x = 11.7 m is on the 8 m bar
+    inner, outer = w(1171.875, 0.0), w(-1171.875, 0.0)
+    assert inner["Gravel"] > 0.9 and outer["Gravel"] < 0.1, (inner, outer)

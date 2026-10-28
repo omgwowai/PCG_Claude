@@ -45,8 +45,12 @@ def upstream_exclusions(items):
     from pypcg.stages.w04_roads import road_rows
     from pypcg.stages.w05_bridges import bridge_rows
     roads = [(rd["pts"], 0.5 * rd["width"]) for rd in road_rows(items)]
-    streets = [([r["loc"] for r in WP.rows_of(v)], 0.5 * WP.rows_of(v)[0]["Width"])
-               for v, tags in items if isinstance(v, Points) and "Street" in tags and len(v)]
+    streets = []                     # per segment: the paved half width (carriageway + sidewalks) where W6 gives it
+    for v, tags in items:
+        if isinstance(v, Points) and "Street" in tags and len(v):
+            rows = WP.rows_of(v)
+            half = [0.5 * r.get("Paved", r["Width"]) for r in rows]
+            streets += [([a["loc"], b["loc"]], max(ha, hb)) for a, b, ha, hb in zip(rows, rows[1:], half, half[1:])]
     river = [(r[0], r[1], r[2], r[3]) for r in river_rows(items)]
     rings = [v.outer for v, tags in items if isinstance(v, Polygon) and tags & {"Footprint", "Plaza", "Field"}]
     rings += [geom.rect(b["x"], b["y"], b["span"], b["width"] + 200.0, b["yaw"]) for b in bridge_rows(items)]
