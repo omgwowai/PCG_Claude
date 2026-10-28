@@ -275,3 +275,40 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **89** | **结构核对的 WL 匹配在大图里会"选错对称点"**：两个看似相同的节点（同类同参数）只差在汇入同一 Gather 的边序号，按名字字典序硬配一对会级联出几十条假 diff（合并图 44 / 73 条）。`compare.match` 已改为对歧义组逐个试配、取让所有颜色类平衡的那一个。注意：只要图里还有**真** diff，就没有任何配对能平衡，假 diff 会和真 diff 混在一起出现 | 看到大量 "edge 顺序" 类 diff 时先修掉非边类的真 diff（如结构体只写了一半的设置，trap 90），再看剩下的 |
 | **90** | **写结构体设置（如 `ActorSelector`）时只给部分字段，导出时引擎会补全其余字段**，结构核对把它报成设置差异。 | 描述里写完整结构体：先建一次、用 `extract.export` 读回引擎补全后的样子，抄进描述（`combined._actor_selector`） |
 | **91** | **重写（clear + rewrite）一个 PCG 图资产后，挂它的组件上的 graph instance 覆盖全部回到图的默认值**，组件仍指着同一个资产，看不出变化。实测 2026-10-22：重建 `PCG_PyCity` 后直接生成，地形比例 0.5（覆盖是 0.4）、阶段 6 15 项（应 50）、阶段 9 11 项（应 479），整城几乎没有建筑 | 每次重建图之后重新套覆盖（`pypcg_city.py assign`）；生成前核对组件覆盖（`gen` 已这样做：缺覆盖就拒绝） |
+
+## 10. 2026-10-22 PyWorld（山谷世界，`docs/pyworld-guide.md`）实测
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **92** | **`Get_ActorData`（按 tag）能直接读另一个 PCG volume 的生成输出**：它的 `GetDataFromPCGComponentOrParseComponents` 模式拿到的就是那个组件 Output 节点收到的数据，数据 tag 原样带过来（只删含 `input` 子串的 tag）。PyWorld 的 9 个阶段全靠它串起来 | 跨阶段传数据不必用 actor 引用：给 volume 一个 tag（`PyWorld_W02`），下游按 tag 读；tag 名里别带 `input` |
+| **93** | **`MeshPartition` actor 的地形定义能从 Python 换**：`set_editor_property("mega_mesh_definition", load_asset(MPD_Basic))` 立即生效，`MPD_Basic` 的 6 个材质通道（Grass Rock ForestFloor Dirt Mud Gravel）由 `Write_MeshTerrain(Channels=[...])` 加同名 Float 点属性写入，权重和为 1 时颜色正确 | 需要地表材质时先换成带通道的 MPD；`ModifierLayerPriority` 留默认 `None` 即可 |
+| **94** | **PCGPrimitives 的建筑语法（`SGD_Bldg_B_Advance_Template`）只要一个足迹不合适，整个节点一栋都不生成**：足迹边 < 约 8 m 报 `SubdivideSpline: Grammar does not fit for this spline`；`Size` 450 同样失败；`Size` 2 400 报 `OffsetSpline: Invalid cardinality among pins 'In' and 'Magnitude'`。600 / 750 / 1 050 / 1 950 可用，墙顶高度正好等于 `Size` | 足迹两边都 ≥ 8 m；按层高分组时每组单独一个语法节点，坏一组不连累别组；用实测的 Size |
+| **95** | **同一份足迹输入，建筑语法的实例数偶尔差 1**：三次生成 `SM_Bldg_Wall_L` 2 540 / 2 541 / 2 540（Python 输出逐项相同） | "两遍逐网格相同"对语法生成的网格要容许 ±1，比较时先确认 Python 输出相同再归因 |
+| **96** | **编辑器窗口在后台时 `take_high_res_screenshot` 不落盘**（`bThrottleCPUWhenNotForeground`），而且后发的截图会顶掉还没渲染的那张 | 截图前跑 `tl_editor_no_throttle.py {"throttle": false}`，结束后 `{"throttle": true}`；一次只发一张，等文件出现再发下一张 |
+| **97** | **City Sample Megaplants 的树在本项目只剩光秃枝干**：它们是 Nanite 装配体（树干 + `Instances/` 下的枝叶部件），叶子是 Nanite 体素植被，`r.Nanite.Foliage` 默认 0（City Sample 自己也关着）。只读 cvar，运行时改不了 | 写进 `Config/DefaultEngine.ini` `[ConsoleVariables]`（`r.Nanite.Foliage=1`），重启编辑器并重编 shader。部件材质被映射到根网格的槽位，换根网格的叶子槽即可换叶色（`pyworld_megaplant_summer.py`） |
+| **98** | **Electric Dreams 的母材质（`M_MS_Default_Material_VT_DynamicLayering`、`M_MS_CustomDefault`、`M_Foliage`）一画就崩编辑器**：`MaterialShader.cpp:2567` "missing expected shader type FAnisotropyPS"，Substrate 混合 GBuffer（`ProjectGBufferFormat=0`）下旧材质转换节点连了 Anisotropy | `pyworld_fix_aniso.py`：断开 Substrate 转换节点的 Anisotropy 输入后存盘（拷进来的副本，ED 原工程不动） |
+| **99** | **W7 那种 140 万个点交给 `Spawn_Assets`（GetClassFromAttribute）会让编辑器在生成中崩**（trap 61 同一个 GC 竞争） | 用原生 `PCGStaticMeshSpawnerSettings` + `PCGMeshSelectorByAttribute`；`MeshSelectorParameters` 要写完整（`TemplateDescriptor` 全字段 + `bUseAttributeMaterialOverrides` + `MaterialOverrideAttributes`），否则 build 报 diff；生成期间关自动保存、调大 `gc.TimeBetweenPurgingPendingKillObjects` |
+| **100** | **Python 往材质里加表达式时，每次 `set_editor_property` 都触发整个材质重编**（贴图属性尤甚），几十个节点把编辑器推到 100 GB 后显存耗尽崩溃 | 表达式属性一律 `PropertyAccessChangeNotifyMode.NEVER`，全部连完再 `MaterialEditingLibrary.recompile_material` 一次（`pyworld_terrain_material.py`） |
+| **101** | **本机常同时开两个 UE 编辑器**（PCG_Claude 和 PCG_Codex，各由一个 AI 驱动），`tasklist` 里都叫 `UnrealEditor.exe` | 杀进程前用 `Get-CimInstance Win32_Process` 看命令行含 `PCG_Claude.uproject`；崩溃报告进程看 `-MONITOR=<pid>`；Git Bash 里启动要 `MSYS_NO_PATHCONV=1`，否则 `/Game/...` 参数被改写 |
+
+## 11. 2026-10-27 PyWorld 道路与水系形状（`docs/pyworld-guide.md` §7）
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **102** | **Single Layer Water 的散射 / 吸收系数单位是每厘米**（`MaterialExpressionSingleLayerWaterMaterialOutput.h`）：填 1–40 这种数，每 1 cm 水都不透明，水深完全看不出；**`Opacity` 不接时默认 1 = 不透明表面**，水面成了一面暗镜子，改系数毫无变化（换色只差 2/255） | 清澈偏绿的河水约 0.01–0.03 /cm 吸收、0.001 /cm 散射；`Opacity` 一定要接（0 = 体积水，只给泡沫处 1） |
+| **103** | **PCG Spawn Dynamic Mesh 生成的 `DynamicMeshComponent` 不参与贴图流送**：材质里的流式法线贴图一直停在最低 mip（平的），水面看着是完美镜面，加大法线强度也没用（把法线当颜色输出是均匀灰） | 法线贴图拷一份到 `/Game` 并设 `never_stream`（`pyworld_water_material.py` 的 `T_PyWorldWaterNormal`） |
+| **104** | **正在被网格用的材质删不掉**：`delete_asset` 报 "in use"（ForceDelete 失败），接着 `create_asset` 返回 None；改成就地重建后，**`delete_all_material_expressions` 不删 Single Layer Water 输出节点**，再建一个就编译失败 "only one Single Layer Water Material node"（引擎回退默认材质，画面是灰的） | 就地重建：`delete_all_material_expressions` 之后再逐个 `delete_material_expression` 直到为空 |
+| **105** | **A\* 的启发式不能超过每厘米的最低代价**：代价乘了 < 1 的因子（偏好场 / 漂移噪声 / 复用折扣）而 `h_scale` 还是 1 时，启发式不可采纳，A\* 直冲终点——改噪声参数路径一点不变 | `h_scale` = 代价每厘米的下界（如 `exp(-Wander)`、`ReuseFactor`）；噪声要乘在整个代价上，加法项会被高度项淹没 |
+| **106** | **动态网格三角形的朝向**：`append_buffers_to_mesh` 的三角形 (a, b, c) 只有在右手读 (b − a) × (c − a) 的 z < 0 时从上面看得见（单面）；反过来的绕序整张水面在编辑器里不可见 | 按 `geo.Mesh` 文档的绕序生成（`w03_river.surface`），测试里断言每个三角形的这个 z 为负 |
+
+## 12. 2026-10-27 PyWorld 城镇模块化建筑（`docs/pyworld-guide.md` §8）
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **107** | **Megascans `Modular_Roof`（`Modular_Building_Roof_Kit_00`）的角块不是看名字或包围盒能判断的**：两个 600 × 600 的角块里 `_02` 是**天沟（valley）**，`_01` 才是**四坡顶的斜脊角**（经过枢轴的两条边都是檐口，脊端在 (−600, −600)）；直段的檐口在枢轴线 y = 0、屋脊在 y = −600。**俯视截图分不出正四坡顶和倒扣的"漏斗顶"**，按包围盒猜放了两次都是倒的 | 用 Geometry Script 读顶点量高度（`copy_mesh_from_static_mesh` → `get_vertex_position`，`pyworld_probe_roof_geometry.py`）；`_01` 放在屋顶矩形的角上、转 +90°，直段放在檐口上（`building._roof`） |
+| **108** | **`MS_DefaultMaterial`（Megascans 默认母材质）的 `Albedo Tint` 单独设没用**：`Albedo Tint Intensity` 默认 0；而 `Roof_Kit_00` 的板岩反照率接近白色，中等色调（0.33）看起来还是浅灰 | 色调子材质同时设 `Albedo Tint Intensity = 1`（`pyworld_town_materials.py`）；屋顶色要压暗（板岩 0.16、陶土 (0.62, 0.22, 0.12)） |
+| **109** | **Megascans `Modular_Building` 家族 01（`*_01` 砖房）的子网格 `_01.._04` 导入时丢了材质（`WorldGridMaterial`），而且它的窗没有玻璃槽**：直接放是灰格子墙、窗洞透光 | 这些模块的 0 号槽一律覆写成同套件的 `*_inst`（实测贴图对得上，`kit.py` 的 `fix`）；每栋楼窗后放一块室内遮挡体，材质用套件的 `M_Bldg_glass`（深色块看着像墙上开的洞） |
+| **110** | **Megascans 模块化建筑的朝向约定**（实测）：模块沿本地 +X 从 0 到槽宽、立面朝 +Y、墙体在 −Y、外角的枢轴在墙角点、占当前边前 c 和上一条边后 c。**沿足迹逆时针摆，立面全朝里** | 足迹按**顺时针**遍历，每条边用边的朝向摆（左手法线即外侧）；家族 00 的角宽逐层不同（144 / 129 / 115 / 106 / 151），用端区 + 缩放壁柱填充，窗洞才能上下对齐 |
+| **111** | **原生 Static Mesh Spawner 按属性覆写材质**：`bUseAttributeMaterialOverrides` + `MaterialOverrideAttributes = ["Mat0"]`，属性是 SoftObjectPath（或 String），按槽位顺序对应；空路径 = 该槽不覆写（用网格自己的材质）。每种 (网格, 材质) 组合一个 ISM | 一个属性只覆写 0 号槽，玻璃等其它槽保持原样；W6 的 3.2 万个模块 114 种网格 |
+| **112** | **`Lattice.height` 是双线性插值，引擎的地形是沿 (i, j)–(i+1, j+1) 切开的三角面**（`Lattice.tri_height`，实测误差 0.04 cm）。在扭曲的格子上两者差到约 16 cm：按双线性高度贴地的街道石板，在一条横坡陡的商业街上整片被地面盖住（只在截图里看得出，按格点量是贴着的） | 凡是要**坐在可见地面上**的东西（街道石板）都用 `tri_height`，并把足迹里的地形顶点也算进去（三角面的峰值在顶点上，`Lattice.vertices_in`）；石板平面按 9 × 9 网格最小二乘拟合、按网格和顶点抬高（`w06.street_modules`）；验收按更密的网格量 |
+| **113** | **City Sample 的 `SM_Plaza_Square_E`（石块路面）是一层带石块起伏的 4 cm 皮（z 15.8–20），不是平板**：Z 缩放连起伏一起拉长，石缝随之变深。×10（42 cm）时地面在石顶下 8 cm，石缝里露土，像真的石块路；×20（84 cm）、地面在石顶下 3 cm 时，整条街看着是土路、只露出石块顶 | 石块路面只拉到 ×10，地面留在石顶下 8 cm（`w06.SETTS_Z` `SETTS_TOP`）；要加厚只加厚平顶的板（人行道 `SM_Sidewalk_3_3_A` ×5）；改完要在街上平视截图看，俯视看不出 |

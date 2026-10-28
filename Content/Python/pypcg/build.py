@@ -140,7 +140,8 @@ def _layout(g, ir, made, layout_from, fresh_seeds):
     return len(boxes)
 
 
-CLASS_PATHS = {_ir.PYTHON_NODE: "/Script/PCGPythonInteropEditor.PCGPythonDataProcessorSettings"}
+CLASS_PATHS = {_ir.PYTHON_NODE: "/Script/PCGPythonInteropEditor.PCGPythonDataProcessorSettings",
+               "PCGSpawnDynamicMeshSettings": "/Script/PCGGeometryScriptInterop.PCGSpawnDynamicMeshSettings"}
 SLIM_DX, SLIM_DY = 480, 200
 
 

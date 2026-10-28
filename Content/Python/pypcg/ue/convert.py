@@ -3,13 +3,13 @@
 Read: Polygon2D -> Polygon, spline -> Spline (control points + the engine's polyline), points ->
 Points (all attributes), param data -> ParamSet, any other spatial data -> Terrain (a surface).
 Write: Polygon -> MakePolygon2DData (C++), Spline -> PCGSplineData.k2_initialize, Points ->
-PCGPointData, ParamSet -> PCGParamData."""
+PCGPointData, ParamSet -> PCGParamData, Mesh -> PCGDynamicMeshData (GeometryScript buffers)."""
 import json
 import math
 
 import unreal
 
-from pypcg.geo import ParamSet, Points, Polygon, Spline, degenerate, drop_closing
+from pypcg.geo import Mesh, ParamSet, Points, Polygon, Spline, degenerate, drop_closing
 from pypcg import stage_api
 from pypcg.ue.terrain import Terrain
 
@@ -263,7 +263,31 @@ def to_pcg(v, registry=None, exact_rotations=False, exact_spline_rotators=False)
         return _point_data(v, exact_rotations)
     if isinstance(v, ParamSet):
         return _param_data(v)
+    if isinstance(v, Mesh):
+        return _mesh_data(v)
     raise TypeError("PyPCG cannot write %r" % (v,))
+
+
+def _mesh_data(m):
+    """A geo.Mesh as PCGDynamicMeshData for the Spawn Dynamic Mesh node: GeometryScript's simple mesh buffers
+    (append_buffers_to_mesh(mesh, buffers, material_id); per-vertex normals, uv0 and colours) into a DynamicMesh,
+    initialised with the mesh's material (the spawner hands the data's materials to its component). Probed
+    2026-10-26: a 60 k triangle mesh builds in 0.14 s."""
+    b = unreal.GeometryScriptSimpleMeshBuffers()
+    b.vertices = [unreal.Vector(*p) for p in m.vertices]
+    b.triangles = [unreal.IntVector(*t) for t in m.triangles]
+    if m.normals:
+        b.normals = [unreal.Vector(*n) for n in m.normals]
+    if m.uvs:
+        b.uv0 = [unreal.Vector2D(*u) for u in m.uvs]
+    if m.colors:
+        b.vertex_colors = [unreal.LinearColor(*c) for c in m.colors]
+    dm = unreal.DynamicMesh()
+    unreal.GeometryScript_MeshEdits.append_buffers_to_mesh(dm, b, 0)
+    material = unreal.load_asset(m.material) if m.material else None
+    d = unreal.PCGDynamicMeshData()
+    d.k2_initialize(dm, [material] if material else [], True)
+    return d
 
 
 def _spline_data(s, exact_rotators=False):

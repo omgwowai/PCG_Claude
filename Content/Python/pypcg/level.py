@@ -7,6 +7,7 @@ called L_PyTown would pass a short-name check (final review M14).
 DEMO = "/CitySamplePCG/Levels/L_CitySamplePCG_Demo"   # V2, V1 oracles, measure and probe scripts
 TOWN = "/Game/PyPCG/L_PyTown"                         # the town run (pypcg_town*.py)
 TOWN_GRAPHS = "/Game/PyPCG/Town/"                     # the only graphs a saved town volume may hold
+WORLD = "/Game/PyPCG/L_PyWorld"                       # the PyWorld valley (pyworld.py)
 
 
 def map_package(level_path_name):

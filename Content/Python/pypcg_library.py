@@ -22,6 +22,9 @@ _REPO = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())
 EXTRA_CLASSES = ("PCGRerouteSettings", "PCGNamedRerouteDeclarationSettings", "PCGNamedRerouteUsageSettings",
                  "PCGUserParameterGetSettings", "PCGGenericUserParameterGetSettings",
                  "PCGSubgraphSettings", "PCGLoopSettings")
+# Subgraphs no official stage graph uses but PyWorld does (pypcg/world/graphs.py).
+EXTRA_SUBGRAPHS = ("/PCGPrimitives_MeshPartitionInterop/Primitives/Transform/Transform_MeshTerrain_Erosion."
+                   "Transform_MeshTerrain_Erosion",)
 
 
 def _labels(node, which):
@@ -45,6 +48,8 @@ def run():
                 e = seen_cls.setdefault(n["class"], {"inputs": set(), "outputs": set()})
             e["inputs"].update(ins)
             e["outputs"].update(outs)
+    for path in EXTRA_SUBGRAPHS:
+        seen_sub.setdefault(pir.alias_of(path), {"path": path, "inputs": set(), "outputs": set()})
     tmp = unreal.new_object(unreal.PCGGraph, unreal.find_package("/Engine/Transient"), "PYPCG_LIBRARY_PROBE")
     lib = {"subgraphs": {}, "classes": {}, "io": {}, "fresh_seeds": {}}
     sub_cls = unreal.load_class(None, "/Script/PCG.PCGSubgraphSettings")

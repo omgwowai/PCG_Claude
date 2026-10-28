@@ -19,6 +19,8 @@ _LIBRARY = {}
 EXTRA_CLASSES = {
     _ir.PYTHON_NODE: {"inputs": [], "outputs": []},             # pins are per node (dynamic_pins)
     _ir.SELF_NODE: {"inputs": [], "outputs": ["Out"]},
+    # PCGGeometryScriptInterop's spawner (PyWorld W3's water surface): one dynamic mesh component per input mesh
+    "PCGSpawnDynamicMeshSettings": {"inputs": ["In"], "outputs": ["Out"]},
 }
 
 
@@ -273,6 +275,17 @@ class Graph:
                     "InputDynamicPins": list(inputs), "OutputDynamicPins": list(outputs)}
         return self._add(_ir.PYTHON_NODE, title, settings, {}, dynamic=(inputs, outputs))
 
+    def actor_points(self, tag, title="", **kw):
+        """Get Actor Data: one point per level actor carrying `tag` -- its transform, bounds and an `ActorReference`
+        attribute (Mode GetSinglePoint). The whole selector struct is written, as the exporter reads it back (trap 90)."""
+        settings = {"Mode": "GetSinglePoint",
+                    "ActorSelector": {"ActorFilter": "AllWorldActors", "bMustOverlapSelf": False,
+                                      "bIncludeChildren": False, "IncludeIsolatedActors": "Ignore",
+                                      "bDisableFilter": False, "ActorSelection": "ByTag", "ActorSelectionTag": tag,
+                                      "ActorSelectionClass": "None", "ActorReferenceSelector": "PCGBegin(@Last)PCGEnd",
+                                      "bSelectMultiple": True, "bIgnoreSelfAndChildren": False}}
+        return self._add(_ir.SELF_NODE, title, settings, kw)
+
     def self_point(self, title="Get Self (Volume Transform)", **kw):
         """The volume's own transform as one point (what Create_Spline_Shape reads when not at the origin)."""
         return self._add(_ir.SELF_NODE, title, {"Mode": "GetSinglePoint"}, kw)
@@ -403,7 +416,7 @@ class SlimGraph(Graph):
     extra_params are official parameters only kept nodes read; more_modules add Python nodes for
     stage parts that sit after an engine generation node."""
 
-    def __init__(self, stage_module, extra_params=(), more_modules=()):
+    def __init__(self, stage_module, extra_params=(), more_modules=(), name=None):
         from . import stage_api, stages
         self.stage = stage_module
         specs = {}
@@ -413,7 +426,7 @@ class SlimGraph(Graph):
                     raise TypeError("parameter %s is %s in one module and %s in another" % (spec[0], specs[spec[0]][1], spec[1]))
                 specs.setdefault(spec[0], spec)
         params = [P(n, t, v, type_object=to, category=cat, tooltip=tip) for n, t, v, tip, to, cat in specs.values()]
-        super().__init__(stages.name(stage_module.STAGE), params=params + list(extra_params),
+        super().__init__(name or stages.name(stage_module.STAGE), params=params + list(extra_params),
                          description=stage_module.DOC.strip())
         self._getters = {}
         self.pynodes = {}

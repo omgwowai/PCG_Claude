@@ -48,5 +48,7 @@ def run(stage_name, scope):
     seconds = time.perf_counter() - t0
     if os.environ.get(stage_api.RECORD_ENV):
         stage_api.record(module, inputs, params, outputs, seconds, ctx)
+    if os.environ.get(stage_api.CAPTURE_ENV):
+        stage_api.capture(module, inputs, params)
     unreal.log("PyPCG %s: %d outputs in %.2f s%s" % (stage_name, count, seconds,
                                                      "; notes: " + "; ".join(ctx.notes) if ctx.notes else ""))

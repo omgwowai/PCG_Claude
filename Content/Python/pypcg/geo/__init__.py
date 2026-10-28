@@ -16,5 +16,5 @@ from .plane import (at, bbox, ccw, clean_points, clip_path, convex_hull, degener
                     quat_from_yaw, quat_rotate, rect, rotate, signed_area, split_frame, unit, xy)
 from .sample import area_m2, choose, contains, keep_each, scatter  # noqa: F401
 from .subdivide import SLIVER_CM2, auto_split, grid_lines, recursive_split  # noqa: F401
-from .types import (MAX_RECORDED_POINTS, ParamSet, Points, Polygon, Spline, from_json, to_json,  # noqa: F401
+from .types import (MAX_RECORDED_POINTS, Mesh, ParamSet, Points, Polygon, Spline, from_json, to_json,  # noqa: F401
                     values, with_tag)

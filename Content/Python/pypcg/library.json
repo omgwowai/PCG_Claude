@@ -2240,6 +2240,44 @@
    },
    "path": "/PCGPrimitives/Primitives/Transform/Transform_Level.Transform_Level"
   },
+  "Transform_MeshTerrain_Erosion": {
+   "inputs": [
+    "CoreProcessGraph",
+    "ErosionBranchStrength",
+    "ErosionGain",
+    "ErosionLacunarity",
+    "ErosionOctaves",
+    "ErosionScale",
+    "ErosionSlopeStength",
+    "ErosionStrength",
+    "Execution Dependency",
+    "InputsFallbackGraph",
+    "InputsProcessingGraph",
+    "MaskAttribute",
+    "Overrides",
+    "PrepareOutputsGraph",
+    "PrimaryInput",
+    "SubgraphOverride"
+   ],
+   "outputs": [
+    "Out"
+   ],
+   "params": {
+    "CoreProcessGraph": "SoftObject",
+    "ErosionBranchStrength": "Double",
+    "ErosionGain": "Double",
+    "ErosionLacunarity": "Double",
+    "ErosionOctaves": "Int32",
+    "ErosionScale": "Double",
+    "ErosionSlopeStength": "Double",
+    "ErosionStrength": "Double",
+    "InputsFallbackGraph": "SoftObject",
+    "InputsProcessingGraph": "SoftObject",
+    "MaskAttribute": "String",
+    "PrepareOutputsGraph": "SoftObject"
+   },
+   "path": "/PCGPrimitives_MeshPartitionInterop/Primitives/Transform/Transform_MeshTerrain_Erosion.Transform_MeshTerrain_Erosion"
+  },
   "Transform_Offset": {
    "inputs": [
     "AbsoluteOffset",
