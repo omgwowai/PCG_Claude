@@ -75,6 +75,7 @@
 | `Content/Python/pyinterior_probe_meshes.py` | 只读探针：StarterContent 网格的包围盒、材质槽、朝向（读顶点） |
 | `Content/Python/pyinterior_live_probe.py` | 探针：只改样条并发属性变更通知、不调 generate，看房子会不会自己重算（改完用 `shape` 还原） |
 | `Content/Python/pyinterior_dirty.py` | 列出编辑器里没存盘的包；`{"save_interior": true}` 只存 `/Game/PyPCG/Interior` 下的。StarterContent 的 `M_Chair`、`M_TableRound`、`M_Bush` 一渲染就变脏，别存：存了就和引擎原件不同，`starter_closure.py --copy` 会拒绝再拷 |
+| `Content/Python/pyinterior_steps.py` | 出图用的分步预览（不存盘）：把一栋示范房按步骤（足迹、房间、门、窗、家具、真网格）临时搭在街道西边的草地上并截图；用的随机数和阶段相同，最后一步就是关卡里那栋房子。`{"step": "clear"}` 清掉临时物体，之后关卡不要存盘（trap 123） |
 | `Tools/pyinterior/plan.py` | 离线平面图（不开编辑器） |
 | `Tools/pyinterior/census.py` | 失败普查：50 cm 步长的全部矩形外形走一遍阶段的规划链，数失败和窄台面（改规则前后各跑一次） |
 | `Tools/pyinterior/sheet.py` | 截图拼图 |
