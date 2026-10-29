@@ -21,6 +21,8 @@ EXTRA_CLASSES = {
     _ir.SELF_NODE: {"inputs": [], "outputs": ["Out"]},
     # PCGGeometryScriptInterop's spawner (PyWorld W3's water surface): one dynamic mesh component per input mesh
     "PCGSpawnDynamicMeshSettings": {"inputs": ["In"], "outputs": ["Out"]},
+    # Get Spline Data (Self by default): the owner actor's spline components (PyInterior's house footprint)
+    "PCGGetSplineSettings": {"inputs": [], "outputs": ["Out"]},
 }
 
 

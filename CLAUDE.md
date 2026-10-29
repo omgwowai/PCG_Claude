@@ -164,6 +164,22 @@ Mat0) for the native mesh spawner; the 70 tinted material instances in `/Game/Py
 GitHub's 100 MB file limit): after opening it, run `gen` / `read` for W1..W9 in order (about 10 minutes), and to commit a
 level change, `reset {"from": 1}` before `save`.
 
+**PyInterior** (guide: `docs/pyinterior-guide.md`). Rule-driven life-sim interiors (inZOI / The Sims style): a house is a
+PCGVolume with its own closed footprint spline (an instance SplineComponent added through `SubobjectDataSubsystem`, trap 117);
+graph `/Game/PyPCG/Interior/PCGI_House` (Get Spline Data (Self) + Get Actor Data (Self) -> one Python node
+`pypcg/stages/i01_house.py` -> native Static Mesh Spawner, `Mesh` / `Mat0` attributes) plans footprint -> program (by area)
+-> zoning grammar -> doors -> windows (`[S][W,S]*`) -> furniture (room recipes, kitchen grammar) -> walls, floors, openings
+and furniture instances, all from the rule tables in `Content/Python/pypcg/interior/` (`program.py` is its BDF). Level
+`/Game/PyPCG/L_PyInterior` (8 demo houses, saved generated, 1.6 MB); driver `Content/Python/pyinterior.py`
+(`level / build / site / houses / assign / gen / read / shape / shot / status / save`; run `assign` after every `build`);
+offline plans `Tools/pyinterior/plan.py --demo --sweep`, and `Tools/pyinterior/census.py` (every rectangle on a 50 cm grid
+through the chain, ~3 min; run it before and after a rule change). `pypcg/interior/house.py` is the chain: a variant whose
+required furniture does not fit steps down like a room below its minimum. Change the outline and the plan follows: dragging a footprint point
+in the viewport regenerates the house on mouse release (Regenerate In Editor), but Python spline edits send no change
+notification, so scripts flush the PCG cache (`pcg.FlushCache`) before generating (traps 114-116). Four primitive recipes
+become StarterContent meshes (couch, lounge chair, round table, bush) while the stage parameter `RealMeshes` is on;
+`Content/StarterContent/` comes from `Tools/pyinterior/starter_closure.py --copy` (gitignored).
+
 ## Build
 
 ```powershell
@@ -186,7 +202,7 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs and PyWorld, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 1027 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `pypcg` (Python form of the 18 stage graphs, PyWorld and PyInterior, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 1943 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 
