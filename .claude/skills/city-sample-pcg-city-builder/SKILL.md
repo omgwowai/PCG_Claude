@@ -227,7 +227,7 @@ for c in comp.get_owner().get_components_by_class(unreal.PrimitiveComponent):
 - `references/pipeline-map.md` — City Sample 的 18 阶段流水线、关卡装配、手绘样条、各阶段内部结构、形状语法、建筑样式码、World Partition 注意事项，以及**可搬迁 / 不可搬迁**的清单。**规划前必读。**
 - `references/node-classes.md` — **PCG 节点类名表**：常用节点的确切类名与 `/Script/...` 加载路径、子图节点唯一正确的 `SetSubgraph()` 接法、从标题猜类名会失败的陷阱表，以及「动态输入 pin 加不了」这一硬限制。**写 `add_node_of_type` 前必读。**
 - `references/tooling.md` — `run_unreal_script` 的调用形态与脚本契约、六大反直觉之处、拒绝时的确切报错串，以及**「CitySample 侧工具 → 本项目怎么写」的对照表**。**写调用前必读。**
-- `references/traps.md` — 静默零点与实测坑（122 条；51–91 是 PyPCG 计划实测的，第 9 节有按主题的索引；92–113 是 PyWorld 实测的：山谷世界第 10 节、道路与水系形状第 11 节、城镇模块化建筑第 12 节；114–122 是 PyInterior 室内实测的，第 13 节）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
+- `references/traps.md` — 静默零点与实测坑（123 条；51–91 是 PyPCG 计划实测的，第 9 节有按主题的索引；92–113 是 PyWorld 实测的：山谷世界第 10 节、道路与水系形状第 11 节、城镇模块化建筑第 12 节；114–123 是 PyInterior 室内实测的，第 13 节）、项目硬约束、已实测的机制结论（资产解析链路、种子策略、代理与红盒兜底）。**遇到"跑通了但没结果"时读这个。**
 - `docs/pypcg-guide.md`（仓库文档，不在本目录）— **路线 D 的完整指南**：阶段模块与瘦身图、改图 / 加参数 / 移植新图的流程、DSL 速查、V2 阈值、小镇命令、`PyPCGTools` 的 13 个函数、留原生的计算与后续工作。
 - `references/stage-run-playbook.md` — **把 18 阶段跑一遍并逐阶段截图的操作手册**：
   自带的 11 个电影机位对照表、「PCG debug 没有全局开关」与限量理由、
