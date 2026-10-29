@@ -77,6 +77,8 @@ __pycache__/
 # Electric Dreams vegetation (Tools/pyworld/ed_closure.py --copy re-copies it)
 /Content/Custom/
 /Content/PhysicalMaterials/
+# StarterContent subset for PyInterior (Tools/pyinterior/starter_closure.py --copy re-copies it)
+/Content/StarterContent/
 /Content/Prop/
 /Content/Road/
 /Content/Splash/
