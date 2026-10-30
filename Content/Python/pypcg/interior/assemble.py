@@ -12,7 +12,10 @@ role} in world space, every one a primitive (or a real mesh) for the native spaw
   its floor is its own material; one foundation slab per wing.
 - Doors: frame, leaf open into the room it swings into (a wet room's sliding door closed in its opening); windows: frame,
   glass, inner sill; furniture: the catalogue's parts, scaled to a kitchen module's solved width -- with RealMeshes, an
-  item's StarterContent recipe, its REAL meshes in their own materials. Pure."""
+  item's StarterContent recipe, its REAL meshes in their own materials.
+- A floor of a multi-storey house (spec 2026-10-29 §8, params Level / StairRoom): an upper floor stands on a SLAB thick
+  slab over its outline, open over the stair room, which has no floor or skirting there; a stair opening has no frame; a
+  terrace door is a frame in the exterior wall with a closed glass leaf. Pure."""
 import math
 
 from pypcg.interior import catalog as C
@@ -26,6 +29,7 @@ MESHES = {"cube": "/Engine/BasicShapes/Cube.Cube", "cyl": "/Engine/BasicShapes/C
 MAT_DIR = "/Game/PyPCG/Interior/Materials/"
 DEFAULTS = {"WallHeight": 270.0, "WallCut": 0.0, "Style": "Scandi", "Furnish": True, "RealMeshes": True}
 FOUNDATION = 30.0
+SLAB = 30.0                  # an upper floor's slab (storeys.SLAB)
 FLOOR = 2.0
 PAINT = 1.0
 SKIRT_H, SKIRT_T = 8.0, 1.5
@@ -216,6 +220,19 @@ class _Out:
         self.items.append({"loc": (x, y, z), "rot": (0.0, self.fp.yaw_world(yaw), 0.0), "scale": tuple(scale),
                            "mesh": path, "mat": "", "role": role})
 
+    def bar(self, p0, p1, t, mat_name, role):
+        """A cube bar t x t from local point p0 to p1 (x, y, z), sloped: its length along the line (pitch, yaw)."""
+        a, b = self.fp.to_world(*p0), self.fp.to_world(*p1)
+        dx, dy, dz = b[0] - a[0], b[1] - a[1], b[2] - a[2]
+        length = math.sqrt(dx * dx + dy * dy + dz * dz)
+        if length <= EPS:
+            return
+        pitch = math.degrees(math.atan2(dz, math.hypot(dx, dy)))
+        yaw = math.degrees(math.atan2(dy, dx))
+        self.items.append({"loc": (0.5 * (a[0] + b[0]), 0.5 * (a[1] + b[1]), 0.5 * (a[2] + b[2])), "rot": (pitch, yaw, 0.0),
+                           "scale": (length / 100.0, t / 100.0, t / 100.0), "mesh": MESHES["cube"], "mat": mat(mat_name),
+                           "role": role, "ends": (tuple(p0), tuple(p1))})
+
 
 def real_part(shape, centre, size):
     """(path, pivot, yaw, scale): a catalogue REAL mesh posed in its item's frame -- turned by its measured yaw (front to
@@ -246,7 +263,7 @@ def _walls(out, plan, doors, wins, pal, H):
             out.box(piece, z0, z1, pal["facade"] if kind == "ext" else pal["trim"], "wall")
 
 
-def _room_faces(out, plan, room, doors, wins, color, pal, H):
+def _room_faces(out, plan, room, doors, wins, color, pal, H, skirting=True):
     R = L.clear_rect(room.rect, plan.footprint, plan.walls)
     lines = [("y", room.rect.y0, R.y0, 1), ("x", room.rect.x1, R.x1, -1), ("y", room.rect.y1, R.y1, -1),
              ("x", room.rect.x0, R.x0, 1)]
@@ -259,6 +276,8 @@ def _room_faces(out, plan, room, doors, wins, color, pal, H):
         for a0, a1, z0, z1 in cut(lo, hi, holes, H):
             t0, t1 = sorted((face - c, face - c + inward * PAINT))
             out.box(_along(axis, c, a0, a1, t0, t1), z0, z1, color, "paint")
+        if not skirting:
+            continue
         # skirting along the paint, not across a passage
         slo, shi = (lo, hi) if axis == "y" else (lo + SKIRT_T, hi - SKIRT_T)
         if axis == "y":
@@ -271,11 +290,28 @@ def _room_faces(out, plan, room, doors, wins, color, pal, H):
             out.box(_along(axis, c, a0, a1, t0, t1), 0.0, SKIRT_H, pal["trim"], "skirting")
 
 
-def _floors(out, plan, floors):
+def minus(r, hole):
+    """[Rect] covering r without `hole` (at most four: the bands below and above it, the pieces beside it)."""
+    if not r.overlaps(hole):
+        return [r]
+    hx0, hy0, hx1, hy1 = max(r.x0, hole.x0), max(r.y0, hole.y0), min(r.x1, hole.x1), min(r.y1, hole.y1)
+    out = [Rect(r.x0, r.y0, r.x1, hy0), Rect(r.x0, hy1, r.x1, r.y1), Rect(r.x0, hy0, hx0, hy1), Rect(hx1, hy0, r.x1, hy1)]
+    return [p for p in out if p.w > EPS and p.h > EPS]
+
+
+def _floors(out, plan, floors, level=0, stair=None, pal=None):
+    """The ground floor's foundation per wing, or an upper floor's slab open over its stair room; every room's floor
+    (none in an upper floor's stair room)."""
     fp = plan.footprint
     for w in fp.wings:
-        out.box(w, -FOUNDATION, 0.0, FLOOR_MATERIAL, "foundation")
+        if level == 0:
+            out.box(w, -FOUNDATION, 0.0, FLOOR_MATERIAL, "foundation")
+            continue
+        for piece in (minus(w, stair.rect) if stair is not None else [w]):
+            out.box(piece, -SLAB, 0.0, pal["facade"], "slab")
     for r in plan.rooms:
+        if level and stair is not None and r.id == stair.id:
+            continue
         ins = [plan.walls["ext"] if L.exterior_parts(fp, axis, c, a0, a1, o) else 0.0 for axis, c, a0, a1, o in r.rect.edges()]
         b, rr, t, l = ins
         out.box(r.rect.shrink(l, b, rr, t), 0.0, FLOOR, floors[r.id], "floor")
@@ -284,9 +320,21 @@ def _floors(out, plan, floors):
 def _doors(out, plan, doors, pal):
     by = {r.id: r for r in plan.rooms}
     for d in doors:
-        t = plan.walls["ext"] if d.kind == "front" else plan.walls["int"]
+        t = plan.walls["ext"] if d.kind in ("front", "terrace") else plan.walls["int"]
         h = t / 2.0 + PAINT
-        if d.kind != "opening":
+        if d.kind == "terrace":
+            # in the exterior wall, whose line is the outline: the frame fills the wall's thickness on the room's side
+            inward = 1.0 if ((by[d.b].rect.x0 >= d.c - EPS) if d.axis == "x" else (by[d.b].rect.y0 >= d.c - EPS)) else -1.0
+            t0, t1 = sorted((0.0, inward * t))
+            for a0, a1 in ((d.s0, d.s0 + FRAME), (d.s1 - FRAME, d.s1)):
+                out.box(_along(d.axis, d.c, a0, a1, t0, t1), 0.0, D.DOOR_H, pal["trim"], "door", clip=True)
+            out.box(_along(d.axis, d.c, d.s0 + FRAME, d.s1 - FRAME, t0, t1), D.DOOR_H - FRAME, D.DOOR_H, pal["trim"], "door",
+                    clip=True)
+            g0, g1 = sorted((inward * (0.5 * t - LEAF_T / 2), inward * (0.5 * t + LEAF_T / 2)))
+            out.box(_along(d.axis, d.c, d.s0 + FRAME, d.s1 - FRAME, g0, g1), 1.0, D.DOOR_H - FRAME - 1.0, pal["glass"], "door",
+                    clip=True)
+            continue
+        if d.kind not in ("opening", "stair"):
             for a0, a1 in ((d.s0, d.s0 + FRAME), (d.s1 - FRAME, d.s1)):
                 out.box(_along(d.axis, d.c, a0, a1, -h, h), 0.0, D.DOOR_H, pal["trim"], "door", clip=True)
             out.box(_along(d.axis, d.c, d.s0 + FRAME, d.s1 - FRAME, -h, h), D.DOOR_H - FRAME, D.DOOR_H, pal["trim"], "door",
@@ -353,17 +401,21 @@ def _furniture(out, places, pal, real=True):
 
 
 def house(plan, doors, wins, places, params, rng):
-    """The house's instances, in world space."""
+    """The house's instances, in world space. `Level` (0) and `StairRoom` (the stair room's id) make it a floor of a
+    multi-storey house."""
     H = float(params.get("WallHeight", DEFAULTS["WallHeight"]))
     cut_h = float(params.get("WallCut", 0.0) or 0.0)
     if cut_h > 0.0:
         H = min(H, cut_h)
+    level = int(params.get("Level", 0) or 0)
+    sid = params.get("StairRoom")
+    stair = plan.room(sid) if sid is not None else None
     pal, walls, floors = palette(plan, params.get("Style", "Scandi"), rng)
     out = _Out(plan.footprint, H)
-    _floors(out, plan, floors)
+    _floors(out, plan, floors, level, stair, pal)
     _walls(out, plan, doors, wins, pal, H)
     for r in plan.rooms:
-        _room_faces(out, plan, r, doors, wins, walls[r.id], pal, H)
+        _room_faces(out, plan, r, doors, wins, walls[r.id], pal, H, skirting=not (level and stair is not None and r is stair))
     _doors(out, plan, doors, pal)
     _windows(out, plan, wins, pal)
     if params.get("Furnish", True):

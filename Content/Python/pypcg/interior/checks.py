@@ -9,7 +9,8 @@ TUCK = {("chair", "dining_table"), ("chair", "desk"), ("island", "stool")}
 
 def validate(plan, doors, wins, places):
     """[failure]: unreachable rooms, missing passages, furniture overlaps, furniture in a door's sweep or a passage's
-    approach, habitable rooms without a window."""
+    approach, habitable rooms without a window (a terrace's glass door counts). An upper floor (no entry) has no front
+    door."""
     out = list(plan.failures)
     by = {r.id: r for r in plan.rooms}
     if len(plan.parents) != len(plan.rooms):
@@ -21,7 +22,7 @@ def validate(plan, doors, wins, places):
     missing = [by[r.id].type for r in plan.rooms if r.id != plan.front_room and into.get(r.id, 0) != 1]
     if missing:
         out.append("no single passage into %s" % ", ".join(missing))
-    if not any(d.kind == "front" for d in doors):
+    if plan.entry is not None and not any(d.kind == "front" for d in doors):
         out.append("no front door")
     solid = [p for p in places if C.ITEMS[p.item].kind != "rug" and p.z < 100.0]
     overlaps = 0
@@ -41,7 +42,7 @@ def validate(plan, doors, wins, places):
             blocked += sum(1 for p in solid if p.room == rid and p.rect().overlaps(z))
     if blocked:
         out.append("%d pieces in a door's way" % blocked)
-    lit = {w.room for w in wins}
+    lit = {w.room for w in wins} | {d.b for d in doors if d.kind == "terrace"}
     dark = [r.type for r in plan.rooms if r.type in L.HABITABLE and r.id not in lit]
     if dark:
         out.append("no window in %s" % ", ".join(dark))

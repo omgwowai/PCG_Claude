@@ -94,3 +94,81 @@ def test_graph_description():
     assert "PCGGetSplineSettings" in classes and "PCGStaticMeshSpawnerSettings" in classes
     getters = {x["getter_param"] for x in out["nodes"] if x.get("getter_param")}
     assert {p["name"] for p in out["params"]} <= getters
+
+
+# ---------------------------------------------------------------- multi-storey houses (spec 2026-10-29)
+
+BOX = [(0, 0), (1000, 0), (1000, 800), (0, 800)]
+
+
+def inputs_floors(outlines, loc=(0.0, 0.0, 0.0), yaw=0.0, zs=None):
+    """The stage's inputs for a house actor at `loc` turned `yaw` with one spline per local outline, outline k raised
+    zs[k] (k x 300 by default) above the actor."""
+    from test_interior_footprint import world_of
+    zs = zs or [k * 300.0 for k in range(len(outlines))]
+    vol = Points()
+    vol.add(tuple(loc), rot=(0.0, yaw, 0.0), scale=(1.0, 1.0, 1.0))
+    sp = [(Spline([(x, y, z + dz) for x, y, z in world_of(o, loc, yaw)], closed=True, linear=True), [])
+          for o, dz in zip(outlines, zs)]
+    return {"Footprint": sp, "Volume": [(vol, [])]}
+
+
+def run_stage(ins, **params):
+    return stage_api.execute(i01_house, ins, dict(stage_api.defaults(i01_house), Seed=1, **params), None)[0]
+
+
+def test_stage_runs_a_two_storey_house():
+    from pypcg.interior import stairs as ST
+    out = run_stage(inputs_floors([BOX, BOX]))
+    s = out["Summary"][0][0].values
+    rooms = out["Rooms"][0][0]
+    assert s["floors"] == 2 and s["failures"] == 0 and set(rooms.attrs["Floor"]) == {0, 1}, s
+    assert s["stair"] in ST.TYPES and s["program"].count("/") == 1 and len(out["Parts"][0][0]) > 300
+    assert len(rooms) == s["rooms"] + s["terraces"]
+
+
+def test_stage_odd_spline_sets():
+    """Review Focus 4: odd inputs give today's single-floor house or a reported note, never another single-floor house."""
+    from test_interior_regression import digest
+    one = run_stage(inputs_floors([BOX]))
+    ref = digest(one)
+    assert one["Summary"][0][0].values["floors"] == 1 and set(one["Rooms"][0][0].attrs["Floor"]) == {0}
+    # Floors 1 with two splines: the ground floor's alone, the other reported
+    a = run_stage(inputs_floors([BOX, BOX]), Floors=1)
+    assert digest(a) == ref and "ignored" in a["Summary"][0][0].values["notes"]
+    # a spline below the actor: it is the ground floor, reported
+    b = run_stage(inputs_floors([BOX], zs=[-300.0]))
+    assert digest(b) == ref and "below" in b["Summary"][0][0].values["notes"]
+    # two splines on one level: the larger, reported
+    c = run_stage(inputs_floors([BOX, [(0, 0), (600, 0), (600, 500), (0, 500)]], zs=[0.0, 0.0]))
+    assert digest(c) == ref and "largest" in c["Summary"][0][0].values["notes"]
+
+
+def test_stage_reports_a_dropped_floor():
+    """An upper floor no stair can serve: the house is planned on one floor, the floor that went is reported."""
+    small = [(0, 0), (600, 0), (600, 600), (0, 600)]
+    out = run_stage(inputs_floors([small, small]))
+    s = out["Summary"][0][0].values
+    assert s["floors"] == 1 and s["dropped"] and s["failures"] == 0
+
+
+def test_show_floors_param():
+    every = run_stage(inputs_floors([BOX, BOX]))
+    ground = run_stage(inputs_floors([BOX, BOX]), ShowFloors=1)
+    assert 0 < len(ground["Parts"][0][0]) < len(every["Parts"][0][0])
+    assert max(z for _x, _y, z in ground["Parts"][0][0].loc) <= 270.0 + 1e-6
+
+
+def test_graph_description_has_the_new_params():
+    names = {p["name"] for p in IG.house().to_ir(None)["params"]}
+    assert {"Floors", "ShowFloors", "StairType"} <= names
+
+
+def test_the_deck_material_is_made():
+    """The terrace deck's floor material is one pyinterior_materials.py makes (FLOOR_MATERIALS, its FLOORS table)."""
+    import os
+    from pypcg.interior import program as P
+    from pypcg.interior import terrace as T
+    assert T.DECK_MATERIAL in P.FLOOR_MATERIALS
+    src = open(os.path.join(os.path.dirname(i01_house.__file__), "..", "..", "pyinterior_materials.py"), encoding="utf-8").read()
+    assert '"%s":' % T.DECK_MATERIAL in src

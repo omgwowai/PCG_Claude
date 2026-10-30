@@ -27,6 +27,7 @@ FLOORS = {     # name: (texture, tile size cm, tint, roughness)
     "Tile_Checker": ("T_Concrete_Tiles_D", 80.0, (1.2, 1.1, 0.95), 0.3),
     "Tile_Grey": ("T_Concrete_Tiles_D", 120.0, (0.85, 0.86, 0.88), 0.35),
     "Concrete": ("T_Concrete_Poured_D", 300.0, (1.0, 1.0, 1.0), 0.8),
+    "Floor_Deck": ("T_Wood_Pine_D", 120.0, (0.72, 0.62, 0.50), 0.75),      # a terrace's weathered boards
 }
 
 

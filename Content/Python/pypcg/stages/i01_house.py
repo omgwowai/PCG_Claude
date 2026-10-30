@@ -4,7 +4,12 @@ The house actor's own closed spline is the footprint; the actor's forward is the
 footprint -> program (area -> rooms, rule table) -> layout (zoning grammar) -> doors -> windows (wall grammar) ->
 furnish (room recipes; a variant whose required furniture does not fit steps down, interior.house) -> assemble (walls,
 paint, floors, doors, windows, furniture parts) -> checks. Parts carry each piece's mesh and slot-0 material for the native
-spawner; Rooms one point per room; Summary the counts and failures."""
+spawner; Rooms one point per room; Summary the counts and failures.
+
+A house with splines on two or three heights (or `Floors` 2..3) is a multi-storey house (spec 2026-10-29,
+interior.storeys): one spline per floor, a stair placed first, every floor planned around it, terraces on the roofs the
+upper floors leave open; `ShowFloors` shows floors 1..k (the cutaway view). When one floor is left it is planned exactly
+as a single-floor house, the floors that went reported in the Summary."""
 from pypcg.geo import Spline
 from pypcg.interior import assemble as A
 from pypcg.interior import checks as K
@@ -12,6 +17,7 @@ from pypcg.interior import footprint as F
 from pypcg.interior import house as H
 from pypcg.interior import layout as L
 from pypcg.interior import program as P
+from pypcg.interior import storeys as S
 from pypcg.stage_api import Param, volume_point
 from pypcg.world import points as WP
 
@@ -32,11 +38,15 @@ PARAMS = {
     "RealMeshes": Param(True, "StarterContent meshes for the sofas, armchair, round table and plants (off: primitive "
                               "recipes, for a project without StarterContent)", type="Bool"),
     "Mirror": Param(False, "Put the public zone at the other end of a long-fronted house", type="Bool"),
+    "Floors": Param(0, "Floors: 0 = one per spline height (a spline every WallHeight + 30 cm up), 1-3 a set number "
+                       "(a floor without a spline copies the one below)", type="Int32"),
+    "ShowFloors": Param(0, "Show floors 1..k (0 = all); the top one shown takes WallCut -- the cutaway view", type="Int32"),
+    "StairType": Param("Auto", "Auto | U | L | Straight (a three-floor house takes U)", type="String"),
 }
 INPUTS = {"Footprint": "spline", "Volume": "points"}
 OUTPUTS = ("Parts", "Rooms", "Summary")
 ROOM_TYPES = {"Type": "String", "Label": "String", "Area": "Double", "Parent": "Int32", "Windows": "Int32",
-              "Items": "Int32", "SizeX": "Double", "SizeY": "Double"}
+              "Items": "Int32", "SizeX": "Double", "SizeY": "Double", "Floor": "Int32"}
 
 
 def _area(pts):
@@ -46,6 +56,20 @@ def _area(pts):
 
 def _empty(error):
     return {"Parts": [], "Rooms": [], "Summary": [(WP.summary({"error": error, "failures": 1, "rooms": 0}), ["Summary"])]}
+
+
+def _storeys(b, params, ctx):
+    """A multi-storey house's outputs (interior.storeys): every shown floor's parts, a row per room and terrace, the
+    building's Summary."""
+    parts = S.parts(b, params, ctx.rng)
+    failures = S.validate(b)
+    summary = S.summary(b, parts, failures)
+    ctx.notes.append("%s, %d floors, %s stair: %d rooms, %d terraces, %d parts, %d failures" % (
+        summary["program"], summary["floors"], summary["stair"], summary["rooms"], summary["terraces"], len(parts),
+        len(failures)))
+    return {"Parts": [(WP.module_points(parts), ["HousePart"])],
+            "Rooms": [(WP.table_points(S.room_rows(b), ROOM_TYPES), ["Room"])],
+            "Summary": [(WP.summary(summary), ["Summary"])]}
 
 
 def run(inputs, params, ctx):
@@ -58,7 +82,15 @@ def run(inputs, params, ctx):
                 splines.append(pts)
     if loc is None or not splines:
         return _empty("no footprint spline on the house actor")
-    pts = max(splines, key=_area)
+    # splines on several heights: a multi-storey house; one floor left is planned below exactly as a single-floor house
+    lv = S.levels(splines, loc[2] if len(loc) > 2 else 0.0, params["WallHeight"], params["Floors"])
+    notes, dropped = list(lv.notes), []
+    if len(lv.outlines) >= 2:
+        b = S.plan_building(splines, loc, yaw, params, ctx.rng)
+        if len(b.floors) >= 2:
+            return _storeys(b, params, ctx)
+        notes, dropped = list(b.notes), list(b.dropped)
+    pts = lv.outlines[0] if lv.outlines and lv.outlines[0] else max(splines, key=_area)
     fp = F.build(pts, loc, yaw, params["Grid"])
     if fp is None:
         return _empty("footprint smaller than %.1f x %.1f m / %.0f m2" % (F.MIN_EXTENT / 100, F.MIN_LONG / 100,
@@ -80,6 +112,7 @@ def run(inputs, params, ctx):
                                                 "RealMeshes": params["RealMeshes"]}, ctx.rng)
     failures = fails + K.validate(plan, doors, wins, places)
     summary = K.summary(plan, doors, wins, places, parts, failures)
+    summary.update({"floors": 1, "stair": "", "terraces": 0, "dropped": "; ".join(dropped), "notes": "; ".join(notes)})
     rows = []
     lit = {}
     for w in wins:
@@ -93,7 +126,7 @@ def run(inputs, params, ctx):
         rows.append({"loc": fp.to_world(c.cx, c.cy, 5.0), "Type": r.type, "Label": P.ROOMS[r.type].label,
                      "Area": round(c.w * c.h / 1e4, 2), "Parent": -1 if plan.parents.get(r.id) is None else plan.parents[r.id],
                      "Windows": lit.get(r.id, 0), "Items": items.get(r.id, 0), "SizeX": round(c.w, 1),
-                     "SizeY": round(c.h, 1)})
+                     "SizeY": round(c.h, 1), "Floor": 0})
     ctx.notes.append("%s %.0f m2: %d rooms (%s), %d windows, %d pieces, %d parts, %d failures" % (
         plan.program.name, fp.area_m2, len(plan.rooms), summary["room_types"], len(wins), len(places), len(parts),
         len(failures)))

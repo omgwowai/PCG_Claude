@@ -6,14 +6,17 @@ leaf (bedrooms 90, wet rooms 80) goes to the end nearer the point the parent roo
 opening into the child room; a doorway (into a corridor, 90) and an opening (public rooms, up to 180) are centred and have no
 leaf (a wet room's door slides into the wall). The front door (100) is centred on the clear part of the entry room's front wall -- or, when that wall is the room's only
 window wall, at its end nearer the middle of the house. `swing` gives the floor a passage
-needs kept free: the leaf's sweep, or the approach in front of a doorway / opening. Pure."""
+needs kept free: the leaf's sweep, or the approach in front of a doorway / opening.
+
+A multi-storey floor (spec 2026-10-29): the front door only on the ground floor; the stair room's passage is its opening on
+the floor (stairs.Stair.access), no leaf; a terrace gets a sliding glass door (90) from the room it touches. Pure."""
 from dataclasses import dataclass
 
 from pypcg.interior import layout as L
 from pypcg.interior import program as P
 from pypcg.interior.footprint import EPS, Rect
 
-WIDTH = {"front": 100.0, "door": 90.0, "bath": 80.0, "doorway": 90.0}
+WIDTH = {"front": 100.0, "door": 90.0, "bath": 80.0, "doorway": 90.0, "terrace": 90.0}
 OPENING_MAX = 180.0
 OPENING_MIN = 100.0
 MIN_WIDTH = 80.0             # a passage narrower than this is not placed
@@ -21,28 +24,32 @@ MARGIN = 15.0                # from the ends of the shared wall
 JAMB = 5.0                   # from the clear face of a crossing wall
 DOOR_H = 210.0
 APPROACH = 60.0              # the clear floor in front of a doorway / opening
+TERRACE_ROOMS = ("Living", "Master", "Bedroom", "Corridor", "Study", "Dining")   # who opens onto a terrace, first first
+TERRACE_MIN = 120.0          # the wall a room must share with a terrace for its door
 
 
 @dataclass(frozen=True)
 class Door:
-    a: object                # the parent room's id (None: the front door, from outside)
+    a: object                # the parent room's id (None: the front door or a terrace door, from outside)
     b: int                   # the room it leads into
     axis: str                # "x": on the vertical wall line x = c; "y": on the horizontal line y = c
     c: float
     s0: float
     s1: float
-    kind: str                # front | door | bath | doorway | opening
-    tree: bool = True        # on the connection tree (False: an extra opening)
+    kind: str                # front | door | bath | doorway | opening | stair | terrace
+    tree: bool = True        # on the connection tree (False: an extra opening, a terrace door)
     hinge: int = 0           # the leaf is hinged at s0 (0) or at s1 (1)
+    wall: tuple = None       # a terrace door's stretch of wall (lo, hi) that keeps no window
 
     @property
     def leaf(self):
-        return self.kind in ("front", "door", "bath")
+        return self.kind in ("front", "door", "bath", "terrace")
 
     @property
     def sliding(self):
-        """A bathroom's door slides into the wall (a pocket door): a narrow room keeps its floor."""
-        return self.kind == "bath"
+        """A bathroom's door slides into the wall (a pocket door): a narrow room keeps its floor; a terrace door is a
+        sliding glass door."""
+        return self.kind in ("bath", "terrace")
 
     @property
     def width(self):
@@ -98,27 +105,35 @@ def _place(kind, iv, near):
 
 
 def connect(plan, rng=None):
-    """The house's passages: [Door] -- the front door, one tree passage into every other room, extra openings."""
+    """The house's passages: [Door] -- the front door, one tree passage into every other room, extra openings. A floor
+    without an entry (an upper floor) has no front door; its tree grows from the stair room."""
     by = {r.id: r for r in plan.rooms}
     fp, walls = plan.footprint, plan.walls
     out = []
-    # the front door, centred on the clear part of the entry room's front wall
     fr = by[plan.front_room]
-    cf = L.clear_rect(fr.rect, fp, walls)
-    x0, x1, y = plan.entry
-    lo, hi = max(x0 + MARGIN, cf.x0 + JAMB), min(x1 - MARGIN, cf.x1 - JAMB)
-    w = min(WIDTH["front"], hi - lo)
-    m = 0.5 * (lo + hi)
-    s0, s1 = m - 0.5 * w, m + 0.5 * w
-    # a room whose front wall is its only window wall keeps that wall for windows: the door goes to the end nearer the
-    # middle of the house (where the corridor usually starts)
-    elsewhere = [b - a for axis, c, _o, a, b in L.window_parts(fr.rect, fp, walls) if not (axis == "y" and abs(c - y) < EPS)]
-    if max(elsewhere, default=0.0) < L.WINDOW_MIN - EPS:
-        cx = fp.bbox().cx
-        s0, s1 = (lo, lo + w) if abs(lo - cx) <= abs(hi - cx) else (hi - w, hi)
-    front = Door(None, fr.id, "y", y, s0, s1, "front", True, 0)
-    out.append(front)
-    entered = {fr.id: front.point()}
+    if plan.entry is not None:
+        # the front door, centred on the clear part of the entry room's front wall
+        cf = L.clear_rect(fr.rect, fp, walls)
+        x0, x1, y = plan.entry
+        lo, hi = max(x0 + MARGIN, cf.x0 + JAMB), min(x1 - MARGIN, cf.x1 - JAMB)
+        w = min(WIDTH["front"], hi - lo)
+        m = 0.5 * (lo + hi)
+        s0, s1 = m - 0.5 * w, m + 0.5 * w
+        # a room whose front wall is its only window wall keeps that wall for windows: the door goes to the end nearer
+        # the middle of the house (where the corridor usually starts)
+        elsewhere = [b - a for axis, c, _o, a, b in L.window_parts(fr.rect, fp, walls)
+                     if not (axis == "y" and abs(c - y) < EPS)]
+        if max(elsewhere, default=0.0) < L.WINDOW_MIN - EPS:
+            cx = fp.bbox().cx
+            s0, s1 = (lo, lo + w) if abs(lo - cx) <= abs(hi - cx) else (hi - w, hi)
+        front = Door(None, fr.id, "y", y, s0, s1, "front", True, 0)
+        out.append(front)
+        entered = {fr.id: front.point()}
+    else:
+        st = plan.stair
+        axis, c, a0, a1 = st.access(st.role(plan.level))
+        m = 0.5 * (a0 + a1)
+        entered = {fr.id: (c, m) if axis == "x" else (m, c)}
     # tree passages in breadth-first order, each placed near where its parent is entered
     kids = {}
     for rid, pid in plan.parents.items():
@@ -129,8 +144,17 @@ def connect(plan, rng=None):
         pid = todo.pop(0)
         for rid in sorted(kids.get(pid, [])):
             a, b = by[pid], by[rid]
-            iv = interval(plan, a, b)
             kind = L.passage(a.type, b.type)
+            if kind == "stair":
+                # the stair room opens over its whole opening on this floor
+                st = plan.stair
+                axis, c, s0, s1 = st.access(st.role(plan.level))
+                d = Door(pid, rid, axis, c, s0, s1, "stair", True, 0)
+                out.append(d)
+                entered[rid] = d.point()
+                todo.append(rid)
+                continue
+            iv = interval(plan, a, b)
             ep = entered[pid]
             near = ep[1] if iv and iv[0] == "x" else (ep[0] if iv else None)
             spot = _place(kind, iv, near) if iv else None
@@ -162,10 +186,41 @@ def swing(door, room, plan):
     depth = door.width if door.leaf and not door.sliding else APPROACH
     R = room.rect
     if door.axis == "x":
+        t = plan.walls["ext"] if door.kind == "terrace" else 0.5 * plan.walls["int"]
         if R.x0 >= door.c - EPS:
-            return Rect(door.c, door.s0, min(R.x1, door.c + depth + 0.5 * plan.walls["int"]), door.s1)
-        return Rect(max(R.x0, door.c - depth - 0.5 * plan.walls["int"]), door.s0, door.c, door.s1)
-    t = plan.walls["ext"] if door.kind == "front" else 0.5 * plan.walls["int"]
+            return Rect(door.c, door.s0, min(R.x1, door.c + depth + t), door.s1)
+        return Rect(max(R.x0, door.c - depth - t), door.s0, door.c, door.s1)
+    t = plan.walls["ext"] if door.kind in ("front", "terrace") else 0.5 * plan.walls["int"]
     if R.y0 >= door.c - EPS:
         return Rect(door.s0, door.c, door.s1, min(R.y1, door.c + depth + t))
     return Rect(door.s0, max(R.y0, door.c - depth - t), door.s1, door.c)
+
+
+def terrace_doors(plan, rects):
+    """[Door]: for each terrace rect (house-local, on this floor's level) a sliding glass door from the room that shares at
+    least TERRACE_MIN of wall with it -- the first of TERRACE_ROOMS, then the longest wall -- centred on the clear part of
+    that wall; the wall keeps no window (Door.wall). A terrace no such room touches has no door."""
+    fp, walls = plan.footprint, plan.walls
+    out = []
+    for t in rects:
+        best = None
+        for r in plan.rooms:
+            if r.type not in TERRACE_ROOMS:
+                continue
+            sh = r.rect.shared(t)
+            if sh is None or sh[3] - sh[2] < TERRACE_MIN - EPS:
+                continue
+            axis, c, a0, a1 = sh
+            lo, hi = _along(L.clear_rect(r.rect, fp, walls), axis)
+            lo, hi = max(a0 + MARGIN, lo + JAMB), min(a1 - MARGIN, hi - JAMB)
+            if hi - lo < WIDTH["terrace"] - EPS:
+                continue
+            key = (TERRACE_ROOMS.index(r.type), -(a1 - a0), r.id)
+            if best is None or key < best[0]:
+                best = (key, r, axis, c, lo, hi, a0, a1)
+        if best is not None:
+            _k, r, axis, c, lo, hi, a0, a1 = best
+            m = 0.5 * (lo + hi)
+            out.append(Door(None, r.id, axis, c, m - 0.5 * WIDTH["terrace"], m + 0.5 * WIDTH["terrace"], "terrace", False,
+                            0, (a0, a1)))
+    return out
