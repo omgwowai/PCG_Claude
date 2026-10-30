@@ -72,3 +72,42 @@ def test_targets_split_a_zone_by_weight():
     assert sum(t) == pytest.approx(5000 * 100.0)
     w = [s.weight for s in prog.private]
     assert t[0] / t[1] == pytest.approx(w[0] / w[1])
+
+
+# ---------------------------------------------------------------- multi-storey floor programs (spec 2026-10-29 §5)
+
+def test_floor_tables_choose_by_area():
+    assert P.choose_floor(20.0, 0, False).name == "Ground_S" and P.choose_floor(40.0, 0, False).name == "Ground_M"
+    assert P.choose_floor(60.0, 0, False).name == "Ground_L"
+    assert [P.choose_floor(a, 1, True).name for a in (20.0, 35.0, 55.0, 80.0)] == ["Upper_S", "Upper_M", "Upper_L", "Upper_XL"]
+
+
+def test_one_master_per_house():
+    assert "Master" in P.choose_floor(55.0, 2, True).types()
+    lower = P.choose_floor(55.0, 1, False)
+    assert "Master" not in lower.types() and lower.types().count("Bedroom") == 3
+
+
+def test_for_floor_converts_every_fallback_variant():
+    """The downgrade walk reaches the table's own programs: each variant of a lower upper floor is converted again."""
+    for v in P.fallbacks(P.choose_floor(90.0, 1, False), P.UPPER):
+        assert "Master" not in P.for_floor(v, False).types()
+        assert P.for_floor(v, True).types() == v.types()
+
+
+def test_floor_fallbacks_stay_in_their_table():
+    for v in P.fallbacks(P.choose_floor(70.0, 0, False), P.GROUND):
+        assert v.name.startswith("Ground_") and {"Living", "Kitchen"} <= set(v.types())
+    for v in P.fallbacks(P.choose_floor(90.0, 1, True), P.UPPER):
+        assert v.name.startswith("Upper_") and "Bath" in v.types() and {"Master", "Bedroom"} & set(v.types())
+
+
+def test_stair_room_and_access():
+    assert P.ROOMS["Stair"].window is None and P.ACCESS["Stair"] == ("Living", "Corridor", "Dining")
+    assert all(P.ACCESS[t][-1] == "Stair" for t in ("Corridor", "Master", "Bedroom"))
+
+
+def test_single_floor_tables_are_unchanged():
+    assert [p.name for p in P.PROGRAMS] == ["Studio", "OneBed", "TwoBed", "ThreeBed", "FourBed"]
+    assert P.ACCESS["Bedroom"][:4] == ("Corridor", "Living", "Dining", "Main")
+    assert P.ACCESS["Corridor"][:4] == ("Living", "Dining", "Main", "Corridor")

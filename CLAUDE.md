@@ -170,8 +170,10 @@ graph `/Game/PyPCG/Interior/PCGI_House` (Get Spline Data (Self) + Get Actor Data
 `pypcg/stages/i01_house.py` -> native Static Mesh Spawner, `Mesh` / `Mat0` attributes) plans footprint -> program (by area)
 -> zoning grammar -> doors -> windows (`[S][W,S]*`) -> furniture (room recipes, kitchen grammar) -> walls, floors, openings
 and furniture instances, all from the rule tables in `Content/Python/pypcg/interior/` (`program.py` is its BDF). Level
-`/Game/PyPCG/L_PyInterior` (8 demo houses, saved generated, 1.6 MB); driver `Content/Python/pyinterior.py`
-(`level / build / site / houses / assign / gen / read / shape / shot / status / save`; run `assign` after every `build`);
+`/Game/PyPCG/L_PyInterior` (two streets, 15 demo houses, saved generated, 3.7 MB); driver `Content/Python/pyinterior.py`
+(`level / build / site / houses / assign / gen / read / shape / view / shot / status / save`; run `assign` after every
+`build` -- a rebuilt graph forgets the volumes' overrides, and `assign` puts the street's WallCut and the storeys' Floors /
+StairType back, trap 124);
 offline plans `Tools/pyinterior/plan.py --demo --sweep`, and `Tools/pyinterior/census.py` (every rectangle on a 50 cm grid
 through the chain, ~3 min; run it before and after a rule change). `pypcg/interior/house.py` is the chain: a variant whose
 required furniture does not fit steps down like a room below its minimum. Change the outline and the plan follows: dragging a footprint point
@@ -179,6 +181,14 @@ in the viewport regenerates the house on mouse release (Regenerate In Editor), b
 notification, so scripts flush the PCG cache (`pcg.FlushCache`) before generating (traps 114-116). Four primitive recipes
 become StarterContent meshes (couch, lounge chair, round table, bush) while the stage parameter `RealMeshes` is on;
 `Content/StarterContent/` comes from `Tools/pyinterior/starter_closure.py --copy` (gitignored).
+**Multi-storey houses** (guide §8): one footprint spline per floor, read by height (floor k at the actor's z + k x 300 cm;
+stage params `Floors`, `ShowFloors`, `StairType`); `pypcg/interior/storeys.py` (floors, clipping, terraces, the building
+loop), `stairs.py` (U / L / straight stairs, candidates, parts), `floorplan.py` (each floor zoned around the fixed stair
+room), `terrace.py`; the stair is placed first, every floor is planned around it from its own GROUND / UPPER program table,
+exposed roofs become terraces with a glass door, furniture and railing. One floor left -> today's single-floor path, whose
+output is pinned by `Tools/pypcg/tests/test_interior_regression.py` (golden digests: keep them passing). The 7 demo houses
+stand on the second street (`houses {"set": "storeys"}`); `view {"floors": k, "wallcut": 100}` is the cutaway;
+`plan.py --storeys` and `census.py --storeys` (708 houses, ~5 min) are the offline checks.
 
 ## Build
 
@@ -202,7 +212,7 @@ Three suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
-| `pypcg` (Python form of the 18 stage graphs, PyWorld and PyInterior, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 1943 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
+| `pypcg` (Python form of the 18 stage graphs, PyWorld and PyInterior, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 2094 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 

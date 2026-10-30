@@ -35,6 +35,23 @@ def width(shape):
     return max(p[0] for p in SHAPES[shape]) - min(p[0] for p in SHAPES[shape])
 
 
+def _rect(w, h, x0=0.0, y0=0.0):
+    return [(x0, y0), (x0 + w, y0), (x0 + w, y0 + h), (x0, y0 + h)]
+
+
+# the multi-storey houses (spec 2026-10-29 §10.1): (name, [local outline per floor, None = copy the floor below], Floors,
+# StairType, style, seed); floor k's spline stands k x 300 cm above the house actor
+STOREYS = [
+    ("House_11_TwoStorey", [_rect(1000, 800), _rect(1000, 800)], 0, "Auto", "Scandi", 11),
+    ("House_12_FrontTerrace", [_rect(1000, 900), _rect(1000, 600, 0, 300)], 0, "Auto", "Warm", 12),
+    ("House_13_LTerrace", [SHAPES["lshape"], _rect(800, 1100)], 0, "Auto", "Modern", 13),
+    ("House_14_Townhouse", [_rect(550, 1100), _rect(550, 1100), _rect(550, 1100)], 0, "Auto", "Scandi", 14),
+    ("House_15_Stepped", [_rect(1200, 1000), _rect(1200, 700), _rect(800, 700)], 0, "Auto", "Warm", 15),
+    ("House_16_OneSpline", [_rect(900, 800), None], 2, "Auto", "Modern", 16),
+    ("House_17_LongStair", [_rect(650, 1300), _rect(650, 1300)], 0, "Straight", "Scandi", 17),
+]
+
+
 def houses():
     """[(name, shape, (x, y, z) actor location, yaw, style, seed)]: the actor sits at the footprint's local origin."""
     out = []
@@ -54,7 +71,32 @@ def houses():
 
 def world_points(shape, loc, yaw):
     """The footprint's corners in world space for a house actor at `loc` turned `yaw` (pypcg.interior.footprint.Frame)."""
+    return floor_points(SHAPES[shape], loc, yaw, 0, 0.0)
+
+
+def floor_points(outline, loc, yaw, k, H):
+    """A local outline's corners in world space for floor k of a house actor at `loc` turned `yaw`: z = loc z + k H."""
     import math
     a = math.radians(yaw)
     ex, ey = (-math.sin(a), math.cos(a)), (-math.cos(a), -math.sin(a))
-    return [(loc[0] + x * ex[0] + y * ey[0], loc[1] + x * ex[1] + y * ey[1], loc[2]) for x, y in SHAPES[shape]]
+    return [(loc[0] + x * ex[0] + y * ey[0], loc[1] + x * ex[1] + y * ey[1], loc[2] + k * H) for x, y in outline]
+
+
+STREET2 = -6500.0       # the second street's centre line (world y), south of the first street's houses
+STOREY_NORTH = ("House_11_TwoStorey", "House_12_FrontTerrace", "House_13_LTerrace", "House_14_Townhouse")
+
+
+def storeys():
+    """[(name, outlines, (x, y, z) actor location, yaw, Floors, StairType, style, seed)]: the multi-storey houses on the
+    second street (along world X at y = STREET2), 11-14 on its north side facing -Y, 15-17 on its south side facing +Y."""
+    out = []
+    xn = xs = 0.0
+    for name, outlines, floors, stair, style, seed in STOREYS:
+        w = max(p[0] for p in outlines[0]) - min(p[0] for p in outlines[0])
+        if name in STOREY_NORTH:
+            out.append((name, outlines, (xn, STREET2 + FRONT, 0.0), -90.0, floors, stair, style, seed))
+            xn += w + GAP
+        else:
+            out.append((name, outlines, (xs + w, STREET2 - FRONT, 0.0), 90.0, floors, stair, style, seed))
+            xs += w + GAP
+    return out

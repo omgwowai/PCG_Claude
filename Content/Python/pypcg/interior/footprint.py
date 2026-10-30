@@ -325,7 +325,13 @@ def build(points_world, origin, yaw_deg, grid=50.0, min_wing=250.0):
         return None
     frame = Frame(origin, yaw_deg)
     poly = [frame.local(p) for p in points_world]
-    cells = clean(rasterise(poly, grid))
+    return from_cells(rasterise(poly, grid), grid, frame, min_wing)
+
+
+def from_cells(cells, grid, frame, min_wing=250.0):
+    """A footprint from cells in `frame` (an upper floor's clipped cells, a rasterised spline): the largest piece, holes
+    filled, wings thinner than `min_wing` dropped; None below MIN_EXTENT x MIN_LONG / MIN_AREA_M2."""
+    cells = clean(set(cells)) if cells else set()
     while cells:
         rects = decompose(cells)
         thin = [r for r in rects if min(r[2] - r[0], r[3] - r[1]) * grid < min_wing - EPS]

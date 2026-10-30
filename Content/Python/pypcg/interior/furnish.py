@@ -98,24 +98,28 @@ def side_of(room, axis, c):
 
 
 PATH = 90.0                  # the walkway through a wide opening: its middle this wide is kept free
+LANDING = 100.0              # the floor in front of a stair opening, its whole width (spec 2026-10-29)
 
 
 def approach(door, room, plan):
     """The floor of `room` in front of a passage it does not swing into: D.APPROACH deep, as wide as the passage -- for a
-    wide opening only its middle PATH, the walkway through it."""
+    wide opening only its middle PATH, the walkway through it; before a stair opening LANDING deep over all of it."""
     R = room.rect
     s0, s1 = door.s0, door.s1
-    if s1 - s0 > PATH:
+    depth = D.APPROACH
+    if door.kind == "stair":
+        depth = LANDING
+    elif s1 - s0 > PATH:
         m = 0.5 * (s0 + s1)
         s0, s1 = m - 0.5 * PATH, m + 0.5 * PATH
     if door.axis == "x":
         if R.x0 >= door.c - EPS:
-            return Rect(door.c, s0, min(R.x1, door.c + D.APPROACH + 0.5 * plan.walls["int"]), s1)
-        return Rect(max(R.x0, door.c - D.APPROACH - 0.5 * plan.walls["int"]), s0, door.c, s1)
+            return Rect(door.c, s0, min(R.x1, door.c + depth + 0.5 * plan.walls["int"]), s1)
+        return Rect(max(R.x0, door.c - depth - 0.5 * plan.walls["int"]), s0, door.c, s1)
     t = plan.walls["ext"] if door.kind == "front" else 0.5 * plan.walls["int"]
     if R.y0 >= door.c - EPS:
-        return Rect(s0, door.c, s1, min(R.y1, door.c + D.APPROACH + t))
-    return Rect(s0, max(R.y0, door.c - D.APPROACH - t), s1, door.c)
+        return Rect(s0, door.c, s1, min(R.y1, door.c + depth + t))
+    return Rect(s0, max(R.y0, door.c - depth - t), s1, door.c)
 
 
 def _overlap(a0, a1, b0, b1):

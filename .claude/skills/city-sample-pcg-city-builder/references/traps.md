@@ -327,3 +327,12 @@ Attribute 'X' is not of valid type (must be FString or FSoftObjectPath)
 | **121** | **降墙（`WallCut`）只降墙块不够**：门框、窗框、窗顶过梁、吊柜和镜子还停在原高度，悬在降低的墙上面，俯视一片浮空的框 | 墙上的东西（门、窗）一律剪到降墙高度，整个在降墙高度以上的挂墙件不出（`assemble.WALL_HUNG`、`_Out(top)`） |
 | **122** | **`pypcg.world.grammar.solve` 找不到合格解时照样返回"最接近的"解**（`ok = False`，`symbols` 非空）：厨房台面 `[K][C]*[S]` 铺在比电器长 10–20 cm 的墙上时，`C` 的缩放只有 0.17（下限 0.5），结果照用，出了 10 cm 宽的台面和同宽的吊柜（50 cm 普查里 2.7 % 的房子），不报错 | 调用方要么看 `res["ok"]`，要么传 `slack=True` 把塞不满的零头留成空（`furnish._try_runs`；PyWorld 的 `bdf.py` 一直用 slack）；窄模块用 `Tools/pyinterior/census.py` 普查 |
 | **123** | **桥接脚本里删掉一批 actor 后紧接着 `load_level` 重开当前关卡，编辑器崩溃**：`Assertion failed: !LevelList.Contains(TickTaskLevel)`（`TickTaskManager.cpp:1992`，`ULevel::~ULevel` ← `EditorDestroyWorld` ← `Map_Load` ← `LevelEditorSubsystem.LoadLevel`）。脚本跑在游戏线程的 tick 里，旧关卡销毁时它的 tick 任务还挂在列表上。同样的 `load_level` 在没有删 actor 的调用里成功过，不可靠 | 预览 / 探针脚本不重开关卡：删完临时 actor 后不存盘，关编辑器或切关卡时选不保存（`pyinterior_steps.py`）；确需重开时单独一次调用、前面不删任何东西。崩溃后照 trap 78 先挪走 `Saved/Autosaves` 再重启 |
+
+## 14. 2026-10-29 PyInterior 多层（`docs/pyinterior-guide.md` §8）实测
+
+| # | 坑 | 规避 |
+|---|---|---|
+| **124** | **重建图（`pyinterior.py build`、任何 `build_slim`）会清掉房子组件上的图参数覆写**：示范街的 `WallCut` 110（House_04 是 0）回到 0，单层房的实例数从 143 / 237 / 355 … 跳到 182 / 296 / 425 …，看着像"单层输出变了"，其实是降墙没了（离线：同一房子 `WallCut` 110 → 143，0 → 182） | `build` 之后一定 `assign`（现在 `assign` 会把示范街的降墙和多层房的 `Floors` / `StairType` / `ShowFloors` / `WallCut` 一起放回去）；比较实例数之前先确认两边的覆写一样 |
+| **125** | **一栋房子的楼层来自它所有样条组件的高度**：`Get Spline Data (Self)` 把 actor 上**每一条** SplineComponent 都交给 Python 节点，阶段按样条点的平均高度归层（层高 = WallHeight + 30）。所以在 Details 面板里给房子加一条样条、整体抬高 300 cm，它就是新的一层；带通知的编辑后房子**自己重算**（实测：House_11 加一条抬到 600 cm 的样条 → 自动变三层 26 间）。反过来，误加的样条也会被当成一层 | 加层 = 加样条 + 抬高；不想要的样条要删掉组件，不能只挪开（挪到别的高度就成了别的楼层）。脚本改样条照 trap 114–115 用 `ALWAYS` 通知或先 `pcg.FlushCache` |
+| **126** | **给打分函数加缓存时，浮点加法的顺序也要一模一样**：`floorplan` 给"每间房的得分"做缓存、再把每间的总分相加，和原来逐项 `s += …` 的结果差在最后几位，接近平局的两个布局换了赢家，多层房的布局摘要变了（单层没走这条路所以没发现） | 只缓存每一项（尺寸检查、长宽比项），按原来的顺序逐项加（`floorplan._Memo`）；用一个测试逐位比较缓存版和原函数（`test_floor_memo_matches_the_layout_checks`，打乱加法顺序它就失败） |
+| **127** | **`[a.get_actor_label() for a in actors if destroy_actor(a)]` 得到一串空字符串**：条件先执行，actor 已经被删，再读标签只剩 `""` | 先把标签读出来，再删（`pyinterior.py houses`） |

@@ -83,7 +83,9 @@ def windows(plan, doors, rng=None):
             continue
         _w, sill, height, _s = WINDOWS[kind]
         for axis, c, outward, lo, hi in L.window_parts(r.rect, fp, plan.walls):
-            cuts = [(d.s0 - DOOR_CLEAR, d.s1 + DOOR_CLEAR) for d in doors if d.axis == axis and abs(d.c - c) < EPS]
+            # keep DOOR_CLEAR from a door on the same wall; a terrace door's whole stretch of wall stays plain
+            cuts = [d.wall if d.wall else (d.s0 - DOOR_CLEAR, d.s1 + DOOR_CLEAR)
+                    for d in doors if d.axis == axis and abs(d.c - c) < EPS]
             for a, b in _minus(lo, hi, cuts):
                 for s0, s1 in fill(a, b, kind, rng):
                     out.append(Window(r.id, axis, c, s0, s1, sill, height, kind, outward))

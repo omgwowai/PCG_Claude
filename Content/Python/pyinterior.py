@@ -4,16 +4,22 @@
 #                                 disk, refused while the map has unsaved changes); UObject globals purged
 #   probe                         read-only: can a spline component be added to an actor here (SubobjectDataSubsystem)?
 #   build                         describe -> /Game/PyPCG/Interior/PCGI_House, structural check, save on 0 diffs
-#   site                          the demo street: lawn, road, pavements (static mesh actors, PyInterior/Site)
-#   houses                        the demo houses (pypcg.interior.demo): a PCG volume each, its closed footprint spline,
-#                                 tags PyInterior_House + its name; replaces the previous ones
-#   assign {"params": {...}}      graph, seed, style and any overrides on every house (or {"house": name})
+#   site                          the demo streets: lawn, both roads, pavements (static mesh actors, PyInterior/Site)
+#   houses {"set"?}               the demo houses (pypcg.interior.demo): a PCG volume each, its closed footprint spline,
+#                                 tags PyInterior_House + its name; replaces the previous ones of that set -- "street" (the
+#                                 eight single-floor houses, the default) or "storeys" (the multi-storey houses on the
+#                                 second street, tag PyInterior_Storeys, one spline per floor k at the actor's z + k H)
+#   assign {"params": {...}}      graph, seed, style and any overrides on every house (or {"house": name}); the storeys
+#                                 houses also take their Floors and StairType
 #   gen {"house": name}           generate one house or all
 #   read {"house": name}          Summary + Rooms + instances per house -> Saved/Reports/pyinterior_read.json
-#   shape {"house", "shape" | "points" | "size"}   give a house a new outline (the dynamic test); it regenerates
+#   shape {"house", "shape" | "points" | "size", "floor"?}   give a house (floor k's spline, 0 the ground) a new outline
+#                                 (the dynamic test); it regenerates
+#   view {"house"?, "floors", "wallcut"}   ShowFloors / WallCut on one house (or every storeys house), regenerated --
+#                                 shoot it in a later call; {"floors": 0, "wallcut": 0} puts it back
 #   shot {"view": "overview" | "street"} | {"house", "view": "top" | "angle" | "inside", "tag"}   one screenshot
-#                                 | {"house", "view": "room", "room": "Living", "corner": [-1, -1]}   eye height in a room
-#   status                        houses, outlines, generated flags, instance counts
+#                                 | {"house", "view": "room", "room": "Living", "floor"?, "corner": [-1, -1]}   eye height
+#   status                        houses, their splines by floor, generated flags, instance counts
 #   save {"defer": true}          save the level
 import gc
 import json
@@ -59,16 +65,38 @@ def _require(what):
     return level.require(LEVEL, "pyinterior.py " + what)
 
 
-def _houses(name=None):
-    from pypcg.interior import HOUSE_TAG
+def _houses(name=None, which=None):
+    """The house actors by label: all, or one set -- "street" (single-floor) or "storeys"."""
+    from pypcg.interior import HOUSE_TAG, STOREYS_TAG
     out = [a for a in _eas().get_all_level_actors() if HOUSE_TAG in _tags(a)]
+    if which:
+        out = [a for a in out if (STOREYS_TAG in _tags(a)) == (which == "storeys")]
     if name:
         out = [a for a in out if str(a.get_actor_label()) == name]
     return sorted(out, key=lambda a: str(a.get_actor_label()))
 
 
+def _floor_h():
+    from pypcg.interior import storeys
+    return storeys.floor_height(270.0)
+
+
+def _splines(actor):
+    """[(floor, SplineComponent)]: the actor's footprint splines, each on the floor its height reads as (k H above the
+    actor, as the stage reads them), lowest first."""
+    z0, H = actor.get_actor_location().z, _floor_h()
+    out = []
+    for sc in actor.get_components_by_class(unreal.SplineComponent):
+        n = sc.get_number_of_spline_points()
+        z = sum(sc.get_location_at_spline_point(i, unreal.SplineCoordinateSpace.WORLD).z for i in range(n)) / max(n, 1)
+        out.append((int(round((z - z0) / H)), sc))
+    return sorted(out, key=lambda e: e[0])
+
+
 def _spline(actor):
-    return actor.get_component_by_class(unreal.SplineComponent)
+    """The ground floor's spline (the actor's only one on a single-floor house)."""
+    sp = _splines(actor)
+    return sp[0][1] if sp else None
 
 
 def _purge():
@@ -174,17 +202,16 @@ def phase_site(args):
     for a in list(_eas().get_all_level_actors()):
         if "PyInterior_Site" in _tags(a):
             _eas().destroy_actor(a)
-    hs = demo.houses()
-    xs = [p[0] for _n, shape, loc, yaw, _s, _d in hs for p in demo.world_points(shape, loc, yaw)]
-    ys = [p[1] for _n, shape, loc, yaw, _s, _d in hs for p in demo.world_points(shape, loc, yaw)]
+    pts = [p for _n, shape, loc, yaw, _s, _d in demo.houses() for p in demo.world_points(shape, loc, yaw)]
+    pts += [p for _n, outl, loc, yaw, *_r in demo.storeys() for p in demo.floor_points(outl[0], loc, yaw, 0, 0.0)]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
     x0, x1 = min(xs) - 2000.0, max(xs) + 2000.0
     y0, y1 = min(ys) - 2000.0, max(ys) + 2000.0
-    made = [
-        _box_actor("PyInterior_Lawn", x0, y0, x1, y1, -60.0, -31.0, "Forest"),
-        _box_actor("PyInterior_Road", x0, -400.0, x1, 400.0, -60.0, -29.0, "Charcoal"),
-        _box_actor("PyInterior_Pavement_N", x0, 400.0, x1, 650.0, -60.0, -25.0, "Greige"),
-        _box_actor("PyInterior_Pavement_S", x0, -650.0, x1, -400.0, -60.0, -25.0, "Greige"),
-    ]
+    made = [_box_actor("PyInterior_Lawn", x0, y0, x1, y1, -60.0, -31.0, "Forest")]
+    for tag, yc in (("", 0.0), ("2", demo.STREET2)):
+        made += [_box_actor("PyInterior_Road" + tag, x0, yc - 400.0, x1, yc + 400.0, -60.0, -29.0, "Charcoal"),
+                 _box_actor("PyInterior_Pavement%s_N" % tag, x0, yc + 400.0, x1, yc + 650.0, -60.0, -25.0, "Greige"),
+                 _box_actor("PyInterior_Pavement%s_S" % tag, x0, yc - 650.0, x1, yc - 400.0, -60.0, -25.0, "Greige")]
     # the template's own floor would cut through the houses
     hidden = []
     for a in _eas().get_all_level_actors():
@@ -196,32 +223,51 @@ def phase_site(args):
     return {"site": [str(a.get_actor_label()) for a in made], "lowered": hidden, "bounds": [x0, y0, x1, y1]}
 
 
-def _write_outline(actor, pts):
-    sc = _spline(actor)
+def _write_outline(actor, pts, sc=None):
+    sc = sc or _spline(actor)
     sc.set_spline_points([unreal.Vector(p[0], p[1], p[2]) for p in pts], unreal.SplineCoordinateSpace.WORLD, False)
     for i in range(len(pts)):
         sc.set_spline_point_type(i, unreal.SplinePointType.LINEAR, False)
     sc.set_closed_loop(True, False)
     sc.update_spline()
     back = [sc.get_location_at_spline_point(i, unreal.SplineCoordinateSpace.WORLD) for i in range(sc.get_number_of_spline_points())]
-    return round(max(abs(b.x - p[0]) + abs(b.y - p[1]) for b, p in zip(back, pts)), 4) if len(back) == len(pts) else 1e9
+    return round(max(abs(b.x - p[0]) + abs(b.y - p[1]) + abs(b.z - p[2]) for b, p in zip(back, pts)), 4) \
+        if len(back) == len(pts) else 1e9
+
+
+def _new_house(name, loc, yaw, tags, folder):
+    a = _eas().spawn_actor_from_class(unreal.PCGVolume, unreal.Vector(*loc), unreal.Rotator(pitch=0.0, yaw=yaw, roll=0.0))
+    a.set_actor_label(name)
+    a.set_editor_property("tags", tags)
+    a.set_folder_path(folder)
+    brush = a.get_component_by_class(unreal.BrushComponent)
+    if brush is not None:
+        brush.set_visibility(False, False)
+    return a
 
 
 def phase_houses(args):
     refused = _require("houses")
     if refused:
         return refused
-    from pypcg.interior import HOUSE_TAG, demo
-    gone = [str(a.get_actor_label()) for a in _houses() if _eas().destroy_actor(a)]
-    out = {"destroyed": gone, "houses": []}
+    from pypcg.interior import HOUSE_TAG, STOREYS_TAG, demo
+    which = args.get("set", "street")
+    old = _houses(which=which)
+    gone = [str(a.get_actor_label()) for a in old]
+    gone = [n for n, a in zip(gone, old) if _eas().destroy_actor(a)]
+    out = {"set": which, "destroyed": gone, "houses": []}
+    if which == "storeys":
+        H = _floor_h()
+        for name, outlines, loc, yaw, floors, stair, style, seed in demo.storeys():
+            a = _new_house(name, loc, yaw, [HOUSE_TAG, STOREYS_TAG, name], "PyInterior/Storeys")
+            errs = [_write_outline(a, demo.floor_points(o, loc, yaw, k, H), _add_spline(a))
+                    for k, o in enumerate(outlines) if o is not None]
+            a.get_component_by_class(unreal.PCGComponent).set_editor_property("regenerate_in_editor", False)
+            out["houses"].append({"name": name, "splines": len(errs), "floors": floors or len(outlines),
+                                  "outline_error_cm": max(errs)})
+        return out
     for name, shape, loc, yaw, style, seed in demo.houses():
-        a = _eas().spawn_actor_from_class(unreal.PCGVolume, unreal.Vector(*loc), unreal.Rotator(pitch=0.0, yaw=yaw, roll=0.0))
-        a.set_actor_label(name)
-        a.set_editor_property("tags", [HOUSE_TAG, name])
-        a.set_folder_path("PyInterior/Houses")
-        brush = a.get_component_by_class(unreal.BrushComponent)
-        if brush is not None:
-            brush.set_visibility(False, False)
+        a = _new_house(name, loc, yaw, [HOUSE_TAG, name], "PyInterior/Houses")
         if _spline(a) is None:
             _add_spline(a)
         err = _write_outline(a, demo.world_points(shape, loc, yaw))
@@ -237,12 +283,18 @@ def phase_assign(args):
         return refused
     from pypcg import census
     from pypcg.interior import demo
-    table = {n: (style, seed) for n, _s, _l, _y, style, seed in demo.houses()}
+    # the street's saved look: walls down to 110 cm but on House_04 (a rebuilt graph forgets the overrides, so assign
+    # puts them back); the storeys houses keep full walls and every floor shown
+    table = {n: {"Style": style, "Seed": seed, "WallCut": 0.0 if n == "House_04_ThreeBed" else 110.0}
+             for n, _s, _l, _y, style, seed in demo.houses()}
+    table.update({n: {"Style": style, "Seed": seed, "Floors": floors, "StairType": stair, "WallCut": 0.0, "ShowFloors": 0}
+                  for n, _o, _l, _y, floors, stair, style, seed in demo.storeys()})
     graph = unreal.EditorAssetLibrary.load_asset(ASSET)
     out = {}
     for a in _houses(args.get("house")):
         name = str(a.get_actor_label())
-        style, seed = table.get(name, ("Scandi", 1))
+        base = table.get(name, {"Style": "Scandi", "Seed": 1})
+        seed = int(base["Seed"])
         pc = a.get_component_by_class(unreal.PCGComponent)
         pc.set_editor_property("regenerate_in_editor", False)
         pc.set_graph(graph)
@@ -250,13 +302,13 @@ def phase_assign(args):
             pc.set_editor_property("generation_trigger", unreal.PCGComponentGenerationTrigger.GENERATE_ON_LOAD)
         except Exception as ex:
             out["trigger_error"] = str(ex)[:200]
-        pc.set_editor_property("seed", int(seed))
-        over = {"Seed": int(seed), "Style": style}
+        pc.set_editor_property("seed", seed)
+        over = dict(base, Seed=seed)
         over.update(args.get("params") or {})
         res = census.apply_overrides(pc, over)
         # live editing: dragging the outline's points regenerates the house
         pc.set_editor_property("regenerate_in_editor", bool(args.get("live", True)))
-        out[name] = {"style": style, "seed": seed, "skipped": res["skipped"]}
+        out[name] = {"style": base["Style"], "seed": seed, "skipped": res["skipped"]}
     return out
 
 
@@ -292,7 +344,8 @@ def _summary(pc):
             summary = dict(v.values)
         elif "Room" in tags and hasattr(v, "attrs"):
             for i in range(len(v)):
-                row = {k: col[i] for k, col in v.attrs.items() if k in ("Type", "Area", "Windows", "Items", "SizeX", "SizeY")}
+                row = {k: col[i] for k, col in v.attrs.items()
+                       if k in ("Type", "Area", "Windows", "Items", "SizeX", "SizeY", "Floor")}
                 row["loc"] = [round(c, 1) for c in v.loc[i]]
                 rooms.append(row)
     return summary, rooms
@@ -312,10 +365,9 @@ def phase_read(args):
                                          "rooms": rooms, "instances": inst["total"], "meshes": len(inst["per_mesh"]),
                                          "pass_ok": bool(summary) and summary.get("failures", 1) == 0 and inst["total"] > 0}
     _save("pyinterior_read.json", out)
-    brief = {k: {"ok": v["pass_ok"], "program": (v["summary"] or {}).get("program"), "rooms": (v["summary"] or {}).get("rooms"),
-                 "failures": (v["summary"] or {}).get("failures"), "first_failure": (v["summary"] or {}).get("first_failure"),
-                 "instances": v["instances"]} for k, v in out.items()}
-    return brief
+    keys = ("program", "rooms", "failures", "first_failure", "floors", "stair", "terraces", "dropped", "notes")
+    return {k: dict({"ok": v["pass_ok"], "instances": v["instances"]}, **{x: (v["summary"] or {}).get(x) for x in keys})
+            for k, v in out.items()}
 
 
 def phase_shape(args):
@@ -336,32 +388,54 @@ def phase_shape(args):
         local = [(0, 0), (w, 0), (w, d), (0, d)]
     else:
         local = demo.SHAPES[args["shape"]]
-    a_ = math.radians(yaw)
-    ex, ey = (-math.sin(a_), math.cos(a_)), (-math.cos(a_), -math.sin(a_))
-    pts = [(loc.x + x * ex[0] + y * ey[0], loc.y + x * ex[1] + y * ey[1], loc.z) for x, y in local]
-    err = _write_outline(a, pts)
+    k = int(args.get("floor", 0))
+    pts = demo.floor_points(local, (loc.x, loc.y, loc.z), yaw, k, _floor_h())
+    sc = dict(_splines(a)).get(k)
+    added = sc is None
+    if added:
+        sc = _add_spline(a)                  # a floor drawn for the first time (it copied the floor below until now)
+    err = _write_outline(a, pts, sc)
     _flush()
     pc = a.get_component_by_class(unreal.PCGComponent)
     pc.generate_local(True)
-    return {"house": str(a.get_actor_label()), "outline": local, "outline_error_cm": err}
+    return {"house": str(a.get_actor_label()), "floor": k, "outline": local, "added_spline": added,
+            "outline_error_cm": err}
+
+
+def phase_view(args):
+    """ShowFloors / WallCut on one house or every storeys house, then regenerated (the cutaway view)."""
+    refused = _require("view")
+    if refused:
+        return refused
+    from pypcg import census
+    houses = _houses(args["house"]) if args.get("house") else _houses(which="storeys")
+    over = {"ShowFloors": int(args.get("floors", 0)), "WallCut": float(args.get("wallcut", 0.0))}
+    done = {}
+    for a in houses:
+        done[str(a.get_actor_label())] = census.apply_overrides(a.get_component_by_class(unreal.PCGComponent), over)["skipped"]
+    _flush()
+    for a in houses:
+        a.get_component_by_class(unreal.PCGComponent).generate_local(True)
+    return {"view": over, "houses": done}
 
 
 def phase_status(args):
     from pypcg import census, level
     out = {"map": level.current_map(), "houses": {}}
     for a in _houses():
-        sc, pc = _spline(a), a.get_component_by_class(unreal.PCGComponent)
+        sp, pc = _splines(a), a.get_component_by_class(unreal.PCGComponent)
         g = pc.get_graph()
         out["houses"][str(a.get_actor_label())] = {
-            "points": sc.get_number_of_spline_points() if sc else None, "closed": bool(sc.is_closed_loop()) if sc else None,
+            "splines": [{"floor": k, "points": sc.get_number_of_spline_points(), "closed": bool(sc.is_closed_loop())}
+                        for k, sc in sp],
             "graph": g.get_name() if g else None, "generated": bool(pc.get_editor_property("generated")),
             "instances": census.instances(a)["total"]}
     return out
 
 
 def _house_box(a):
-    sc = _spline(a)
-    pts = [sc.get_location_at_spline_point(i, unreal.SplineCoordinateSpace.WORLD) for i in range(sc.get_number_of_spline_points())]
+    pts = [sc.get_location_at_spline_point(i, unreal.SplineCoordinateSpace.WORLD)
+           for _k, sc in _splines(a) for i in range(sc.get_number_of_spline_points())]
     xs, ys = [p.x for p in pts], [p.y for p in pts]
     return min(xs), min(ys), max(xs), max(ys)
 
@@ -375,8 +449,7 @@ def phase_shot(args):
     if refused:
         return refused
     for a in _houses():
-        sc = _spline(a)
-        if sc is not None:
+        for _k, sc in _splines(a):
             try:
                 sc.set_editor_property("draw_debug", False)
             except Exception:
@@ -396,10 +469,12 @@ def phase_shot(args):
         elif view == "room":
             # eye height in a corner of the named room (its clear floor from the Rooms output), looking across it
             _s, rooms = _summary(a.get_component_by_class(unreal.PCGComponent))
-            r = next((x for x in rooms if x.get("Type") == args.get("room", "Living")), None)
+            fl = args.get("floor")
+            r = next((x for x in rooms if x.get("Type") == args.get("room", "Living")
+                      and (fl is None or int(x.get("Floor", 0)) == int(fl))), None)
             if r is None:
-                return {"abort": "no %s room in %s: %s" % (args.get("room", "Living"), args["house"],
-                                                          [x.get("Type") for x in rooms])}
+                return {"abort": "no %s room%s in %s: %s" % (args.get("room", "Living"), "" if fl is None else " on floor %s" % fl,
+                                                            args["house"], [(x.get("Type"), x.get("Floor")) for x in rooms])}
             a_ = math.radians(yaw)
             ex, ey = (-math.sin(a_), math.cos(a_)), (-math.cos(a_), -math.sin(a_))
             sx, sy = args.get("corner", [-1, -1])
@@ -432,8 +507,8 @@ def phase_save(args):
 
 
 PHASES = {"level": phase_level, "probe": phase_probe, "build": phase_build, "site": phase_site, "houses": phase_houses,
-          "assign": phase_assign, "gen": phase_gen, "read": phase_read, "shape": phase_shape, "status": phase_status,
-          "shot": phase_shot, "save": phase_save}
+          "assign": phase_assign, "gen": phase_gen, "read": phase_read, "shape": phase_shape, "view": phase_view,
+          "status": phase_status, "shot": phase_shot, "save": phase_save}
 DEFERRED = os.path.join(REPORTS, "pyinterior_deferred.json")
 
 

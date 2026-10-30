@@ -25,7 +25,7 @@ SNAP = 10.0                  # partition lines on 10 cm
 CORRIDOR = 130.0             # corridor width on the partition (118 clear between interior walls, 99 along an exterior one)
 ALLOW = 31.0                 # wall allowance per dimension while sizing (an exterior 25 + half an interior 12)
 WALLS = {"ext": 25.0, "int": 12.0, "height": 270.0}
-SPAN = {"door": 120.0, "bath": 110.0, "doorway": 110.0, "opening": 120.0}   # shared wall a passage needs
+SPAN = {"door": 120.0, "bath": 110.0, "doorway": 110.0, "opening": 120.0, "stair": 100.0}   # shared wall a passage needs
 FRONT_MIN = 120.0            # the front door needs this much exterior front wall on the entry room
 WINDOW_CORNER = 40.0         # a window keeps this far from the clear corners of its room
 WINDOW_MIN = 90.0            # a habitable room needs this much window-able exterior wall
@@ -69,6 +69,8 @@ class Plan:
     failures: list
     parents: dict = field(default_factory=dict)
     score: float = 0.0
+    stair: object = None          # a multi-storey floor's stairs.Stair (spec 2026-10-29), None for a single floor
+    level: int = 0                # its floor, 0 the ground
 
     def room(self, rid):
         return next(r for r in self.rooms if r.id == rid)
@@ -140,6 +142,8 @@ def front_part(rect, fp):
 # ---------------------------------------------------------------- passages
 
 def passage(parent, child):
+    if "Stair" in (parent, child):
+        return "stair"
     if frozenset((parent, child)) in P.OPEN:
         return "opening"
     if child in P.DOORWAY:
@@ -157,10 +161,14 @@ def shared_length(a, b):
 TIER = {"Kitchen": 0, "Dining": 0, "Corridor": 0}
 
 
-def connect(rooms, fp, front_room):
+def connect(rooms, fp, front_room, only=None):
     """{room id: parent id} reaching every room from the front room, each through the first already-reached neighbour of
     an allowed type (program.ACCESS order) that shares enough wall for the passage; None when a room cannot be reached.
-    Corridors and the public rooms are resolved before the rooms that hang off them."""
+    Corridors and the public rooms are resolved before the rooms that hang off them. `only` {room id: neighbour id}: that
+    room joins the tree through that neighbour alone (a stair through the room at its opening)."""
+    def allowed(a, b):
+        return only is None or (only.get(a, b) == b and only.get(b, a) == a)
+
     parents = {front_room: None}
     for tier in (0, 1):
         changed = True
@@ -172,7 +180,7 @@ def connect(rooms, fp, front_room):
                 for ptype in P.ACCESS.get(r.type, ()):
                     need = SPAN[passage(ptype, r.type)]
                     cands = [q for q in rooms if q.id in parents and q.type == ptype
-                             and shared_length(q.rect, r.rect) >= need - EPS]
+                             and shared_length(q.rect, r.rect) >= need - EPS and allowed(r.id, q.id)]
                     if cands:
                         parents[r.id] = max(cands, key=lambda q: (shared_length(q.rect, r.rect), -q.id)).id
                         changed = True

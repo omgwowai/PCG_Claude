@@ -27,6 +27,8 @@ ROOMS = {
     "Laundry": RoomType("service", 140.0, 160.0, "tile", "high", "wet", "洗衣房"),
     "Corridor": RoomType("circulation", 95.0, 110.0, "wood", None, "neutral", "走廊"),
     "Storage": RoomType("service", 90.0, 100.0, "wood", None, "neutral", "储藏间"),     # the filler
+    # a multi-storey house's stair room: placed before the floors are planned, never sized by the zoning (spec 2026-10-29 §6)
+    "Stair": RoomType("circulation", 100.0, 100.0, "wood", None, "neutral", "楼梯间"),
 }
 FLOORS = ("wood", "tile")
 
@@ -65,20 +67,39 @@ PROGRAMS = (
              Slot("WC", 0.5, 2), Slot("Study", 1.5, 1), Slot("Laundry", 0.8, 1))),
 )
 
+# multi-storey houses choose a program per floor (spec 2026-10-29 §5.2), by the floor's area less the stair room
+GROUND = (
+    Program("Ground_S", 0.0, (Slot("Living", 3.0), Slot("Kitchen", 1.3)), ()),
+    Program("Ground_M", 32.0, (Slot("Living", 3.0), Slot("Kitchen", 1.5), Slot("Dining", 1.4, 1)), (Slot("WC", 0.5, 2),)),
+    Program("Ground_L", 55.0, (Slot("Living", 3.2), Slot("Kitchen", 1.6), Slot("Dining", 1.6, 3)),
+            (Slot("WC", 0.5, 4), Slot("Study", 1.5, 2), Slot("Laundry", 0.8, 1))),
+)
+UPPER = (
+    Program("Upper_S", 0.0, (), (Slot("Bedroom", 2.2), Slot("Bath", 1.0))),
+    Program("Upper_M", 30.0, (), (Slot("Master", 2.6), Slot("Bedroom", 2.1), Slot("Bath", 1.1))),
+    Program("Upper_L", 50.0, (), (Slot("Master", 2.7), Slot("Bedroom", 2.1), Slot("Bedroom", 2.0), Slot("Bath", 1.2),
+                                  Slot("WC", 0.5, 1))),
+    Program("Upper_XL", 75.0, (), (Slot("Master", 2.9), Slot("Bedroom", 2.1), Slot("Bedroom", 2.1), Slot("Bedroom", 2.0),
+                                   Slot("Bath", 1.3), Slot("WC", 0.5, 3), Slot("Study", 1.5, 2), Slot("Laundry", 0.8, 1))),
+)
+
 # who may lead into a room (by preference); the entry rooms take the front door
 ENTRY = ("Main", "Living")
 ACCESS = {
     "Main": (), "Living": (),
     "Kitchen": ("Dining", "Living", "Main", "Corridor"),
     "Dining": ("Living", "Kitchen", "Main"),
-    "Corridor": ("Living", "Dining", "Main", "Corridor"),
-    "Master": ("Corridor", "Living", "Dining"),
-    "Bedroom": ("Corridor", "Living", "Dining", "Main"),
+    "Corridor": ("Living", "Dining", "Main", "Corridor", "Stair"),
+    "Master": ("Corridor", "Living", "Dining", "Stair"),
+    "Bedroom": ("Corridor", "Living", "Dining", "Main", "Stair"),
     "Study": ("Corridor", "Living", "Dining"),
     "Bath": ("Corridor", "Living", "Main", "Dining", "Master", "Bedroom"),
     "WC": ("Corridor", "Living", "Dining", "Kitchen"),
     "Laundry": ("Kitchen", "Corridor", "Dining"),
     "Storage": ("Corridor", "Main", "Living", "Kitchen", "Dining", "Master", "Bedroom", "Study"),
+    # multi-storey: the stair is reached from these on the ground floor; upper floors are entered from the stair (the
+    # "Stair" ends above come last, so a single-floor house's access costs are what they were)
+    "Stair": ("Living", "Corridor", "Dining"),
 }
 OPEN = {frozenset(p) for p in (("Living", "Kitchen"), ("Living", "Dining"), ("Kitchen", "Dining"), ("Main", "Kitchen"),
                                ("Main", "Dining"))}       # these links are openings without a door leaf
@@ -101,7 +122,7 @@ COLORS = {   # sRGB 0..1; pyinterior_materials.py makes one material instance pe
 SURFACE = {"Steel": (0.35, 1.0), "Mirror": (0.04, 1.0), "Glass": (0.05, 0.0), "Screen": (0.15, 0.0),
            "Porcelain": (0.2, 0.0), "Black": (0.4, 0.0)}           # colour -> (roughness, metallic); the rest (0.6, 0)
 FLOOR_MATERIALS = ("Floor_Oak", "Floor_Walnut", "Floor_WalnutWorn", "Floor_Pine", "Tile_White", "Tile_Checker",
-                   "Tile_Grey", "Concrete")
+                   "Tile_Grey", "Concrete", "Floor_Deck")             # Floor_Deck: a terrace's boards (spec 2026-10-29)
 STYLES = {
     "Scandi": {"facade": "Plaster_White", "trim": "White", "door": "OffWhite",
                "walls": {"living": ("OffWhite", "Greige", "Sage"), "bedroom": ("Sky", "Sage", "Blush", "Lavender", "Mint"),
@@ -157,16 +178,37 @@ def _variants(p):
         yield cur
 
 
-def fallbacks(program):
-    """program, then program with its optional rooms dropped one by one, then each lower program the same way -- never
-    more rooms than the one before -- ending in Studio."""
-    names = [p.name for p in PROGRAMS]
+def fallbacks(program, table=PROGRAMS):
+    """program, then program with its optional rooms dropped one by one, then each lower program of `table` the same way --
+    never more rooms than the one before -- ending in the table's first."""
+    names = [p.name for p in table]
     start = names.index(program.name)
     seen, last = set(), None
-    for base in [program] + [PROGRAMS[k] for k in range(start - 1, -1, -1)]:
+    for base in [program] + [table[k] for k in range(start - 1, -1, -1)]:
         for v in _variants(base):
             if v in seen or (last is not None and v.size > last):
                 continue
             seen.add(v)
             last = v.size
             yield v
+
+
+def for_floor(program, top):
+    """One master per house (spec 2026-10-29 §5.1): an upper floor below the top one has bedrooms, not a master."""
+    if top:
+        return program
+
+    def swap(slots):
+        return tuple(replace(s, type="Bedroom") if s.type == "Master" else s for s in slots)
+    return replace(program, public=swap(program.public), private=swap(program.private))
+
+
+def choose_floor(area_m2, level, top):
+    """A multi-storey floor's program: the ground floor's table at level 0, the upper floors' above, by the floor's area
+    less the stair room; converted for its place in the house (for_floor)."""
+    table = GROUND if level == 0 else UPPER
+    best = table[0]
+    for p in table:
+        if area_m2 >= p.min_area_m2 - 1e-9:
+            best = p
+    return best if level == 0 else for_floor(best, top)

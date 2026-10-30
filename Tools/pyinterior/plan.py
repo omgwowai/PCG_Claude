@@ -3,6 +3,9 @@
     python Tools/pyinterior/plan.py --demo            one PNG per demo house -> Saved/Reports/pyinterior_plan_<name>.png
     python Tools/pyinterior/plan.py --sweep           a sheet of rectangles 5 x 4.5 .. 20 x 14 m -> pyinterior_sweep.png
     python Tools/pyinterior/plan.py --rect 1300x900   one rectangle (local cm) -> pyinterior_plan_rect.png
+    python Tools/pyinterior/plan.py --storeys         each multi-storey demo house, its floors side by side (the stair room,
+                                                      its openings in red, the terraces with their railings and furniture)
+                                                      -> pyinterior_storeys_<name>.png
 """
 import math
 import os
@@ -24,7 +27,9 @@ from pypcg.interior import program as P  # noqa: E402
 OUT = os.path.join(REPO, "Saved", "Reports")
 FILL = {"Main": (238, 214, 170), "Living": (240, 210, 160), "Kitchen": (200, 225, 235), "Dining": (245, 225, 190),
         "Master": (205, 190, 230), "Bedroom": (215, 205, 240), "Study": (210, 230, 200), "Bath": (170, 210, 225),
-        "WC": (170, 210, 225), "Laundry": (190, 215, 215), "Corridor": (225, 225, 225), "Storage": (205, 200, 195)}
+        "WC": (170, 210, 225), "Laundry": (190, 215, 215), "Corridor": (225, 225, 225), "Storage": (205, 200, 195),
+        "Stair": (160, 160, 160)}
+DECK = (222, 200, 160)
 
 
 def font(px):
@@ -66,8 +71,13 @@ def draw_plan(d, plan, ox, oy, s, extras=None, title=None, fs=18):
         kind = L.passage(plan.room(pid).type, plan.room(rid).type)
         col = {"opening": (60, 160, 60), "doorway": (60, 120, 200)}.get(kind, (200, 120, 40))
         d.ellipse([px - 6, py - 6, px + 6, py + 6], fill=col)
-    x0, x1, y = plan.entry
-    d.line([X(x0 + 0.5 * (x1 - x0) - 50), Y(y), X(x0 + 0.5 * (x1 - x0) + 50), Y(y)], fill=(220, 40, 40), width=6)
+    if plan.entry is not None:                            # an upper floor has no front door
+        x0, x1, y = plan.entry
+        d.line([X(x0 + 0.5 * (x1 - x0) - 50), Y(y), X(x0 + 0.5 * (x1 - x0) + 50), Y(y)], fill=(220, 40, 40), width=6)
+    if plan.stair is not None:                            # the stair's opening on this floor
+        axis, c, s0, s1 = plan.stair.access(plan.stair.role(plan.level))
+        pts = [(X(c), Y(s0)), (X(c), Y(s1))] if axis == "x" else [(X(s0), Y(c)), (X(s1), Y(c))]
+        d.line(pts, fill=(220, 0, 0), width=5)
     # the outline
     poly = [(X(p[0]), Y(p[1])) for p in fp.poly]
     d.line(poly + poly[:1], fill=(30, 30, 30), width=4)
@@ -171,11 +181,55 @@ def sweep(path, seed=1):
     return path
 
 
+def storeys(seed=None):
+    """One sheet per multi-storey demo house (pypcg.interior.demo.STOREYS): its floors side by side, each with its
+    terraces (deck, railing, furniture) drawn under it, through storeys.plan_building as the stage runs it."""
+    from pypcg.interior import demo
+    from pypcg.interior import storeys as S
+    params = {"WallHeight": 270.0, "ExteriorWall": 25.0, "InteriorWall": 12.0, "Grid": 50.0, "Mirror": False,
+              "Furnish": True}
+    paths = []
+    for name, outlines, floors, stair, style, hseed in demo.STOREYS:
+        splines = [[(-y, x, k * 300.0) for x, y in o] for k, o in enumerate(outlines) if o is not None]
+        b = S.plan_building(splines, (0.0, 0.0, 0.0), 0.0, dict(params, Floors=floors, StairType=stair),
+                            random.Random(hseed if seed is None else seed))
+        if not b.floors:
+            print("%s: one floor left (%s)" % (name, "; ".join(b.dropped)))
+            continue
+        s = 0.4
+        bb = b.floors[0].fp.bbox()
+        W = int(len(b.floors) * (bb.w * s + 60) + 60)
+        img = Image.new("RGB", (W, int(bb.h * s + 150)), (255, 255, 255))
+        d = ImageDraw.Draw(img)
+        fails = S.validate(b)
+        d.text((20, 8), "%s  %s stair  %s%s" % (name, b.stair.type, " / ".join(f.plan.program.name for f in b.floors),
+                                                 ("  FAIL " + fails[0]) if fails else ""), fill=(20, 20, 20), font=font(16))
+        for f in b.floors:
+            ox, oy = 40 - bb.x0 * s + f.level * (bb.w * s + 60), 100 + bb.y1 * s
+            for t in f.terraces:
+                r = t.rect
+                d.rectangle([ox + r.x0 * s, oy - r.y1 * s, ox + r.x1 * s, oy - r.y0 * s], fill=DECK)
+                for axis, c, lo, hi, _o in t.rails:
+                    pts = [(ox + c * s, oy - lo * s), (ox + c * s, oy - hi * s)] if axis == "x" else \
+                        [(ox + lo * s, oy - c * s), (ox + hi * s, oy - c * s)]
+                    d.line(pts, fill=(60, 60, 60), width=3)
+            places = f.places + [p for t in f.terraces for p in t.places]
+            draw_plan(d, f.plan, ox, oy, s, overlay(f.plan, f.doors, f.wins, places),
+                      title="%dF %s" % (f.level + 1, f.plan.program.name), fs=12)
+        path = os.path.join(OUT, "pyinterior_storeys_%s.png" % name)
+        img.save(path)
+        paths.append(path)
+    return paths
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     seed = 1
     if "--seed" in sys.argv:
         seed = int(sys.argv[sys.argv.index("--seed") + 1])
+    if "--storeys" in sys.argv:
+        for path in storeys(seed if "--seed" in sys.argv else None):
+            print(path)
     if "--sweep" in sys.argv:
         print(sweep(os.path.join(OUT, "pyinterior_sweep.png"), seed))
     if "--rect" in sys.argv:
