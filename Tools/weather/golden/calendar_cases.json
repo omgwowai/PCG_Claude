@@ -1,0 +1,733 @@
+{
+ "evaluate": [
+  {
+   "expect": {
+    "day_in_season": 0,
+    "day_index": 0,
+    "day_of_year": 79.0,
+    "hour": 0.0,
+    "in_transition": false,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.0,
+    "transition_progress": 0.0,
+    "weights": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 0.0
+  },
+  {
+   "expect": {
+    "day_in_season": 0,
+    "day_index": 0,
+    "day_of_year": 85.64285714285714,
+    "hour": 12.0,
+    "in_transition": false,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.07142857142857142,
+    "transition_progress": 0.0,
+    "weights": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 43200.0
+  },
+  {
+   "expect": {
+    "day_in_season": 3,
+    "day_index": 3,
+    "day_of_year": 122.17857142857143,
+    "hour": 6.0,
+    "in_transition": false,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.4642857142857143,
+    "transition_progress": 0.0,
+    "weights": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 280800.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 6,
+    "day_of_year": 158.71428571428572,
+    "hour": 0.0,
+    "in_transition": true,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.8571428571428571,
+    "transition_progress": 0.0,
+    "weights": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 518400.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 6,
+    "day_of_year": 165.35714285714286,
+    "hour": 12.0,
+    "in_transition": true,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.9285714285714286,
+    "transition_progress": 0.5,
+    "weights": [
+     0.5,
+     0.5,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 561600.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 6,
+    "day_of_year": 171.9867142857143,
+    "hour": 23.975999999999992,
+    "in_transition": true,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.9998571428571428,
+    "transition_progress": 0.9989999999999997,
+    "weights": [
+     0.001000000000000334,
+     0.9989999999999997,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 604713.6
+  },
+  {
+   "expect": {
+    "day_in_season": 0,
+    "day_index": 7,
+    "day_of_year": 172.0,
+    "hour": 0.0,
+    "in_transition": false,
+    "next_season": "Autumn",
+    "season": "Summer",
+    "season_fraction": 0.0,
+    "transition_progress": 0.0,
+    "weights": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 604800.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 13,
+    "day_of_year": 263.6714285714286,
+    "hour": 21.60000000000001,
+    "in_transition": true,
+    "next_season": "Autumn",
+    "season": "Summer",
+    "season_fraction": 0.9857142857142858,
+    "transition_progress": 0.9000000000000004,
+    "weights": [
+     0.0,
+     0.09999999999999964,
+     0.9000000000000004,
+     0.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 1200960.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 20,
+    "day_of_year": 348.57142857142856,
+    "hour": 12.0,
+    "in_transition": true,
+    "next_season": "Winter",
+    "season": "Autumn",
+    "season_fraction": 0.9285714285714286,
+    "transition_progress": 0.5,
+    "weights": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "year": 2026
+   },
+   "game_seconds": 1771200.0
+  },
+  {
+   "expect": {
+    "day_in_season": 0,
+    "day_index": 21,
+    "day_of_year": 355.0,
+    "hour": 0.0,
+    "in_transition": false,
+    "next_season": "Spring",
+    "season": "Winter",
+    "season_fraction": 0.0,
+    "transition_progress": 0.0,
+    "weights": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "year": 2026
+   },
+   "game_seconds": 1814400.0
+  },
+  {
+   "expect": {
+    "day_in_season": 3,
+    "day_index": 24,
+    "day_of_year": 37.678571428571445,
+    "hour": 18.0,
+    "in_transition": false,
+    "next_season": "Spring",
+    "season": "Winter",
+    "season_fraction": 0.5357142857142857,
+    "transition_progress": 0.0,
+    "weights": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "year": 2027
+   },
+   "game_seconds": 2138400.0
+  },
+  {
+   "expect": {
+    "day_in_season": 6,
+    "day_index": 27,
+    "day_of_year": 78.87285714285713,
+    "hour": 23.759999999999962,
+    "in_transition": true,
+    "next_season": "Spring",
+    "season": "Winter",
+    "season_fraction": 0.9985714285714283,
+    "transition_progress": 0.9899999999999984,
+    "weights": [
+     0.9899999999999984,
+     0.0,
+     0.0,
+     0.010000000000001563
+    ],
+    "year": 2027
+   },
+   "game_seconds": 2418336.0
+  },
+  {
+   "expect": {
+    "day_in_season": 0,
+    "day_index": 28,
+    "day_of_year": 79.0,
+    "hour": 0.0,
+    "in_transition": false,
+    "next_season": "Summer",
+    "season": "Spring",
+    "season_fraction": 0.0,
+    "transition_progress": 0.0,
+    "weights": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "year": 2027
+   },
+   "game_seconds": 2419200.0
+  },
+  {
+   "expect": {
+    "day_in_season": 5,
+    "day_index": 418,
+    "day_of_year": 66.01871428571485,
+    "hour": 23.496000000001004,
+    "in_transition": false,
+    "next_season": "Spring",
+    "season": "Winter",
+    "season_fraction": 0.8541428571428631,
+    "transition_progress": 0.0,
+    "weights": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "year": 2041
+   },
+   "game_seconds": 36199785.6
+  },
+  {
+   "expect": {
+    "day_in_season": 5,
+    "day_index": 2000,
+    "day_of_year": 245.07142857142856,
+    "hour": 12.0,
+    "in_transition": false,
+    "next_season": "Autumn",
+    "season": "Summer",
+    "season_fraction": 0.7857142857142857,
+    "transition_progress": 0.0,
+    "weights": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "year": 2097
+   },
+   "game_seconds": 172843200.0
+  }
+ ],
+ "params": {
+  "base_year": 2026,
+  "real_seconds_per_game_day": 3600.0,
+  "season_length_days": 7,
+  "season_start_doy": {
+   "Autumn": 265,
+   "Spring": 79,
+   "Summer": 172,
+   "Winter": 355
+  },
+  "start_hour": 9.0,
+  "start_season": "Spring",
+  "transition_days": 1.0
+ },
+ "seconds_for": [
+  {
+   "current": 0.0,
+   "day": 0,
+   "expect": 0.0,
+   "hour": 0.0,
+   "season": "Spring"
+  },
+  {
+   "current": 0.0,
+   "day": 3,
+   "expect": 304200.0,
+   "hour": 12.5,
+   "season": "Spring"
+  },
+  {
+   "current": 0.0,
+   "day": 99,
+   "expect": 604799.9964,
+   "hour": 25.0,
+   "season": "Spring"
+  },
+  {
+   "current": 0.0,
+   "day": -1,
+   "expect": 0.0,
+   "hour": -2.0,
+   "season": "Spring"
+  },
+  {
+   "current": 0.0,
+   "day": 0,
+   "expect": 604800.0,
+   "hour": 0.0,
+   "season": "Summer"
+  },
+  {
+   "current": 0.0,
+   "day": 3,
+   "expect": 909000.0,
+   "hour": 12.5,
+   "season": "Summer"
+  },
+  {
+   "current": 0.0,
+   "day": 99,
+   "expect": 1209599.9964,
+   "hour": 25.0,
+   "season": "Summer"
+  },
+  {
+   "current": 0.0,
+   "day": -1,
+   "expect": 604800.0,
+   "hour": -2.0,
+   "season": "Summer"
+  },
+  {
+   "current": 0.0,
+   "day": 0,
+   "expect": 1209600.0,
+   "hour": 0.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 0.0,
+   "day": 3,
+   "expect": 1513800.0,
+   "hour": 12.5,
+   "season": "Autumn"
+  },
+  {
+   "current": 0.0,
+   "day": 99,
+   "expect": 1814399.9964,
+   "hour": 25.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 0.0,
+   "day": -1,
+   "expect": 1209600.0,
+   "hour": -2.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 0.0,
+   "day": 0,
+   "expect": 1814400.0,
+   "hour": 0.0,
+   "season": "Winter"
+  },
+  {
+   "current": 0.0,
+   "day": 3,
+   "expect": 2118600.0,
+   "hour": 12.5,
+   "season": "Winter"
+  },
+  {
+   "current": 0.0,
+   "day": 99,
+   "expect": 2419199.9964,
+   "hour": 25.0,
+   "season": "Winter"
+  },
+  {
+   "current": 0.0,
+   "day": -1,
+   "expect": 1814400.0,
+   "hour": -2.0,
+   "season": "Winter"
+  },
+  {
+   "current": 2646000.0,
+   "day": 0,
+   "expect": 2419200.0,
+   "hour": 0.0,
+   "season": "Spring"
+  },
+  {
+   "current": 2646000.0,
+   "day": 3,
+   "expect": 2723400.0,
+   "hour": 12.5,
+   "season": "Spring"
+  },
+  {
+   "current": 2646000.0,
+   "day": 99,
+   "expect": 3023999.9964,
+   "hour": 25.0,
+   "season": "Spring"
+  },
+  {
+   "current": 2646000.0,
+   "day": -1,
+   "expect": 2419200.0,
+   "hour": -2.0,
+   "season": "Spring"
+  },
+  {
+   "current": 2646000.0,
+   "day": 0,
+   "expect": 3024000.0,
+   "hour": 0.0,
+   "season": "Summer"
+  },
+  {
+   "current": 2646000.0,
+   "day": 3,
+   "expect": 3328200.0,
+   "hour": 12.5,
+   "season": "Summer"
+  },
+  {
+   "current": 2646000.0,
+   "day": 99,
+   "expect": 3628799.9964,
+   "hour": 25.0,
+   "season": "Summer"
+  },
+  {
+   "current": 2646000.0,
+   "day": -1,
+   "expect": 3024000.0,
+   "hour": -2.0,
+   "season": "Summer"
+  },
+  {
+   "current": 2646000.0,
+   "day": 0,
+   "expect": 3628800.0,
+   "hour": 0.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 2646000.0,
+   "day": 3,
+   "expect": 3933000.0,
+   "hour": 12.5,
+   "season": "Autumn"
+  },
+  {
+   "current": 2646000.0,
+   "day": 99,
+   "expect": 4233599.9964,
+   "hour": 25.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 2646000.0,
+   "day": -1,
+   "expect": 3628800.0,
+   "hour": -2.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 2646000.0,
+   "day": 0,
+   "expect": 4233600.0,
+   "hour": 0.0,
+   "season": "Winter"
+  },
+  {
+   "current": 2646000.0,
+   "day": 3,
+   "expect": 4537800.0,
+   "hour": 12.5,
+   "season": "Winter"
+  },
+  {
+   "current": 2646000.0,
+   "day": 99,
+   "expect": 4838399.9964,
+   "hour": 25.0,
+   "season": "Winter"
+  },
+  {
+   "current": 2646000.0,
+   "day": -1,
+   "expect": 4233600.0,
+   "hour": -2.0,
+   "season": "Winter"
+  },
+  {
+   "current": 34560000.0,
+   "day": 0,
+   "expect": 33868800.0,
+   "hour": 0.0,
+   "season": "Spring"
+  },
+  {
+   "current": 34560000.0,
+   "day": 3,
+   "expect": 34173000.0,
+   "hour": 12.5,
+   "season": "Spring"
+  },
+  {
+   "current": 34560000.0,
+   "day": 99,
+   "expect": 34473599.9964,
+   "hour": 25.0,
+   "season": "Spring"
+  },
+  {
+   "current": 34560000.0,
+   "day": -1,
+   "expect": 33868800.0,
+   "hour": -2.0,
+   "season": "Spring"
+  },
+  {
+   "current": 34560000.0,
+   "day": 0,
+   "expect": 34473600.0,
+   "hour": 0.0,
+   "season": "Summer"
+  },
+  {
+   "current": 34560000.0,
+   "day": 3,
+   "expect": 34777800.0,
+   "hour": 12.5,
+   "season": "Summer"
+  },
+  {
+   "current": 34560000.0,
+   "day": 99,
+   "expect": 35078399.9964,
+   "hour": 25.0,
+   "season": "Summer"
+  },
+  {
+   "current": 34560000.0,
+   "day": -1,
+   "expect": 34473600.0,
+   "hour": -2.0,
+   "season": "Summer"
+  },
+  {
+   "current": 34560000.0,
+   "day": 0,
+   "expect": 35078400.0,
+   "hour": 0.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 34560000.0,
+   "day": 3,
+   "expect": 35382600.0,
+   "hour": 12.5,
+   "season": "Autumn"
+  },
+  {
+   "current": 34560000.0,
+   "day": 99,
+   "expect": 35683199.9964,
+   "hour": 25.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 34560000.0,
+   "day": -1,
+   "expect": 35078400.0,
+   "hour": -2.0,
+   "season": "Autumn"
+  },
+  {
+   "current": 34560000.0,
+   "day": 0,
+   "expect": 35683200.0,
+   "hour": 0.0,
+   "season": "Winter"
+  },
+  {
+   "current": 34560000.0,
+   "day": 3,
+   "expect": 35987400.0,
+   "hour": 12.5,
+   "season": "Winter"
+  },
+  {
+   "current": 34560000.0,
+   "day": 99,
+   "expect": 36287999.9964,
+   "hour": 25.0,
+   "season": "Winter"
+  },
+  {
+   "current": 34560000.0,
+   "day": -1,
+   "expect": 35683200.0,
+   "hour": -2.0,
+   "season": "Winter"
+  }
+ ],
+ "with_hour": [
+  {
+   "current": 0.0,
+   "expect": 0.0,
+   "hour": 0.0
+  },
+  {
+   "current": 0.0,
+   "expect": 35100.0,
+   "hour": 9.75
+  },
+  {
+   "current": 0.0,
+   "expect": 86399.99639999999,
+   "hour": 24.0
+  },
+  {
+   "current": 0.0,
+   "expect": 0.0,
+   "hour": -1.0
+  },
+  {
+   "current": 276480.0,
+   "expect": 259200.0,
+   "hour": 0.0
+  },
+  {
+   "current": 276480.0,
+   "expect": 294300.0,
+   "hour": 9.75
+  },
+  {
+   "current": 276480.0,
+   "expect": 345599.9964,
+   "hour": 24.0
+  },
+  {
+   "current": 276480.0,
+   "expect": 259200.0,
+   "hour": -1.0
+  },
+  {
+   "current": 34620480.0,
+   "expect": 34560000.0,
+   "hour": 0.0
+  },
+  {
+   "current": 34620480.0,
+   "expect": 34595100.0,
+   "hour": 9.75
+  },
+  {
+   "current": 34620480.0,
+   "expect": 34646399.9964,
+   "hour": 24.0
+  },
+  {
+   "current": 34620480.0,
+   "expect": 34560000.0,
+   "hour": -1.0
+  }
+ ]
+}

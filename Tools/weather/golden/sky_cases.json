@@ -1,0 +1,3135 @@
+{
+ "combine": [
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "season": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "type": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 4.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.6400000000000001,
+    "sky_light": 0.6400000000000001,
+    "sun_intensity": 0.0625,
+    "white_temp_offset": 1000.0
+   },
+   "season": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "type": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.68,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 1100.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "type": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.68,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 1100.0
+   },
+   "season": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   }
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.4,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.7224999999999999,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 1200.0
+   },
+   "season": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "type": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   }
+  }
+ ],
+ "lerp": [
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.285,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.3,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.9400000000000001,
+    "sky_light": 0.9400000000000001,
+    "sun_intensity": 0.775,
+    "white_temp_offset": 150.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.06,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.955,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 180.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.665,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.7,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.86,
+    "sky_light": 0.86,
+    "sun_intensity": 0.475,
+    "white_temp_offset": 350.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.665,
+    "contrast": 1.0,
+    "exposure_bias": 0.06,
+    "fog_density": 1.7,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8150000000000001,
+    "sky_light": 0.86,
+    "sun_intensity": 0.475,
+    "white_temp_offset": 530.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.14,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.895,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 420.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.285,
+    "contrast": 1.0,
+    "exposure_bias": 0.14,
+    "fog_density": 1.3,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.835,
+    "sky_light": 0.9400000000000001,
+    "sun_intensity": 0.775,
+    "white_temp_offset": 570.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "t": 1.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 0.0
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 0.3
+  },
+  {
+   "a": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "b": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.2,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.85,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 600.0
+   },
+   "t": 1.0
+  }
+ ],
+ "rig": [
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -78.4,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -78.4,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -78.4,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -78.4,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -78.4,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -78.4,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -78.4,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -78.4,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 78.4
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -10.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -10.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -10.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -10.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -10.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     -10.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -10.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     -10.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": 10.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     3.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     3.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     3.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     3.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     3.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     3.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     3.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.0,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     3.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -3.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.5,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     7.5,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.5,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     7.5,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.025000000000000022,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     7.5,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.025000000000000022,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     7.5,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.5,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     7.5,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 0.5,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     7.5,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.025000000000000022,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     7.5,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.025000000000000022,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     7.5,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -7.5
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 1.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     40.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.3,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 1.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     40.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     0.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.050000000000000044,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     40.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.08625000000000002,
+    "moon_rotation": [
+     -40.0,
+     15.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.050000000000000044,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     40.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 180.0,
+   "moon_el": 40.0,
+   "moon_illum": 1.0,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 1.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     40.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 1.0,
+    "sky_light_intensity": 1.0,
+    "star_intensity": 1.0,
+    "sun_lux": 10.0,
+    "sun_rotation": [
+     40.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 6500.0
+   },
+   "look": {
+    "cloud_cover": 0.0,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 1.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 1.0,
+    "sky_light": 1.0,
+    "sun_intensity": 1.0,
+    "white_temp_offset": 0.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     270.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.050000000000000044,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     40.0,
+     0.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 0.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  },
+  {
+   "expect": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 0.04,
+    "fog_height_falloff": 0.2,
+    "moon_lux": 0.0,
+    "moon_rotation": [
+     5.0,
+     285.0,
+     0.0
+    ],
+    "saturation": 0.8,
+    "sky_light_intensity": 0.8,
+    "star_intensity": 0.050000000000000044,
+    "sun_lux": 0.7187500000000002,
+    "sun_rotation": [
+     40.0,
+     15.0,
+     0.0
+    ],
+    "white_temp": 7000.0
+   },
+   "look": {
+    "cloud_cover": 0.95,
+    "contrast": 1.0,
+    "exposure_bias": 0.0,
+    "fog_density": 2.0,
+    "fog_height_falloff": 1.0,
+    "moon_intensity": 1.0,
+    "saturation": 0.8,
+    "sky_light": 0.8,
+    "sun_intensity": 0.25,
+    "white_temp_offset": 500.0
+   },
+   "moon_az": 90.0,
+   "moon_el": -5.0,
+   "moon_illum": 0.5,
+   "north_yaw": 15.0,
+   "sun_az": 180.0,
+   "sun_el": -40.0
+  }
+ ],
+ "sky": {
+  "cloud_dimming": 0.75,
+  "fog_density": 0.02,
+  "fog_height_falloff": 0.2,
+  "look_blend_seconds": 3.0,
+  "moon_lux": 0.3,
+  "sky_light_intensity": 1.0,
+  "star_fade_range_deg": 9.0,
+  "star_fade_start_deg": -3.0,
+  "sun_lux": 10.0,
+  "white_temp_k": 6500.0
+ }
+}
