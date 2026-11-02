@@ -1,0 +1,48 @@
+#include "/Engine/Public/Platform.ush"
+
+float4 Value;
+int3 Size;
+RWTexture2D<float4> Out2D;
+RWTexture3D<float4> Out3D;
+
+[numthreads(8, 8, 1)]
+void Fill2DCS(uint3 Id : SV_DispatchThreadID)
+{
+	if (all(int2(Id.xy) < Size.xy))
+	{
+		Out2D[Id.xy] = Value;
+	}
+}
+
+[numthreads(4, 4, 4)]
+void Fill3DCS(uint3 Id : SV_DispatchThreadID)
+{
+	if (all(int3(Id) < Size))
+	{
+		Out3D[Id] = Value;
+	}
+}
+
+Texture2D<float4> Src2D;
+Texture3D<float4> Src3D;
+StructuredBuffer<int4> Coords;
+RWStructuredBuffer<float4> OutValues;
+uint NumCoords;
+
+[numthreads(64, 1, 1)]
+void Read2DCS(uint3 Id : SV_DispatchThreadID)
+{
+	if (Id.x < NumCoords)
+	{
+		OutValues[Id.x] = Src2D.Load(int3(Coords[Id.x].xy, 0));
+	}
+}
+
+[numthreads(64, 1, 1)]
+void Read3DCS(uint3 Id : SV_DispatchThreadID)
+{
+	if (Id.x < NumCoords)
+	{
+		OutValues[Id.x] = Src3D.Load(int4(Coords[Id.x].xyz, 0));
+	}
+}
