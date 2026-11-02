@@ -1,0 +1,35 @@
+{
+  "scenarios": {
+    "m0_look": {
+      "milestone": "M0",
+      "steps": [
+        {"set": {"season": "Summer", "day": 0, "hour": 12.0, "type": "Clear", "blend": false}},
+        {"record": "clear_noon_summer"},
+        {"set": {"type": "Overcast", "blend": false}},
+        {"record": "overcast_noon_summer"},
+        {"set": {"season": "Winter", "day": 0, "hour": 12.0, "type": "Clear", "blend": false}},
+        {"record": "clear_noon_winter"},
+        {"set": {"hour": 0.0}},
+        {"record": "clear_midnight_winter"},
+        {"set": {"season": "Autumn", "day": 6, "hour": 12.0}},
+        {"record": "autumn_transition_noon"}
+      ],
+      "checks": [
+        {"name": "summer_noon_sun_elevation", "kind": "near", "value": "clear_noon_summer.sun.elevation_deg", "target": 78.4, "tol": "@sun_elevation_tol_deg"},
+        {"name": "winter_noon_sun_elevation", "kind": "near", "value": "clear_noon_winter.sun.elevation_deg", "target": 31.6, "tol": "@sun_elevation_tol_deg"},
+        {"name": "overcast_dims_sun", "kind": "ratio_below", "value": "overcast_noon_summer.rig.sun_lux", "ref": "clear_noon_summer.rig.sun_lux", "max_ratio": "@overcast_sun_ratio_max"},
+        {"name": "overcast_thickens_fog", "kind": "greater", "value": "overcast_noon_summer.rig.fog_density", "ref": "clear_noon_summer.rig.fog_density"},
+        {"name": "overcast_desaturates", "kind": "less", "value": "overcast_noon_summer.rig.saturation", "ref": "clear_noon_summer.rig.saturation"},
+        {"name": "overcast_state_active", "kind": "equals", "value": "overcast_noon_summer.orchestrator.active_type", "literal": "Overcast"},
+        {"name": "stars_at_midnight", "kind": "at_least", "value": "clear_midnight_winter.rig.star_intensity", "min": "@stars_midnight_min"},
+        {"name": "no_stars_at_noon", "kind": "at_most", "value": "clear_noon_summer.rig.star_intensity", "max": 0.0},
+        {"name": "transition_half_way", "kind": "near", "value": "autumn_transition_noon.calendar.transition_progress", "target": 0.5, "tol": 1e-6},
+        {"name": "winter_weight_half", "kind": "near", "value": "autumn_transition_noon.calendar.season_weights.3", "target": 0.5, "tol": 1e-6},
+        {"name": "sun_actor_applied", "kind": "equal_to", "value": "clear_noon_summer.actors.sun_lux", "ref": "clear_noon_summer.rig.sun_lux", "tol": "@actor_match_tol"},
+        {"name": "fog_actor_applied", "kind": "equal_to", "value": "overcast_noon_summer.actors.fog_density", "ref": "overcast_noon_summer.rig.fog_density", "tol": "@actor_match_tol"},
+        {"name": "grading_applied", "kind": "equal_to", "value": "overcast_noon_summer.actors.saturation", "ref": "overcast_noon_summer.rig.saturation", "tol": "@actor_match_tol"},
+        {"name": "sun_pitch_applied", "kind": "equal_to", "value": "clear_noon_summer.actors.sun_pitch", "ref": "clear_noon_summer.rig.sun_rotation.0", "tol": "@angle_match_tol_deg"}
+      ]
+    }
+  }
+}
