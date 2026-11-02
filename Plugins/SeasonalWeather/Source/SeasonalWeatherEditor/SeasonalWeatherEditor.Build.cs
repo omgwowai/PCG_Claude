@@ -8,7 +8,7 @@ public class SeasonalWeatherEditor : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "SeasonalWeather", "StateTreeModule" });
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			"StateTreeEditorModule", "UnrealEd", "Slate", "SlateCore", "InputCore", "AssetRegistry", "WorkspaceMenuStructure", "Json"
+			"StateTreeEditorModule", "PropertyBindingUtils", "UnrealEd", "Slate", "SlateCore", "InputCore", "AssetRegistry", "WorkspaceMenuStructure", "Json"
 		});
 	}
 }
