@@ -1,0 +1,21 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "Seasonal Weather",
+	"Description": "Four-season dynamic weather (docs/superpowers/specs/2026-11-02-seasonal-weather-design.md).",
+	"Category": "Rendering",
+	"CreatedBy": "",
+	"EnabledByDefault": true,
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+		{ "Name": "SeasonalWeatherShaders", "Type": "Runtime", "LoadingPhase": "PostConfigInit" },
+		{ "Name": "SeasonalWeather", "Type": "Runtime", "LoadingPhase": "Default" },
+		{ "Name": "SeasonalWeatherEditor", "Type": "Editor", "LoadingPhase": "Default" }
+	],
+	"Plugins": [
+		{ "Name": "StateTree", "Enabled": true }
+	]
+}

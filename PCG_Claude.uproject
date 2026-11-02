@@ -86,6 +86,10 @@
 		{
 			"Name": "ToolsetRegistry",
 			"Enabled": true
+		},
+		{
+			"Name": "SeasonalWeather",
+			"Enabled": true
 		}
 	]
 }
