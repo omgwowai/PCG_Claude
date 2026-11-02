@@ -7,6 +7,7 @@
 #include "Misc/Paths.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "WeatherAstronomy.h"
 
 /** Helpers shared by the SeasonalWeather automation tests. */
 namespace WeatherTest
@@ -36,5 +37,11 @@ namespace WeatherTest
 		}
 		Test.AddError(FString::Printf(TEXT("%s: got %.12g, expected %.12g"), *What, Actual, Expected));
 		return false;
+	}
+
+	/** A - B in degrees, brought into [-180, 180) by WeatherAstronomy::Wrap: 359 and 1 differ by -2, not 358. */
+	inline double AngleDiff(double A, double B)
+	{
+		return WeatherAstronomy::Wrap(A - B + 180.0, 360.0) - 180.0;
 	}
 }
