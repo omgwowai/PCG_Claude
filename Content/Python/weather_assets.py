@@ -10,8 +10,9 @@
 
 Idempotent (plan ruling P6): it creates what is missing and updates values in place. The MPC is never recreated and its
 parameter arrays are never rebuilt, since a material's collection-parameter node stores the parameter's GUID; a later run
-appends only the parameters the MPC lacks. The star material's graph is rebuilt on every run. /SeasonalWeather is saved
-only when both StateTrees compile: the library marks their packages dirty even when a compile fails.
+appends only the parameters the MPC lacks. The star material's graph is rebuilt on every run. Nothing is saved before the
+end: /SeasonalWeather, the re-imported star map included, is saved only when both StateTrees compile (the library marks
+their packages dirty even when a compile fails).
 
 The tables and helpers at module level are pure; `unreal` is imported inside the editor functions."""
 import os
@@ -117,14 +118,16 @@ def _mpc():
 
 
 def _import_stars(png):
-    """Imports (or re-imports over) T_WeatherStars and returns whether this run's import produced it."""
+    """Imports (or re-imports over) T_WeatherStars and returns whether this run's import produced it. The task does not
+    save: the imported package stays dirty and run() saves it with the other assets, only when the StateTrees compile
+    (Controller Ruling 27)."""
     import unreal
     task = unreal.AssetImportTask()
     task.set_editor_property("filename", png)
     task.set_editor_property("destination_path", TEXTURE_DIR)
     task.set_editor_property("automated", True)
     task.set_editor_property("replace_existing", True)
-    task.set_editor_property("save", True)
+    task.set_editor_property("save", False)
     _tools().import_asset_tasks([task])
     return any(str(p).split(".")[0] == TEXTURE for p in task.get_editor_property("imported_object_paths"))
 
