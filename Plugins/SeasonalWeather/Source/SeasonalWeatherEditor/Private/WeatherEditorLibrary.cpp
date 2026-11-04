@@ -4,8 +4,8 @@
 #include "Logging/TokenizedMessage.h"
 #include "Misc/PackageName.h"
 #include "StateTree.h"
-#include "StateTreeCompiler.h"
 #include "StateTreeCompilerLog.h"
+#include "StateTreeEditingSubsystem.h"
 #include "StateTreeEditorData.h"
 #include "StateTreeState.h"
 #include "UObject/Package.h"
@@ -23,11 +23,12 @@ namespace
 		return *EditorData;
 	}
 
+	/** Through the editing subsystem, like the StateTree editor: the same compiler, plus the editor data hash, so a built
+	 *  asset does not read as needing a recompile. */
 	bool Compile(UStateTree& Tree, FString& OutErrors)
 	{
 		FStateTreeCompilerLog Log;
-		FStateTreeCompiler Compiler(Log);
-		const bool bCompiled = Compiler.Compile(Tree);
+		const bool bCompiled = UStateTreeEditingSubsystem::CompileStateTree(&Tree, Log);
 		for (const TSharedRef<FTokenizedMessage>& Message : Log.ToTokenizedMessages())
 		{
 			if (Message->GetSeverity() == EMessageSeverity::Error)
@@ -79,13 +80,31 @@ bool UWeatherEditorLibrary::BuildSeasonTree(UStateTree& Tree, FString& OutErrors
 FString UWeatherEditorLibrary::BuildOrchestratorStateTrees(const FString& Folder)
 {
 	FString Errors;
+	// Python reaches this over the bridge: a bad input must end in an error line here, never in an engine fatal error
+	// (CreatePackage on a malformed name, NewObject without a package or over an object of another class).
 	auto Build = [&Errors, &Folder](const TCHAR* AssetName, bool (*Builder)(UStateTree&, FString&))
 	{
 		const FString PackageName = Folder / AssetName;
+		FPackageName::EErrorCode Reason = FPackageName::EErrorCode::PackageNameUnknown;
+		if (!FPackageName::IsValidLongPackageName(PackageName, false, &Reason))
+		{
+			Errors += FString::Printf(TEXT("%s: %s\n"), AssetName, *FPackageName::FormatErrorAsString(PackageName, Reason));
+			return;
+		}
 		UPackage* Package = FPackageName::DoesPackageExist(PackageName) ? LoadPackage(nullptr, *PackageName, LOAD_None) : CreatePackage(*PackageName);
+		if (!Package)
+		{
+			Errors += FString::Printf(TEXT("%s: package '%s' could not be loaded or created\n"), AssetName, *PackageName);
+			return;
+		}
 		UStateTree* Tree = FindObject<UStateTree>(Package, AssetName);
 		if (!Tree)
 		{
+			if (const UObject* Existing = StaticFindObject(UObject::StaticClass(), Package, AssetName))
+			{
+				Errors += FString::Printf(TEXT("%s: '%s' is an object of class %s, not a StateTree\n"), AssetName, *Existing->GetPathName(), *Existing->GetClass()->GetName());
+				return;
+			}
 			Tree = NewObject<UStateTree>(Package, FName(AssetName), RF_Public | RF_Standalone | RF_Transactional);
 			FAssetRegistryModule::AssetCreated(Tree);
 		}
