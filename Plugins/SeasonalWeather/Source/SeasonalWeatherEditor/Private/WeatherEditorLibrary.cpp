@@ -1,6 +1,8 @@
 #include "WeatherEditorLibrary.h"
 
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Framework/Docking/TabManager.h"
 #include "Logging/TokenizedMessage.h"
 #include "Misc/PackageName.h"
 #include "StateTree.h"
@@ -122,5 +124,10 @@ FString UWeatherEditorLibrary::BuildOrchestratorStateTrees(const FString& Folder
 
 void UWeatherEditorLibrary::OpenWeatherPanel()
 {
-	// Task 15 opens the debug panel here.
+	// Python and Blueprints reach this too; without Slate (a commandlet) there is no tab to open, and spawning one would
+	// assert in FSlateApplication::Get().
+	if (FSlateApplication::IsInitialized())
+	{
+		FGlobalTabmanager::Get()->TryInvokeTab(FTabId(TEXT("SeasonalWeatherPanel")));
+	}
 }

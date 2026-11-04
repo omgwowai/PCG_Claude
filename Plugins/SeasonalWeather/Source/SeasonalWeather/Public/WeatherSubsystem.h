@@ -65,6 +65,9 @@ public:
 	const FWeatherMoon& GetMoon() const { return MoonState; }
 	UWeatherFieldRegistry* GetFieldRegistry() const { return FieldRegistry; }
 	const FWeatherOverride& GetOverride() const { return Override; }
+	double GetTimeScale() const { return TimeScale; }
+	bool IsPaused() const { return bPaused; }
+	bool GetRunInEditor() const { return bRunInEditor; }
 
 protected:
 	/** Game, PIE and editor worlds only: preview, thumbnail and inactive worlds would each read the params file. */
