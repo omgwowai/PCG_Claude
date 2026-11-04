@@ -2,6 +2,7 @@ import gc
 import json
 import os
 import sys
+import time
 
 import unreal
 
@@ -34,7 +35,9 @@ for _m in [m for m in sys.modules if m.startswith("weather_")]:
 #   shot {"camera": c, "tag": t}  move the viewport to the lab camera WeatherCam_<c> (c defaults to overview), then fire
 #                                 Saved/Screenshots/WindowsEditor/weather_<c>_<t>.png in game view, without the editor
 #                                 icons, SHOT_DELAY_S later; the engine restores the view state after the capture. One
-#                                 per call; the write is asynchronous, so judge it from disk on a later call
+#                                 per call; the write is asynchronous, so judge it from disk on a later call. Until the
+#                                 capture is processed (about SHOT_DELAY_S, at most SHOT_TIMEOUT_S), SHOT_PENDING names
+#                                 it and set, advance, scenario and shot refuse (FENCED): wait about 10 s after a shot
 #   scenario {"name": n}          run the steps of Tools/weather/scenarios.json's scenario n (set / advance / record),
 #                                 check the records against thresholds.json (weather_ref.scenario.run_checks) and write
 #                                 the records and results to Saved/Reports/weather/<n>.json. Returns {"name", "passed",
@@ -54,8 +57,15 @@ OVERRIDE_FIELDS = {"precip_mm_per_hour": "precip_mm_h", "snow_fraction": "snow_f
 ACTOR_KEYS = ("sun_lux", "sun_pitch", "moon_lux", "sky_light", "fog_density", "white_temp", "saturation")
 CAMERA_PREFIX = "WeatherCam_"   # the lab's camera actors (weather_lab.LAYOUT)
 # Seconds of game-view frames before a shot's capture: the first frame after the switch to game view comes out
-# under-exposed with an unsettled band (measured on the overcast shot); 5 s were enough there, the night adapts furthest.
+# under-exposed with an unsettled band (measured on the overcast shot); 5 s were enough there, and the night adapts
+# furthest.
 SHOT_DELAY_S = 8.0
+# A fired shot's marker {"file", "started"}: written when the shot is fired, removed once its capture is processed.
+# Module state does not survive a bridge call (the weather_* modules are dropped, and every script shares __main__), so
+# the fence lives on disk. A marker older than SHOT_TIMEOUT_S is stale: ignored and replaced.
+SHOT_PENDING = os.path.join(REPORTS, "shot_pending.json")
+SHOT_TIMEOUT_S = 60.0
+FENCED = {"set", "advance", "scenario", "shot"}   # phases that would change what a pending shot photographs
 
 
 def _save(path, data):
@@ -204,12 +214,55 @@ def phase_state(args):
     return record(sub, world)
 
 
+def _pending_shot():
+    """(file name, seconds since it was fired) of a shot whose capture is still pending, or None when there is none or
+    its marker is stale (SHOT_TIMEOUT_S) or unreadable."""
+    try:
+        with open(SHOT_PENDING, encoding="utf-8") as fh:
+            marker = json.load(fh)
+        age = time.time() - float(marker["started"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+    return (marker.get("file"), age) if 0.0 <= age < SHOT_TIMEOUT_S else None
+
+
+def _hold_until_captured(task, claimed):
+    """Write the pending marker and keep the capture task alive until the engine has processed its screenshot, or
+    SHOT_TIMEOUT_S has passed; then drop the marker. The engine guards the UAutomationEditorTask only inside the C++
+    call, and a task collected before its capture restores the editor view early (FScreenshotTakenState's destructor),
+    so this self-unregistering Slate post-tick callback (the _defer pattern) holds the Python reference meanwhile. It
+    uses only names bound here: other bridge scripts share __main__ and may rebind module globals while it waits."""
+    started, path, timeout = time.time(), SHOT_PENDING, SHOT_TIMEOUT_S
+    clock, load, remove = time.time, json.load, os.remove
+    unregister = unreal.unregister_slate_post_tick_callback
+    _save(path, {"file": claimed, "started": started})
+    handle = {}
+
+    def tick(_dt):
+        try:
+            if not task.is_task_done() and clock() - started < timeout:
+                return
+        except Exception:
+            pass                          # a task that cannot answer is finished with
+        h = handle.pop("h", None)
+        if h is not None:
+            unregister(h)
+        try:
+            with open(path, encoding="utf-8") as fh:
+                ours = load(fh).get("started") == started   # a later shot may have replaced a stale marker
+            if ours:
+                remove(path)
+        except (OSError, ValueError, AttributeError):
+            pass
+    handle["h"] = unreal.register_slate_post_tick_callback(tick)
+
+
 def _fire_in_game_view(name, les):
     """One 1600 x 900 capture like pcg_sa_shots.fire, under a name from its ledger, but in game view so that the editor
     icons are hidden (Controller Ruling 32). With force_game_view the engine switches the viewport to game view only
     when it is not in it, captures SHOT_DELAY_S later, and switches it back once the screenshot is processed
     (AutomationBlueprintFunctionLibrary.cpp, FScreenshotTakenState::UnlockViewport), so the view state is restored after
-    the capture."""
+    the capture. A valid task is held until then (_hold_until_captured)."""
     sys.modules.pop("pcg_sa_shots", None)
     import pcg_sa_shots
     game_view_before = bool(les.editor_get_game_view())
@@ -217,9 +270,11 @@ def _fire_in_game_view(name, les):
     claimed = pcg_sa_shots.claim_name(name)
     task = unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, claimed, None, False, False,
                                                              delay=SHOT_DELAY_S, force_game_view=True)
-    return {"requested": name, "claimed": claimed, "varied": claimed != name, "fired": claimed,
-            "valid": bool(task and task.is_valid_task()), "game_view_before": game_view_before,
-            "delay_s": SHOT_DELAY_S}
+    valid = bool(task and task.is_valid_task())
+    if valid:
+        _hold_until_captured(task, claimed)
+    return {"requested": name, "claimed": claimed, "varied": claimed != name, "fired": claimed, "valid": valid,
+            "game_view_before": game_view_before, "delay_s": SHOT_DELAY_S, "pending": SHOT_PENDING if valid else None}
 
 
 def phase_shot(args):
@@ -301,13 +356,19 @@ DEFERRED = os.path.join(REPORTS, "deferred.json")
 
 
 def _call(phase, args):
-    """The phase, or its refusal when it needs the lab and the lab is not the current map."""
+    """The phase; or its refusal when it needs the lab and the lab is not the current map, or when it would change what
+    a pending shot photographs."""
     if phase not in ANY_MAP:
         from pypcg import level
         from weather_lab import LEVEL
         refused = level.require(LEVEL, "weather.py %s" % phase)
         if refused:
             return refused
+    if phase in FENCED:
+        pending = _pending_shot()
+        if pending:
+            name, age = pending
+            return {"abort": "a shot is still being captured (%s, %d s ago); call again" % (name, int(age))}
     return PHASES[phase](args)
 
 
