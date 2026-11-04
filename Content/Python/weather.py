@@ -20,6 +20,10 @@ for _m in [m for m in sys.modules if m.startswith("weather_")]:
 #   assets                        generate the plugin assets under /SeasonalWeather (weather_assets.py): MPC_Weather,
 #                                 T_WeatherStars + M_WeatherStars, the 12 look data assets and the two StateTrees; saved
 #                                 only when both StateTrees compile. Always deferred (ALWAYS_DEFER)
+#   lab {"force": bool}           the lab level /Game/Weather/L_WeatherLab (weather_lab.py): opens it, or creates it with
+#                                 new_level, or with force rebuilds its WeatherLab actors, and saves what it built.
+#                                 Refuses while a big level is open (traps.md 79/83), and before a level switch while a
+#                                 map has unsaved changes. Always deferred (ALWAYS_DEFER)
 # {"defer": true} runs the phase on the next editor tick and writes its result to Saved/Reports/weather/deferred.json;
 # read that file on a later call.
 REPORTS = os.path.join(_REPO, "Saved", "Reports", "weather")
@@ -36,11 +40,17 @@ def phase_assets(args):
     return weather_assets.run(_REPO)
 
 
-PHASES = {"assets": phase_assets}
+def phase_lab(args):
+    import weather_lab
+    return weather_lab.build(force=bool(args.get("force")))
+
+
+PHASES = {"assets": phase_assets, "lab": phase_lab}
 # Phases that run deferred even without {"defer": true}. assets imports the star map through Interchange, whose
 # synchronous wait pumps the game-thread task queue; inside the bridge's own game-thread task that trips TaskGraph's
 # RecursionGuard and kills the editor (Controller Ruling 26). A Slate post-tick callback runs outside the task graph.
-ALWAYS_DEFER = {"assets"}
+# lab creates or opens a level and saves it, which may pump the task queue the same way (Controller Ruling 28).
+ALWAYS_DEFER = {"assets", "lab"}
 DEFERRED = os.path.join(REPORTS, "deferred.json")
 
 
