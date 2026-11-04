@@ -21,6 +21,7 @@
         {"name": "overcast_thickens_fog", "kind": "greater", "value": "overcast_noon_summer.rig.fog_density", "ref": "clear_noon_summer.rig.fog_density"},
         {"name": "overcast_desaturates", "kind": "less", "value": "overcast_noon_summer.rig.saturation", "ref": "clear_noon_summer.rig.saturation"},
         {"name": "overcast_state_active", "kind": "equals", "value": "overcast_noon_summer.orchestrator.active_type", "literal": "Overcast"},
+        {"name": "trees_running", "kind": "equals", "value": "overcast_noon_summer.orchestrator.trees_running", "literal": true},
         {"name": "stars_at_midnight", "kind": "at_least", "value": "clear_midnight_winter.rig.star_intensity", "min": "@stars_midnight_min"},
         {"name": "no_stars_at_noon", "kind": "at_most", "value": "clear_noon_summer.rig.star_intensity", "max": 0.0},
         {"name": "transition_half_way", "kind": "near", "value": "autumn_transition_noon.calendar.transition_progress", "target": 0.5, "tol": 1e-6},

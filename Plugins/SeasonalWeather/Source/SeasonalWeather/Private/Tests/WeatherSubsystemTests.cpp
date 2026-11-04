@@ -8,6 +8,8 @@
 #include "Engine/PostProcessVolume.h"
 #include "Engine/SkyLight.h"
 #include "Engine/World.h"
+#include "GameFramework/PlayerState.h"
+#include "GameFramework/WorldSettings.h"
 #include "Misc/AutomationTest.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -201,6 +203,17 @@ bool FWeatherSubsystemClockTest::RunTest(const FString&)
 	Weather->SetPaused(true);
 	Weather->UpdateNow(1.f);
 	TestTrue(TEXT("paused"), FMath::IsNearlyEqual(Weather->GetCalendar().GameSeconds - Before, 3600.0, 1e-6));
+	// A paused world stops it too: the subsystem ticks even then (IsTickableInEditor). A pauser player state is how
+	// AGameModeBase::SetPause pauses a world, and it needs no player controller.
+	Weather->SetPaused(false);
+	UWorld* World = Wrapper.GetTestWorld();
+	World->GetWorldSettings()->SetPauserPlayerState(World->SpawnActor<APlayerState>());
+	TestTrue(TEXT("the world is paused"), World->IsPaused());
+	Weather->UpdateNow(1.f);
+	TestTrue(TEXT("a paused world"), FMath::IsNearlyEqual(Weather->GetCalendar().GameSeconds - Before, 3600.0, 1e-6));
+	World->GetWorldSettings()->SetPauserPlayerState(nullptr);
+	Weather->UpdateNow(1.f);
+	TestTrue(TEXT("runs again with the world"), FMath::IsNearlyEqual(Weather->GetCalendar().GameSeconds - Before, 7200.0, 1e-6));
 	return true;
 }
 

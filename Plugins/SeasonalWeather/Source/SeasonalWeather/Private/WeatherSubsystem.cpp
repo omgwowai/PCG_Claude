@@ -161,7 +161,10 @@ void UWeatherSubsystem::UpdateNow(float RealDeltaSeconds)
 	}
 	const UWorld* World = GetWorld();
 	const bool bEditorWorld = World && World->WorldType == EWorldType::Editor;
-	if (!bPaused && (!bEditorWorld || bRunInEditor))
+	// A paused world stops the clock like SetPaused: the subsystem is tickable in the editor, so it still ticks in a
+	// paused PIE world, with the frame's delta (Tickable.cpp).
+	const bool bWorldPaused = World && World->IsPaused();
+	if (!bPaused && !bWorldPaused && (!bEditorWorld || bRunInEditor))
 	{
 		GameSeconds = ClampGameSeconds(GameSeconds + Dt * TimeScale);
 	}
@@ -457,6 +460,17 @@ bool UWeatherSubsystem::EnsureDomain()
 	if (!bDomainSeen)
 	{
 		bDomainSeen = true;
+		// The first domain in actor-iterator order wins; say so once when the world has more.
+		int32 DomainCount = 0;
+		for (TActorIterator<AWeatherDomain> It(GetWorld()); It; ++It)
+		{
+			++DomainCount;
+		}
+		if (DomainCount > 1)
+		{
+			UE_LOG(LogSeasonalWeather, Warning, TEXT("%s has %d AWeatherDomain actors: the weather uses %s, the first found, and ignores the others while it exists"),
+				*GetNameSafe(GetWorld()), DomainCount, *Domain->GetActorNameOrLabel());
+		}
 		LoadAssets();
 		BlendTargetType = RequestedType;
 		DisplayedTypeLook = TypeLook(RequestedType);
@@ -484,6 +498,15 @@ void UWeatherSubsystem::LoadAssets()
 	}
 	TypeTree = LoadIfExists<UStateTree>(TEXT("/SeasonalWeather/Orchestrator/ST_WeatherType"));
 	SeasonTree = LoadIfExists<UStateTree>(TEXT("/SeasonalWeather/Orchestrator/ST_Season"));
+	// Said here, once per world, because TickOrchestrator falls back without a word on every update.
+	for (const UStateTree* Tree : { TypeTree.Get(), SeasonTree.Get() })
+	{
+		if (Tree && !Tree->IsReadyToRun())
+		{
+			UE_LOG(LogSeasonalWeather, Warning, TEXT("%s is not ready to run: until it is (weather.py assets rebuilds it), the orchestrator holds the requested weather type and the calendar's season"),
+				*Tree->GetPathName());
+		}
+	}
 }
 
 void UWeatherSubsystem::TickOrchestrator(float DeltaSeconds)

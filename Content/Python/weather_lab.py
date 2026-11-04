@@ -125,7 +125,10 @@ def _setup(actor, row):
         actor.set_actor_scale3d(unreal.Vector(k, k, k))
         mesh.set_collision_profile_name("NoCollision")
         mesh.set_cast_shadow(False)
-        mesh.set_material(0, unreal.load_asset(s["material"]))
+        material = unreal.load_asset(s["material"])
+        if material is None:   # the slot would keep the sky sphere's own material without a word
+            raise RuntimeError("could not load %s for %s (run weather.py assets first)" % (s["material"], row["label"]))
+        mesh.set_material(0, material)
     elif what == "WeatherDomain":
         actor.set_editor_property("extent_meters", s["extent_meters"])
 

@@ -278,14 +278,18 @@ def _fire_in_game_view(name, les):
 
 
 def phase_shot(args):
+    from weather_lab import TAG
     camera, tag = str(args.get("camera", "overview")), args.get("tag")
     if not tag:
         return {"abort": "shot needs a tag: the picture is weather_<camera>_<tag>.png; nothing was fired"}
     label = CAMERA_PREFIX + camera
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-    cameras = {str(a.get_actor_label()): a for a in eas.get_all_level_actors() if isinstance(a, unreal.CameraActor)}
-    if label not in cameras:   # found by label: a camera is not part of the domain
-        return {"abort": "no camera %s (cameras: %s); nothing was fired" % (label, ", ".join(sorted(cameras)))}
+    # Found by label among the lab's own actors (tagged TAG): a camera is not one of the domain's references.
+    cameras = {str(a.get_actor_label()): a for a in eas.get_all_level_actors()
+               if isinstance(a, unreal.CameraActor) and TAG in [str(t) for t in a.get_editor_property("tags")]}
+    if label not in cameras:
+        return {"abort": "no %s camera %s (%s cameras: %s); nothing was fired"
+                         % (TAG, label, TAG, ", ".join(sorted(cameras)))}
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     cam = cameras[label]
     les.set_level_viewport_camera_info(cam.get_actor_location(), cam.get_actor_rotation(),

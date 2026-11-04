@@ -40,7 +40,7 @@ def test_failures_and_missing_records_are_reported_by_name():
 def test_scenario_files_are_consistent():
     doc, th = SC.load_scenarios(), SC.load_thresholds()
     assert SC.problems(doc, th) == []
-    assert len(doc["scenarios"]["m0_look"]["checks"]) == 14
+    assert len(doc["scenarios"]["m0_look"]["checks"]) == 15
 
 
 def test_problems_catch_unknown_kinds_records_and_thresholds():
