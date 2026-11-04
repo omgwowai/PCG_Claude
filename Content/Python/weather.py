@@ -32,8 +32,9 @@ for _m in [m for m in sys.modules if m.startswith("weather_")]:
 #   state                         record(): the subsystem's state JSON plus the actors block, the sky actors' values
 #                                 read back through the domain's references
 #   shot {"camera": c, "tag": t}  move the viewport to the lab camera WeatherCam_<c> (c defaults to overview), then fire
-#                                 Saved/Screenshots/WindowsEditor/weather_<c>_<t>.png with pcg_sa_shots.fire. One per
-#                                 call; the write is asynchronous, so judge it from disk on a later call
+#                                 Saved/Screenshots/WindowsEditor/weather_<c>_<t>.png in game view, without the editor
+#                                 icons, SHOT_DELAY_S later; the engine restores the view state after the capture. One
+#                                 per call; the write is asynchronous, so judge it from disk on a later call
 #   scenario {"name": n}          run the steps of Tools/weather/scenarios.json's scenario n (set / advance / record),
 #                                 check the records against thresholds.json (weather_ref.scenario.run_checks) and write
 #                                 the records and results to Saved/Reports/weather/<n>.json. Returns {"name", "passed",
@@ -52,6 +53,9 @@ OVERRIDE_FIELDS = {"precip_mm_per_hour": "precip_mm_h", "snow_fraction": "snow_f
                    "cloud_cover": "cloud_cover"}
 ACTOR_KEYS = ("sun_lux", "sun_pitch", "moon_lux", "sky_light", "fog_density", "white_temp", "saturation")
 CAMERA_PREFIX = "WeatherCam_"   # the lab's camera actors (weather_lab.LAYOUT)
+# Seconds of game-view frames before a shot's capture: the first frame after the switch to game view comes out
+# under-exposed with an unsettled band (measured on the overcast shot); 5 s were enough there, the night adapts furthest.
+SHOT_DELAY_S = 8.0
 
 
 def _save(path, data):
@@ -200,6 +204,24 @@ def phase_state(args):
     return record(sub, world)
 
 
+def _fire_in_game_view(name, les):
+    """One 1600 x 900 capture like pcg_sa_shots.fire, under a name from its ledger, but in game view so that the editor
+    icons are hidden (Controller Ruling 32). With force_game_view the engine switches the viewport to game view only
+    when it is not in it, captures SHOT_DELAY_S later, and switches it back once the screenshot is processed
+    (AutomationBlueprintFunctionLibrary.cpp, FScreenshotTakenState::UnlockViewport), so the view state is restored after
+    the capture."""
+    sys.modules.pop("pcg_sa_shots", None)
+    import pcg_sa_shots
+    game_view_before = bool(les.editor_get_game_view())
+    les.editor_invalidate_viewports()
+    claimed = pcg_sa_shots.claim_name(name)
+    task = unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, claimed, None, False, False,
+                                                             delay=SHOT_DELAY_S, force_game_view=True)
+    return {"requested": name, "claimed": claimed, "varied": claimed != name, "fired": claimed,
+            "valid": bool(task and task.is_valid_task()), "game_view_before": game_view_before,
+            "delay_s": SHOT_DELAY_S}
+
+
 def phase_shot(args):
     camera, tag = str(args.get("camera", "overview")), args.get("tag")
     if not tag:
@@ -209,13 +231,11 @@ def phase_shot(args):
     cameras = {str(a.get_actor_label()): a for a in eas.get_all_level_actors() if isinstance(a, unreal.CameraActor)}
     if label not in cameras:   # found by label: a camera is not part of the domain
         return {"abort": "no camera %s (cameras: %s); nothing was fired" % (label, ", ".join(sorted(cameras)))}
-    sys.modules.pop("pcg_sa_shots", None)
-    import pcg_sa_shots
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     cam = cameras[label]
     les.set_level_viewport_camera_info(cam.get_actor_location(), cam.get_actor_rotation(),
                                        les.get_active_viewport_config_key())
-    return {"fired": pcg_sa_shots.fire("weather_%s_%s.png" % (camera, tag), les), "camera": label}
+    return {"fired": _fire_in_game_view("weather_%s_%s.png" % (camera, tag), les), "camera": label}
 
 
 def _step_hours(value):

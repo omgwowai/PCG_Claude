@@ -2,8 +2,10 @@
 `weather.py assets` into the plugin content /SeasonalWeather (Plugins/SeasonalWeather/Content):
 
   Materials/MPC_Weather            the parameter collection the subsystem writes every update (MPC_SCALARS, MPC_VECTORS)
-  Textures/T_WeatherStars          Saved/Weather/T_WeatherStars.png from Tools/weather/gen_starmap.py (plan ruling P5)
-  Materials/M_WeatherStars         unlit two-sided sky material: star map RGB x MPC_Weather.StarIntensity -> emissive
+  Textures/T_WeatherStars          Saved/Weather/T_WeatherStars.png from Tools/weather/gen_starmap.py (plan ruling P5),
+                                   compressed STAR_COMPRESSION
+  Materials/M_WeatherStars         unlit two-sided sky material: the sky atmosphere and the sun disk, plus the star map
+                                   RGB x MPC_Weather.StarIntensity -> emissive
   Data/DA_WeatherType_<Type>       UWeatherTypeAsset, TYPE_LOOKS
   Data/DA_SeasonLook_<Season>      USeasonLookAsset, SEASON_LOOKS
   Orchestrator/ST_WeatherType, ST_Season   built by UWeatherEditorLibrary.BuildOrchestratorStateTrees (C++)
@@ -22,21 +24,22 @@ from weather_ref.sky import LOOK_FIELDS
 
 # Looks in weather_ref.sky.LOOK_FIELDS order: sun, moon, sky_light, fog_density, fog_height_falloff, white_temp_offset,
 # saturation, contrast, exposure_bias, cloud_cover.
+# UE's post-process White Balance warms the image as WhiteTemp rises: a negative offset cools it (Controller Ruling 30).
 TYPE_LOOKS = {
-    "Clear":        (1.00, 1.00, 1.00, 1.0, 1.0,    0.0, 1.00, 1.00, 0.0, 0.05),
-    "FairCumulus":  (0.90, 0.90, 1.00, 1.0, 1.0,    0.0, 1.00, 1.00, 0.0, 0.35),
-    "Overcast":     (0.25, 0.30, 0.80, 2.0, 0.8,  500.0, 0.80, 0.90, 0.3, 0.95),
-    "FrontalRain":  (0.15, 0.20, 0.65, 3.0, 0.7,  700.0, 0.70, 0.85, 0.5, 1.00),
-    "Thunderstorm": (0.08, 0.10, 0.50, 3.5, 0.7,  900.0, 0.65, 0.95, 0.6, 1.00),
-    "Fog":          (0.40, 0.40, 0.90, 8.0, 2.5,  300.0, 0.75, 0.80, 0.2, 0.60),
-    "Snow":         (0.30, 0.35, 0.90, 2.5, 0.8,  800.0, 0.70, 0.90, 0.3, 0.95),
-    "Blizzard":     (0.10, 0.10, 0.70, 6.0, 0.6, 1200.0, 0.55, 0.85, 0.5, 1.00),
+    "Clear":        (1.00, 1.00, 1.00, 1.0, 1.0,     0.0, 1.00, 1.00, 0.0, 0.05),
+    "FairCumulus":  (0.90, 0.90, 1.00, 1.0, 1.0,     0.0, 1.00, 1.00, 0.0, 0.35),
+    "Overcast":     (0.25, 0.30, 0.80, 2.0, 0.8,  -500.0, 0.80, 0.90, 0.3, 0.95),
+    "FrontalRain":  (0.15, 0.20, 0.65, 3.0, 0.7,  -700.0, 0.70, 0.85, 0.5, 1.00),
+    "Thunderstorm": (0.08, 0.10, 0.50, 3.5, 0.7,  -900.0, 0.65, 0.95, 0.6, 1.00),
+    "Fog":          (0.40, 0.40, 0.90, 8.0, 2.5,  -300.0, 0.75, 0.80, 0.2, 0.60),
+    "Snow":         (0.30, 0.35, 0.90, 2.5, 0.8,  -800.0, 0.70, 0.90, 0.3, 0.95),
+    "Blizzard":     (0.10, 0.10, 0.70, 6.0, 0.6, -1200.0, 0.55, 0.85, 0.5, 1.00),
 }
 SEASON_LOOKS = {   # cloud_cover is ignored for seasons (Combine keeps the type's)
-    "Spring": (1.0, 1.0, 1.0, 1.0, 1.0, -200.0, 1.05, 1.00, 0.0, 0.0),
-    "Summer": (1.0, 1.0, 1.0, 0.9, 1.0, -400.0, 1.10, 1.05, 0.0, 0.0),
-    "Autumn": (1.0, 1.0, 1.0, 1.2, 1.0, -600.0, 1.00, 1.00, 0.0, 0.0),
-    "Winter": (1.0, 1.0, 1.0, 1.1, 1.0,  600.0, 0.85, 0.95, 0.2, 0.0),
+    "Spring": (1.0, 1.0, 1.0, 1.0, 1.0,  200.0, 1.05, 1.00, 0.0, 0.0),
+    "Summer": (1.0, 1.0, 1.0, 0.9, 1.0,  400.0, 1.10, 1.05, 0.0, 0.0),
+    "Autumn": (1.0, 1.0, 1.0, 1.2, 1.0,  600.0, 1.00, 1.00, 0.0, 0.0),
+    "Winter": (1.0, 1.0, 1.0, 1.1, 1.0, -600.0, 0.85, 0.95, 0.2, 0.0),
 }
 # The names the subsystem writes (UWeatherSubsystem::WriteMpc); the values are only the collection's defaults.
 MPC_SCALARS = {"TimeOfDay": 12.0, "MoonIllumination": 0.0, "StarIntensity": 0.0, "CloudCover": 0.0}
@@ -51,6 +54,8 @@ TEXTURE = TEXTURE_DIR + "/T_WeatherStars"
 DATA_DIR = ROOT + "/Data"
 TREES_DIR = ROOT + "/Orchestrator"
 STAR_PNG = os.path.join("Saved", "Weather", "T_WeatherStars.png")   # relative to the repository
+# BC7 keeps the noisy star map's colours; the default BC1 left magenta and green block specks (Controller Ruling 31).
+STAR_COMPRESSION = "TC_BC7"
 NO_PNG = "run C:/Python314/python.exe Tools/weather/gen_starmap.py first"
 
 
@@ -138,9 +143,13 @@ def _link(ok, what):
 
 
 def _star_material(texture, mpc):
-    """M_WeatherStars rebuilt from an empty graph: TextureSample(T_WeatherStars).RGB x CollectionParameter(MPC_Weather,
-    StarIntensity) -> Emissive Color, unlit, sky, two-sided. Properties are set without notification (traps.md 100) and
-    compiled at the end, except the parameter name, whose notification resolves the node's parameter GUID."""
+    """M_WeatherStars rebuilt from an empty graph, unlit, sky, two-sided: SkyAtmosphereViewLuminance +
+    SkyAtmosphereLightDiskLuminance (light 0, the sun disk) + TextureSample(T_WeatherStars).RGB x
+    CollectionParameter(MPC_Weather, StarIntensity) -> Emissive Color. A scene with a sky material makes the
+    SkyAtmosphere skip its own sky pixels (SkyAtmosphereRendering.cpp, bRenderSkyPixel), so the material draws the
+    atmosphere and the sun disk itself; it stays a sky material so that the volumetric clouds stay in front of the stars
+    (Controller Ruling 29). Properties are set without notification (traps.md 100) and compiled at the end, except the
+    parameter name, whose notification resolves the node's parameter GUID."""
     import unreal
     mel = unreal.MaterialEditingLibrary
     never = unreal.PropertyAccessChangeNotifyMode.NEVER
@@ -153,6 +162,12 @@ def _star_material(texture, mpc):
     m.set_editor_property("shading_model", unreal.MaterialShadingModel.MSM_UNLIT, never)
     m.set_editor_property("is_sky", True, never)
     m.set_editor_property("two_sided", True, never)
+    sky = mel.create_material_expression(m, unreal.MaterialExpressionSkyAtmosphereViewLuminance, -600, -350)
+    disk = mel.create_material_expression(m, unreal.MaterialExpressionSkyAtmosphereLightDiskLuminance, -600, -200)
+    disk.set_editor_property("light_index", 0, never)
+    atmosphere = mel.create_material_expression(m, unreal.MaterialExpressionAdd, -250, -250)
+    _link(mel.connect_material_expressions(sky, "", atmosphere, "A"), "SkyAtmosphereViewLuminance -> Add.A")
+    _link(mel.connect_material_expressions(disk, "", atmosphere, "B"), "SkyAtmosphereLightDiskLuminance -> Add.B")
     tex = mel.create_material_expression(m, unreal.MaterialExpressionTextureSample, -600, 0)
     tex.set_editor_property("texture", texture, never)
     par = mel.create_material_expression(m, unreal.MaterialExpressionCollectionParameter, -600, 300)
@@ -162,7 +177,11 @@ def _star_material(texture, mpc):
     mul = mel.create_material_expression(m, unreal.MaterialExpressionMultiply, -250, 100)
     _link(mel.connect_material_expressions(tex, "RGB", mul, "A"), "TextureSample.RGB -> Multiply.A")
     _link(mel.connect_material_expressions(par, "", mul, "B"), "StarIntensity -> Multiply.B")
-    _link(mel.connect_material_property(mul, "", unreal.MaterialProperty.MP_EMISSIVE_COLOR), "Multiply -> Emissive Color")
+    emissive = mel.create_material_expression(m, unreal.MaterialExpressionAdd, -50, 0)
+    _link(mel.connect_material_expressions(atmosphere, "", emissive, "A"), "atmosphere Add -> Add.A")
+    _link(mel.connect_material_expressions(mul, "", emissive, "B"), "stars Multiply -> Add.B")
+    _link(mel.connect_material_property(emissive, "", unreal.MaterialProperty.MP_EMISSIVE_COLOR),
+          "Add -> Emissive Color")
     errors = [str(e) for e in mel.recompile_material(m)]
     if errors:
         raise RuntimeError("M_WeatherStars does not compile: %s" % "; ".join(errors))
@@ -174,8 +193,11 @@ def _stars(png, mpc):
     texture = unreal.load_asset(TEXTURE)
     if not isinstance(texture, unreal.Texture2D):
         raise RuntimeError("%s was not imported from %s" % (TEXTURE, png))
+    compression = getattr(unreal.TextureCompressionSettings, STAR_COMPRESSION)
+    if texture.get_editor_property("compression_settings") != compression:
+        texture.set_editor_property("compression_settings", compression)   # notified: the texture rebuilds
     _star_material(texture, mpc)
-    return {"imported": imported, "material": MATERIAL}
+    return {"imported": imported, "material": MATERIAL, "compression": STAR_COMPRESSION}
 
 
 def _looks():
@@ -199,8 +221,8 @@ def _looks():
 
 def run(repo_dir):
     """Generates every asset above and saves /SeasonalWeather when the StateTrees compiled:
-    {"mpc": {"created", "added"}, "stars": {"imported", "material"}, "looks": {"types", "seasons"}, "trees": "" or the
-    compiler errors, "saved"}; {"abort": ...} when the star map has not been generated."""
+    {"mpc": {"created", "added"}, "stars": {"imported", "material", "compression"}, "looks": {"types", "seasons"},
+    "trees": "" or the compiler errors, "saved"}; {"abort": ...} when the star map has not been generated."""
     png = os.path.normpath(os.path.join(repo_dir, STAR_PNG))
     if not os.path.isfile(png):
         return {"abort": NO_PNG}
