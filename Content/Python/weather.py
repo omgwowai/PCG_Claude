@@ -24,15 +24,142 @@ for _m in [m for m in sys.modules if m.startswith("weather_")]:
 #                                 new_level, or with force rebuilds its WeatherLab actors, and saves what it built.
 #                                 Refuses while a big level is open (traps.md 79/83), and before a level switch while a
 #                                 map has unsaved changes. Always deferred (ALWAYS_DEFER)
+#   set {...}                     any of SET_KEYS, applied in that order: season and day (day 0 by default; a day alone
+#                                 keeps the season), hour, type with blend (default true), time_scale, paused,
+#                                 run_in_editor, override (FWeatherOverride fields in snake_case, merged onto the
+#                                 current override); then apply_now(). Returns record()
+#   advance {"hours": h}          the clock h game hours on, then apply_now(). Returns record()
+#   state                         record(): the subsystem's state JSON plus the actors block, the sky actors' values
+#                                 read back through the domain's references
+#   shot {"camera": c, "tag": t}  move the viewport to the lab camera WeatherCam_<c> (c defaults to overview), then fire
+#                                 Saved/Screenshots/WindowsEditor/weather_<c>_<t>.png with pcg_sa_shots.fire. One per
+#                                 call; the write is asynchronous, so judge it from disk on a later call
+#   scenario {"name": n}          run the steps of Tools/weather/scenarios.json's scenario n (set / advance / record),
+#                                 check the records against thresholds.json (weather_ref.scenario.run_checks) and write
+#                                 the records and results to Saved/Reports/weather/<n>.json. Returns {"name", "passed",
+#                                 "failed", "report"}
+# Every phase but assets and lab (ANY_MAP) refuses unless the lab is the current map.
 # {"defer": true} runs the phase on the next editor tick and writes its result to Saved/Reports/weather/deferred.json;
 # read that file on a later call.
 REPORTS = os.path.join(_REPO, "Saved", "Reports", "weather")
+
+SET_KEYS = ("season", "day", "hour", "type", "blend", "time_scale", "paused", "run_in_editor", "override")
+# FWeatherOverride's Python field names -> their names in the state JSON's "override" block (weather_params.json
+# override_defaults), from which set reads the current override it merges onto.
+OVERRIDE_FIELDS = {"precip_mm_per_hour": "precip_mm_h", "snow_fraction": "snow_fraction",
+                   "temperature_c": "temperature_c", "humidity": "humidity", "wind_direction_deg": "wind_dir_deg",
+                   "wind_speed_mps": "wind_speed_m_s", "thunder_potential": "thunder_potential",
+                   "cloud_cover": "cloud_cover"}
+ACTOR_KEYS = ("sun_lux", "sun_pitch", "moon_lux", "sky_light", "fog_density", "white_temp", "saturation")
+CAMERA_PREFIX = "WeatherCam_"   # the lab's camera actors (weather_lab.LAYOUT)
 
 
 def _save(path, data):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, indent=1, ensure_ascii=False, sort_keys=True, default=str)
+
+
+def _number(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def _weather():
+    """(the editor world's weather subsystem or None, the editor world)."""
+    world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+    return unreal.WeatherBlueprintLibrary.get_weather_subsystem(world), world
+
+
+NO_WEATHER = {"abort": "the editor world has no weather subsystem (is the SeasonalWeather plugin loaded?); nothing was "
+                       "changed"}
+
+
+def _actors(world):
+    """The actors block of a record: the sky actors' values, read back through the references of the level's weather
+    domain (never by label); None where the domain or a reference is missing."""
+    out = dict.fromkeys(ACTOR_KEYS)
+    domains = unreal.GameplayStatics.get_all_actors_of_class(world, unreal.WeatherDomain)
+    if not domains:
+        return out
+    ref = domains[0].get_editor_property   # the first in actor-iterator order, the one the subsystem drives
+    sun, moon, sky, fog, post = (ref(p) for p in ("sun", "moon", "sky_light", "height_fog", "post_process"))
+    if sun:
+        out["sun_lux"] = sun.get_editor_property("light_component").get_editor_property("intensity")
+        out["sun_pitch"] = sun.get_actor_rotation().pitch
+    if moon:
+        out["moon_lux"] = moon.get_editor_property("light_component").get_editor_property("intensity")
+    if sky:
+        out["sky_light"] = sky.get_editor_property("light_component").get_editor_property("intensity")
+    if fog:
+        out["fog_density"] = fog.get_editor_property("component").get_editor_property("fog_density")
+    if post:
+        settings = post.get_editor_property("settings")
+        out["white_temp"] = settings.get_editor_property("white_temp")
+        out["saturation"] = settings.get_editor_property("color_saturation").x
+    return out
+
+
+def record(sub, world):
+    """The subsystem's state JSON, parsed, plus the actors block."""
+    rec = json.loads(sub.get_state_json())
+    rec["actors"] = _actors(world)
+    return rec
+
+
+def _set_problems(args):
+    """Why `args` is not a valid set ([] when it is), so that a bad set changes nothing. `phase` and `defer` are the
+    driver's own keys."""
+    from weather_ref.params import SEASONS, WEATHER_TYPES
+    allowed = SET_KEYS + ("phase", "defer")
+    out = ["unknown key %r (keys: %s)" % (k, ", ".join(SET_KEYS)) for k in args if k not in allowed]
+    for key, names in (("season", SEASONS), ("type", WEATHER_TYPES)):
+        if key in args and args[key] not in names:
+            out.append("%s %r is not one of %s" % (key, args[key], ", ".join(names)))
+    if "blend" in args and "type" not in args:
+        out.append("blend goes with type")
+    out += ["%s %r is not a number" % (k, args[k]) for k in ("day", "hour", "time_scale")
+            if k in args and not _number(args[k])]
+    out += ["%s %r is not true or false" % (k, args[k]) for k in ("blend", "paused", "run_in_editor")
+            if k in args and not isinstance(args[k], bool)]
+    override = args.get("override", {})
+    if not isinstance(override, dict):
+        return out + ["override %r is not an object of override fields" % (override,)]
+    for k, v in override.items():
+        if k not in OVERRIDE_FIELDS:
+            out.append("override field %r is unknown (fields: %s)" % (k, ", ".join(OVERRIDE_FIELDS)))
+        elif not _number(v):
+            out.append("override %s %r is not a number" % (k, v))
+    return out
+
+
+def _apply_set(sub, args):
+    """The keys of a valid set in SET_KEYS order, then apply_now()."""
+    from weather_assets import enum_member
+    if "season" in args or "day" in args:
+        season = args.get("season") or json.loads(sub.get_state_json())["calendar"]["season"]
+        sub.set_season(getattr(unreal.WeatherSeason, enum_member(season)), int(args.get("day", 0)))
+    if "hour" in args:
+        sub.set_time_of_day(float(args["hour"]))
+    if "type" in args:
+        sub.set_weather_type(getattr(unreal.WeatherType, enum_member(args["type"])), args.get("blend", True))
+    if "time_scale" in args:
+        sub.set_time_scale(float(args["time_scale"]))
+    if "paused" in args:
+        sub.set_paused(args["paused"])
+    if "run_in_editor" in args:
+        sub.set_run_in_editor(args["run_in_editor"])
+    if "override" in args:
+        current = json.loads(sub.get_state_json())["override"]
+        override = unreal.WeatherOverride()
+        for field, key in OVERRIDE_FIELDS.items():
+            override.set_editor_property(field, float(args["override"].get(field, current[key])))
+        sub.set_override(override)
+    sub.apply_now()
+
+
+def _apply_advance(sub, hours):
+    sub.advance_game_time(float(hours))
+    sub.apply_now()
 
 
 def phase_assets(args):
@@ -45,13 +172,123 @@ def phase_lab(args):
     return weather_lab.build(force=bool(args.get("force")))
 
 
-PHASES = {"assets": phase_assets, "lab": phase_lab}
+def phase_set(args):
+    problems = _set_problems(args)
+    if problems:
+        return {"abort": "set: %s; nothing was changed" % "; ".join(problems)}
+    sub, world = _weather()
+    if sub is None:
+        return NO_WEATHER
+    _apply_set(sub, args)
+    return record(sub, world)
+
+
+def phase_advance(args):
+    if not _number(args.get("hours")):
+        return {"abort": "advance needs hours, a number of game hours; nothing was changed"}
+    sub, world = _weather()
+    if sub is None:
+        return NO_WEATHER
+    _apply_advance(sub, args["hours"])
+    return record(sub, world)
+
+
+def phase_state(args):
+    sub, world = _weather()
+    if sub is None:
+        return NO_WEATHER
+    return record(sub, world)
+
+
+def phase_shot(args):
+    camera, tag = str(args.get("camera", "overview")), args.get("tag")
+    if not tag:
+        return {"abort": "shot needs a tag: the picture is weather_<camera>_<tag>.png; nothing was fired"}
+    label = CAMERA_PREFIX + camera
+    eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cameras = {str(a.get_actor_label()): a for a in eas.get_all_level_actors() if isinstance(a, unreal.CameraActor)}
+    if label not in cameras:   # found by label: a camera is not part of the domain
+        return {"abort": "no camera %s (cameras: %s); nothing was fired" % (label, ", ".join(sorted(cameras)))}
+    sys.modules.pop("pcg_sa_shots", None)
+    import pcg_sa_shots
+    les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+    cam = cameras[label]
+    les.set_level_viewport_camera_info(cam.get_actor_location(), cam.get_actor_rotation(),
+                                       les.get_active_viewport_config_key())
+    return {"fired": pcg_sa_shots.fire("weather_%s_%s.png" % (camera, tag), les), "camera": label}
+
+
+def _step_hours(value):
+    """An advance step's game hours: a number, or the advance phase's arguments {"hours": h}."""
+    return value.get("hours") if isinstance(value, dict) else value
+
+
+def _step_problems(name, sc, thresholds):
+    """Why scenario `name` (`sc`) cannot run ([] when it can): weather_ref.scenario.problems on it alone, plus its set
+    and advance values."""
+    from weather_ref import scenario as SC
+    out = SC.problems({"scenarios": {name: sc}}, thresholds)
+    for i, step in enumerate(sc.get("steps") or []):
+        if isinstance(step, dict) and "set" in step:
+            value = step["set"]
+            out += ["%s: steps[%d] set: %s" % (name, i, p)
+                    for p in (_set_problems(value) if isinstance(value, dict) else ["%r is not an object" % (value,)])]
+        elif isinstance(step, dict) and "advance" in step and not _number(_step_hours(step["advance"])):
+            out.append("%s: steps[%d] advance %r is not a number of game hours" % (name, i, step["advance"]))
+    return out
+
+
+def phase_scenario(args):
+    from weather_ref import scenario as SC
+    name = args.get("name")
+    scenarios = SC.load_scenarios()["scenarios"]
+    if name not in scenarios:
+        return {"abort": "no scenario %r (scenarios: %s); nothing was changed" % (name, ", ".join(sorted(scenarios)))}
+    sc, thresholds = scenarios[name], SC.load_thresholds()
+    problems = _step_problems(name, sc, thresholds)
+    if problems:
+        return {"abort": "%s; nothing was changed" % "; ".join(problems)}
+    sub, world = _weather()
+    if sub is None:
+        return NO_WEATHER
+    records = {}
+    for step in sc["steps"]:
+        (key, value), = step.items()
+        if key == "set":
+            _apply_set(sub, value)
+        elif key == "advance":
+            _apply_advance(sub, _step_hours(value))
+        else:
+            records[value] = record(sub, world)
+    out = SC.run_checks(sc["checks"], records, thresholds)
+    report = os.path.join(REPORTS, "%s.json" % name)
+    _save(report, {"name": name, "milestone": sc.get("milestone"), "passed": out["passed"], "failed": out["failed"],
+                   "results": out["results"], "records": records})
+    return {"name": name, "passed": out["passed"], "failed": out["failed"], "report": report}
+
+
+PHASES = {"assets": phase_assets, "lab": phase_lab, "set": phase_set, "advance": phase_advance, "state": phase_state,
+          "shot": phase_shot, "scenario": phase_scenario}
+# Phases that run with any map open: assets writes plugin assets only, and lab opens or creates the lab itself, behind
+# its own big-level refusal (Controller Ruling 12).
+ANY_MAP = {"assets", "lab"}
 # Phases that run deferred even without {"defer": true}. assets imports the star map through Interchange, whose
 # synchronous wait pumps the game-thread task queue; inside the bridge's own game-thread task that trips TaskGraph's
 # RecursionGuard and kills the editor (Controller Ruling 26). A Slate post-tick callback runs outside the task graph.
 # lab creates or opens a level and saves it, which may pump the task queue the same way (Controller Ruling 28).
 ALWAYS_DEFER = {"assets", "lab"}
 DEFERRED = os.path.join(REPORTS, "deferred.json")
+
+
+def _call(phase, args):
+    """The phase, or its refusal when it needs the lab and the lab is not the current map."""
+    if phase not in ANY_MAP:
+        from pypcg import level
+        from weather_lab import LEVEL
+        refused = level.require(LEVEL, "weather.py %s" % phase)
+        if refused:
+            return refused
+    return PHASES[phase](args)
 
 
 def _defer(phase, args):
@@ -62,7 +299,7 @@ def _defer(phase, args):
     def tick(_dt):
         unreal.unregister_slate_post_tick_callback(handle["h"])
         try:
-            _save(DEFERRED, {"phase": phase, "state": "done", "result": PHASES[phase](args)})
+            _save(DEFERRED, {"phase": phase, "state": "done", "result": _call(phase, args)})
         except Exception as exc:
             _save(DEFERRED, {"phase": phase, "state": "error", "error": "%s: %s" % (type(exc).__name__, str(exc)[:800])})
         gc.collect()
@@ -76,7 +313,7 @@ def run(args):
         return {"abort": "unknown phase %r; phases: %s" % (phase, sorted(PHASES))}
     if args.get("defer") or phase in ALWAYS_DEFER:
         return _defer(phase, {k: v for k, v in args.items() if k != "defer"})
-    return PHASES[phase](args)
+    return _call(phase, args)
 
 
 try:
