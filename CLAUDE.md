@@ -241,8 +241,8 @@ its GPU tests (`SeasonalWeather.Gpu.Fields`, `SeasonalWeather.Subsystem.Fields`)
   `-Module`) restamps them. To check, compare `"BuildId"` in
   `E:\UnrealEngine\Engine\Binaries\Win64\UnrealEditor.modules` with this project's
   `Binaries\Win64\UnrealEditor.modules`. A build here that runs UHT can strand the other project the
-  same way: UHT writes the engine's `NetCore.init.gen.cpp` differently for each project, which
-  relinks NetCore.
+  same way: UHT can rewrite the engine's `NetCore.init.gen.cpp` with another hash (cause unknown; this
+  project's own builds have written both values), which relinks NetCore and renews the BuildId.
 - A missing `E:\UnrealEngine\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe` (the build
   fails with `No ISPC compiler at ...`) is restored with
   `E:\UnrealEngine\Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe` in its default
@@ -255,7 +255,7 @@ Five suites:
 | Suite | Runs | Baseline |
 |---|---|---|
 | `pypcg` (Python form of the 18 stage graphs, PyWorld and PyInterior, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 2094 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
-| `weather` (the SeasonalWeather reference model, golden files, scenarios and lab layout, offline) | `C:\Python314\python.exe -m pytest Tools/weather/tests -q` | 38 passed |
+| `weather` (the SeasonalWeather reference model, golden files, scenarios and the lab's big-level refusal, offline) | `C:\Python314\python.exe -m pytest Tools/weather/tests -q` | 38 passed |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | `SeasonalWeather` C++ automation | second command below (`-RenderOffScreen` instead of `-nullrhi`); needs **both** editors closed | 22 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
