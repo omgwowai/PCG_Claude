@@ -1,0 +1,54 @@
+{
+ "components": {
+  "SkyAtmosphereComponent": {
+   "mie_absorption": {
+    "__t": "LinearColor",
+    "v": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "mie_absorption_scale": 0.0004440000047907233,
+   "mie_exponential_distribution": 1.2000000476837158,
+   "mie_scattering": {
+    "__t": "LinearColor",
+    "v": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "other_absorption": {
+    "__t": "LinearColor",
+    "v": [
+     0.34556084871292114,
+     0.9999999403953552,
+     0.045188724994659424,
+     531.632080078125
+    ]
+   },
+   "other_absorption_scale": 0.0018810000037774444,
+   "sky_and_aerial_perspective_luminance_factor": {
+    "__t": "LinearColor",
+    "v": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   }
+  },
+  "VolumetricCloudComponent": {
+   "use_per_sample_atmospheric_light_transmittance": true
+  }
+ },
+ "cvars": {
+  "r.HighResScreenshotDelay": 4
+ },
+ "editor": {
+  "bThrottleCPUWhenNotForeground": true
+ }
+}

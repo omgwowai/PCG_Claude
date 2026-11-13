@@ -21,7 +21,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The gameplay code is stock Epic template code; treat it as upstream behavior to extend rather than
 rewrite. The bespoke additions are the MCP bridge toolchain ("Driving the editor" below), the
 `PyPCGTools` C++ plugin, the `pypcg` Python package (see the **PyPCG** paragraph below), the
-migrated `CitySamplePCG` plugin, and the `SeasonalWeather` C++ plugin (see the **SeasonalWeather**
+migrated `CitySamplePCG` plugin, the `SeasonalWeather` C++ plugin (see the **SeasonalWeather**
+paragraph below), and the City Sample sky / weather / cloud scripts (see the **City Sample sky, weather and clouds**
 paragraph below).
 
 ## Architecture
@@ -222,6 +223,24 @@ weather is accepted before it goes into `L_PyWorld`; `lab` opens or creates it a
 reported in `Saved/Reports/weather/m0_look.json`. The C++ automation needs `-RenderOffScreen`, not `-nullrhi`, because
 its GPU tests (`SeasonalWeather.Gpu.Fields`, `SeasonalWeather.Subsystem.Fields`) read the fields back from the GPU.
 
+**City Sample sky, weather and clouds** (reports `docs/citysample-clear-sky-renderdoc.html`,
+`citysample-weather-presets.html`, `citysample-cloud-art.html`, `citysample-cloud-motion.html`; cloud-motion spec / plan
+`docs/superpowers/{specs,plans}/2026-11-12-cs-cloud-motion*`). Looks for the demo level
+`/CitySamplePCG/Levels/L_CitySamplePCG_Demo`, applied **in memory only**: the demo level is never saved, and every session
+ends with `Content/Python/cs_weather.py {"phase": "restore", "to": "original"}` (puts the snapshotted originals back, deletes
+the helper actors, clears the level packages' dirty flags, turns autosave back on). `cs_clear_sky.py apply` is the 10:00
+base look; `cs_weather.py` (`apply / state / cams / shoot / restore / run / batch / prefs`) applies the 11 photo presets
+(`cs_weather_presets.py`) and the 10 art-directed cloud weathers (`cs_weather_art.py`), every value `[value, why]`. The
+cloud material `/Game/CitySampleSky/M_CS_CumulusCloud` is generated: `cs_cloud_code.py` writes its Custom HLSL (two
+parameter slots A / `B_`, absolute altitude, time inputs; `Tools/cs_weather/hlsl_check.py` compiles it offline with the
+engine's DXC) and `cs_sky_assets.py {"phase": "material"}` builds it -- only with the startup map open, deferred, result in
+`Saved/Reports/cs_weather/assets_result.json` (trap 136: never rerun on a lost reply). The cloud director
+`cs_cloud_director.py` (`play / pause / resume / speed / seek / to / state / stop / record`; editor side `cs_cloud_rt.py`,
+pure model `cs_cloud_motion.py`) animates the clouds and blends preset to preset through one MaterialInstanceDynamic; a
+manual `apply` stops it, `apply` / `shoot` / `batch` refuse while it records. Recording, encoding and checks:
+`Tools/cs_weather/` (`encode_clips.py`, `motion_check.py`, `stills_check.py`, `regress_shots.py`, `perf_summary.py`);
+working notes and measurements in `Saved/Reports/cs_cloud_motion/notes.md`. Traps 132-151.
+
 ## Build
 
 ```powershell
@@ -252,18 +271,19 @@ its GPU tests (`SeasonalWeather.Gpu.Fields`, `SeasonalWeather.Subsystem.Fields`)
 
 ## Tests
 
-Five suites:
+Six suites:
 
 | Suite | Runs | Baseline |
 |---|---|---|
 | `pypcg` (Python form of the 18 stage graphs, PyWorld and PyInterior, offline) | `C:\Python314\python.exe -m pytest Tools/pypcg/tests -q` | 2094 passed, 18 skipped (the skips are the per-node reference drafts' step check) |
 | `weather` (the SeasonalWeather reference model, golden files, scenarios and the lab's big-level refusal, offline) | `C:\Python314\python.exe -m pytest Tools/weather/tests -q` | 38 passed |
+| `cs_weather` (City Sample presets resolver, cloud material code, cloud motion model, clip and perf tools, offline) | `C:\Python314\python.exe -m pytest Tools/cs_weather/tests -q` | 105 passed |
 | `PyPCGTools` C++ automation | command below; needs **both** editors (this one and `E:\PCG_Codex`) closed | 9 tests, all `Result={Success}`, exit 0 |
 | `SeasonalWeather` C++ automation | second command below (`-RenderOffScreen` instead of `-nullrhi`); needs **both** editors closed | 22 tests, all `Result={Success}`, exit 0 |
 | MCP server | `.\mcp_server\.venv\Scripts\python.exe -m pytest mcp_server/tests -q` | 17 passed |
 
-- `pypcg` and `weather` run on system Python 3.14 because the MCP venv lacks Pillow (and numpy,
-  which `weather` also needs).
+- `pypcg`, `weather` and `cs_weather` run on system Python 3.14 because the MCP venv lacks Pillow (and numpy,
+  which `weather` and `cs_weather` also need).
   `C:\Python314\python.exe Tools/pypcg/baseline.py check` checks that the official CitySample assets
   under `Plugins/CitySamplePCG/Content` keep their recorded mtime and size.
 - One MCP test: `... -m pytest mcp_server/tests/test_protocol.py::test_build_run_frame_roundtrips_to_expected_json -q`.
