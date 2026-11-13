@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "calendar": {
+    "real_seconds_per_game_day": 3600.0,
+    "season_length_days": 7,
+    "transition_days": 1.0,
+    "start_season": "Spring",
+    "start_hour": 9.0,
+    "base_year": 2026,
+    "season_start_doy": {"Spring": 79, "Summer": 172, "Autumn": 265, "Winter": 355}
+  },
+  "astronomy": {
+    "latitude_deg": 35.0,
+    "longitude_deg": 136.0,
+    "timezone_hours": 9.0,
+    "north_yaw_deg": 0.0,
+    "synodic_month_game_days": 29.530588853,
+    "moon_phase_offset_days": 0.0,
+    "sunrise_zenith_deg": 90.833
+  },
+  "sky": {
+    "sun_lux": 10.0,
+    "moon_lux": 0.3,
+    "sky_light_intensity": 1.0,
+    "fog_density": 0.02,
+    "fog_height_falloff": 0.2,
+    "white_temp_k": 6500.0,
+    "cloud_dimming": 0.75,
+    "star_fade_start_deg": -3.0,
+    "star_fade_range_deg": 9.0,
+    "look_blend_seconds": 3.0
+  },
+  "fields": {
+    "atmos_volume": {"dims": 3, "size": [128, 128, 32], "format": "rgba16f", "channels": ["cloud_water", "precip", "ice_fraction", "updraft"]},
+    "coarse_wind": {"dims": 3, "size": [128, 128, 32], "format": "rgba16f", "channels": ["u", "v", "w", "unused"]},
+    "ground_a": {"dims": 2, "size": [128, 128], "format": "rgba16f", "channels": ["precip_mm_h", "snow_fraction", "temperature_c", "humidity"]},
+    "ground_b": {"dims": 2, "size": [128, 128], "format": "rgba16f", "channels": ["wind_u", "wind_v", "thunder_potential", "cloud_cover"]},
+    "near_wind": {"dims": 3, "size": [128, 128, 32], "format": "rgba16f", "channels": ["u", "v", "w", "turbulence"]},
+    "near_ground_height": {"dims": 2, "size": [128, 128], "format": "r32f", "channels": ["height_m"]},
+    "gust_map": {"dims": 2, "cell_m": 8.0, "format": "rgba16f", "channels": ["gust_u", "gust_v", "intensity", "unused"]},
+    "far_weather": {"dims": 2, "size": [512, 512], "format": "rgba16f", "channels": ["coverage", "cloud_type", "precip", "unused"]},
+    "surface_state": {"dims": 2, "cell_m": 1.0, "format": "rgba16f", "channels": ["wetness", "puddle_mm", "snow_swe_mm", "frozen"]},
+    "canopy_state": {"dims": 2, "cell_m": 4.0, "format": "rgba16f", "channels": ["leaf_wetness", "leaf_snow", "snow_age", "leaf_litter"]},
+    "snow_compression": {"dims": 2, "size": [1024, 1024], "format": "r16f", "channels": ["compression_m"]},
+    "rain_depth": {"dims": 2, "size": [512, 512], "format": "r32f", "channels": ["depth_m"]}
+  },
+  "override_defaults": {
+    "precip_mm_h": 0.0,
+    "snow_fraction": 0.0,
+    "temperature_c": 15.0,
+    "humidity": 0.6,
+    "wind_dir_deg": 270.0,
+    "wind_speed_m_s": 3.0,
+    "thunder_potential": 0.0,
+    "cloud_cover": 0.1
+  }
+}

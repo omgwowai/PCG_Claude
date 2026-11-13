@@ -1,0 +1,12 @@
+{
+  "calendar": {"real_seconds_per_game_day": "number", "season_length_days": "integer", "transition_days": "number",
+               "start_season": "season", "start_hour": "number", "base_year": "integer", "season_start_doy": "season_doy_map"},
+  "astronomy": {"latitude_deg": "number", "longitude_deg": "number", "timezone_hours": "number", "north_yaw_deg": "number",
+                "synodic_month_game_days": "number", "moon_phase_offset_days": "number", "sunrise_zenith_deg": "number"},
+  "sky": {"sun_lux": "number", "moon_lux": "number", "sky_light_intensity": "number", "fog_density": "number",
+          "fog_height_falloff": "number", "white_temp_k": "number", "cloud_dimming": "number", "star_fade_start_deg": "number",
+          "star_fade_range_deg": "number", "look_blend_seconds": "number"},
+  "fields": "field_map",
+  "override_defaults": {"precip_mm_h": "number", "snow_fraction": "number", "temperature_c": "number", "humidity": "number",
+                        "wind_dir_deg": "number", "wind_speed_m_s": "number", "thunder_potential": "number", "cloud_cover": "number"}
+}

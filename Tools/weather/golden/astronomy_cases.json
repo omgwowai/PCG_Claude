@@ -1,0 +1,3800 @@
+{
+ "moon": [
+  {
+   "expect": {
+    "azimuth_deg": 0.674531845065161,
+    "declination_deg": -23.007382514272624,
+    "elevation_deg": -78.00664825397419,
+    "illumination": 0.0,
+    "phase": 0.0
+   },
+   "game_days": 0.0,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 94.34779012322599,
+    "declination_deg": -0.04329791416247382,
+    "elevation_deg": 3.39475970545412,
+    "illumination": 0.0,
+    "phase": 0.0
+   },
+   "game_days": 0.0,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 358.31306904399275,
+    "declination_deg": 20.740029508085133,
+    "elevation_deg": -17.736828538009494,
+    "illumination": 0.0,
+    "phase": 0.0
+   },
+   "game_days": 0.0,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 105.60328688227588,
+    "declination_deg": -23.10544787531427,
+    "elevation_deg": 18.977085876789598,
+    "illumination": 0.0,
+    "phase": 0.0
+   },
+   "game_days": 0.0,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 286.1011949955917,
+    "declination_deg": -12.918134229049965,
+    "elevation_deg": -42.853332365353076,
+    "illumination": 0.14709989403338009,
+    "phase": 0.12529381037466575
+   },
+   "game_days": 3.7,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 50.61015060205017,
+    "declination_deg": 16.334468680934833,
+    "elevation_deg": -8.066424855547812,
+    "illumination": 0.14709989403338009,
+    "phase": 0.12529381037466575
+   },
+   "game_days": 3.7,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 310.60793173482415,
+    "declination_deg": 6.986548596666364,
+    "elevation_deg": -19.43279894366293,
+    "illumination": 0.14709989403338009,
+    "phase": 0.12529381037466575
+   },
+   "game_days": 3.7,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 124.85270583185505,
+    "declination_deg": -13.356160765473255,
+    "elevation_deg": -22.013729972242036,
+    "illumination": 0.14709989403338009,
+    "phase": 0.12529381037466575
+   },
+   "game_days": 3.7,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 274.59464781494233,
+    "declination_deg": 4.221450795769195,
+    "elevation_deg": 0.7990747144562648,
+    "illumination": 0.4997183779402314,
+    "phase": 0.24991035690946842
+   },
+   "game_days": 7.38,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 5.285276714948566,
+    "declination_deg": 23.43818044804272,
+    "elevation_deg": -14.89462098571008,
+    "illumination": 0.4997183779402314,
+    "phase": 0.24991035690946842
+   },
+   "game_days": 7.38,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 265.2554603769053,
+    "declination_deg": -10.423391604926783,
+    "elevation_deg": -9.572358135355671,
+    "illumination": 0.4997183779402314,
+    "phase": 0.24991035690946842
+   },
+   "game_days": 7.38,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 161.34122737534463,
+    "declination_deg": 3.7079297750245725,
+    "elevation_deg": -58.53073380474054,
+    "illumination": 0.4997183779402314,
+    "phase": 0.24991035690946842
+   },
+   "game_days": 7.38,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 180.69176302383087,
+    "declination_deg": 23.007670371043236,
+    "elevation_deg": 78.00689813243686,
+    "illumination": 0.9999999990189089,
+    "phase": 0.4999900297789026
+   },
+   "game_days": 14.765,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 274.35126443992095,
+    "declination_deg": 0.04472558584507492,
+    "elevation_deg": -3.3956840369151453,
+    "illumination": 0.9999999990189089,
+    "phase": 0.4999900297789026
+   },
+   "game_days": 14.765,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 178.3167796793705,
+    "declination_deg": -20.740724605189257,
+    "elevation_deg": 17.736202489699963,
+    "illumination": 0.9999999990189089,
+    "phase": 0.4999900297789026
+   },
+   "game_days": 14.765,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 285.6016492422284,
+    "declination_deg": 23.105701053941157,
+    "elevation_deg": -18.980323887439546,
+    "illumination": 0.9999999990189089,
+    "phase": 0.4999900297789026
+   },
+   "game_days": 14.765,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 94.70911940029083,
+    "declination_deg": -4.004860695237467,
+    "elevation_deg": -0.25889652079041425,
+    "illumination": 0.5051001519856413,
+    "phase": 0.7483765430486792
+   },
+   "game_days": 22.1,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 185.85547782159415,
+    "declination_deg": -23.436437350356588,
+    "elevation_deg": 14.860000104342541,
+    "illumination": 0.5051001519856413,
+    "phase": 0.7483765430486792
+   },
+   "game_days": 22.1,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 85.78832191450671,
+    "declination_deg": 10.224090261237048,
+    "elevation_deg": 9.742489413367657,
+    "illumination": 0.5051001519856413,
+    "phase": 0.7483765430486792
+   },
+   "game_days": 22.1,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 340.52263678816496,
+    "declination_deg": -3.490625905923798,
+    "elevation_deg": 58.183639695072934,
+    "illumination": 0.5051001519856413,
+    "phase": 0.7483765430486792
+   },
+   "game_days": 22.1,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 0.7089949086317233,
+    "declination_deg": -23.00795813294927,
+    "elevation_deg": -78.00714695754753,
+    "illumination": 3.9243642779851484e-09,
+    "phase": 0.9999800595578052
+   },
+   "game_days": 29.53,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 94.35473876326733,
+    "declination_deg": -0.046153257379946196,
+    "elevation_deg": 3.3966083559193847,
+    "illumination": 3.9243642779851484e-09,
+    "phase": 0.9999800595578052
+   },
+   "game_days": 29.53,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 358.3204902888114,
+    "declination_deg": 20.741419620340068,
+    "elevation_deg": -17.735576371663363,
+    "illumination": 3.9243642779851484e-09,
+    "phase": 0.9999800595578052
+   },
+   "game_days": 29.53,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 105.60001153851618,
+    "declination_deg": -23.105954137112292,
+    "elevation_deg": 18.98356188369291,
+    "illumination": 3.9243642779851484e-09,
+    "phase": 0.9999800595578052
+   },
+   "game_days": 29.53,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 259.71815954519155,
+    "declination_deg": 20.60270284871358,
+    "elevation_deg": 50.77656928831826,
+    "illumination": 0.8913750248180082,
+    "phase": 0.393091837713921
+   },
+   "game_days": 100.2,
+   "lat": 35.0,
+   "offset": 0.0,
+   "sun": 0,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 312.26850985020576,
+    "declination_deg": 14.366994029187897,
+    "elevation_deg": -11.90783376681844,
+    "illumination": 0.8913750248180082,
+    "phase": 0.393091837713921
+   },
+   "game_days": 100.2,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 37,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 216.51725117182917,
+    "declination_deg": -22.948998292200006,
+    "elevation_deg": 7.763115850848496,
+    "illumination": 0.8913750248180082,
+    "phase": 0.393091837713921
+   },
+   "game_days": 100.2,
+   "lat": 51.5074,
+   "offset": 0.0,
+   "sun": 81,
+   "synodic": 29.530588853
+  },
+  {
+   "expect": {
+    "azimuth_deg": 259.89187114524924,
+    "declination_deg": 20.33782001135518,
+    "elevation_deg": -51.76321945338732,
+    "illumination": 0.8913750248180082,
+    "phase": 0.393091837713921
+   },
+   "game_days": 100.2,
+   "lat": -33.87,
+   "offset": 0.0,
+   "sun": 150,
+   "synodic": 29.530588853
+  }
+ ],
+ "sun": [
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 0.674531845065161,
+    "declination_deg": -23.007382514272624,
+    "ecliptic_longitude_deg": 280.6971558275933,
+    "elevation_deg": -78.00664825397419,
+    "eot_min": -3.390894718205172,
+    "hour_angle_deg": -179.84772367955128,
+    "obliquity_deg": 23.438346858260065,
+    "right_ascension_deg": 281.6339835227429
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 358.03504161311105,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -61.45790414401716,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": 178.98037952394986,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 179.5964744996293,
+    "declination_deg": -23.01078236346229,
+    "ecliptic_longitude_deg": 280.6546879314404,
+    "elevation_deg": -33.118144033667775,
+    "eot_min": -3.3712512494882962,
+    "hour_angle_deg": -179.63281281237207,
+    "obliquity_deg": 23.438346903298203,
+    "right_ascension_deg": 281.58799306894196
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 358.95840002656774,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -37.97408840212594,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": 179.10817952394984,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 113.17206830506187,
+    "declination_deg": -23.007382514272624,
+    "ecliptic_longitude_deg": 280.6971558275933,
+    "elevation_deg": -7.110311150223285,
+    "eot_min": -3.390894718205172,
+    "hour_angle_deg": -82.34772367955128,
+    "obliquity_deg": 23.438346858260065,
+    "right_ascension_deg": 281.6339835227429
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 109.51917280204385,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -13.936524414010746,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": -83.51962047605016,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 105.58751713912794,
+    "declination_deg": -23.01078236346229,
+    "ecliptic_longitude_deg": 280.6546879314404,
+    "elevation_deg": 18.811874548402606,
+    "eot_min": -3.3712512494882962,
+    "hour_angle_deg": -82.13281281237207,
+    "obliquity_deg": 23.438346903298203,
+    "right_ascension_deg": 281.58799306894196
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 102.53689399729244,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -20.46443999460005,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": -83.39182047605017,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 180.16526408881828,
+    "declination_deg": -23.007382514272624,
+    "ecliptic_longitude_deg": 280.6971558275933,
+    "elevation_deg": 31.99243758917587,
+    "eot_min": -3.390894718205172,
+    "hour_angle_deg": 0.15227632044872053,
+    "obliquity_deg": 23.438346858260065,
+    "right_ascension_deg": 281.6339835227429
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 179.02579161478158,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": 15.511018293128481,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": -1.0196204760501644,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 358.2065650596694,
+    "declination_deg": -23.01078236346229,
+    "ecliptic_longitude_deg": 280.6546879314404,
+    "elevation_deg": 79.13601055982733,
+    "eot_min": -3.3712512494882962,
+    "hour_angle_deg": 0.3671871876279056,
+    "obliquity_deg": 23.438346903298203,
+    "right_ascension_deg": 281.58799306894196
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 179.1709105566743,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -7.9778564336317634,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": -0.8918204760501567,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 252.8018214639977,
+    "declination_deg": -23.007382514272624,
+    "ecliptic_longitude_deg": 280.6971558275933,
+    "elevation_deg": -15.991519862905077,
+    "eot_min": -3.390894718205172,
+    "hour_angle_deg": 93.90227632044872,
+    "obliquity_deg": 23.438346858260065,
+    "right_ascension_deg": 281.6339835227429
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 257.2178423266005,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -19.439935572964313,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": 92.73037952394986,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 248.5125942057418,
+    "declination_deg": -23.01078236346229,
+    "ecliptic_longitude_deg": 280.6546879314404,
+    "elevation_deg": 9.38021931141841,
+    "eot_min": -3.3712512494882962,
+    "hour_angle_deg": 94.1171871876279,
+    "obliquity_deg": 23.438346903298203,
+    "right_ascension_deg": 281.58799306894196
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "azimuth_deg": 266.4723490697213,
+    "declination_deg": -22.97618643870264,
+    "ecliptic_longitude_deg": 281.0793689796136,
+    "elevation_deg": -22.88791234331586,
+    "eot_min": -3.567281904200658,
+    "hour_angle_deg": 92.85817952394984,
+    "obliquity_deg": 23.43834645275424,
+    "right_ascension_deg": 282.0477943475811
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 353.0895679820779,
+    "declination_deg": -14.048724120502325,
+    "ecliptic_longitude_deg": 322.3900340631734,
+    "elevation_deg": -68.92236005694711,
+    "eot_min": -14.225938037104946,
+    "hour_angle_deg": 177.44351549072377,
+    "obliquity_deg": 23.438300796756373,
+    "right_ascension_deg": 324.7467240264239
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 354.1459995383294,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -52.30066614717493,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": 176.31565503403,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 183.0641854084866,
+    "declination_deg": -14.062414684714371,
+    "ecliptic_longitude_deg": 322.34787468776335,
+    "elevation_deg": -42.01548473536912,
+    "eot_min": -14.225799047068513,
+    "hour_angle_deg": 177.65355023823287,
+    "obliquity_deg": 23.438300845327937,
+    "right_ascension_deg": 324.70561879103883
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 356.0565912954112,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -28.8935400300833,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": 176.44345503402997,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 104.32462931222977,
+    "declination_deg": -14.048724120502325,
+    "ecliptic_longitude_deg": 322.3900340631734,
+    "elevation_deg": -4.057409801723841,
+    "eot_min": -14.225938037104946,
+    "hour_angle_deg": -85.05648450927623,
+    "obliquity_deg": 23.438300796756373,
+    "right_ascension_deg": 324.7467240264239
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 101.68770009432363,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -8.520067798855004,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": -86.18434496597001,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 99.0097854828439,
+    "declination_deg": -14.062414684714371,
+    "ecliptic_longitude_deg": 322.34787468776335,
+    "elevation_deg": 11.991214681894107,
+    "eot_min": -14.225799047068513,
+    "hour_angle_deg": -84.84644976176713,
+    "obliquity_deg": 23.438300845327937,
+    "right_ascension_deg": 324.70561879103883
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 97.45821457651356,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -12.426004571180965,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": -86.05654496597002,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 176.71864163405493,
+    "declination_deg": -14.048724120502325,
+    "ecliptic_longitude_deg": 322.3900340631734,
+    "elevation_deg": 40.891305017526186,
+    "eot_min": -14.225938037104946,
+    "hour_angle_deg": -2.556484509276231,
+    "obliquity_deg": 23.438300796756373,
+    "right_ascension_deg": 324.7467240264239
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 176.07006948738032,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": 24.48875787563069,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": -3.684344965970041,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 6.693473880379258,
+    "declination_deg": -14.062414684714371,
+    "ecliptic_longitude_deg": 322.34787468776335,
+    "elevation_deg": 70.07854383635592,
+    "eot_min": -14.225799047068513,
+    "hour_angle_deg": -2.3464497617671327,
+    "obliquity_deg": 23.438300845327937,
+    "right_ascension_deg": 324.70561879103883
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 176.54753078371786,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": 1.047067441836686,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": -3.5565449659700334,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 259.0722315133214,
+    "declination_deg": -14.048724120502325,
+    "ecliptic_longitude_deg": 322.3900340631734,
+    "elevation_deg": -8.96238012342663,
+    "eot_min": -14.225938037104946,
+    "hour_angle_deg": 91.19351549072377,
+    "obliquity_deg": 23.438300796756373,
+    "right_ascension_deg": 324.7467240264239
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 261.2773762123278,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -10.897362315050575,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": 90.06565503402999,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 257.49990469526244,
+    "declination_deg": -14.062414684714371,
+    "ecliptic_longitude_deg": 322.34787468776335,
+    "elevation_deg": 6.643222699550394,
+    "eot_min": -14.225799047068513,
+    "hour_angle_deg": 91.40355023823292,
+    "obliquity_deg": 23.438300845327937,
+    "right_ascension_deg": 324.70561879103883
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "azimuth_deg": 266.51435948354066,
+    "declination_deg": -13.925207000278888,
+    "ecliptic_longitude_deg": 322.76943941146345,
+    "elevation_deg": -13.491620796865352,
+    "eot_min": -14.226179863880096,
+    "hour_angle_deg": 90.19345503402997,
+    "obliquity_deg": 23.438300359451773,
+    "right_ascension_deg": 325.1164220054725
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 358.4482088193709,
+    "declination_deg": -0.19154131152608062,
+    "ecliptic_longitude_deg": 359.51844597691263,
+    "elevation_deg": -55.181713161614454,
+    "eot_min": -7.543867483392263,
+    "hour_angle_deg": 179.11403312915195,
+    "obliquity_deg": 23.438256263190567,
+    "right_ascension_deg": 359.55817771634565
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 357.4616491625335,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": -38.508516760083175,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": 178.0139522707109,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 181.2117480298029,
+    "declination_deg": -0.20801439902976382,
+    "ecliptic_longitude_deg": 359.47703005783984,
+    "elevation_deg": -55.91602349255198,
+    "eot_min": -7.55616922619654,
+    "hour_angle_deg": 179.32095769345085,
+    "obliquity_deg": 23.4382563149094,
+    "right_ascension_deg": 359.5201785939158
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 358.07585927986986,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": -15.03522279943329,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": 178.14175227071087,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 93.96221986679608,
+    "declination_deg": -0.19154131152608062,
+    "ecliptic_longitude_deg": 359.51844597691263,
+    "elevation_deg": 5.303550755358593,
+    "eot_min": -7.543867483392263,
+    "hour_angle_deg": -83.38596687084805,
+    "obliquity_deg": 23.438256263190567,
+    "right_ascension_deg": 359.55817771634565
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 94.34779012322599,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": 3.39475970545412,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": -84.48604772928911,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 86.35940290227623,
+    "declination_deg": -0.20801439902976382,
+    "ecliptic_longitude_deg": 359.47703005783984,
+    "elevation_deg": 5.775770041662796,
+    "eot_min": -7.55616922619654,
+    "hour_angle_deg": -83.17904230654912,
+    "obliquity_deg": 23.4382563149094,
+    "right_ascension_deg": 359.5201785939158
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 95.46185126581233,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": 1.4161556610195778,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": -84.35824772928912,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 178.4629506591368,
+    "declination_deg": -0.19154131152608062,
+    "ecliptic_longitude_deg": 359.51844597691263,
+    "elevation_deg": 54.79872391056739,
+    "eot_min": -7.543867483392263,
+    "hour_angle_deg": -0.8859668708480513,
+    "obliquity_deg": 23.438256263190567,
+    "right_ascension_deg": 359.55817771634565
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 177.46469599541882,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": 38.42195379876705,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": -1.9860477292891403,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 1.2249248172913383,
+    "declination_deg": -0.20801439902976382,
+    "ecliptic_longitude_deg": 359.47703005783984,
+    "elevation_deg": 56.33198745484317,
+    "eot_min": -7.55616922619654,
+    "hour_angle_deg": -0.6790423065491495,
+    "obliquity_deg": 23.4382563149094,
+    "right_ascension_deg": 359.5201785939158
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 178.07663817286644,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": 14.948630239672914,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": -1.8582477292891326,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 271.48667950866525,
+    "declination_deg": -0.19154131152608062,
+    "ecliptic_longitude_deg": 359.51844597691263,
+    "elevation_deg": -2.455703753048873,
+    "eot_min": -7.543867483392263,
+    "hour_angle_deg": 92.86403312915195,
+    "obliquity_deg": 23.438256263190567,
+    "right_ascension_deg": 359.55817771634565
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 271.3538475959859,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": -1.1316964222114214,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": 91.76395227071089,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 268.11459888180786,
+    "declination_deg": -0.20801439902976382,
+    "ecliptic_longitude_deg": 359.47703005783984,
+    "elevation_deg": -2.43339475633749,
+    "eot_min": -7.55616922619654,
+    "hour_angle_deg": 93.07095769345085,
+    "obliquity_deg": 23.4382563149094,
+    "right_ascension_deg": 359.5201785939158
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "azimuth_deg": 271.8161357406141,
+    "declination_deg": -0.04329791416247382,
+    "ecliptic_longitude_deg": 359.89114573298843,
+    "elevation_deg": -0.5313626081797079,
+    "eot_min": -7.432990917156481,
+    "hour_angle_deg": 91.89175227071087,
+    "obliquity_deg": 23.438255797562658,
+    "right_ascension_deg": 359.9001273612318
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 2.144040246856065,
+    "declination_deg": 14.903863405236425,
+    "ecliptic_longitude_deg": 40.28697387089062,
+    "elevation_deg": -40.07011568830911,
+    "eot_min": 2.7908508861836396,
+    "hour_angle_deg": -178.3022872784541,
+    "obliquity_deg": 23.43820301245807,
+    "right_ascension_deg": 37.87325074390551
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 0.6123156124334059,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": -23.472738247054107,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": -179.41849325591647,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 174.34919798161522,
+    "declination_deg": 14.891153870532028,
+    "ecliptic_longitude_deg": 40.24650586464872,
+    "elevation_deg": -70.94306242430775,
+    "eot_min": 2.7856211156596906,
+    "hour_angle_deg": -178.09359472108508,
+    "obliquity_deg": 23.438203067655458,
+    "right_ascension_deg": 37.83349400937543
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 0.6850790895397836,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 0.019025281763516325,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": -179.29069325591647,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 82.70677935911195,
+    "declination_deg": 14.903863405236425,
+    "ecliptic_longitude_deg": 40.28697387089062,
+    "elevation_deg": 15.905563172244127,
+    "eot_min": 2.7908508861836396,
+    "hour_angle_deg": -80.80228727845409,
+    "obliquity_deg": 23.43820301245807,
+    "right_ascension_deg": 37.87325074390551
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 86.7077711921529,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 16.697732474934885,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": -81.91849325591646,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 72.45695326212709,
+    "declination_deg": 14.891153870532028,
+    "ecliptic_longitude_deg": 40.24650586464872,
+    "elevation_deg": -0.6918787348537688,
+    "eot_min": 2.7856211156596906,
+    "hour_angle_deg": -80.59359472108508,
+    "obliquity_deg": 23.438203067655458,
+    "right_ascension_deg": 37.83349400937543
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 93.95833791780097,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 16.617816925649578,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": -81.79069325591647,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 184.76644535099638,
+    "declination_deg": 14.903863405236425,
+    "ecliptic_longitude_deg": 40.28697387089062,
+    "elevation_deg": 69.84600060619496,
+    "eot_min": 2.7908508861836396,
+    "hour_angle_deg": 1.6977127215459404,
+    "obliquity_deg": 23.43820301245807,
+    "right_ascension_deg": 37.87325074390551
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 180.94441746383134,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 53.507544818802124,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": 0.5815067440835264,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 357.5508959033458,
+    "declination_deg": 14.891153870532028,
+    "ecliptic_longitude_deg": 40.24650586464872,
+    "elevation_deg": 41.205014165886546,
+    "eot_min": 2.7856211156596906,
+    "hour_angle_deg": 1.9064052789149173,
+    "obliquity_deg": 23.438203067655458,
+    "right_ascension_deg": 37.83349400937543
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 180.7912003017027,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 30.016660227647467,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": 0.7093067440835341,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 285.30744652052147,
+    "declination_deg": 14.903863405236425,
+    "ecliptic_longitude_deg": 40.28697387089062,
+    "elevation_deg": 4.1501693523193985,
+    "eot_min": 2.7908508861836396,
+    "hour_angle_deg": 95.44771272154588,
+    "obliquity_deg": 23.43820301245807,
+    "right_ascension_deg": 37.87325074390551
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 282.7755534013899,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 9.056466780046502,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": 94.33150674408358,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 279.46257364978567,
+    "declination_deg": 14.891153870532028,
+    "ecliptic_longitude_deg": 40.24650586464872,
+    "elevation_deg": -12.844638355772359,
+    "eot_min": 2.7856211156596906,
+    "hour_angle_deg": 95.65640527891492,
+    "obliquity_deg": 23.438203067655458,
+    "right_ascension_deg": 37.83349400937543
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "azimuth_deg": 278.2491396273049,
+    "declination_deg": 15.017927758838724,
+    "ecliptic_longitude_deg": 40.65114737828917,
+    "elevation_deg": 13.347461381241219,
+    "eot_min": 2.83722697633415,
+    "hour_angle_deg": 94.45930674408356,
+    "obliquity_deg": 23.438202515525745,
+    "right_ascension_deg": 38.231234906506565
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 0.6076366473685653,
+    "declination_deg": 23.43796135614804,
+    "ecliptic_longitude_deg": 89.78752074947,
+    "elevation_deg": -31.559587400113248,
+    "eot_min": -1.7426985417908567,
+    "hour_angle_deg": -179.43567463544773,
+    "obliquity_deg": 23.43813216006672,
+    "right_ascension_deg": 89.7684126884586
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 359.4452711927612,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": -15.052789109119045,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": 179.41613000049682,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 176.07024217713018,
+    "declination_deg": 23.43789150543253,
+    "ecliptic_longitude_deg": 89.74775736005508,
+    "elevation_deg": -79.54577256602161,
+    "eot_min": -1.7336297150408433,
+    "hour_angle_deg": -179.2234074287602,
+    "obliquity_deg": 23.438132219497746,
+    "right_ascension_deg": 89.7250735113141
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 359.57698103805166,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 8.438487408792545,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": 179.5439300004968,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 74.49585640405023,
+    "declination_deg": 23.43796135614804,
+    "ecliptic_longitude_deg": 89.78752074947,
+    "elevation_deg": 19.48599885728189,
+    "eot_min": -1.7426985417908567,
+    "hour_angle_deg": -81.9356746354477,
+    "obliquity_deg": 23.43813216006672,
+    "right_ascension_deg": 89.7684126884586
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 79.96972574582398,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 22.33893966281535,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": -83.0838699995032,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 66.01975337153331,
+    "declination_deg": 23.43789150543253,
+    "ecliptic_longitude_deg": 89.74775736005508,
+    "elevation_deg": -6.431235520144966,
+    "eot_min": -1.7336297150408433,
+    "hour_angle_deg": -81.7234074287602,
+    "obliquity_deg": 23.438132219497746,
+    "right_ascension_deg": 89.7250735113141
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 90.36062385381247,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 24.41383701668915,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": -82.9560699995032,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 182.58181710433098,
+    "declination_deg": 23.43796135614804,
+    "ecliptic_longitude_deg": 89.78752074947,
+    "elevation_deg": 78.42754498855558,
+    "eot_min": -1.7426985417908567,
+    "hour_angle_deg": 0.5643253645522464,
+    "obliquity_deg": 23.43813216006672,
+    "right_ascension_deg": 89.7684126884586
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 178.86160991338335,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 61.92704143608314,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": -0.5838699995032073,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 359.153403116305,
+    "declination_deg": 23.43789150543253,
+    "ecliptic_longitude_deg": 89.74775736005508,
+    "elevation_deg": 32.68734465706767,
+    "eot_min": -1.7336297150408433,
+    "hour_angle_deg": 0.776592571239803,
+    "obliquity_deg": 23.438132219497746,
+    "right_ascension_deg": 89.7250735113141
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 179.46578743956036,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 38.43750137919184,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": -0.4560699995031996,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 291.7719699273696,
+    "declination_deg": 23.43796135614804,
+    "ecliptic_longitude_deg": 89.78752074947,
+    "elevation_deg": 9.881128979697266,
+    "eot_min": -1.7426985417908567,
+    "hour_angle_deg": 94.3143253645523,
+    "obliquity_deg": 23.43813216006672,
+    "right_ascension_deg": 89.7684126884586
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 287.40833569322274,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 16.247062680231675,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": 93.16613000049682,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 287.5866139122961,
+    "declination_deg": 23.43789150543253,
+    "ecliptic_longitude_deg": 89.74775736005508,
+    "elevation_deg": -16.367381404851596,
+    "eot_min": -1.7336297150408433,
+    "hour_angle_deg": 94.5265925712398,
+    "obliquity_deg": 23.438132219497746,
+    "right_ascension_deg": 89.7250735113141
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "azimuth_deg": 279.535692877287,
+    "declination_deg": 23.438051663157562,
+    "ecliptic_longitude_deg": 90.1453814180939,
+    "elevation_deg": 21.750144812676997,
+    "eot_min": -1.8242799980127886,
+    "hour_angle_deg": 93.2939300004968,
+    "obliquity_deg": 23.438131625035115,
+    "right_ascension_deg": 90.15845550552491
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 359.33970368357063,
+    "declination_deg": 20.80893007629134,
+    "ecliptic_longitude_deg": 116.72976852217408,
+    "elevation_deg": -34.188311938654444,
+    "eot_min": -6.337221552328945,
+    "hour_angle_deg": 179.41569461191773,
+    "obliquity_deg": 23.438091089994664,
+    "right_ascension_deg": 118.7618208924057
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 358.31306904399275,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": -17.736828538009494,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": 178.2819095264224,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 181.54591893893144,
+    "declination_deg": 20.81653503879415,
+    "ecliptic_longitude_deg": 116.69000678682204,
+    "elevation_deg": -76.94234981063047,
+    "eot_min": -6.334481567080735,
+    "hour_angle_deg": 179.62637960822985,
+    "obliquity_deg": 23.43809115170573,
+    "right_ascension_deg": 118.72006874413215
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 358.50527898526616,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 5.745398055257925,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": 178.40970952642238,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 76.28643468992337,
+    "declination_deg": 20.80893007629134,
+    "ecliptic_longitude_deg": 116.72976852217408,
+    "elevation_deg": 17.215342532706618,
+    "eot_min": -6.337221552328945,
+    "hour_angle_deg": -83.08430538808224,
+    "obliquity_deg": 23.438091089994664,
+    "right_ascension_deg": 118.7618208924057
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 81.041625999194,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 19.62192821793674,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": -84.2180904735776,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 68.80310504424249,
+    "declination_deg": 20.81653503879415,
+    "ecliptic_longitude_deg": 116.69000678682204,
+    "elevation_deg": -5.841271887033271,
+    "eot_min": -6.334481567080735,
+    "hour_angle_deg": -82.87362039177017,
+    "obliquity_deg": 23.43809115170573,
+    "right_ascension_deg": 118.72006874413215
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 90.08332240711273,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 21.529675494546154,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": -84.09029047357761,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 177.77297624212184,
+    "declination_deg": 20.80893007629134,
+    "ecliptic_longitude_deg": 116.72976852217408,
+    "elevation_deg": 75.79962734685503,
+    "eot_min": -6.337221552328945,
+    "hour_angle_deg": -0.5843053880822708,
+    "obliquity_deg": 23.438091089994664,
+    "right_ascension_deg": 118.7618208924057
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 176.86066711834434,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 59.20333330264503,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": -1.7180904735776323,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 0.4279738309815855,
+    "declination_deg": 20.81653503879415,
+    "ecliptic_longitude_deg": 116.69000678682204,
+    "elevation_deg": 35.312306362586874,
+    "eot_min": -6.334481567080735,
+    "hour_angle_deg": -0.37362039177014594,
+    "obliquity_deg": 23.43809115170573,
+    "right_ascension_deg": 118.72006874413215
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 178.16777271184094,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 35.733448821428965,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": -1.5902904735776247,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 288.9582104082624,
+    "declination_deg": 20.80893007629134,
+    "ecliptic_longitude_deg": 116.72976852217408,
+    "elevation_deg": 9.29273726260334,
+    "eot_min": -6.337221552328945,
+    "hour_angle_deg": 93.16569461191779,
+    "obliquity_deg": 23.438091089994664,
+    "right_ascension_deg": 118.7618208924057
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 284.767484168923,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 14.864496278544788,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": 92.0319095264224,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 285.8198832664678,
+    "declination_deg": 20.81653503879415,
+    "ecliptic_longitude_deg": 116.69000678682204,
+    "elevation_deg": -14.108784970642068,
+    "eot_min": -6.334481567080735,
+    "hour_angle_deg": 93.37637960822985,
+    "obliquity_deg": 23.43809115170573,
+    "right_ascension_deg": 118.72006874413215
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "azimuth_deg": 277.66047023752077,
+    "declination_deg": 20.740029508085133,
+    "ecliptic_longitude_deg": 117.08763394353393,
+    "elevation_deg": 19.447325857211048,
+    "eot_min": -6.3611618943104675,
+    "hour_angle_deg": 92.15970952642238,
+    "obliquity_deg": 23.438090534444786,
+    "right_ascension_deg": 119.13741042772301
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 4.80173742539904,
+    "declination_deg": 0.3430653358443692,
+    "ecliptic_longitude_deg": 179.13747133817685,
+    "elevation_deg": -54.5614210546074,
+    "eot_min": 7.1283034719403595,
+    "hour_angle_deg": -177.2179241320149,
+    "obliquity_deg": 23.43799120056641,
+    "right_ascension_deg": 179.20862818336008
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 2.149628236312992,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": -38.27571250461162,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": -178.31259991573802,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 174.5983434036476,
+    "declination_deg": 0.35927162429928694,
+    "ecliptic_longitude_deg": 179.09672300553376,
+    "elevation_deg": -56.372275473940746,
+    "eot_min": 7.113567794376231,
+    "hour_angle_deg": -177.01160805140594,
+    "obliquity_deg": 23.43799126738037,
+    "right_ascension_deg": 179.1712405470835
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 1.8774573298775863,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": -14.795117168604111,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": -178.184799915738,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 95.65761928459739,
+    "declination_deg": 0.3430653358443692,
+    "ecliptic_longitude_deg": 179.13747133817685,
+    "elevation_deg": 8.606399497584759,
+    "eot_min": 7.1283034719403595,
+    "hour_angle_deg": -79.7179241320149,
+    "obliquity_deg": 23.43799120056641,
+    "right_ascension_deg": 179.20862818336008
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 97.09236947038472,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": 5.8583924300893875,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": -80.812599915738,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 83.80935657924373,
+    "declination_deg": 0.35927162429928694,
+    "ecliptic_longitude_deg": 179.09672300553376,
+    "elevation_deg": 8.49064748877236,
+    "eot_min": 7.113567794376231,
+    "hour_angle_deg": -79.51160805140591,
+    "obliquity_deg": 23.43799126738037,
+    "right_ascension_deg": 179.1712405470835
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 98.95262226192278,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": 2.591680237237551,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": -80.68479991573801,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 184.8842688049297,
+    "declination_deg": 0.3430653358443692,
+    "ecliptic_longitude_deg": 179.13747133817685,
+    "elevation_deg": 55.24590905931218,
+    "eot_min": 7.1283034719403595,
+    "hour_angle_deg": 2.7820758679850996,
+    "obliquity_deg": 23.43799120056641,
+    "right_ascension_deg": 179.20862818336008
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 182.161420766124,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": 38.66997668907198,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": 1.6874000842619807,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 354.69789416908066,
+    "declination_deg": 0.35927162429928694,
+    "ecliptic_longitude_deg": 179.09672300553376,
+    "elevation_deg": 55.6558900816683,
+    "eot_min": 7.113567794376231,
+    "hour_angle_deg": 2.988391948594085,
+    "obliquity_deg": 23.43799126738037,
+    "right_ascension_deg": 179.1712405470835
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 181.8809224241606,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": 15.189475229525511,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": 1.8152000842619884,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 274.03911978597466,
+    "declination_deg": 0.3430653358443692,
+    "ecliptic_longitude_deg": 179.13747133817685,
+    "elevation_deg": -5.149239876146667,
+    "eot_min": 7.1283034719403595,
+    "hour_angle_deg": 96.5320758679851,
+    "obliquity_deg": 23.43799120056641,
+    "right_ascension_deg": 179.20862818336008
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 274.3833279550439,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": -3.226584002447704,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": 95.43740008426204,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 266.53183901312843,
+    "declination_deg": 0.35927162429928694,
+    "ecliptic_longitude_deg": 179.09672300553376,
+    "elevation_deg": -5.792001035622164,
+    "eot_min": 7.113567794376231,
+    "hour_angle_deg": 96.73839194859409,
+    "obliquity_deg": 23.43799126738037,
+    "right_ascension_deg": 179.1712405470835
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "azimuth_deg": 275.42752414955663,
+    "declination_deg": 0.19718613258607104,
+    "ecliptic_longitude_deg": 179.50424873577555,
+    "elevation_deg": -1.2477392772794045,
+    "eot_min": 7.260800337047972,
+    "hour_angle_deg": 95.56520008426202,
+    "obliquity_deg": 23.437990599095627,
+    "right_ascension_deg": 179.5451508360897
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 14.262893683468775,
+    "declination_deg": -15.034440822589636,
+    "ecliptic_longitude_deg": 220.70457306310564,
+    "elevation_deg": -69.51073126106981,
+    "eot_min": 16.49206295607411,
+    "hour_angle_deg": -174.87698426098146,
+    "obliquity_deg": 23.43792222506067,
+    "right_ascension_deg": 218.2838437351723
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 6.4923367606102715,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -53.503101011186175,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": -176.0047459442766,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 173.18493178586982,
+    "declination_deg": -15.021412247918956,
+    "ecliptic_longitude_deg": 220.66285567163922,
+    "elevation_deg": -40.84514902487862,
+    "eot_min": 16.491925975274334,
+    "hour_angle_deg": -174.66701850618142,
+    "obliquity_deg": 23.437922295086228,
+    "right_ascension_deg": 218.24280959108606
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 4.6014130197935685,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -30.10854621060181,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": -175.8769459442766,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 109.48990091826025,
+    "declination_deg": -15.034440822589636,
+    "ecliptic_longitude_deg": 220.70457306310564,
+    "elevation_deg": 1.380988575574627,
+    "eot_min": 16.49206295607411,
+    "hour_angle_deg": -77.37698426098149,
+    "obliquity_deg": 23.43792222506067,
+    "right_ascension_deg": 218.2838437351723
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 108.32286381945005,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -4.867077682829696,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": -78.50474594427659,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 95.79934597043751,
+    "declination_deg": -15.021412247918956,
+    "ecliptic_longitude_deg": 220.66285567163922,
+    "elevation_deg": 18.817853213050324,
+    "eot_min": 16.491925975274334,
+    "hour_angle_deg": -77.16701850618142,
+    "obliquity_deg": 23.437922295086228,
+    "right_ascension_deg": 218.24280959108606
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 105.12197208170893,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -11.661660847971614,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": -78.3769459442766,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 186.4382835509106,
+    "declination_deg": -15.034440822589636,
+    "ecliptic_longitude_deg": 220.70457306310564,
+    "elevation_deg": 39.729713708906466,
+    "eot_min": 16.49206295607411,
+    "hour_angle_deg": 5.1230157390185695,
+    "obliquity_deg": 23.43792222506067,
+    "right_ascension_deg": 218.2838437351723
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 184.19758312237275,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": 23.250145321384288,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": 3.995254055723393,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 344.36421086622425,
+    "declination_deg": -15.021412247918956,
+    "ecliptic_longitude_deg": 220.66285567163922,
+    "elevation_deg": 70.54516999366547,
+    "eot_min": 16.491925975274334,
+    "hour_angle_deg": 5.332981493818579,
+    "obliquity_deg": 23.437922295086228,
+    "right_ascension_deg": 218.24280959108606
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 183.9795175645183,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -0.1884233379384491,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": 4.123054055723401,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 262.4161859180592,
+    "declination_deg": -15.034440822589636,
+    "ecliptic_longitude_deg": 220.70457306310564,
+    "elevation_deg": -15.712515258938627,
+    "eot_min": 16.49206295607411,
+    "hour_angle_deg": 98.87301573901851,
+    "obliquity_deg": 23.43792222506067,
+    "right_ascension_deg": 218.2838437351723
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 266.3587500978723,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -16.59098283242432,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": 97.74525405572342,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 252.52921877962072,
+    "declination_deg": -15.021412247918956,
+    "ecliptic_longitude_deg": 220.66285567163922,
+    "elevation_deg": 1.022607905952704,
+    "eot_min": 16.491925975274334,
+    "hour_angle_deg": 99.08298149381858,
+    "obliquity_deg": 23.437922295086228,
+    "right_ascension_deg": 218.24280959108606
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "azimuth_deg": 273.5945755108386,
+    "declination_deg": -15.151378230555313,
+    "ecliptic_longitude_deg": 221.08006979892653,
+    "elevation_deg": -16.659565687283905,
+    "eot_min": 16.492216222893617,
+    "hour_angle_deg": 97.8730540557234,
+    "obliquity_deg": 23.437921594689104,
+    "right_ascension_deg": 218.6534164174792
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 6.960886218957455,
+    "declination_deg": -23.435676773126275,
+    "ecliptic_longitude_deg": 269.2439077361136,
+    "elevation_deg": -78.3596222265355,
+    "eot_min": 2.1087216097419113,
+    "hour_angle_deg": -178.47281959756452,
+    "obliquity_deg": 23.43783948772306,
+    "right_ascension_deg": 269.1759231681838
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 0.6881598173250154,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -61.92858974728881,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": -179.64705804863164,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 178.1008788959256,
+    "declination_deg": -23.435427328584737,
+    "ecliptic_longitude_deg": 269.20148080609675,
+    "elevation_deg": -32.670596381540655,
+    "eot_min": 2.1293531501792975,
+    "hour_angle_deg": -178.25766171245516,
+    "obliquity_deg": 23.437839561316924,
+    "right_ascension_deg": 269.12968248576937
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 0.5631089191307694,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -38.43669754548037,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": -179.51925804863166,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 114.25929163083599,
+    "declination_deg": -23.435676773126275,
+    "ecliptic_longitude_deg": 269.2439077361136,
+    "elevation_deg": -6.326705866649015,
+    "eot_min": 2.1087216097419113,
+    "hour_angle_deg": -80.97281959756452,
+    "obliquity_deg": 23.43783948772306,
+    "right_ascension_deg": 269.1759231681838
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 110.82330863874104,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -13.490612595275701,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": -82.14705804863164,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 105.32089512097356,
+    "declination_deg": -23.435427328584737,
+    "ecliptic_longitude_deg": 269.20148080609675,
+    "elevation_deg": 20.12112187606423,
+    "eot_min": 2.1293531501792975,
+    "hour_angle_deg": -80.75766171245516,
+    "obliquity_deg": 23.437839561316924,
+    "right_ascension_deg": 269.12968248576937
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 103.96716755960163,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -20.562126203479824,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": -82.01925804863164,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 181.64421192886041,
+    "declination_deg": -23.435676773126275,
+    "ecliptic_longitude_deg": 269.2439077361136,
+    "elevation_deg": 31.54637308416126,
+    "eot_min": 2.1087216097419113,
+    "hour_angle_deg": 1.5271804024354765,
+    "obliquity_deg": 23.43783948772306,
+    "right_ascension_deg": 269.1759231681838
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 180.33533164237159,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": 15.054648185058822,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": 0.3529419513683365,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 351.23229685254125,
+    "declination_deg": -23.435427328584737,
+    "ecliptic_longitude_deg": 269.20148080609675,
+    "elevation_deg": 79.45458571369343,
+    "eot_min": 2.1293531501792975,
+    "hour_angle_deg": 1.7423382875448397,
+    "obliquity_deg": 23.437839561316924,
+    "right_ascension_deg": 269.12968248576937
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 180.445904587817,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -8.437793140928122,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": 0.4807419513683442,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 253.11080360168532,
+    "declination_deg": -23.435676773126275,
+    "ecliptic_longitude_deg": 269.2439077361136,
+    "elevation_deg": -17.292388336449275,
+    "eot_min": 2.1087216097419113,
+    "hour_angle_deg": 95.27718040243548,
+    "obliquity_deg": 23.43783948772306,
+    "right_ascension_deg": 269.1759231681838
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 257.9004713706698,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -20.620068465952805,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": 94.1029419513684,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 247.45362842226965,
+    "declination_deg": -23.435427328584737,
+    "ecliptic_longitude_deg": 269.20148080609675,
+    "elevation_deg": 8.553676478064522,
+    "eot_min": 2.1293531501792975,
+    "hour_angle_deg": 95.49233828754484,
+    "obliquity_deg": 23.437839561316924,
+    "right_ascension_deg": 269.12968248576937
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "azimuth_deg": 267.649128305662,
+    "declination_deg": -23.437308973625385,
+    "ecliptic_longitude_deg": 269.62576137688825,
+    "elevation_deg": -23.68519585693566,
+    "eot_min": 1.922967805473408,
+    "hour_angle_deg": 94.23074195136837,
+    "obliquity_deg": 23.437838825241123,
+    "right_ascension_deg": 269.59210809028514
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 1.3394329532206086,
+    "declination_deg": -23.102445113161146,
+    "ecliptic_longitude_deg": 279.4319486974164,
+    "elevation_deg": -78.0995700544738,
+    "eot_min": -2.7989510961219697,
+    "hour_angle_deg": -179.6997377740305,
+    "obliquity_deg": 23.43782173724135,
+    "right_ascension_deg": 280.26283402439196
+   },
+   "hour": 0.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 358.3149376621784,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -61.559436255091256,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": 179.1277974728289,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 0.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 179.43478790429137,
+    "declination_deg": -23.10544787531427,
+    "ecliptic_longitude_deg": 279.3894826893208,
+    "elevation_deg": -33.022442028071026,
+    "eot_min": -2.7790607316110716,
+    "hour_angle_deg": -179.48476518290275,
+    "obliquity_deg": 23.437821811564287,
+    "right_ascension_deg": 280.2167805697957
+   },
+   "hour": 0.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 359.13003841554786,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -38.0733565012235,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": 179.25559747282887,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 0.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 113.32935918627345,
+    "declination_deg": -23.102445113161146,
+    "ecliptic_longitude_deg": 279.4319486974164,
+    "elevation_deg": -7.053620927845114,
+    "eot_min": -2.7989510961219697,
+    "hour_angle_deg": -82.1997377740305,
+    "obliquity_deg": 23.43782173724135,
+    "right_ascension_deg": 280.26283402439196
+   },
+   "hour": 6.5,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 109.69166000810372,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -13.926114378943184,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": -83.37220252717113,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 6.5,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 105.60328688227588,
+    "declination_deg": -23.10544787531427,
+    "ecliptic_longitude_deg": 279.3894826893208,
+    "elevation_deg": 18.977085876789598,
+    "eot_min": -2.7790607316110716,
+    "hour_angle_deg": -81.98476518290278,
+    "obliquity_deg": 23.437821811564287,
+    "right_ascension_deg": 280.2167805697957
+   },
+   "hour": 6.5,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 102.7050693045853,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -20.52205334197638,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": -83.24440252717113,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 6.5,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 180.32530344168842,
+    "declination_deg": -23.102445113161146,
+    "ecliptic_longitude_deg": 279.4319486974164,
+    "elevation_deg": 31.89685665193156,
+    "eot_min": -2.7989510961219697,
+    "hour_angle_deg": 0.30026222596950447,
+    "obliquity_deg": 23.43782173724135,
+    "right_ascension_deg": 280.26283402439196
+   },
+   "hour": 12.0,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 179.16764296878256,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": 15.413837615746063,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": -0.8722025271711402,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 12.0,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 357.46408681074627,
+    "declination_deg": -23.10544787531427,
+    "ecliptic_longitude_deg": 279.3894826893208,
+    "elevation_deg": 79.22597953325848,
+    "eot_min": -2.7790607316110716,
+    "hour_angle_deg": 0.51523481709728,
+    "obliquity_deg": 23.437821811564287,
+    "right_ascension_deg": 280.2167805697957
+   },
+   "hour": 12.0,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 179.30829702414277,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -8.075982130936811,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": -0.7444025271711325,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 12.0,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 252.79223821575084,
+    "declination_deg": -23.102445113161146,
+    "ecliptic_longitude_deg": 279.4319486974164,
+    "elevation_deg": -16.157331029643363,
+    "eot_min": -2.7989510961219697,
+    "hour_angle_deg": 94.0502622259695,
+    "obliquity_deg": 23.43782173724135,
+    "right_ascension_deg": 280.26283402439196
+   },
+   "hour": 18.25,
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 257.25701356177507,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -19.60355892505254,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": 92.87779747282889,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 18.25,
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 248.35700844316483,
+    "declination_deg": -23.10544787531427,
+    "ecliptic_longitude_deg": 279.3894826893208,
+    "elevation_deg": 9.31737634202305,
+    "eot_min": -2.7790607316110716,
+    "hour_angle_deg": 94.26523481709728,
+    "obliquity_deg": 23.437821811564287,
+    "right_ascension_deg": 280.2167805697957
+   },
+   "hour": 18.25,
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "azimuth_deg": 266.58369738483464,
+    "declination_deg": -23.074819167610087,
+    "ecliptic_longitude_deg": 279.8141458971285,
+    "elevation_deg": -23.020663910087407,
+    "eot_min": -2.9776101086845523,
+    "hour_angle_deg": 93.00559747282887,
+    "obliquity_deg": 23.4378210681987,
+    "right_ascension_deg": 280.6772245871714
+   },
+   "hour": 18.25,
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026
+  }
+ ],
+ "sunrise": [
+  {
+   "doy": 1.0,
+   "expect": {
+    "day_length": 9.847521714154293,
+    "sunrise": 7.066087388226272,
+    "sunset": 16.913609102380565
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "day_length": 7.931080124108146,
+    "sunrise": 8.10243463634927,
+    "sunset": 16.033514760457415
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "day_length": 14.360414904407378,
+    "sunrise": 4.7953134019544486,
+    "sunset": 19.155728306361826
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 1.0,
+   "expect": {
+    "day_length": 0.0,
+    "sunrise": 12.059454698403345,
+    "sunset": 12.059454698403345
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "day_length": 10.796251950820938,
+    "sunrise": 6.772306325207946,
+    "sunset": 17.568558276028885
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "day_length": 9.770437911318776,
+    "sunrise": 7.3604040420719485,
+    "sunset": 17.130841953390725
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "day_length": 13.43065169740069,
+    "sunrise": 5.441104135417464,
+    "sunset": 18.871755832818152
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 42.0,
+   "expect": {
+    "day_length": 3.9780230169706856,
+    "sunrise": 10.248091489245994,
+    "sunset": 14.226114506216678
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "day_length": 12.117705446538046,
+    "sunrise": 6.000211734787513,
+    "sunset": 18.11791718132556
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "day_length": 12.171193570073882,
+    "sunrise": 6.0468063969156685,
+    "sunset": 18.217999966989552
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "day_length": 12.152388835449505,
+    "sunrise": 5.969075069378522,
+    "sunset": 18.121463904828026
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 79.0,
+   "expect": {
+    "day_length": 12.40776190326174,
+    "sunrise": 5.920002230321739,
+    "sunset": 18.32776413358348
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "day_length": 13.575135298668368,
+    "sunrise": 5.099251502562755,
+    "sunset": 18.674386801231122
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "day_length": 14.826079912572766,
+    "sunrise": 4.548192927441383,
+    "sunset": 19.37427284001415
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "day_length": 10.769573338782768,
+    "sunrise": 6.488119645347621,
+    "sunset": 17.25769298413039
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 120.5,
+   "expect": {
+    "day_length": 24.0,
+    "sunrise": -0.04728711627223525,
+    "sunset": 23.952712883727763
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "day_length": 14.511798688873121,
+    "sunrise": 4.706478964593286,
+    "sunset": 19.21827765346641
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "day_length": 16.639140915337663,
+    "sunrise": 3.719354208964715,
+    "sunset": 20.35849512430238
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "day_length": 9.896330119214612,
+    "sunrise": 7.00006210231004,
+    "sunset": 16.896392221524653
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 172.0,
+   "expect": {
+    "day_length": 24.0,
+    "sunrise": 0.03040466663354735,
+    "sunset": 24.030404666633547
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "day_length": 14.208603341283778,
+    "sunrise": 4.934652021896928,
+    "sunset": 19.143255363180707
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "day_length": 16.01016745643618,
+    "sunrise": 4.109455636687086,
+    "sunset": 20.119623093123266
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "day_length": 10.176312745518148,
+    "sunrise": 6.936751653358937,
+    "sunset": 17.113064398877086
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 200.25,
+   "expect": {
+    "day_length": 24.0,
+    "sunrise": 0.10601936490517438,
+    "sunset": 24.106019364905173
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "day_length": 12.167627776608116,
+    "sunrise": 5.730714387163602,
+    "sunset": 17.89834216377172
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "day_length": 12.211528747416173,
+    "sunrise": 5.781742287341115,
+    "sunset": 17.99327103475729
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "day_length": 12.101613719250652,
+    "sunrise": 5.749967010468404,
+    "sunset": 17.851580729719057
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 265.0,
+   "expect": {
+    "day_length": 12.52765706133401,
+    "sunrise": 5.615158130382196,
+    "sunset": 18.142815191716206
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "day_length": 10.697325865138378,
+    "sunrise": 6.309802684829577,
+    "sunset": 17.007128549967955
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "day_length": 9.541326041631281,
+    "sunrise": 6.9629867088027995,
+    "sunset": 16.50431275043408
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "day_length": 13.524607356412105,
+    "sunrise": 4.8821642222060415,
+    "sunset": 18.406771578618148
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 307.0,
+   "expect": {
+    "day_length": 2.3670128601956515,
+    "sunrise": 10.541623299520614,
+    "sunset": 12.908636159716265
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "day_length": 9.798678212529937,
+    "sunrise": 6.998848866905999,
+    "sunset": 16.797527079435937
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "day_length": 7.82517665984559,
+    "sunrise": 8.06388220665265,
+    "sunset": 15.889058866498239
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "day_length": 14.408186399369473,
+    "sunrise": 4.679750914478941,
+    "sunset": 19.087937313848414
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 355.0,
+   "expect": {
+    "day_length": 0.0,
+    "sunrise": 11.967950536575444,
+    "sunset": 11.967950536575444
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "day_length": 9.836714700750635,
+    "sunrise": 7.061625167893383,
+    "sunset": 16.89833986864402
+   },
+   "lat": 35.0,
+   "lon": 136.0,
+   "tz": 9.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "day_length": 7.908561163957156,
+    "sunrise": 8.103866253166165,
+    "sunset": 16.01242741712332
+   },
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "day_length": 14.371029244668382,
+    "sunrise": 4.780136389859326,
+    "sunset": 19.151165634527707
+   },
+   "lat": -33.87,
+   "lon": 151.21,
+   "tz": 10.0,
+   "year": 2026,
+   "zenith": 90.833
+  },
+  {
+   "doy": 365.0,
+   "expect": {
+    "day_length": 0.0,
+    "sunrise": 12.049626835144743,
+    "sunset": 12.049626835144743
+   },
+   "lat": 75.0,
+   "lon": 0.0,
+   "tz": 0.0,
+   "year": 2026,
+   "zenith": 90.833
+  }
+ ]
+}
